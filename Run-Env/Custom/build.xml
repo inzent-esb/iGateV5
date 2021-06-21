@@ -20,7 +20,7 @@
 
 	<target name="init" depends="clean">
 		<mkdir dir="target/classes" />
-		<copy includeemptydirs="false" todir="target/classes">
+		<copy todir="target/classes" includeemptydirs="false" failonerror="false">
 			<fileset dir="src/main/resources"/>
 		</copy>
 	</target>
