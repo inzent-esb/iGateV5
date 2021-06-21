@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="Custom">
-
 	<property environment="env" />
 	<property name="iManager.location" value="../iManager" />
 	<property name="iGate.location" value="../iGate" />
@@ -36,5 +35,4 @@
 		<copy file="target/${ant.project.name}.jar" todir="${iGate.location}/src/main/webapp/WEB-INF/lib/" />
 		<copy file="target/${ant.project.name}.jar" todir="${iLogger.location}/src/main/webapp/WEB-INF/lib/" />
 	</target>
-
 </project>
