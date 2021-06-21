@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Operation name="Put File" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.file.ftp" desc="Put files"> 
+  <Variables> 
+    <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="AdapterParameter" isParameter="true"/> 
+  </Variables>  
+  <Activities> 
+    <Start uniqueKey="0000" index="0" desc="start" xPos="118" yPos="49"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Start>  
+    <End uniqueKey="0001" index="1" desc="End" xPos="119" yPos="307"/>  
+    <Activity uniqueKey="0002" index="2" desc="ActiveRoundRobineSession" id="ActiveRoundRobineSession" xPos="57" yPos="135"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Activity>  
+    <Activity uniqueKey="0003" index="3" desc="writeRequest" id="WriteRequest" xPos="95" yPos="221"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Activity> 
+  </Activities>  
+  <Transitions> 
+    <Transition from="0" to="2" order="1" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="2" to="3" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="3" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition> 
+  </Transitions>  
+  <Imports/> 
+</Operation>

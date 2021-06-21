@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<!-- JEUS -->
+	<bean id="handshakeHandler" class="org.springframework.web.socket.server.support.DefaultHandshakeHandler">
+		<constructor-arg>
+			<bean class="jeus.spring.websocket.JeusRequestUpgradeStrategy"/>
+		</constructor-arg>
+	</bean>
+
+</beans>

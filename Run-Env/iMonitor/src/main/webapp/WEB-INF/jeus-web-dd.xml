@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jeus-web-dd xmlns="http://www.tmaxsoft.com/xml/ns/jeus">
+
+	<context-path>/iMonitor</context-path>
+
+	<webinf-first>
+		<enabled>true</enabled>
+	</webinf-first>
+
+	<encoding>
+		<request-encoding>
+			<default>UTF-8</default>
+		</request-encoding>
+
+		<response-encoding>
+			<default>UTF-8</default>
+		</response-encoding>
+	</encoding>
+
+	<websocket />
+
+	<library-ref>
+		<library-name>spring-support</library-name>
+		<specification-version>
+			<value>4.2.0.RELEASE</value>
+		</specification-version>
+	</library-ref>
+
+</jeus-web-dd>

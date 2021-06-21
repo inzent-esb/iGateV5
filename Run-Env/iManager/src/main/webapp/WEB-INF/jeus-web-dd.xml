@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jeus-web-dd xmlns="http://www.tmaxsoft.com/xml/ns/jeus">
+
+	<context-path>/iManager</context-path>
+
+	<webinf-first>
+		<enabled>true</enabled>
+	</webinf-first>
+
+	<encoding>
+		<request-encoding>
+			<default>UTF-8</default>
+		</request-encoding>
+
+		<response-encoding>
+			<default>UTF-8</default>
+		</response-encoding>
+	</encoding>
+
+	<library-ref>
+		<library-name>jstl</library-name>
+		<specification-version>
+			<value>1.2</value>
+		</specification-version>
+	</library-ref>
+
+</jeus-web-dd>

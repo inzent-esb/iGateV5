@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd"
+	default-lazy-init="false">
+
+	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
+
+	<context:component-scan base-package="com.inzent.igate" />
+
+	<bean class="com.inzent.igate.monitoring.MonitoringReceiver">
+		<property name="transactionThresholdShort" value="#{systemProperties['igate.monitor.transactionThresholdShort']?:'5000'}" />
+		<property name="transactionThresholdMiddle" value="#{systemProperties['igate.monitor.transactionThresholdMiddle']?:'30000'}" />
+		<property name="snapshotDuration" value="#{systemProperties['igate.monitor.snapshotDuration']?:'60000'}" />
+		<property name="snapshotLimit" value="#{systemProperties['igate.monitor.snapshotLimit']?:'9000'}" />
+		<property name="snapshotDelete" value="#{systemProperties['igate.monitor.snapshotDelete']?:'500'}" />
+		<property name="transactionSnapshotQueueSize" value="#{systemProperties['igate.monitor.snapshotQueue']?:'10000'}" />
+	</bean>
+
+	<bean id="monitoringWebSocketHandler" class="com.inzent.igate.monitoring.MonitoringWebSocketHandler" />
+
+	<websocket:handlers allowed-origins="*">
+		<websocket:mapping handler="monitoringWebSocketHandler" path="/message" />
+		<websocket:handshake-handler ref="handshakeHandler" />
+	</websocket:handlers>
+
+</beans>

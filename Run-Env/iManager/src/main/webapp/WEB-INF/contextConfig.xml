@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
+	default-lazy-init="false">
+
+	<bean class="com.inzent.imanager.controller.HttpSession" scope="session">
+		<aop:scoped-proxy proxy-target-class="true" />
+	</bean>
+	
+	<bean id="menuPreparer" class="com.inzent.imanager.controller.MenuViewPreparer"></bean>
+
+	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+	    <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+	    <property name="order" value="1" />
+	</bean>
+
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+	    <property name="definitions">
+	        <list>
+	            <value>/WEB-INF/tiles-define.xml</value>
+	        </list>
+	    </property>
+	    <property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"></property>
+	</bean>	
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+				<property name="mediaTypes">
+					<map>
+						<entry key="json" value="application/json" />
+						<entry key="html" value="text/html" />
+						<entry key="script" value="text/javascript" />
+					</map>
+				</property>
+			</bean>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+				<bean class="com.inzent.imanager.view.JsonViewResolver" />				
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="contentType" value="text/html; charset=UTF-8" />
+		<property name="prefix" value="/WEB-INF/html/" />
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="2" />
+	</bean>
+	
+	<bean name="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
+
+	<context:component-scan base-package="com.inzent.imanager">
+		<context:exclude-filter type="regex" expression="com.inzent.imanager.common.property.PropertyService" /> 
+	</context:component-scan>
+	<context:component-scan base-package="com.inzent.igate" />
+
+	<tx:annotation-driven />
+
+	<mvc:annotation-driven />
+
+	<security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+</beans>

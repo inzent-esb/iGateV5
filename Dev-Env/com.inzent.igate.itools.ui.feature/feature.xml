@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.inzent.igate.itools.ui.feature"
+      label="iGate iTools Feature"
+      version="5.0.16.qualifier">
+
+   <description url="http://www.inzent.com/">
+      iGate iTools Feature
+   </description>
+
+   <copyright url="http://www.inzent.com/">
+      Copyright Notice
+Copyright © 2009 Inzent Co., Ltd. All Rights Reserved.
+Restricted Rights Legend
+All Inzent Software and documents are protected by copyright
+laws and the Protection Act of Computer Programs, and international
+convention.
+Inzent software and documents are made available under the terms
+of the Inzent License Agreement and may only be used or copied
+in accordance with the terms of this agreement.
+No part of this document may be transmitted, copied, deployed,
+or reproduced in any form or by any means, electronic, mechanical,
+or optical, without the prior written consent of Inzent Co.,
+Ltd.
+Trademarks
+iGate are trademark of Inzent Co., Ltd. Other products, titles
+or services may be registered trademarks of their respective
+companies.
+Open Source Software Notice
+This product includes various open source software that has been
+developed and/or licensed by “Spring Framework”, “Hibernate”,
+“FasterXML, LLC”, “Apache Foundation”, “The Werken Company”,
+“Terracotta, Inc”, “JGroups”, “Atsuhiko Yamanaka”, “JCraft,Inc”,
+“QOS.ch”, “Sun Microsystems, Inc.”.
+Inzent fully respects the aforementioned parties and the open
+source software used in this product.
+More details can be found within the directory “${INSTALL_HOME}/oss_licenses”.
+   </copyright>
+
+   <license url="http://www.inzent.com/">
+      Copyright Notice
+Copyright © 2009 Inzent Co., Ltd. All Rights Reserved.
+
+Restricted Rights Legend
+All Inzent Software and documents are protected by copyright laws and the Protection Act of Computer Programs, and international convention.
+Inzent software and documents are made available under the terms of the Inzent License Agreement and may only be used or copied in accordance with the terms of this agreement.
+No part of this document may be transmitted, copied, deployed, or reproduced in any form or by any means, electronic, mechanical, or optical, without the prior written consent of Inzent Co., Ltd.
+
+Trademarks
+iGate are trademark of Inzent Co., Ltd. Other products, titles or services may be registered trademarks of their respective companies.
+
+Open Source Software Notice
+This product includes various open source software that has been developed and/or licensed by “Spring Framework”, “Hibernate”, “FasterXML, LLC”, “Apache Foundation”, “The Werken Company”, “Terracotta, Inc”, “JGroups”, “Atsuhiko Yamanaka”, “JCraft,Inc”, “QOS.ch”, “Sun Microsystems, Inc.”.
+Inzent fully respects the aforementioned parties and the open source software used in this product.
+More details can be found within the directory “${INSTALL_HOME}/oss_licenses”.
+   </license>
+
+   <url>
+      <update label="Inzent Corporation" url="http://www.inzent.com/"/>
+      <discovery label="Inzent Corporation" url="http://www.inzent.com/"/>
+   </url>
+
+   <plugin
+         id="com.inzent.igate.itools.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

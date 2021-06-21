@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Operation name="Send File" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.file.peer" desc="Send files to remote"> 
+  <Variables> 
+    <Variable type="com.inzent.igate.message.Record" name="reqData" desc="request Record" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="AdapterParameter" isParameter="true"/> 
+  </Variables>  
+  <Activities> 
+    <Start uniqueKey="0000" index="0" desc="start" xPos="127" yPos="43"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Start>  
+    <End uniqueKey="0001" index="1" desc="End" xPos="128" yPos="271"/>  
+    <Activity uniqueKey="0002" index="2" desc="ActiveRoundRobineSession" id="ActiveRoundRobineSession" xPos="66" yPos="119"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0003" index="3" desc="File Protocol" id="FileProtocol" xPos="105" yPos="195"> 
+      <Parameter type="java.lang.String" desc="Protocol Mode" from="Constant" dynamic="false">
+        <Value><![CDATA["S"]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity> 
+  </Activities>  
+  <Transitions> 
+    <Transition from="0" to="2" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="3" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="2" to="3" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>
+  </Transitions>  
+  <Imports/> 
+</Operation>

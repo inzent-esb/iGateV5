@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Operation name="Read Online-Response" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online" desc="Read a online response"> 
+  <Variables> 
+    <Variable type="java.lang.Boolean" name="noticeResult" desc="noticeResult" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="AdapterParameter" isParameter="true"/> 
+  </Variables>  
+  <Activities> 
+    <Start uniqueKey="0000" index="0" desc="start" xPos="445" yPos="33"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Start>  
+    <End uniqueKey="0001" index="1" desc="End" xPos="446" yPos="677"/>  
+    <Activity uniqueKey="0002" index="2" desc="Logging Trace" id="LoggingTrace" xPos="38" yPos="401"> 
+      <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
+        <Value><![CDATA["SNO"]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[null]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0003" index="3" desc="ReleaseSession" id="ReleaseSession" xPos="675" yPos="217"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Boolean" desc="Closing Session" from="Constant" dynamic="false">
+        <Value><![CDATA[false]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0004" index="4" desc="NoticeResponse" id="NoticeResponse" xPos="607" yPos="401"> 
+      <Parameter type="java.lang.Boolean" desc="Result Of Notice" from="Variable" dynamic="false">
+        <Value><![CDATA[noticeResult]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <Condition uniqueKey="0005" index="5" desc="Is Received" xPos="427" yPos="125"> 
+      <When target="3" desc="Received"> 
+        <MethodExpression variableName="adapterParameter"> 
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isReply" argumentTypes="" argumentType="boolean"/> 
+        </MethodExpression> 
+      </When>  
+      <Others target="9" desc="Notified"/>  
+      <Value><![CDATA[
+// Received
+if ( adapterParameter.isReply() ) 
+   return 0;
+// Notified
+else 
+   return 1;]]></Value> 
+    </Condition>  
+    <Activity uniqueKey="0006" index="6" desc="Execute Interface" id="ExecuteInterface" xPos="793" yPos="493"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0007" index="7" desc="Logging Trace" id="LoggingTrace" xPos="800" yPos="401"> 
+      <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
+        <Value><![CDATA["SNO"]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[null]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0008" index="8" desc="Is Async-Interface" id="IsAsyncInterface" xPos="667" yPos="309"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <Condition uniqueKey="0009" index="9" desc="Is Error" xPos="208" yPos="217"> 
+      <When target="16" desc="Normal"> 
+        <JavaExpression><![CDATA[adapterParameter.getException() == null]]></JavaExpression> 
+      </When>  
+      <Others target="10" desc="Exception"> 
+        <JavaExpression><![CDATA[true]]></JavaExpression> 
+      </Others>  
+      <Value><![CDATA[
+// Normal
+if ( adapterParameter.getException() == null ) 
+   return 0;
+// Exception
+else 
+   return 1;]]></Value> 
+    </Condition>  
+    <Activity uniqueKey="0010" index="10" desc="Logging Trace" id="LoggingTrace" xPos="415" yPos="401"> 
+      <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
+        <Value><![CDATA["SEO"]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[null]]></Value>
+      </Parameter>
+    </Activity>  
+    <Condition uniqueKey="0011" index="11" desc="Is Notified" xPos="618" yPos="493"> 
+      <When target="1" desc="Notified"> 
+        <VariableExpression name="noticeResult"/> 
+      </When>  
+      <Others target="10" desc="No Request"/>  
+      <Value><![CDATA[
+// Notified
+if ( noticeResult ) 
+   return 0;
+// No Request
+else 
+   return 1;]]></Value> 
+    </Condition>  
+    <Activity uniqueKey="0013" index="13" desc="Logging Trace" id="LoggingTrace" xPos="223" yPos="401"> 
+      <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
+        <Value><![CDATA["SDO"]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[null]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0014" index="14" desc="Is Async-Interface" id="IsAsyncInterface" xPos="25" yPos="493"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0015" index="15" desc="Execute Interface" id="ExecuteInterface" xPos="27" yPos="585"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <Condition uniqueKey="0016" index="16" desc="Is Acknowledgement" xPos="97" yPos="309"> 
+      <When target="13" desc="Ack"> 
+        <MethodExpression variableName="adapterParameter"> 
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isServiceAck" argumentTypes="" argumentType="boolean"/> 
+        </MethodExpression> 
+      </When>  
+      <Others target="2" desc="Normal"/>  
+      <Value><![CDATA[
+// Ack
+if ( adapterParameter.isServiceAck() ) 
+   return 0;
+// Normal
+else 
+   return 1;]]></Value> 
+    </Condition> 
+  </Activities>  
+  <Transitions> 
+    <Transition from="7" to="6" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="3" to="8" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="10" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="0" to="5" order="1" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="6" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="5" to="3" order="0" desc="Received" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="5" to="9" order="1" desc="Notified" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="2" to="14" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="14" to="15" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="14" to="1" order="1" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="15" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="13" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="11" to="1" order="0" desc="Notified" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="11" to="10" order="1" desc="No Request" fromTerminal="top" toTerminal="bottom"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="9" to="16" order="0" desc="Normal" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="9" to="10" order="1" desc="Exception" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="16" to="13" order="0" desc="Ack" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="16" to="2" order="1" desc="Normal" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="8" to="4" order="1" fromTerminal="bottom" toTerminal="top" desc="Sync-Interface"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="8" to="7" order="0" fromTerminal="bottom" toTerminal="top" desc="Async-Interface"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="4" to="11" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition> 
+  </Transitions>  
+  <Imports/> 
+</Operation>
