@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>
+
+<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
+
+<c:if test="${'Popup' != viewMode}">
+	<%@ include file="/WEB-INF/html/layout/component/component_detail.jsp"%>
+</c:if>

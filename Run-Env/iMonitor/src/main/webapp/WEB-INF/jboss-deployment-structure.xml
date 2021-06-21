@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+
+	<deployment>
+		<!-- Exclusions allow you to prevent the server from automatically adding some dependencies -->
+		<exclusions>
+			<module name="com.fasterxml.classmate" />
+			<module name="com.fasterxml.jackson.core.jackson-annotations" />
+			<module name="com.fasterxml.jackson.core.jackson-core" />
+			<module name="com.fasterxml.jackson.core.jackson-databind" />
+			<module name="org.antlr" />
+			<module name="org.apache.commons.codec" />
+			<module name="org.apache.commons.io" />
+			<module name="org.apache.commons.lang3" />
+			<module name="org.apache.commons.logging" />
+			<module name="org.apache.httpcomponent" />
+			<module name="org.apache.httpcomponent.core" />
+			<module name="org.apache.log4j" />
+			<module name="org.dom4j" />
+			<module name="org.hibernate" />
+			<module name="org.javassist" />
+			<module name="org.jaxen" />
+			<module name="org.jboss.logging.commons.logging" />
+			<module name="org.jgroups"/>
+			<module name="org.slf4j" />
+			<module name="org.slf4j.impl" />
+		</exclusions>
+
+		<dependencies>
+			<module name="javax.persistence.api" services="import" />
+		</dependencies>
+	</deployment>
+
+</jboss-deployment-structure>

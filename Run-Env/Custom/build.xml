@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="Custom">
+
+	<property environment="env" />
+	<property name="iManager.location" value="../iManager" />
+	<property name="iGate.location" value="../iGate" />
+	<property name="iLogger.location" value="../iLogger" />
+	<property name="source" value="1.8" />
+	<property name="target" value="1.8" />
+	<property name="encoding" value="ms949" />
+
+	<path id="classpath">
+		<pathelement location="target/classes" />
+		<fileset dir="${iGate.location}/src/main/webapp/WEB-INF/lib/" includes="**/*.jar" excludes="${ant.project.name}.jar"/>
+		<fileset dir="${iGate.location}/lib/" includes="**/*.jar" />
+	</path>
+
+	<target name="clean">
+		<delete dir="target" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="target/classes" />
+		<copy includeemptydirs="false" todir="target/classes">
+			<fileset dir="src/main/resources"/>
+		</copy>
+	</target>
+
+	<target name="build" depends="init">
+		<javac debug="true" destdir="target/classes" source="${source}" target="${target}" encoding="${encoding}" includeantruntime="false">
+			<src path="src/main/java" />
+			<classpath refid="classpath" />
+		</javac>
+		<jar destfile="target/${ant.project.name}.jar" basedir="target/classes" />
+		<copy file="target/${ant.project.name}.jar" todir="${iManager.location}/src/main/webapp/WEB-INF/lib/" />
+		<copy file="target/${ant.project.name}.jar" todir="${iGate.location}/src/main/webapp/WEB-INF/lib/" />
+		<copy file="target/${ant.project.name}.jar" todir="${iLogger.location}/src/main/webapp/WEB-INF/lib/" />
+	</target>
+
+</project>

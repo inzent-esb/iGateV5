@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Operation name="Broadcast Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online"> 
+  <Variables> 
+    <Variable type="com.inzent.igate.message.Record" name="chlReq" desc="interface request" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.message.Record" name="bizReq" desc="service request" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.message.Record" name="bizRes" desc="service response" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.message.Record" name="chlRes" desc="interface response" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.repository.meta.InterfaceService" name="interfaceService" desc="interfaceService" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="AdapterParameter" isParameter="true"/> 
+  </Variables>  
+  <Activities> 
+    <Start uniqueKey="0000" index="0" desc="start" xPos="225" yPos="37"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Start>  
+    <End uniqueKey="0001" index="1" desc="End" xPos="226" yPos="594"/>  
+    <Activity uniqueKey="0002" index="2" desc="Parse Interface Request" id="ParseInterfaceRequest" xPos="174" yPos="187"> 
+      <Parameter type="com.inzent.igate.message.Record" desc="Parsed Record" from="Variable" dynamic="false">
+        <Value><![CDATA[chlReq]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <ForEach height="251" width="402" uniqueKey="0009" index="9" desc="ForEach" xPos="56" yPos="289"> 
+      <Activities> 
+        <Activity uniqueKey="0010" index="1" desc="Mapping Online Request" id="MappingOnlineRequest" dynamic="true" xPos="16" yPos="95"> 
+          <Parameter type="com.inzent.igate.message.Record" desc="Target Record" from="Variable" dynamic="false">
+            <Value><![CDATA[bizReq]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParamete" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.repository.meta.InterfaceService" desc="Interface-Service Information" from="Variable" dynamic="false">
+            <Value><![CDATA[interfaceService]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.message.Record" desc="Source Records" from="Variable" dynamic="true">
+            <Value><![CDATA[chlReq]]></Value>
+          </Parameter>
+        </Activity>  
+        <Activity uniqueKey="0011" index="2" desc="Execute Service" id="ExecuteService" xPos="41" yPos="146"> 
+          <Parameter type="com.inzent.igate.message.Record" desc="Respone Record" from="Variable" dynamic="false">
+            <Value><![CDATA[bizRes]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.String" desc="Service ID" from="Method" dynamic="false">
+            <Value><![CDATA[interfaceService.getPk().getServiceId()]]></Value>
+            <MethodExpression variableName="interfaceService">
+              <FunctionExpression className="com.inzent.igate.repository.meta.InterfaceService" methodName="getPk" argumentTypes="" argumentType="com.inzent.igate.repository.meta.InterfaceServicePK"/>
+              <FunctionExpression className="com.inzent.igate.repository.meta.InterfaceServicePK" methodName="getServiceId" argumentTypes="" argumentType="java.lang.String"/>
+            </MethodExpression>
+          </Parameter>
+          <Parameter type="java.lang.Boolean" desc="Push To Queue" from="Constant" dynamic="false">
+            <Value><![CDATA[true]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
+            <Value><![CDATA[bizReq]]></Value>
+          </Parameter>
+        </Activity>  
+        <Activity uniqueKey="0012" index="3" desc="VerifyCondition" id="VerifyCondition" xPos="137" yPos="31"> 
+          <Parameter type="com.inzent.igate.repository.meta.InterfaceService" desc="Interface-Service Information" from="Variable" dynamic="false">
+            <Value><![CDATA[interfaceService]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
+            <Value><![CDATA[chlReq]]></Value>
+          </Parameter>
+        </Activity>  
+        <Continue uniqueKey="0013" index="4" desc="Continue" xPos="284" yPos="95"/> 
+      </Activities>  
+      <Transitions> 
+        <Transition from="start" to="3" order="0" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="3" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="3" to="4" order="1" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="1" to="2" order="0" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="2" to="end" order="0" fromTerminal="bottom" toTerminal="bottom"> 
+          <bendPoints/> 
+        </Transition> 
+      </Transitions>  
+      <Condition/>  
+      <Parameter type="java.lang.Iterable" desc="Collection Varable" from="Method" dynamic="false"> 
+        <Value><![CDATA[adapterParameter.getInterface().getInterfaceServices()]]></Value>  
+        <MethodExpression variableName="adapterParameter"> 
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="getInterface" argumentTypes="" argumentType="com.inzent.igate.repository.meta.Interface"/>  
+          <FunctionExpression className="com.inzent.igate.repository.meta.Interface" methodName="getInterfaceServices" argumentTypes="" argumentType="java.util.List"/> 
+        </MethodExpression> 
+      </Parameter>  
+      <Parameter type="java.lang.Object" desc="item Variable" from="Variable" dynamic="false"> 
+        <Value><![CDATA[interfaceService]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="Index Variable" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="Start" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="End" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="Step" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter> 
+    </ForEach>  
+    <Activity uniqueKey="0015" index="10" desc="Restrict Interface" id="RestrictInterface" xPos="188" yPos="83"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="0019" index="14" desc="Start Interface" id="StartInterface" xPos="195" yPos="135"> 
+      <Parameter type="java.lang.Boolean" desc="Is sync-interface" from="Constant" dynamic="false">
+        <Value><![CDATA[false]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Boolean" desc="Is send ack" from="Constant" dynamic="false">
+        <Value><![CDATA[false]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Boolean" desc="Is exists async-response" from="Constant" dynamic="false">
+        <Value><![CDATA[false]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="001a" index="15" desc="ValidateRequest" id="ValidateRequest" xPos="190" yPos="239">
+      <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
+        <Value><![CDATA[chlReq]]></Value>
+      </Parameter>
+    </Activity>
+  </Activities>  
+  <Transitions> 
+    <Transition from="9" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="10" to="14" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="14" to="2" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="0" to="10" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="15" to="9" order="0" fromTerminal="bottom" toTerminal="top">
+      <bendPoints/>
+    </Transition>
+    <Transition from="2" to="15" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>
+  </Transitions>  
+  <Imports> 
+    <Import name="com.inzent.igate.repository.meta.AdapterPropertyPK"/> 
+  </Imports> 
+</Operation>

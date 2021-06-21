@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"
+	default-lazy-init="false">
+
+	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
+
+	<bean id="property" class="com.inzent.igate.context.PropertyManager" />
+
+	<bean id="exceptionCode" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.ExceptionCode" />
+	</bean>
+
+	<bean id="record" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.Record" />
+	</bean>
+
+	<bean id="mapping" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.Mapping" />
+	</bean>
+
+	<bean id="mappingRule" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.MappingRule" />
+	</bean>
+
+	<bean id="onlineHeaderMappingPolicy" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.OnlineHeaderMappingPolicy" />
+	</bean>
+
+	<bean id="service" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.Service" />
+	</bean>
+
+	<bean id="interface" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.Interface" />
+	</bean>
+
+	<bean id="javaProject" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.JavaProject" />
+	</bean>
+
+	<context:component-scan base-package="com.inzent.igate" />
+
+	<bean id="activity" class="com.inzent.igate.rule.activity.ActivityManager" />
+
+	<bean class="com.inzent.igate.message.MessageBeans"/>
+
+	<bean id="adapter" class="com.inzent.igate.context.MetaManager">
+		<constructor-arg value="com.inzent.igate.repository.meta.Adapter" />
+	</bean>
+
+	<bean id="traceLogViewer" class="com.inzent.igate.tracelog.TraceLogViewer"/>
+
+</beans>

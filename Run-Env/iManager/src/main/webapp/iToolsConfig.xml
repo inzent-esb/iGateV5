@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Common>
+    <Description height="80" />
+  </Common>
+
+  <Interface>
+    <OnlineInterfaces>
+      <InterfaceType>Online</InterfaceType>
+    </OnlineInterfaces>
+  </Interface>
+
+  <Service>
+    <OnlineServices>
+      <ServiceType>Online</ServiceType>
+    </OnlineServices>
+  </Service>
+
+
+  <Mapping> 
+    <MappingRule fieldId="100" fieldType="100" fieldName="100">
+      <Canvas width="150">
+        <Color normal="90969b" warn="c1282e"/>
+        <SelectColor normal="212F39" warn="6A070A" />
+      </Canvas>
+    </MappingRule>
+  </Mapping>
+
+  <Operation>
+    <OperationTemplates>
+      <OperationTemplate type="A" transaction="online" event="request.read" name="AOP_Online_Request_Read.xml">요청 수신</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="request.write" name="AOP_Online_Request_Write.xml">요청 송신</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="response.read" name="AOP_Online_Response_Read.xml">응답 수신</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="response.write" name="AOP_Online_Response_Write.xml">응답 송신</OperationTemplate>
+
+      <OperationTemplate type="A" transaction="file" event="extract" name="AOP_File_Extract.xml">파일 추출</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="extract" name="AOP_File_Get.xml">(s)FTP Get</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.read" name="AOP_File_Center.xml">파일 센터</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.read" name="AOP_File_Receive.xml">파일 수신</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.write" name="AOP_File_Push.xml">파일 배포</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.write" name="AOP_File_Put.xml">(s)FTP Put</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.write" name="AOP_File_Send.xml">파일 송신</OperationTemplate>
+
+      <OperationTemplate type="I" name="IOP_Online_Sync.xml">동기 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online_Composite.xml">동기(BID) 인터페이스</OperationTemplate>      
+      <OperationTemplate type="I" name="IOP_Online_Async.xml">비동기 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online_Broadcast.xml">배포 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online_External.xml">대외 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_File_Normal.xml">파일 인터페이스</OperationTemplate>
+    </OperationTemplates>
+  </Operation>
+
+  <Record>
+    <GroupHeaders>
+      <GroupHeader label="기본정보" expanded="true">
+        <Column label="ID" align="left" width="180" name="fieldId" editType="edit" />
+        <Column label="이름" align="left" width="120" name="fieldName" editType="edit" />
+        <Column label="Index" align="left" width="50" name="fieldIndex" editType="edit" />
+        <Column label="타입" align="center" width="80" name="fieldType" editType="select" availableValue="B=Byte,S=Short,I=Int,L=Long,F=Float,D=Double,b=Boolean,p=TimeStamp,T=String,N=Numeric,P=PackedDecimal,A=Raw,R=Group" availableDefaultValue="T" />
+        <Column label="길이" align="center" width="50" name="fieldLength" editType="edit" availableValue="integer" />
+        <Column label="소수" align="center" width="50" name="fieldScale" editType="edit" availableValue="numeric" />
+      </GroupHeader>
+      <GroupHeader label="반복정보" expanded="false">
+        <Column label="반복타입" align="left" width="80" name="arrayType" editType="select" availableValue="N=Not,F=Fixed,V=Variable" availableDefaultValue="N" />
+        <Column label="반복횟수" align="left" width="70" name="referenceFieldId" editType="edit" />
+      </GroupHeader>
+      <GroupHeader label="속성정보" expanded="true">
+        <Column label="기본값" align="left" width="70" name="fieldDefaultValue" editType="edit" />
+        <Column label="마스킹" align="center" width="80" name="fieldHiddenYn" editType="checkbox" availableValue="Y=true,N=false" availableDefaultValue="N" />
+        <Column label="필수" align="center" width="60" name="fieldRequireYn" editType="checkbox" availableValue="Y=true,N=false" availableDefaultValue="N" />
+        <Column label="유효값" align="left" width="100" name="fieldValidValue" editType="edit" />
+        <Column label="변환" align="left" width="100" name="codecId" editType="codec" />
+      </GroupHeader>
+      <GroupHeader label="확장정보" expanded="false">
+        <Column label="FieldTrim" align="left" width="100" name="FieldTrim" editType="checkbox" extened="true"/>
+        <Column label="FieldFullWidth" align="left" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
+        <Column label="확장1" align="left" width="100" name="ext1" editType="edit" extened="true"/>
+        <Column label="FieldHttp" align="left" width="100" name="FieldHttp" editType="select" availableValue="header=header,query=query,body=body" extened="true"/> 
+        <Column label="기타속성" align="left" width="220" name="fieldOptions" editType="edit" />
+      </GroupHeader>
+    </GroupHeaders>
+    <FieldMetas>
+      <Column label="ID" align="left" width="180" name="fieldId" search="true" />
+      <Column label="이름" align="left" width="120" name="fieldName" search="true" />
+      <Column label="표준 타입" align="center" width="80" name="originalType" />
+      <Column label="표준 길이" align="center" width="80" name="originalLength" />
+      <Column label="표준 소수" align="center" width="80" name="originalScale" />
+      <Column label="타입" align="center" width="80" name="fieldType" availableValue="B=Byte,S=Short,I=Int,L=Long,F=Float,D=Double,b=Boolean,p=TimeStamp,T=String,N=Numeric,P=PackedDecimal,A=Raw,R=Group" />
+      <Column label="길이" align="center" width="50" name="fieldLength" />
+      <Column label="소수" align="center" width="50" name="fieldScale" />
+      <Column label="필수" align="center" width="60" name="fieldRequireYn" availableValue="Y=true,N=false" />
+      <Column label="마스킹" align="center" width="80" name="fieldHiddenYn" availableValue="Y=true,N=false" />
+      <Column label="변환" align="left" width="100" name="codecId" />
+      <Column label="기타속성" align="left" width="220" name="fieldOptions" />
+      <Column label="비고" align="left" width="220" name="fieldDesc" search="true" />
+    </FieldMetas>
+    <Indexing useAutoIndexing="true" startIndex="1" indexFormat="%04d"/>
+  </Record>
+</Configuration>

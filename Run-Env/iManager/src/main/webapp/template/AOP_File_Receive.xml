@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Operation name="Receive File" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.file.peer" desc="Receive files from remote"> 
+  <Variables> 
+    <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="AdapterParameter" isParameter="true"/> 
+  </Variables>  
+  <Activities> 
+    <Start uniqueKey="0000" index="0" desc="start" xPos="88" yPos="30"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Start>  
+    <End uniqueKey="0001" index="1" desc="End" xPos="89" yPos="198"/>  
+    <Activity uniqueKey="0002" index="2" desc="File Protocol" id="FileProtocol" xPos="66" yPos="114"> 
+      <Parameter type="java.lang.String" desc="Protocol Mode" from="Constant" dynamic="false"> 
+        <Value><![CDATA["R"]]></Value> 
+      </Parameter>  
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Activity> 
+  </Activities>  
+  <Transitions> 
+    <Transition from="0" to="2" order="1" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="2" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition> 
+  </Transitions>  
+  <Imports/> 
+</Operation>

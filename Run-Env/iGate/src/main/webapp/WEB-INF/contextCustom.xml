@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd"
+	default-lazy-init="false">
+
+	<bean class="com.custom.exception.ExceptionManagerBean" />
+
+	<bean class="com.inzent.igate.message.ValueCaster" />
+
+	<bean id="messageBuilder" class="com.custom.message.CustomMessageBuilder" />
+
+	<bean id="activityInitializer" class ="com.inzent.igate.rule.activity.ActivityInitializer" lazy-init="true">
+		<property name="activities">
+			<array>
+				<value>LoggingTrace</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="replyEmulater" class="com.inzent.igate.replyemulating.ReplyEmulater">
+		<property name="packagesToScan">
+			<array>
+				<value>com.custom.replyemulating</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="sessionMap" class="com.inzent.igate.cluster.ClusteredMapBean">
+		<property name="timeToLiveSeconds" value="86400" />
+		<property name="timeout" value="#{systemProperties['igate.cluster.timeout']?:'3000'}" />
+	</bean>
+
+</beans>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
+	default-lazy-init="false">
+	
+	<bean id="LogStatsExcelBean" class="com.inzent.igate.imanager.logstats.LogStatsExcelBeanImpl" />
+	
+	<bean id="objectIdValidator" class="com.inzent.igate.imanager.ObjectIdValidatorImpl" />
+
+	<task:scheduler id="scheduler" pool-size="1" /> <!-- pool-size는 task 갯수에 맞추어야 함 -->
+	<task:scheduled-tasks scheduler="scheduler">
+		<task:scheduled ref="metaHistoryDeleteTask" method="run" cron="0 30 * * * ?" />
+	</task:scheduled-tasks>
+
+	<security:authentication-manager>
+		<security:authentication-provider ref="authenticationProvider" />
+	</security:authentication-manager>
+
+	<bean id="csrfRequestMatcher" class="com.inzent.imanager.common.auth.CsrfRequestMatcher">
+		<property name="allowedPaths">
+			<list>
+				<value>/common/auth/login.*</value>
+				<value>/common/auth/logout.*</value>
+			</list>
+		</property>
+	</bean>
+
+	<security:http pattern="/igate/spread/in.*" security="none"/>
+	<security:http auto-config="true" entry-point-ref="clientAuthenticationEntryPoint">
+		<security:intercept-url pattern="/*/*/popup.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/*/*/*/popup.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/*/*/searchPopup.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/common/generateId*/**" access="isAuthenticated()"/>	
+		<security:intercept-url pattern="/common/menu/**" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/common/metaHistory.*" access="hasRole('ROLE_MetaHistoryViewer')"/>
+		<security:intercept-url pattern="/common/metaHistory/**" access="hasRole('ROLE_MetaHistoryViewer')"/>
+		<security:intercept-url pattern="/common/privilege.*" access="hasRole('ROLE_PrivilegeViewer')"/>
+		<security:intercept-url pattern="/common/privilege/**" access="hasRole('ROLE_PrivilegeViewer')"/>
+		<security:intercept-url pattern="/common/property.*" access="hasRole('ROLE_PropertyViewer')"/>
+		<security:intercept-url pattern="/common/property/propertyIds.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/common/property/properties.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/common/role.*" access="hasRole('ROLE_RoleViewer')"/>
+		<security:intercept-url pattern="/common/role/**" access="hasRole('ROLE_RoleViewer')"/>
+		<security:intercept-url pattern="/common/user/password.html" access="permitAll()"/>
+		<security:intercept-url pattern="/common/user.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/common/user/**" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/activity.*" access="hasRole('ROLE_ActivityViewer')"/>
+		<security:intercept-url pattern="/igate/activity/**" access="hasRole('ROLE_ActivityViewer')"/>
+		<security:intercept-url pattern="/igate/adapter.*" access="hasRole('ROLE_AdapterViewer')"/>
+		<security:intercept-url pattern="/igate/adapter/**" access="hasRole('ROLE_AdapterViewer')"/>
+		<security:intercept-url pattern="/igate/adapterControl.*" access="hasRole('ROLE_AdapterControl')"/>
+		<security:intercept-url pattern="/igate/adapterControl/**" access="hasRole('ROLE_AdapterControl')"/>
+		<security:intercept-url pattern="/igate/calendar.*" access="hasRole('ROLE_CalendarViewer')"/>
+		<security:intercept-url pattern="/igate/calendar/**" access="hasRole('ROLE_CalendarViewer')"/>
+		<security:intercept-url pattern="/igate/connector.*" access="hasRole('ROLE_ConnectorViewer')"/>
+		<security:intercept-url pattern="/igate/connector/**" access="hasRole('ROLE_ConnectorViewer')"/>
+		<security:intercept-url pattern="/igate/connectorControl.*" access="hasRole('ROLE_ConnectorControl')"/>
+		<security:intercept-url pattern="/igate/connectorControl/**" access="hasRole('ROLE_ConnectorControl')"/>
+		<security:intercept-url pattern="/igate/dashboard.*" access="hasRole('ROLE_DashBoardViewer')"/>
+		<security:intercept-url pattern="/igate/dashboard/**" access="hasRole('ROLE_DashBoardViewer')"/>
+		<security:intercept-url pattern="/igate/exceptionCode.*" access="hasRole('ROLE_ExceptionCodeViewer')"/>
+		<security:intercept-url pattern="/igate/exceptionCode/**" access="hasRole('ROLE_ExceptionCodeViewer')"/>
+		<security:intercept-url pattern="/igate/exceptionLog.*" access="hasRole('ROLE_ExceptionLogViewer')"/>
+		<security:intercept-url pattern="/igate/exceptionLog/**" access="hasRole('ROLE_ExceptionLogViewer')"/>
+		<security:intercept-url pattern="/igate/externalLine.**" access="hasRole('ROLE_ExternalLineViewer')"/>
+		<security:intercept-url pattern="/igate/externalLine/**" access="hasRole('ROLE_ExternalLineViewer')"/>
+		<security:intercept-url pattern="/igate/fieldMeta.*" access="hasRole('ROLE_RecordViewer')"  />
+		<security:intercept-url pattern="/igate/fieldMeta/**" access="hasRole('ROLE_RecordViewer')" />
+		<security:intercept-url pattern="/igate/fileLog.*" access="hasRole('ROLE_FileLogViewer')"/>
+		<security:intercept-url pattern="/igate/fileLog/**" access="hasRole('ROLE_FileLogViewer')"/>
+		<security:intercept-url pattern="/igate/fileRepository.*" access="hasRole('ROLE_FileRepositoryViewer')"/>
+		<security:intercept-url pattern="/igate/fileRepository/**" access="hasRole('ROLE_FileRepositoryViewer')"/>
+		<security:intercept-url pattern="/igate/instance.*" access="hasRole('ROLE_InstanceViewer')"/>
+		<security:intercept-url pattern="/igate/instance/list.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/instance/**" access="hasRole('ROLE_InstanceViewer')"/>
+		<security:intercept-url pattern="/igate/interface.*" access="hasRole('ROLE_InterfaceViewer')"/>
+		<security:intercept-url pattern="/igate/interface/**" access="hasRole('ROLE_InterfaceViewer')"/>
+		<security:intercept-url pattern="/igate/interfacePolicy.*" access="hasRole('ROLE_InterfacePolicyViewer')"/>
+		<security:intercept-url pattern="/igate/interfacePolicy/**" access="hasRole('ROLE_InterfacePolicyViewer')"/>
+		<security:intercept-url pattern="/igate/interfaceRecognize.*" access="hasRole('ROLE_InterfaceViewer')"/>
+		<security:intercept-url pattern="/igate/interfaceRecognize/**" access="hasRole('ROLE_InterfaceViewer')"/>
+		<security:intercept-url pattern="/igate/interfaceRestriction.*" access="hasRole('ROLE_InterfaceRestrictionViewer')" />
+		<security:intercept-url pattern="/igate/interfaceRestriction/**" access="hasRole('ROLE_InterfaceRestrictionViewer')"/>
+		<security:intercept-url pattern="/igate/javaProject.*" access="hasRole('ROLE_JavaProjectViewer')"/>
+		<security:intercept-url pattern="/igate/javaProject/**" access="hasRole('ROLE_JavaProjectViewer')"/>
+		<security:intercept-url pattern="/igate/job.*" access="hasRole('ROLE_JobViewer')"/>
+		<security:intercept-url pattern="/igate/job/**" access="hasRole('ROLE_JobViewer')"/>
+		<security:intercept-url pattern="/igate/jobResult.*" access="hasRole('ROLE_JobResultViewer')"/>
+		<security:intercept-url pattern="/igate/jobResult/**" access="hasRole('ROLE_JobResultViewer')"/>
+		<security:intercept-url pattern="/igate/logStatistics/**" access="hasRole('ROLE_LogStatisticsViewer')"/>
+		<security:intercept-url pattern="/igate/mapping.*" access="hasRole('ROLE_MappingViewer')"/>
+		<security:intercept-url pattern="/igate/mapping/**" access="hasRole('ROLE_MappingViewer')"/>
+		<security:intercept-url pattern="/igate/message.*" access="hasRole('ROLE_MessageViewer')"/>
+		<security:intercept-url pattern="/igate/message/**" access="hasRole('ROLE_MessageViewer')"/>
+		<security:intercept-url pattern="/igate/migration/record.*" access="hasRole('ROLE_RecordViewer')"/>
+		<security:intercept-url pattern="/igate/migration/record/**" access="hasRole('ROLE_RecordViewer')"/>
+		<security:intercept-url pattern="/igate/migration/mapping.*" access="hasRole('ROLE_MappingViewer')"/>
+		<security:intercept-url pattern="/igate/migration/mapping/**" access="hasRole('ROLE_MappingViewer')"/>
+		<security:intercept-url pattern="/igate/migration/operation.*" access="hasRole('ROLE_OperationViewer')"/>
+		<security:intercept-url pattern="/igate/migration/operation/**" access="hasRole('ROLE_OperationViewer')"/>
+		<security:intercept-url pattern="/igate/migration/service.*" access="hasRole('ROLE_ServiceViewer')"/>
+		<security:intercept-url pattern="/igate/migration/service/**" access="hasRole('ROLE_ServiceViewer')"/>
+		<security:intercept-url pattern="/igate/migration/interface.*" access="hasRole('ROLE_InterfaceViewer')"/>
+		<security:intercept-url pattern="/igate/migration/interface/**" access="hasRole('ROLE_InterfaceViewer')"/>
+		<security:intercept-url pattern="/igate/migration/query.*" access="hasRole('ROLE_QueryViewer')"/>
+		<security:intercept-url pattern="/igate/migration/query/**" access="hasRole('ROLE_QueryViewer')"/>
+		<security:intercept-url pattern="/igate/monitoring/dashboard.*" access="hasRole('ROLE_DashBoardViewer')"/>
+		<security:intercept-url pattern="/igate/monitoring/dashboard/**" access="hasRole('ROLE_DashBoardViewer')"/>		
+		<security:intercept-url pattern="/igate/onlineHeaderMappingPolicy.*" access="hasRole('ROLE_OnlineHeaderMappingPolicyViewer')"/>
+		<security:intercept-url pattern="/igate/onlineHeaderMappingPolicy/**" access="hasRole('ROLE_OnlineHeaderMappingPolicyViewer')"/>
+		<security:intercept-url pattern="/igate/operation.*" access="hasRole('ROLE_OperationViewer')"/>
+		<security:intercept-url pattern="/igate/operation/**" access="hasRole('ROLE_OperationViewer')" />
+		<security:intercept-url pattern="/igate/query.*" access="hasRole('ROLE_QueryViewer')"/>
+		<security:intercept-url pattern="/igate/query/**" access="hasRole('ROLE_QueryViewer')"/>
+		<security:intercept-url pattern="/igate/record.*" access="hasRole('ROLE_RecordViewer')"/>
+		<security:intercept-url pattern="/igate/record/**" access="hasRole('ROLE_RecordViewer')"/>
+		<security:intercept-url pattern="/igate/reservedSchedule.*" access="hasRole('ROLE_ReservedScheduleViewer')"/>
+		<security:intercept-url pattern="/igate/reservedSchedule/**" access="hasRole('ROLE_ReservedScheduleViewer')"/>
+		<security:intercept-url pattern="/igate/service.*" access="hasRole('ROLE_ServiceViewer')" />
+		<security:intercept-url pattern="/igate/service/**" access="hasRole('ROLE_ServiceViewer')"/>
+		<security:intercept-url pattern="/igate/safMessage.*" access="hasRole('ROLE_SafMessageViewer')" />
+		<security:intercept-url pattern="/igate/safMessage/**" access="hasRole('ROLE_SafMessageViewer')"/>
+		<security:intercept-url pattern="/igate/sapInterface.*" access="hasRole('ROLE_InterfaceEditor')" />
+		<security:intercept-url pattern="/igate/sapInterface/**" access="hasRole('ROLE_InterfaceEditor')"/>
+		<security:intercept-url pattern="/igate/sapService.*" access="hasRole('ROLE_ServiceEditor')" />
+		<security:intercept-url pattern="/igate/sapService/**" access="hasRole('ROLE_ServiceEditor')"/>
+		<security:intercept-url pattern="/igate/servicePolicy.*" access="hasRole('ROLE_ServicePolicyViewer')" />
+		<security:intercept-url pattern="/igate/servicePolicy/**" access="hasRole('ROLE_ServicePolicyViewer')"/>
+		<security:intercept-url pattern="/igate/serviceRecognize.*" access="hasRole('ROLE_ServiceViewer')" />
+		<security:intercept-url pattern="/igate/serviceRecognize/**" access="hasRole('ROLE_ServiceViewer')"/>
+		<security:intercept-url pattern="/igate/serviceRestriction.*" access="hasRole('ROLE_ServiceRestrictionViewer')" />
+		<security:intercept-url pattern="/igate/serviceRestriction/**" access="hasRole('ROLE_ServiceRestrictionViewer')"/>
+		<security:intercept-url pattern="/igate/standardCode.*" access="hasRole('ROLE_StandardCodeViewer')" />
+		<security:intercept-url pattern="/igate/standardCode/**" access="hasRole('ROLE_StandardCodeViewer')"/>
+		<security:intercept-url pattern="/igate/threadPool.*" access="hasRole('ROLE_ThreadPoolViewer')" />
+		<security:intercept-url pattern="/igate/threadPool/**" access="hasRole('ROLE_ThreadPoolViewer')"/>
+		<security:intercept-url pattern="/igate/traceLog.*" access="hasRole('ROLE_TraceLogViewer')" />
+		<security:intercept-url pattern="/igate/traceLog/**" access="hasRole('ROLE_TraceLogViewer')"/>
+		<security:intercept-url pattern="/igate/transactionContext.*" access="hasRole('ROLE_TransactionContextViewer')" />
+		<security:intercept-url pattern="/igate/transactionContext/**" access="hasRole('ROLE_TransactionContextViewer')"/>
+		<security:intercept-url pattern="/igate/transactionLoss.*" access="hasRole('ROLE_TransactionLossViewer')" />
+		<security:intercept-url pattern="/igate/transactionLoss/**" access="hasRole('ROLE_TransactionLossViewer')"/>
+		<security:intercept-url pattern="/igate/webservice.*" access="hasRole('ROLE_ServiceEditor')" />
+		<security:intercept-url pattern="/igate/webservice/**" access="hasRole('ROLE_ServiceEditor')"/>				
+		<security:intercept-url pattern="/common/notice.*" access="isAuthenticated()" />
+		<security:intercept-url pattern="/common/notice/**" access="isAuthenticated()"/>		
+		<security:access-denied-handler ref="accessDeniedHandler" />
+		<security:form-login login-processing-url="/common/auth/login.*" login-page="/common/auth/login.html"
+			username-parameter="userId" password-parameter="password"
+			authentication-success-handler-ref="authenticationSuccessHandler"
+			authentication-failure-handler-ref="authenticationFailureHandler" />
+		<security:logout logout-url="/common/auth/logout.*" logout-success-url="/common/portal.html" />
+		<security:session-management session-fixation-protection="changeSessionId" /> <!-- migrateSession servlet 3.0-  -->
+		<security:headers>
+			<security:frame-options disabled="true" />
+		</security:headers>
+		<security:csrf request-matcher-ref="csrfRequestMatcher" />
+	</security:http>
+</beans>

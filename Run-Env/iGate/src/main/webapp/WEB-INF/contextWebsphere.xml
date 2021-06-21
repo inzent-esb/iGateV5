@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate" />
+
+	<bean id="transactionManager" class="org.springframework.transaction.jta.WebSphereUowTransactionManager">
+		<property name="jndiTemplate" ref="jndiTemplate" />
+	</bean>
+
+	<!-- Jetty, Tomcat, Undertow(JBoss), Glassfish, Weblogic, Websphere -->
+	<bean id="handshakeHandler" class="org.springframework.web.socket.server.support.DefaultHandshakeHandler" />
+<!--
+	<bean id="jMSQueueFactory" class="com.inzent.igate.queue.jms.JMSQueueFactory">
+		<property name="jmsQueueType" value="WebSphere" />
+	</bean>
+-->
+</beans>
