@@ -8,6 +8,7 @@
 
 	<path id="classpath">
 		<pathelement location="target/classes" />
+		<fileset dir="lib/" includes="**/*.jar" />
 		<fileset dir="${iGate.location}/src/main/webapp/WEB-INF/lib/" includes="**/*.jar" excludes="${ant.project.name}.jar"/>
 		<fileset dir="${iGate.location}/lib/" includes="**/*.jar" />
 	</path>
@@ -18,7 +19,7 @@
 
 	<target name="init" depends="clean">
 		<mkdir dir="target/classes" />
-		<copy todir="target/classes" includeemptydirs="false" failonerror="false">
+		<copy todir="target/classes" includeemptydirs="false">
 			<fileset dir="src/main/resources"/>
 		</copy>
 	</target>
