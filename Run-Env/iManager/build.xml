@@ -21,7 +21,7 @@
 		<copy todir="target/${ant.project.name}/" includeemptydirs="false">
 			<fileset dir="src/main/webapp" />
 		</copy>
-		<copy todir="target/${ant.project.name}/WEB-INF/classes" includeemptydirs="false" failonerror="false">
+		<copy todir="target/${ant.project.name}/WEB-INF/classes" includeemptydirs="false">
 			<fileset dir="src/main/resources" />
 		</copy>
 	</target>
