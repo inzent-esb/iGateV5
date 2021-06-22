@@ -43,8 +43,8 @@ public class IsLoginSession extends AbstractActivity
     super(activity) ;
     this.logTemplate = (HibernateTemplate) Context.getApplicationContext().getBean("logTemplate") ;
     this.logTransactionTemplate = (TransactionTemplate) Context.getApplicationContext().getBean("logTransactionTemplate") ;
-    
-    sessionMap = (ClusteredMap<String, MciSession>) Context.getApplicationContext().getBean("sessionMap");
+
+    sessionMap = (ClusteredMap<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
     // TODO Auto-generated constructor stub
   }
 
