@@ -30,7 +30,7 @@
 		</property>
 	</bean>
 
-	<security:http pattern="/igate/spread/in.*" security="none"/>
+	<security:http pattern="/igate/migration/*/recv.json" security="none"/>
 	<security:http auto-config="true" entry-point-ref="clientAuthenticationEntryPoint">
 		<security:intercept-url pattern="/*/*/popup.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/*/*/*/popup.*" access="isAuthenticated()"/>
