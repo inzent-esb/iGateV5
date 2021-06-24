@@ -54,7 +54,7 @@ public class Logout extends AbstractActivity
       try
       {
         MciSession mciSession = logTemplate.get(MciSession.class, mciSessionId) ;
-        if (isLogined(mciSession))
+        if (null != mciSession && isLogined(mciSession))
         {
           logTransactionTemplate.execute(new TransactionCallback<Object>()
           {
