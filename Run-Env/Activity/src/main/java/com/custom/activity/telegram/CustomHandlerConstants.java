@@ -27,38 +27,39 @@ public interface CustomHandlerConstants extends CustomMessageConstants
   public static int MID_OFFSET = TID_OFFSET + TID_LENGTH ;
   public static int MID_LENGTH = 2 ;
 
-  public static String CMGRCD = "CMGRCD" ;
   public static String CMGRCD_FIELD = "CmgrCd" ;
+  public static String CMGRCD_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + CMGRCD_FIELD ;
   public static int CMGRCD_OFFSET = MID_OFFSET + MID_LENGTH ;
   public static int CMGRCD_LENGTH = 4 ;
 
-  public static String CHANNELID = "CHANNELID" ;
   public static String CHANNELID_FIELD = "Channelid" ;
+  public static String CHANNELID_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + CHANNELID_FIELD ;
   public static int CHANNELID_OFFSET = CMGRCD_OFFSET + CMGRCD_LENGTH ;
   public static int CHANNELID_LENGTH = 2 ;
 
-  public static String SESSIONID = "MCISESSIONID" ;
   public static String SESSIONID_FIELD = "MCIsessionId" ;
+  public static String SESSIONID_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + SESSIONID_FIELD ;
   public static int SESSIONID_OFFSET = CHANNELID_OFFSET + CHANNELID_LENGTH ;
   public static int SESSIONID_LENGTH = 40 ;
 
   public static String IP_ADDRESS = "IPADDRESS" ;
   public static String IP_ADDRESS_FIELD = "IpAddress" ;
+  public static String IP_ADDRESS_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + IP_ADDRESS_FIELD ;
   public static int IP_ADDRESS_OFFSET = SESSIONID_OFFSET + SESSIONID_LENGTH ;
   public static int IP_ADDRESS_LENGTH = 32 ;
 
-  public static String MAC_ADDRESS = "MACADDRESS" ;
   public static String MAC_ADDRESS_FIELD = "MacAddress" ;
+  public static String MAC_ADDRESS_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + MAC_ADDRESS_FIELD ;
   public static int MAC_ADDRESS_OFFSET = IP_ADDRESS_OFFSET + IP_ADDRESS_LENGTH ;
   public static int MAC_ADDRESS_LENGTH = 12 ;
 
-  public static String BRANCH = "BRANCH" ;
   public static String BRANCH_FIELD = "TerminalBranch" ;
+  public static String BRANCH_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + BRANCH_FIELD ;
   public static int BRANCH_OFFSET = MAC_ADDRESS_OFFSET + MAC_ADDRESS_LENGTH ;
   public static int BRANCH_LENGTH = 4 ;
 
-  public static String TELLER_CODE = "TELLERCD" ;
   public static String TELLER_CODE_FIELD = "TellerCd" ;
+  public static String TELLER_CODE_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + TELLER_CODE_FIELD ;
   public int TELLER_CODE_OFFSET = BRANCH_OFFSET + BRANCH_LENGTH ;
   public int TELLER_CODE_LENGTH = 6 ;
 

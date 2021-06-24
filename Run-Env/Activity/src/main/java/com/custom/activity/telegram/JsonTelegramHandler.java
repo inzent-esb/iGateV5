@@ -73,11 +73,23 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
     case "R" :
       return RESPONSE_NORMAL ;
 
+    case "B" : // 원인없는 BID (PUSH) 세팅
+      return PUSH_NORMAL ;
+
     default :
       //RestrictInterface 액티비티에서 제어할 지점
       adapterParameter.setBranch(header.path(BRANCH_FIELD).asText()) ;
       return REQUEST_NORMAL ;
     }
+  }
+
+  @Override
+  protected void initializeInterfaceRequest(AdapterParameter adapterParameter) throws IGateException
+  {
+    super.initializeInterfaceRequest(adapterParameter) ;
+
+    // 회기 테트스를 위한 코드
+    transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
   }
 
   @Override
@@ -112,64 +124,5 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
   protected String getServiceId(AdapterParameter adapterParameter, String messageId) throws IGateException
   {
     return header.path(SID_FIELD).asText() ;
-  }
-  
-  @Override
-  protected void initializeInterfaceRequest(AdapterParameter adapterParameter) throws IGateException{
-    super.initializeInterfaceRequest(adapterParameter);
-    
-    String interfaceId = adapterParameter.getInterface().getInterfaceId();
-
-    logger.debug("interfaceId : '" + interfaceId + "'");
-    logger.debug("TER_LOGIN_INTERFACEID : " + TER_LOGIN_INTERFACEID);
-    logger.debug("interfaceId.equals(TER_LOGIN_INTERFACEID) : " + interfaceId.equals(TER_LOGIN_INTERFACEID));
-    
-    // 세션정보를 세팅한다.
-    setSessionInfo(adapterParameter);
-    // 로그인거래일 경우 아래값을 세팅하여 공통변수에 넣는다.
-    /*if(StringUtils.isNotEmpty(interfaceId) && interfaceId.equals(TER_LOGIN_INTERFACEID)) {
-      setSessionInfo(adapterParameter);
-    }*/
-
-    // 회기 테트스를 위한 코드
-    transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
-  }
-  
-  private void setSessionInfo(AdapterParameter adapterParameter) throws IGateException{
-    // 부점정보
-    //String brnCd = adapterParameter.getBranch();
-    
-    // 그룹사코드
-    String cmgrCd = header.path(CMGRCD_FIELD).asText() ;
-    logger.debug("cmgrCd : " + cmgrCd);
-    
-    // 직원번호
-    String tellerCd = header.path(TELLER_CODE_FIELD).asText() ;
-    logger.debug("tellerCd : " + tellerCd);
-    
-    // 채널코드
-    String channelCd = header.path(CHANNELID_FIELD).asText() ;
-    logger.debug("channelCd : " + channelCd);
-    
-    // IP주소
-    String ipAddress = header.path(IP_ADDRESS_FIELD).asText() ;
-    logger.debug("ipAddress : " + ipAddress);
-    
-    // MAC 주소
-    String macAddress = header.path(MAC_ADDRESS_FIELD).asText() ;
-    logger.debug("macAddress : " + macAddress);
-    
-    // MCI SESSION ID
-    String mciSessionId = header.path(SESSIONID_FIELD).asText() ;
-    logger.debug("mciSessionId : " + mciSessionId);
-    
-    // 로그인 처리를 위한 공통변수 세팅.
-    transactionContextBean.setValue(CMGRCD, cmgrCd) ;
-    transactionContextBean.setValue(TELLER_CODE, tellerCd) ;
-    transactionContextBean.setValue(CHANNELID, channelCd) ;
-    transactionContextBean.setValue(IP_ADDRESS, ipAddress) ;
-    transactionContextBean.setValue(MAC_ADDRESS, macAddress) ;
-    transactionContextBean.setValue(SESSIONID, mciSessionId) ;
-    
   }
 }

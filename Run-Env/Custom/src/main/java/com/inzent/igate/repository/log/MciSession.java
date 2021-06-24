@@ -5,48 +5,51 @@ import java.io.Serializable ;
 import javax.persistence.Column ;
 import javax.persistence.Entity ;
 import javax.persistence.Id ;
+import javax.persistence.NamedQueries ;
+import javax.persistence.NamedQuery ;
 import javax.persistence.Table ;
 
 import org.hibernate.annotations.Proxy ;
 
 @Entity
-@Table(name = "IGT_MCI_SESSION", schema = "IGATE")
+@Table(name = "IGT_MCI_SESSION")
 @Proxy(lazy = false)
-public class MciSession implements Serializable, Comparable<MciSession>
+@NamedQueries({ 
+  @NamedQuery(name = MciSession.SELECT_LOGINED, query = "FROM MciSession WHERE empId=:empId AND sessionDelYn='N'"),
+  @NamedQuery(name = MciSession.UPDATE_LOGOUT_NORMAL, query = "UPDATE MciSession SET sessionDelYn='Y', logoffYms=:logoffYms WHERE mciSessionId=:mciSessionId"),
+  @NamedQuery(name = MciSession.UPDATE_LOGOUT_FORCE, query = "UPDATE MciSession SET sessionDelYn='Y' WHERE mciSessionId=:mciSessionId") })
+public class MciSession implements Serializable
 {
-
-  /**
-   * 
-   */
   private static final long serialVersionUID = -7384444813173745206L ;
+
+  public static final String SELECT_LOGINED = "mciSession.select.logined" ;
+  public static final String UPDATE_LOGOUT_NORMAL = "mciSession.update.logout.normal" ;
+  public static final String UPDATE_LOGOUT_FORCE = "mciSession.update.logout.force" ;
 
   @Id
   @Column(name = "MCI_SESSION_ID")
   private String mciSessionId ;
 
-  @Column(name = "BRNCD")
-  private String brnCd ;
+  @Column(name = "MCI_INSTANCE_ID")
+  private String mciInstanceId ;
 
   @Column(name = "CMGRCD")
   private String cmgrCd ;
 
-  @Column(name = "EMPID")
-  private String empId ;
-
   @Column(name = "CHANNEL_CODE")
   private String channelCode ;
-
-  @Column(name = "MCI_NODE_ID")
-  private String mciNodeId ;
-
-  @Column(name = "MCI_INSTANCE_ID")
-  private String mciInstanceId ;
 
   @Column(name = "CHANNEL_IP")
   private String channelIp ;
 
   @Column(name = "MAC_ADDRESS")
   private String macAddress ;
+
+  @Column(name = "BRNCD")
+  private String brnCd ;
+
+  @Column(name = "EMPID")
+  private String empId ;
 
   @Column(name = "LOGON_YMS")
   private String logonYms ;
@@ -59,7 +62,6 @@ public class MciSession implements Serializable, Comparable<MciSession>
 
   public MciSession()
   {
-
   }
 
   public MciSession(String mciSessionId)
@@ -77,14 +79,14 @@ public class MciSession implements Serializable, Comparable<MciSession>
     this.mciSessionId = mciSessionId ;
   }
 
-  public String getBrnCd()
+  public String getMciInstanceId()
   {
-    return brnCd ;
+    return mciInstanceId ;
   }
 
-  public void setBrnCd(String brnCd)
+  public void setMciInstanceId(String mciInstanceId)
   {
-    this.brnCd = brnCd ;
+    this.mciInstanceId = mciInstanceId ;
   }
 
   public String getCmgrCd()
@@ -97,16 +99,6 @@ public class MciSession implements Serializable, Comparable<MciSession>
     this.cmgrCd = cmgrCd ;
   }
 
-  public String getEmpId()
-  {
-    return empId ;
-  }
-
-  public void setEmpId(String empId)
-  {
-    this.empId = empId ;
-  }
-
   public String getChannelCode()
   {
     return channelCode ;
@@ -115,26 +107,6 @@ public class MciSession implements Serializable, Comparable<MciSession>
   public void setChannelCode(String channelCode)
   {
     this.channelCode = channelCode ;
-  }
-
-  public String getMciNodeId()
-  {
-    return mciNodeId ;
-  }
-
-  public void setMciNodeId(String mciNodeId)
-  {
-    this.mciNodeId = mciNodeId ;
-  }
-
-  public String getMciInstanceId()
-  {
-    return mciInstanceId ;
-  }
-
-  public void setMciInstanceId(String mciInstanceId)
-  {
-    this.mciInstanceId = mciInstanceId ;
   }
 
   public String getChannelIp()
@@ -155,6 +127,26 @@ public class MciSession implements Serializable, Comparable<MciSession>
   public void setMacAddress(String macAddress)
   {
     this.macAddress = macAddress ;
+  }
+
+  public String getBrnCd()
+  {
+    return brnCd ;
+  }
+
+  public void setBrnCd(String brnCd)
+  {
+    this.brnCd = brnCd ;
+  }
+
+  public String getEmpId()
+  {
+    return empId ;
+  }
+
+  public void setEmpId(String empId)
+  {
+    this.empId = empId ;
   }
 
   public String getLogonYms()
@@ -185,41 +177,5 @@ public class MciSession implements Serializable, Comparable<MciSession>
   public void setSessionDelYn(String sessionDelYn)
   {
     this.sessionDelYn = sessionDelYn ;
-  }
-
-  @Override
-  public int compareTo(MciSession o)
-  {
-    // TODO Auto-generated method stub
-    return mciSessionId.compareTo(o.mciSessionId) ;
-  }
-
-  @Override
-  public int hashCode()
-  {
-    final int prime = 31 ;
-    int result = 1 ;
-    result = prime * result + ((mciSessionId == null) ? 0 : mciSessionId.hashCode()) ;
-    return result ;
-  }
-
-  @Override
-  public boolean equals(Object obj)
-  {
-    if (this == obj)
-      return true ;
-    if (obj == null)
-      return false ;
-    if (getClass() != obj.getClass())
-      return false ;
-    MciSession other = (MciSession) obj ;
-    if (mciSessionId == null)
-    {
-      if (other.mciSessionId != null)
-        return false ;
-    }
-    else if (!mciSessionId.equals(other.mciSessionId))
-      return false ;
-    return true ;
   }
 }

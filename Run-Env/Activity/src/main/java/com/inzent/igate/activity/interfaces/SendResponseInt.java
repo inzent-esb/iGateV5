@@ -1,4 +1,4 @@
-package com.inzent.igate.activity.interfaces;
+package com.inzent.igate.activity.interfaces ;
 
 import com.custom.activity.telegram.CustomHandlerConstants ;
 import com.inzent.igate.adapter.AdapterParameter ;
@@ -7,7 +7,7 @@ import com.inzent.igate.exception.IGateException ;
 import com.inzent.igate.repository.meta.Activity ;
 
 /**
- * R&DÆÀ È¸±Í Å×½ºÆ®¸¦ À§ÇÑ  Activity
+ * R&DÆÀ È¸±Í Å×½ºÆ®¸¦ À§ÇÑ Activity
  */
 public class SendResponseInt extends SendResponse
 {

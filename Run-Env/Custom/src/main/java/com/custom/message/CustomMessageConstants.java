@@ -26,8 +26,6 @@ public interface CustomMessageConstants
   
   public static String MID_FIELD = "ProgressNo" ;
   
-  public static String MCA_ESSION_ID_FIELD = "MCIsessionId";
-
   public static String LANG_CD_FIELD = "LangCd" ; // 언어코드
   public static String LANG_CD_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + LANG_CD_FIELD ;
 

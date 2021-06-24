@@ -74,6 +74,9 @@ public class XmlTelegramHandler extends AbstractTelegramHandler implements Custo
     case "R" :
       return RESPONSE_NORMAL ;
 
+    case "B" : // 원인없는 BID (PUSH) 세팅
+      return PUSH_NORMAL ;
+
     default :
       // RestrictInterface 액티비티에서 제어할 지점
       adapterParameter.setBranch(header.elementText(BRANCH_FIELD)) ;
