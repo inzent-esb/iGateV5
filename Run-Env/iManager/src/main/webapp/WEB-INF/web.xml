@@ -40,7 +40,7 @@
 		<servlet-name>Dispatcher</servlet-name>
 		<url-pattern>*.json</url-pattern>
 		<url-pattern>*.html</url-pattern>
-		<url-pattern>*.script</url-pattern>
+		<url-pattern>/igate/eims</url-pattern>
 	</servlet-mapping>
 
 	<filter>
