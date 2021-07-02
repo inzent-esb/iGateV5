@@ -18,14 +18,18 @@
 	<bean class="com.custom.tracelog.CustomTraceLogDbFile">
 		<!-- <constructor-arg value="com.inzent.igate.repository.log.TraceLog" /> -->
 		<property name="socketTimeout" value="#{systemProperties['igate.monitoring.socketTimeout']?:'5000'}" />
+		<property name="receiverThreadPool" value="#{systemProperties['igate.logger.threadPool.receiver']?:'connector'}" />
+		<property name="queueSize" value="#{systemProperties['igate.logger.queueSize']?:'5000'}" />
+		<property name="saveQueueFullException" value="#{systemProperties['igate.logger.saveQueueFullException']?:'true'}" />
+		<property name="saverThreadPool" value="#{systemProperties['igate.logger.threadPool.saver']?:'job'}" />
+		<property name="waitDb" value="#{systemProperties['igate.logger.waitDb']?:'3000'}" />
 		<property name="saveMessage" value="#{systemProperties['igate.logger.saveMessage']?:'false'}" />
+		<property name="deleteDb" value="#{systemProperties['igate.logger.deleteDb']?:'true'}" />
 		<property name="logPath" value="#{systemProperties['igate.logger.logPath']}" />
 		<property name="queuePath" value="#{systemProperties['igate.logger.queuePath']}" />
+		<property name="bufferSize" value="#{systemProperties['igate.logger.bufferSize']?:'8192'}" />
 		<property name="logFileCount" value="#{systemProperties['igate.logger.logFileCount']?:'1'}" />
-		<property name="queueSize" value="#{systemProperties['igate.logger.queueSize']?:'5000'}" />
-		<property name="waitDb" value="#{systemProperties['igate.logger.waitDb']?:'3000'}" />
 		<property name="logDuration" value="#{systemProperties['igate.logger.saveDuration']?:'7'}" />
-		<property name="deleteDb" value="#{systemProperties['igate.logger.deleteDb']?:'true'}" />
 	</bean>
 
 </beans>
