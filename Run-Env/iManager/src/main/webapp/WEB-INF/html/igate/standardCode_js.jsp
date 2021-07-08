@@ -270,7 +270,7 @@ $(document).ready(function() {
 					var info = this.standardCodeLocales[i];
 					
 					if(!info || !info.pk || !info.pk.localeCode) {
-						warnAlert('<fmt:message>igate.standardCode.valNullCheck</fmt:message>');
+						warnAlert({message : '<fmt:message>igate.standardCode.valNullCheck</fmt:message>'});
 						isValidation = false;
 						break;
 					}

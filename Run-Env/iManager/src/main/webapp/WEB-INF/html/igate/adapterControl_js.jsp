@@ -109,7 +109,7 @@ $(document).ready(function(){
 	        	},
 	        	start: function() {
 	        		if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-            			warnAlert("<fmt:message>head.selectError</fmt:message>");
+            		    warnAlert({message : "<fmt:message>head.selectError</fmt:message>"}) ;
             			return;
             		}
 	        		
@@ -122,7 +122,7 @@ $(document).ready(function(){
 	        	},
 	        	stop: function() {
 	        		if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-            			warnAlert("<fmt:message>head.selectError</fmt:message>");
+            		    warnAlert({message : "<fmt:message>head.selectError</fmt:message>"}) ;
             			return;
             		}
 	        		

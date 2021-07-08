@@ -43,7 +43,7 @@ $(document).ready(function(){
 	 		'name': "<fmt:message>igate.logStatistics.searchType</fmt:message>", 
 			'isHideAllOption' : true
 	 	},
-	 	{'type': "modal", 'mappingDataInfo': {'url' : '/igate/service.html', 'modalTitle': '<fmt:message>igate.service</fmt:message>', 'vModel': "object.pk.interfaceServiceId", 'callBackFuncName': 'setSearchServiceId'}, 'name': "<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>", 'placeholder': "<fmt:message>head.searchId</fmt:message>"},
+	 	{'type': "modal", 'mappingDataInfo': {'url' : '/igate/interface.html', 'modalTitle': '<fmt:message>igate.interface</fmt:message>', 'vModel': "object.pk.interfaceServiceId", 'callBackFuncName': 'setSearchServiceId'}, 'name': "<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>", 'placeholder': "<fmt:message>head.searchId</fmt:message>"},
 	]);
 	
 	createPageObj.searchConstructor(true);
@@ -122,7 +122,7 @@ $(document).ready(function(){
 	   					createPageObj.openModal.call(this, openModalParam);	
 	   				},	   	        	
 	   	        	setSearchServiceId: function(param) {
-	   	        		this.object.pk.interfaceServiceId = param.serviceId; 
+	   	        		this.object.pk.interfaceServiceId = param.interfaceId; 
 	   	        	}	   	        	
 				},
 				mounted: function(){

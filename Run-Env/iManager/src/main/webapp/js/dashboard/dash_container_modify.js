@@ -52,7 +52,7 @@ function DashContainerModify(dashContainerElement, dashContainerOptions) {
     	$("#modifyContainer").on('click', function() {
     		
     		if(0 == _this.componentList.length) {
-    			warnAlert(dashboardMsg_deployNoComponent);
+    			warnAlert({message : dashboardMsg_deployNoComponent});
     			return false;
     		}
 
@@ -107,7 +107,7 @@ function DashContainerModify(dashContainerElement, dashContainerOptions) {
     		}
     		
     		if(!checkNormal) {
-    			warnAlert(warnAlertMsg);
+    			warnAlert({message : warnAlertMsg});
     			return false;
     		}
     		
@@ -129,7 +129,7 @@ function DashContainerModify(dashContainerElement, dashContainerOptions) {
 		        success: function(result) {
 		        	if('ok' != result.result) return;
 		        	
-		        	normalAlert(dashboardMsg_modifySuccess);
+		        	normalAlert({message : dashboardMsg_modifySuccess});
 		        	
 		        	setLocalStorage();
 		        	

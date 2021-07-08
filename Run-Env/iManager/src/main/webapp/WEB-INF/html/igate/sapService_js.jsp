@@ -250,7 +250,7 @@
 					data: this.address,
 					success: function(result) {
 						if (result.error) {
-							warnAlert('<fmt:message>igate.sap.error</fmt:message>');
+							warnAlert({message : '<fmt:message>igate.sap.error</fmt:message>'});
 							stopSpinner();
 							return;
 						}
@@ -366,7 +366,7 @@
 						  
 						ResultImngObj.resultResponseHandler(result);
 						
-						normalAlert('<fmt:message>head.insert.notice</fmt:message>');
+		                normalAlert({message : '<fmt:message>head.insert.notice</fmt:message>'});
 						
 						this.reset();
 						

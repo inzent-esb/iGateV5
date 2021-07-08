@@ -47,6 +47,10 @@
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>Dispatcher</servlet-name>
+		<url-pattern>/TER</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>TestCase</servlet-name>

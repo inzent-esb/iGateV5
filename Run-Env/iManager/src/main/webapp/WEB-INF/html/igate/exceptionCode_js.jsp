@@ -256,7 +256,7 @@ $(document).ready(function() {
 					var info = this.exceptionProperties[i];
 					
 					if(!info || !info.pk || !info.pk.propertyKey || !info.propertyValue) {
-						warnAlert('<fmt:message>igate.exceptionCode.valNullCheck</fmt:message>');
+						warnAlert({message : '<fmt:message>igate.exceptionCode.valNullCheck</fmt:message>'}) ;          
 						isValidation = false;
 						break;
 					}

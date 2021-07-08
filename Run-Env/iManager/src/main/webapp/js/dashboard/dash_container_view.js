@@ -293,7 +293,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		$("#shareContainerMode").on('click', function() {
     	
 	    	if(!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
-	    		warnAlert(dashboardMsg_selectShareDashboard);
+	    		warnAlert({message : dashboardMsg_selectShareDashboard});
 	    		return;
 	    	}
 
@@ -383,7 +383,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	        		success : function(result) {
 	        			if ('ok' != result.result) return;
         	    	
-	        			normalAlert(dashboardMsg_shareSuccess);
+			        	normalAlert({message : dashboardMsg_shareSuccess});
         	    	
 	        			changeContainer('view');
 	        		},
@@ -451,11 +451,11 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		$("#deleteContainer").on('click', function() {
 
 			if (!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
-	    		warnAlert(dashboardMsg_selectDeleteDashboard);
+	    		warnAlert({message : dashboardMsg_selectDeleteDashboard});
 	    		return;
 	    	}
       
-	    	normalConfirm(dashboardMsg_deleteWarn, function() {
+	    	normalConfirm({message : dashboardMsg_deleteWarn, callBackFunc : function() {
 	    		$.ajax({
 	    			type : 'DELETE',
 	    			url : contextPath + '/igate/monitoring/dashboard/container.json?containerId=' + _this.containerInfo.containerId,
@@ -464,20 +464,20 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	    			success : function(result) {
 	    				if ('ok' != result.result) return;
 
-	    				normalAlert(dashboardMsg_deleteSuccess);
+	    				normalAlert({message : dashboardMsg_deleteSuccess});
 
 	    				setLocalStorage();
 	    				
 	    				changeContainer('view');
 	    			}
 	    		});
-	    	});
+	    	}});
 		});
 
 		$("#modifyContainerMode").on('click', function() {
     	
 	    	if (!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
-	    		warnAlert(dashboardMsg_selectModifyDashboard);
+	    		warnAlert({message : dashboardMsg_selectModifyDashboard});
 	    		return;
 	    	}
 
@@ -542,7 +542,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	    $("#copyContainerMode").on('click', function() {
 	    	
 	    	if (!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
-	    		warnAlert(dashboardMsg_selectCopyDashboard);
+	    		warnAlert({message : dashboardMsg_selectCopyDashboard});
 	    		return;
 	    	};
     
@@ -676,7 +676,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 					        success: function(result) {
 					        	if('ok' != result.result) return;
 					        	
-					        	normalAlert(dashboardMsg_addSuccess);
+			    				normalAlert({message : dashboardMsg_addSuccess});
 					        	
 					        	changeContainer('view');
 					        	
@@ -707,7 +707,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	    $("#previewContainerMode").on('click', function(evt) {
 	    	
 	    	if (!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
-	    		warnAlert(dashboardMsg_selectNoDashboard);
+	    		warnAlert({message : dashboardMsg_selectNoDashboard});
 	    		return;
 	    	};
 	    	
@@ -784,7 +784,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 				
 				if(!document.fullscreenElement && screen.width == window.innerWidth && screen.height == window.innerHeight) {
 					$("#dashContextMenu").remove();
-					warnAlert(dashboardLabel_contextFullscreenMsg);
+					warnAlert({message : dashboardLabel_contextFullscreenMsg});
 					return false;					
 				}
 				
@@ -825,12 +825,12 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 			$("#dashContextSetting").find("#containerMoveBtn").on('click', function() {
 		
 				if(!$("#dashContextSetting").find("#contextMenuContainerList").val()) {
-					warnAlert(dashboardMsg_selectNoDashboard);
+					warnAlert({message : dashboardMsg_selectNoDashboard});
 					return;
 				}
 			
 				if(_this.containerInfo.containerId == $("#dashContextSetting").find("#contextMenuContainerList").val()) {
-					warnAlert(dashboardMsg_moveNoSameDashboard);
+					warnAlert({message : dashboardMsg_moveNoSameDashboard});
 					return;
 				}
 			
@@ -853,7 +853,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 			});
 		
 			$("#dashContextSetting").find("#containerCloseBtn").on('click', function() {
-				if(!window.opener) warnAlert(dashboardMsg_closeNewDashboard);
+				if(!window.opener) warnAlert({message : dashboardMsg_closeNewDashboard});
 				else			   window.close();	
 			});
 				
@@ -2070,17 +2070,17 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		var containerHeight = $('#dashModal').find('#containerHeight').val();
 
 		if (0 == $.trim(containerName).length) {
-			warnAlert(dashboardMsg_enterName);
+			warnAlert({message : dashboardMsg_enterName});
 			return false;
 		}
 
 		if (0 == $.trim(containerWidth).length || 0 == $.trim(containerHeight).length) {
-			warnAlert(dashboardMsg_enterResolution);
+			warnAlert({message : dashboardMsg_enterResolution});
 			return false;
 		}
 
 		if (0 == $.trim(containerWidth.replace(/[^0-9]/g, "")).length || 0 == $.trim(containerHeight.replace(/[^0-9]/g, "")).length) {
-			warnAlert(dashboardMsg_enterNumber);
+			warnAlert({message : dashboardMsg_enterNumber});
 			return false;
 		}
 		
@@ -2100,7 +2100,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 				if('ok' != res.result) return;
 
 				if(res.object) {
-					warnAlert(dashboardMsg_overlapWarn);
+					warnAlert({message : dashboardMsg_overlapWarn});
 					return;
 				}
 			  

@@ -44,6 +44,8 @@
 
   $("#userInfoBtn").on('click', function()
   {
+    var spinnerOption = 'full';
+
     var createPageObj = getCreatePageObj() ;
 
     createPageObj.setViewName('editUserModal') ;
@@ -55,6 +57,9 @@
         userId : $("#userId").val()
       },
       modalTitle : '<fmt:message>common.user</fmt:message> <fmt:message>head.update</fmt:message>',
+      modalParam : {
+	      spinnerMode : spinnerOption
+	  }
     }) ;
   }) ;
 

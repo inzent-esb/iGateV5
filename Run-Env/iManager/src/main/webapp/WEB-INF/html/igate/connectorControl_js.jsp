@@ -147,7 +147,7 @@ $(document).ready(function(){
                 	},
                 	start: function() {
                 		if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-                			warnAlert("<fmt:message>head.selectError</fmt:message>");
+        					warnAlert({alertMessage : "<fmt:message>head.selectError</fmt:message>"}) ;                			
                 			return;
                 		}
                 		
@@ -160,7 +160,7 @@ $(document).ready(function(){
                 	},
 					stop: function() {
 						if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-                			warnAlert("<fmt:message>head.selectError</fmt:message>");
+        					warnAlert({alertMessage : "<fmt:message>head.selectError</fmt:message>"}) ;
                 			return;
                 		}
 						
@@ -173,7 +173,7 @@ $(document).ready(function(){
 					},
 					block: function() {
 						if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-                			warnAlert("<fmt:message>head.selectError</fmt:message>");
+                			warnAlert({alertMessage : "<fmt:message>head.selectError</fmt:message>"}) ;          
                 			return;
                 		}
 						
@@ -186,7 +186,7 @@ $(document).ready(function(){
 					},
 					unblock: function() {
 						if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-                			warnAlert("<fmt:message>head.selectError</fmt:message>");
+        					warnAlert({alertMessage : "<fmt:message>head.selectError</fmt:message>"}) ;                			
                 			return;
                 		}
 						
@@ -199,7 +199,7 @@ $(document).ready(function(){
 					},
 					interrupt: function() {
 						if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-                			warnAlert("<fmt:message>head.selectError</fmt:message>");
+        					warnAlert({alertMessage : "<fmt:message>head.selectError</fmt:message>"}) ;                			
                 			return;
                 		}
 						
@@ -212,18 +212,18 @@ $(document).ready(function(){
 					},
 					stopForce: function() {
 						if(SearchImngObj.searchGrid.getCheckedRows().length == 0) {
-                			warnAlert("<fmt:message>head.selectError</fmt:message>");
+        					warnAlert({alertMessage : "<fmt:message>head.selectError</fmt:message>"}) ;                			
                 			return;
                 		}
 						
-						normalConfirm("<fmt:message>igate.connectorControl.alert</fmt:message>", function() {
+						normalConfirm({message : "<fmt:message>igate.connectorControl.alert</fmt:message>", callBackFunc : function() {
 	                	    $.each(SearchImngObj.searchGrid.getCheckedRows(), function(idx, item) {
 	                	    	SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', '<fmt:message>common.stopping</fmt:message>');
 	                	    	ControlImngObj.rowControl("stopForce", item.instanceId, $.param({
 	                	    		connectorId : item.connectorId
 	                	    	}), item.rowKey);
 							});							
-						});
+						}});
 					}
                 }),
                 mounted: function() {

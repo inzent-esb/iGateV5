@@ -485,7 +485,19 @@ $(document).ready(function() {
 			    object._method = "POST";
 
 			    SaveImngObj.submit(SaveImngObj.objectUri, JsonImngObj.serialize(object), '<fmt:message>head.update.notice</fmt:message>', function(result) {
-			    	SearchImngObj.load($.param({userId: window.vmMain.object.userId}));
+	                
+			    	startSpinner();
+	                
+	                $.ajax({
+	                   type : "GET",
+	                   url : SaveImngObj.objectUri,
+	                   processData : false,
+	                   data : $.param({userId: window.vmMain.object.userId}),
+	                   dataType : "json",
+	                   complete: function() {
+	                      stopSpinner();
+	                   }
+	                })
 			    });
 			}
 		})

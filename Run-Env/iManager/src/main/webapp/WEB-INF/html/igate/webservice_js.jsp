@@ -277,6 +277,7 @@
 	            	success: function(result) {
 	            		
 	            		if (result.error) {
+	            			warnAlert({message : result.error[0].className + ((result.error[0].message)? "<hr/>" + result.error[0].message  : ""), isXSSMode : false})
 	            			stopSpinner();
 	            			return;
 	            		}
@@ -451,7 +452,7 @@
 			    	  
 						ResultImngObj.resultResponseHandler(result);
 						
-						normalAlert('<fmt:message>head.insert.notice</fmt:message>');
+		                normalAlert({message : '<fmt:message>head.insert.notice</fmt:message>'});
 						
 						this.reset();
 						

@@ -357,11 +357,11 @@
 
 	            if (targetIdList.length == 0)
 	            {
-	              warnAlert("<fmt:message>igate.migration.selectError</fmt:message>") ;
+	              warnAlert({message : "<fmt:message>igate.migration.selectError</fmt:message>"}) ;
 	            }
 	            else
 	            {
-	              MigrationImngObj.makeSubmit("<c:url value='/igate/migration/service/make.json' />", targetIdList, function(result)
+	              MigrationImngObj.makeSubmit("<c:url value='/igate/migration/service/make.json' />", targetIdList, "<fmt:message>igate.migration.make</fmt:message>", function(result)
 	              {
 	                window.vmMake.object = result.object ;
 	                panelOpen('detail') ;
@@ -459,7 +459,7 @@
         },
         migration : function()
         {
-          MigrationImngObj.makeSubmit("<c:url value='/igate/migration/service/send.json' />", targetIdList, function(result)
+          MigrationImngObj.makeSubmit("<c:url value='/igate/migration/service/send.json' />", targetIdList, "<fmt:message>igate.migration.migration</fmt:message>", function(result)
           {
             window.vmMake.object = result.object ;
           }) ;
@@ -511,7 +511,7 @@
           {
             if (!this.files || this.files.length != 1)
             {
-              warnAlert("<fmt:message>common.noFileError</fmt:message>") ;
+              warnAlert({message : "<fmt:message>common.noFileError</fmt:message>"}) ;
               return ;
             }
 
@@ -528,9 +528,11 @@
 
           if (null === data)
           {
-            warnAlert("<fmt:message>igate.migration.fileSelectError</fmt:message>") ;
+            warnAlert({message : "<fmt:message>igate.migration.fileSelectError</fmt:message>"}) ;
             return ;
           }
+          
+          startSpinner();
 
           $.ajax({
             url : "<c:url value='/igate/migration/service/import.json' />",
@@ -542,16 +544,18 @@
             type : 'POST', // For jQuery < 1.9
             success : function(data)
             {
+               stopSpinner();	
+               
                if (data.object !== undefined)
                {
                  window.vmImport.object = data.object ;
                  window.vmImport.errorMessage = "" ;
-                 normalAlert("<fmt:message>head.upload</fmt:message> <fmt:message>head.success</fmt:message>") ;
+                 normalAlert({message : "<fmt:message>head.upload</fmt:message> <fmt:message>head.success</fmt:message>"});
                }
                else
                {
-         	  	warnAlert("<fmt:message>head.upload</fmt:message> <fmt:message>head.fail</fmt:message>") ;
-                 window.vmImport.errorMessage = data.error[0].className + "\n" + data.error[0].message ;
+         	  	warnAlert({message : "<fmt:message>head.upload</fmt:message> <fmt:message>head.fail</fmt:message>"}) ;
+         	  	window.vmImport.errorMessage = data.error[0].className + ((data.error[0].message)? "\n" + data.error[0].message  : "");
                }
             }
           }) ;

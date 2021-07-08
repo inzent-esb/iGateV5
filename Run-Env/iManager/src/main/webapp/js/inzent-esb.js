@@ -182,10 +182,19 @@ function getCreatePageObj()
           		  			 .append(
           		  					 $('<label/>').addClass('form-control-label reset')
           		  					 			  .append(
-          		  					 					  $('<b/>').addClass('control-label').text(name)
+          		  					 					  $('<b/>').addClass('control-label')
+          		  					 					  		   .text(name)
+          		  					 					           .append(
+          		  					 					        		$('<i/>').addClass('icon-srch')
+          		  					 					        		         .attr({'v-on:click' : 'openModal(' + JSON.stringify(mappingDataInfo) + ')'})
+          		  					 					        				 .css({
+          		  					 					        					 'line-height': 'unset', 
+          		  					 					        					 'padding-left': '5px'
+          		  					 					        				 })  
+          		  					 					           )
           		  					 			  )
           		  					 			  .append(
-          		  					 					  $('<input/>').addClass('form-control').attr({'v-model' : mappingDataInfo.vModel, 'placeholder' : placeholder, 'readonly' : true, 'v-on:click' : 'openModal(' + JSON.stringify(mappingDataInfo) + ')'})
+          		  					 					  $('<input/>').addClass('form-control').attr({'v-model' : mappingDataInfo.vModel, 'placeholder' : placeholder, 'v-on:keyup.enter' : 'search'})
           		  					 			  )
           		  					 			  .append(
           		  					 					  $('<i/>').addClass('icon-close').attr({'v-on:click.prevent': mappingDataInfo.vModel + ' = null' })
@@ -332,8 +341,21 @@ function getCreatePageObj()
                 object.children('.input-group').children('input[type=text]').removeClass().addClass(formControl).attr(
                 {
                   'v-model' : detailSubObj.mappingDataInfo,
-                  'v-on:change' : detailSubObj.changeEvt
-                }).show() ;
+                  'v-on:change' : detailSubObj.changeEvt,
+                }) ;
+                
+                if(detailSubObj.clickEvt) {
+                	object.children('.input-group').attr({'v-on:click' : detailSubObj.clickEvt })
+                	object.children('.input-group').children('input[type=text]').addClass('underlineTxt');
+                	object.children('.input-group').css({'cursor' : 'pointer'});
+                }
+                
+                if(detailSubObj.btnClickEvt)
+                	object.children('.input-group').append($("<button/>").attr({'v-on:click' : detailSubObj.btnClickEvt }).addClass('btn btn-icon').css({'margin-left' : '3px', 'padding': '5px 10px 0px 10px'})
+    						   					   .append($("<i/>").addClass('icon-link')));
+                
+                object.children('.input-group').children('input[type=text]').show();	
+                	
               }
               else if ('password' == detailSubObj.type)
               {
@@ -432,6 +454,14 @@ function getCreatePageObj()
                   'v-on:change' : (detailSubObj.mappingDataInfo.changeEvt) ? detailSubObj.mappingDataInfo.changeEvt : null,
                   'disabled' : detailSubObj.disabled
                 }) ;
+                
+                if (detailSubObj.id)
+                	selectAttr.attr({'id' : detailSubObj.id});
+                
+                if (detailSubObj.clickEvt) 
+                	object.children('.input-group').append($("<button/>").attr({'v-on:click' : detailSubObj.clickEvt }).addClass('btn btn-icon').css({'margin-left' : '3px', 'padding': '5px 10px 0px 10px'})
+                								   .append($("<i/>").addClass('icon-link')));
+                
 
                 if (detailSubObj.placeholder)
                 {
@@ -515,6 +545,10 @@ function getCreatePageObj()
                   'disabled' : detailSubObj.disabled,
                   'v-on:change' : detailSubObj.changeEvt
                 }).show() ;
+              }
+              else if ('grid' == detailSubObj.type)
+              {
+            	object.append($("<div/>").addClass('table-responsive').append($("<div/>").attr({'id' : detailSubObj.id})));  
               }
               
               if ('search' != detailSubObj.type)
@@ -791,110 +825,113 @@ function getCreatePageObj()
   return new createPageObj() ;
 }
 
-function panelOpen(o, object, callBackFunc)
-{
+function panelOpen(o, object, callBackFunc) {
 
-  if ('sidebar' != o)
-  {
+	$("#panel").find('#panel-header').find('.ml-auto').show();	
+	
+	if(window.vmMain) {
+		window.vmMain.$nextTick(function() {
+			setPanel();
+		});
+	} else {
+		setPanel();
+	}
+  
+	function setPanel() {
+		if ('sidebar' != o) {
+			
+			if (o != 'done')
+				$('#accordionResult').children('.collapse-item').remove() ;
 
-    if (o != 'done')
-      $('#accordionResult').children('.collapse-item').remove() ;
+		    if (window.vmMain)
+		        window.vmMain.panelMode = o ;
+		    
+		    if (o == 'add') {
+		    	$("#panel").find('.sub-bar-tit').text('Insert') ;
+		    	$("#panel").find('.updateGroup').hide() ;
+		    	$("#panel").find('.viewGroup').hide() ;
+		    	$("#panel").find('.saveGroup').show() ;
 
-    if (window.vmMain)
-      window.vmMain.panelMode = o ;
+		    	$("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', false) ;
+		    	$("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', false) ;
+		    	$("#panel").find('.form-control').filter('[name=detail_type_search]').attr('readonly', true) ;
 
-    if (o == 'add')
-    {
-      $("#panel").find('.sub-bar-tit').text('Insert') ;
-      $("#panel").find('.updateGroup').hide() ;
-      $("#panel").find('.viewGroup').hide() ;
-      $("#panel").find('.saveGroup').show() ;
+		    	$("#panel").find('.dataKey').not('[name=detail_type_search]').attr('readonly', false) ;
+		      
+		    	if($("#panel").find('.warningLabel'))
+		    		$("#panel").find('.warningLabel').show();
+		      
+			    if (window.vmMain) {
+			    	window.vmMain.initDetailArea(object) ;
+			    	window.vmMain.$forceUpdate();
+			    }
+		    }
+		    else if (o == 'mod') {
+		    	$("#panel").find('.sub-bar-tit').text('Update') ;
+		    	$("#panel").find('.viewGroup').hide() ;
+		    	$("#panel").find('.saveGroup').hide() ;
+		    	$("#panel").find('.updateGroup').show() ;
 
-      $("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', false) ;
-      $("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', false) ;
-      $("#panel").find('.form-control').filter('[name=detail_type_search]').attr('readonly', true) ;
+		    	$("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', false) ;
+		    	$("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', false) ;
+		    	$("#panel").find('.form-control').filter('[name=detail_type_search]').attr('readonly', true) ;
 
-      $("#panel").find('.dataKey').not('[name=detail_type_search]').attr('readonly', false) ;
-      
-      if($("#panel").find('.warningLabel'))
-    	  $("#panel").find('.warningLabel').show();
-      
-      if (window.vmMain) {
-        window.vmMain.initDetailArea(object) ;
-        window.vmMain.$forceUpdate();
-      }
-    }
-    else if (o == 'mod')
-    {
-      $("#panel").find('.sub-bar-tit').text('Update') ;
-      $("#panel").find('.viewGroup').hide() ;
-      $("#panel").find('.saveGroup').hide() ;
-      $("#panel").find('.updateGroup').show() ;
+		    	$("#panel").find('.dataKey').attr('readonly', true) ;
+		      
+		    	if($("#panel").find('.warningLabel'))
+		    		$("#panel").find('.warningLabel').show();
 
-      $("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', false) ;
-      $("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', false) ;
-      $("#panel").find('.form-control').filter('[name=detail_type_search]').attr('readonly', true) ;
+		    }
+		    else if (o == 'detail' || o == 'done') {
+		    	$("#panel").find('.sub-bar-tit').text('Detail') ;
+		    	$("#panel").find('.updateGroup').hide() ;
+		    	$("#panel").find('.saveGroup').hide() ;
+		    	$("#panel").find('.viewGroup').show() ;
 
-      $("#panel").find('.dataKey').attr('readonly', true) ;
-      
-      if($("#panel").find('.warningLabel'))
-    	  $("#panel").find('.warningLabel').show();
+		    	$("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', true) ;
+		    	$("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', true) ;
 
-    }
-    else if (o == 'detail' || o == 'done')
-    {
-      $("#panel").find('.sub-bar-tit').text('Detail') ;
-      $("#panel").find('.updateGroup').hide() ;
-      $("#panel").find('.saveGroup').hide() ;
-      $("#panel").find('.viewGroup').show() ;
+		    	$("#panel").find('.dataKey').attr('readonly', true) ;
+		      
+		    	if($("#panel").find('.warningLabel'))
+		    		$("#panel").find('.warningLabel').hide();
+		    }
+		}
+		
+		var $wrap = $('#wrap') ;
+		var a = -$wrap.scrollTop() ;
+		var target = $('#' + (('sidebar' != o) ? 'panel' : 'sidebar')) ;
+		var $body = $('body') ;
 
-      $("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', true) ;
-      $("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', true) ;
+		$wrap.css('top', a) ;
 
-      $("#panel").find('.dataKey').attr('readonly', true) ;
-      
-      if($("#panel").find('.warningLabel'))
-    	  $("#panel").find('.warningLabel').hide();
-    }
+		target.data('backdrop') !== false && target.after('<div class="backdrop"></div>') ;
 
-  }
+		if ($body.hasClass('fixed')) {
+			$body.removeAttr('class') ;
+		    $('.panel').hide() ;
+		}
 
-  var $wrap = $('#wrap') ;
-  var a = -$wrap.scrollTop() ;
-  var target = $('#' + (('sidebar' != o) ? 'panel' : 'sidebar')) ;
-  var $body = $('body') ;
+		$body.addClass('fixed') ;
 
-  $wrap.css('top', a) ;
+		setTimeout(function() {
+			target.show(0, function() {
 
-  target.data('backdrop') !== false && target.after('<div class="backdrop"></div>') ;
+				$body.addClass('panel-open-' + o) ;
 
-  if ($body.hasClass('fixed'))
-  {
-    $body.removeAttr('class') ;
-    $('.panel').hide() ;
-  }
+				windowResizeSearchGrid() ;
 
-  $body.addClass('fixed') ;
+				if (callBackFunc) {
+					callBackFunc() ;
+				}
+			});
+		}, 200) ;		
 
-  setTimeout(function()
-  {
-    target.show(0, function()
-    {
-      $body.addClass('panel-open-' + o) ;
-
-      windowResizeSearchGrid() ;
-
-      if (callBackFunc)
-      {
-        callBackFunc() ;
-      }
-    }) ;
-  }, 200) ;
-
-  /*
-  if ((o == 'detail' || o == 'add') && !object)
-    $("#panel").find('.flex-shrink-0').children().first().children('a').trigger('click') ;
-  */    
+		/*
+		  if ((o == 'detail' || o == 'add') && !object)
+		    $("#panel").find('.flex-shrink-0').children().first().children('a').trigger('click') ;
+		*/
+	}
 }
 
 function panelClose(o)
@@ -920,3 +957,4 @@ function panelClose(o)
     windowResizeSearchGrid() ;
   }, 200) ;
 }
+

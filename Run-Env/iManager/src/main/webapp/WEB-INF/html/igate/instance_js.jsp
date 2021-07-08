@@ -534,7 +534,7 @@
 
     if (overlapElement)
     {
-      warnAlert('<fmt:message key="igate.instance.alert.overlap"><fmt:param value="' + overlapElement + '" /></fmt:message>') ;
+      warnAlert({message : '<fmt:message key="igate.instance.alert.overlap"><fmt:param value="' + overlapElement + '" /></fmt:message>'}) ;
       return false ;
     }
     return true ;

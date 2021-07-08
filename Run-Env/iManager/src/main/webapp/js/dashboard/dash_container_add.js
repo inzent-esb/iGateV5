@@ -47,7 +47,7 @@ function DashContainerAdd(dashContainerElement, dashContainerOptions) {
     	$("#saveContainer").on('click', function() {
     		
     		if(0 == _this.componentList.length) {
-    			warnAlert(dashboardMsg_deployNoComponent);
+    			warnAlert({message : dashboardMsg_deployNoComponent});
     			return false;
     		}
     		
@@ -100,7 +100,7 @@ function DashContainerAdd(dashContainerElement, dashContainerOptions) {
     		}
     		
     		if(!checkNormal) {
-    			warnAlert(warnAlertMsg);
+    			warnAlert({message : warnAlertMsg});
     			return false;
     		}
     		
@@ -128,7 +128,7 @@ function DashContainerAdd(dashContainerElement, dashContainerOptions) {
 		        success: function(result) {
 		        	if('ok' != result.result) return;
 		        	
-		        	normalAlert(dashboardMsg_addSuccess);
+		        	normalAlert({message : dashboardMsg_addSuccess});
 		        	
 		        	setLocalStorage();
 		        	

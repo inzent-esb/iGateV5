@@ -12,54 +12,6 @@ $(function()
   $(document).on('click', function(e)
   {
 
-    if ('nav-link active' === $(e.target).attr('class') && window.vmMain)
-    {
-
-      var o = window.vmMain.panelMode ;
-
-      if (o == 'add')
-      {
-        $("#panel").find('.sub-bar-tit').text('Insert') ;
-        $("#panel").find('.updateGroup').hide() ;
-        $("#panel").find('.viewGroup').hide() ;
-        $("#panel").find('.saveGroup').show() ;
-
-        $("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', false) ;
-        $("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', false) ;
-        $("#panel").find('.form-control').filter('[name=detail_type_search]').attr('readonly', true) ;
-
-        $("#panel").find('.dataKey').not('[name=detail_type_search]').attr('readonly', false) ;
-
-      }
-      else if (o == 'mod')
-      {
-        $("#panel").find('.sub-bar-tit').text('Update') ;
-        $("#panel").find('.viewGroup').hide() ;
-        $("#panel").find('.saveGroup').hide() ;
-        $("#panel").find('.updateGroup').show() ;
-
-        $("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', false) ;
-        $("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', false) ;
-        $("#panel").find('.form-control').filter('[name=detail_type_search]').attr('readonly', true) ;
-
-        $("#panel").find('.dataKey').attr('readonly', true) ;
-
-      }
-      else if (o == 'detail' || o == 'done')
-      {
-        $("#panel").find('.sub-bar-tit').text('Detail') ;
-        $("#panel").find('.updateGroup').hide() ;
-        $("#panel").find('.saveGroup').hide() ;
-        $("#panel").find('.viewGroup').show() ;
-
-        $("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', true) ;
-        $("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', true) ;
-
-        $("#panel").find('.dataKey').attr('readonly', true) ;
-      }
-
-    }
-
     var tg = '.panel-content' ;
     if (!$body.is($("[class*='panel-open']")) || $('[data-backdrop="false"]').is(':visible'))
     {
@@ -168,26 +120,27 @@ function windowResizeSearchGrid() {
 
 	setTimeout(function() {
 		resizeSearchGrid();
-	}, 200);
+	}, 350);
 }
 
 function resizeSearchGrid() {
+	var adjustHeight = 0;
 	
-	$("#" + window.mainSearchGridId).width(0).width($("#" + window.mainSearchGridId).parent().width());
-  
-	if ('block' == $("#panel").css('display')) {
-		
-		var adjustHeight = $("#" + window.mainListAreaId).height() - $("#panel").find(".panel-dialog").find(".panel-content").outerHeight(true);
-		
-		$.each($("#" + window.mainListAreaId).children().not('.table-responsive'), function(index, element) {
-			adjustHeight -= $(element).outerHeight(true);
-		});
-		
-		$("#" + window.mainListAreaId).find(".table-responsive").height(adjustHeight);
-		
-	} else {
-		$("#" + window.mainListAreaId).find(".table-responsive").height('auto');
-	}
+	$.each($("#" + window.mainListAreaId).children().not('.table-responsive'), function(index, element) {
+		adjustHeight += $(element).outerHeight(true);
+	});
+	
+	if($("#panel").find(".panel-dialog").find(".panel-content").length)
+		adjustHeight += $("#panel").find(".panel-dialog").find(".panel-content").outerHeight(true);
+	
+	$("#" + window.mainListAreaId).find(".table-responsive").height('calc(100% - '+ adjustHeight +'px)');
+	
+	var adjustWidth = 0;
+	
+	if($("#" + window.mainSearchGridId).parent().outerHeight(true) < $("#" + window.mainSearchGridId).outerHeight(true))
+		adjustWidth += 8;
+	
+	$("#" + window.mainSearchGridId).width(0).width($("#" + window.mainSearchGridId).parent().width() - adjustWidth);
 
 	SearchImngObj.searchGrid.refreshLayout();
 	

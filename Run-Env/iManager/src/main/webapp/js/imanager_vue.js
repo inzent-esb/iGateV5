@@ -6,7 +6,7 @@ var ResultImngObj =
 
     console.log("ajaxError : \n" + error) ;
 
-    warnAlert(error) ;
+    warnAlert({message : error}) ;
   },
 
   resultErrorHandler : function(result)
@@ -467,7 +467,7 @@ var SaveImngObj =
           if (SearchImngObj.searchGrid)
             window.vmSearch.search() ;
 
-          normalAlert(message, modalMode) ;
+		  normalAlert({message : message, isSpinnerMode : modalMode });
 
           stopSpinner() ;
 
@@ -547,7 +547,7 @@ var SaveImngObj =
   remove : function(confirm, message)
   {
 
-    normalConfirm(confirm, function()
+	  normalConfirm({message : confirm, callBackFunc : function()
     {
 
       var vmMain = window.vmMain ;
@@ -564,7 +564,7 @@ var SaveImngObj =
         vmMain.saving() ;
 
       this.deleteSubmit(object, message) ;
-    }.bind(this)) ;
+    }.bind(this)}) ;
   }
 
 } ;
@@ -673,7 +673,7 @@ var ControlImngObj =
 
 var MigrationImngObj =
 {
-  makeSubmit : function(url, data, callback)
+  makeSubmit : function(url, data, message, callback, modalMode)
   {
     var param =
     {
@@ -681,6 +681,8 @@ var MigrationImngObj =
     } ;
 
     $.ajaxSettings.traditional = true ;
+    
+    startSpinner() ;
 
     $.ajax(
     {
@@ -694,15 +696,22 @@ var MigrationImngObj =
         if ("ok" == result.result)
         {
           ResultImngObj.resultResponseHandler(result) ;
+          normalAlert({message : message, isSpinnerMode : modalMode});
           callback(result) ;
           $("#Make-tab").tab("show") ;
         }
-        else
-          ResultImngObj.resultErrorHandler(result)
+        else {
+        	ResultImngObj.resultErrorHandler(result);
+        	warnAlert({message : (escapeHtml(result.error[0].className) + ((result.error[0].message)? "<hr/>" + escapeHtml(result.error[0].message)  : "")), isSpinnerMode : modalMode, isXSSMode : false});
+        }
+        
+        stopSpinner();
+          
       },
       error : function(request, status, error)
       {
         ResultImngObj.errorHandler(request, status, error) ;
+        stopSpinner();
       }
     }) ;
   }
@@ -880,7 +889,7 @@ function getMakeGridObj()
         	}
         	
         	var resetColumnWidths = [];
-        	
+
         	searchGrid.getColumns().forEach(function(columnInfo) {
         		if(!columnInfo.copyOptions) return;
 

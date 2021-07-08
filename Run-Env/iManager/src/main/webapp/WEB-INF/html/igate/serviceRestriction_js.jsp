@@ -429,7 +429,7 @@ $(document).ready(function(){
 		        if(!window.vmServiceRestrictionConds.validationCheck()) return;
 		        
 		        if(window.vmMain.object.startTime > window.vmMain.object.endTime) {
-		   			warnAlert('<fmt:message>igate.time.precedeWarn</fmt:message>');
+					warnAlert({message : '<fmt:message>igate.time.precedeWarn</fmt:message>'});
 		   			return;
 		   		}
 		        
@@ -442,7 +442,7 @@ $(document).ready(function(){
 		   		if(!window.vmServiceRestrictionConds.validationCheck()) return;
 		   		
 		        if(window.vmMain.object.startTime > window.vmMain.object.endTime) {
-		   			warnAlert('<fmt:message>igate.time.precedeWarn</fmt:message>');
+					warnAlert({message : '<fmt:message>igate.time.precedeWarn</fmt:message>'});
 		   			return;
 		   		}
 		   		
@@ -485,7 +485,7 @@ $(document).ready(function(){
 					var info = this.serviceRestrictionConds[i];
 					
 					if(!info || !info.pk || !info.pk.restrictionType || !info.restrictionOperator || !info.restrictionValue) {
-						warnAlert('<fmt:message>igate.transactionRestriction.valNullCheck</fmt:message>');
+						warnAlert({message : '<fmt:message>igate.transactionRestriction.valNullCheck</fmt:message>'});
 						isValidation = false;
 						break;
 					}

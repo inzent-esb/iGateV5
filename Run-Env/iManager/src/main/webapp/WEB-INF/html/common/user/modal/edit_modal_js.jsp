@@ -161,7 +161,7 @@
               {
                 ResultImngObj.resultResponseHandler(result) ;
 
-                normalAlert('<fmt:message>head.update.notice</fmt:message>', modalParam.spinnerMode) ;
+                normalAlert({message : '<fmt:message>head.update.notice</fmt:message>', isSpinnerMode : modalParam.spinnerMode});
 
                 stopSpinner() ;
               }
@@ -169,7 +169,7 @@
               {
                 ResultImngObj.resultErrorHandler(result) ;
                
-                warnAlert(result.error[0].message, modalParam.spinnerMode) ;
+                warnAlert({message :result.error[0].message, isSpinnerMode : modalParam.spinnerMode}) ;
           	  }
             },
             error : function(request, status, error)

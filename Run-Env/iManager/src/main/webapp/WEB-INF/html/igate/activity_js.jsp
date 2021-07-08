@@ -344,7 +344,7 @@
 				var info = this.activityParameters[i];
 				
 				if(!info || !info.pk || !info.parameterType) {
-					warnAlert('<fmt:message>igate.activity.valNullCheck</fmt:message>');
+					warnAlert({message : '<fmt:message>igate.activity.valNullCheck</fmt:message>'}) ;
 					isValidation = false;
 					break;
 				}

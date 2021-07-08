@@ -757,3 +757,30 @@ textarea.view-disabled[readonly]{background: #f5f6fb;pointer-events: auto;}
 select option[disabled]{ 
 	background: #e9ecef;
 }
+
+.underlineTxt {
+	text-decoration: underline; 
+	color: #007bff;
+	cursor: pointer;
+}
+
+select.panel-form-control {
+    padding-right: .725rem;
+    background: #fff url(../img/select.svg) no-repeat center right;
+    background-color : #ffffff;
+    border-radius: 2px;
+}
+
+.panel-form-control {
+    padding: .175rem .125rem;
+    background: #fff;
+    border-color: #babbc2;
+    font-size: .725rem;
+    -webkit-appearance: none;
+    box-shadow: none !important;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+.tui-grid-cell{
+	border-bottom-width: 1px !important;
+}

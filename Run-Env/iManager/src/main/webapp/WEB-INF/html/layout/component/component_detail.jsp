@@ -102,6 +102,9 @@ var panelMethodOption = {
    	},
    	togglePanel: function() {
    		windowResizeSearchGrid();
+   		
+   		if(customResizeFunc)
+   			customResizeFunc();
    	},
    	closePanel: function() {
    		panelClose('panel');

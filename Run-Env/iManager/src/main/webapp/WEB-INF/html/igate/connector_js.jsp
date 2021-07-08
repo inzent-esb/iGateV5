@@ -547,12 +547,12 @@
         },
         stopForce : function()
         {
-          normalConfirm("<fmt:message>igate.connectorControl.alert</fmt:message>", function()
+          normalConfirm({message :"<fmt:message>igate.connectorControl.alert</fmt:message>", callBackFunc : function()
           {
             ControlImngObj.control("stopForce", null, $.param({
               connectorId : window.vmMain.object.connectorId
             })) ;
-          }) ;
+          }}) ;
         },
         interrupt : function()
         {
@@ -826,7 +826,7 @@
 
     if (overlapElement)
     {
-      warnAlert('<fmt:message key="igate.connector.alert.overlap"><fmt:param value="' + overlapElement + '" /></fmt:message>') ;
+	  warnAlert({alertMessage : '<fmt:message key="igate.connector.alert.overlap"><fmt:param value="' + overlapElement + '" /></fmt:message>'}) ;
       return false ;
     }
     return true ;

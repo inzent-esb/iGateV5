@@ -273,7 +273,7 @@ $.fn.xViewChart = function(createOptions) {
 		var xLogDetailModalGrid = null;
 		
 		if(0 == e.data.dataArr.length) {
-			normalAlert(dashboardMsg_noMatchCriteria);
+			normalAlert({message : dashboardMsg_noMatchCriteria});
 			return;
 		}
 		
