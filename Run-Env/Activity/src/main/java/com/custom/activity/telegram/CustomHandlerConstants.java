@@ -9,7 +9,7 @@ import com.custom.message.CustomMessageConstants ;
 import com.inzent.igate.adapter.AdapterParameter ;
 import com.inzent.igate.context.TransactionContext ;
 import com.inzent.igate.exception.IGateException ;
-import com.inzent.igate.message.Array ;
+import com.inzent.igate.message.ArrayImpl ;
 import com.inzent.igate.message.IMessageBuilder ;
 import com.inzent.igate.message.MessageBeans ;
 import com.inzent.igate.message.MessageConverter ;
@@ -106,7 +106,7 @@ public interface CustomHandlerConstants extends CustomMessageConstants
     errorHeader.setFieldValue(SERVICE_ID_FIELD, TransactionContext.getValue(TransactionContext.SERVICE, (String) null)) ;
 
     Record errorBody = addRecord.addRecord(MESSAGE_RECORD, DATA_BODY_ID) ;
-    Array messageContent = (Array) errorBody.getField(MESSAGE_CONTENT_FIELD) ;
+    ArrayImpl messageContent = (ArrayImpl) errorBody.getField(MESSAGE_CONTENT_FIELD) ;
     int idx = 0 ;
     for (String message : MessageTranslator.getStandardMessage(errorCode, 
         adapterParameter.getAdapterId(), (String) record.getFieldValue(LANG_CD_PATH)))
@@ -119,6 +119,7 @@ public interface CustomHandlerConstants extends CustomMessageConstants
 
       messageContent.getField(idx++).setValue(message) ;
     }
+    messageContent.offAddMode() ;
 
     return record ;
   }
