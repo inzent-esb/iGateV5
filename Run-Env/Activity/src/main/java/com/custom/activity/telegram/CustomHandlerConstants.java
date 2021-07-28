@@ -19,9 +19,6 @@ import com.inzent.igate.util.message.MessageTranslator ;
 
 public interface CustomHandlerConstants extends CustomMessageConstants
 {
-  public static String TER_LOGIN_INTERFACEID = "IF_TER_COM_0098" ;
-  public static String TER_LOGOFF_INTERFACEID = "IF_TER_COM_0098" ;
-
   public static String MID_FIELD = "ProgressNo" ;
   public static String MID_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + MID_FIELD ;
   public static int MID_OFFSET = TID_OFFSET + TID_LENGTH ;
