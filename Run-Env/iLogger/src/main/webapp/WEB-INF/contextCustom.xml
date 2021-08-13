@@ -5,11 +5,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"
 	default-lazy-init="false">
 
-	<bean class="com.inzent.igate.message.ValueCaster"/>
-
 	<bean id="messageBuilder" class="com.custom.message.CustomMessageBuilder"/>
 
 	<bean id="jsonConverter" class="com.custom.tracelog.CustomJsonConverterBean"/>
+
+	<bean class="com.inzent.igate.message.ValueCaster"/>
 
 	<bean class="com.inzent.igate.tracelog.TraceLogRecordBean" />
 

@@ -15,26 +15,7 @@
 		<property name="exceptionSaveDuration" value="#{systemProperties['igate.exception.save.duration']?:'190'}" />
 	</bean>
 
-	<bean class="com.inzent.igate.message.ValueCaster" />
-
 	<bean id="messageBuilder" class="com.custom.message.CustomMessageBuilder" />
-
-	<bean id="webSocketHandler" class="com.inzent.igate.connector.http.WebSocketHandler">
-		<constructor-arg value="I_TER_S_WSOC_S01" />
-	</bean>
-
-	<websocket:handlers allowed-origins="*">
-		<websocket:mapping handler="webSocketHandler" path="/TER" />
-		<websocket:handshake-handler ref="handshakeHandler" />
-	</websocket:handlers>
-
-	<bean id="activityInitializer" class ="com.inzent.igate.rule.activity.ActivityInitializer" lazy-init="true">
-		<property name="activities">
-			<array>
-				<value>LoggingTrace</value>
-			</array>
-		</property>
-	</bean>
 
 	<bean id="replyEmulater" class="com.inzent.igate.replyemulating.ReplyEmulater">
 		<property name="packagesToScan">
@@ -44,9 +25,28 @@
 		</property>
 	</bean>
 
+	<bean id="activityInitializer" class ="com.inzent.igate.rule.activity.ActivityInitializer" lazy-init="true">
+		<property name="activities">
+			<array>
+				<value>LoggingTrace</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean class="com.inzent.igate.message.ValueCaster" />
+
 	<bean id="sessionMap" class="com.inzent.igate.cluster.ClusteredMapBean">
 		<property name="timeToLiveSeconds" value="86400" />
 		<property name="timeout" value="#{systemProperties['igate.cluster.timeout']?:'3000'}" />
 	</bean>
+
+	<bean id="webSocketHandler" class="com.inzent.igate.connector.http.WebSocketHandler">
+		<constructor-arg value="I_TER_S_WSOC_S01" />
+	</bean>
+
+	<websocket:handlers allowed-origins="*">
+		<websocket:mapping handler="webSocketHandler" path="/TER" />
+		<websocket:handshake-handler ref="handshakeHandler" />
+	</websocket:handlers>
 
 </beans>

@@ -51,7 +51,29 @@
 		<servlet-name>Dispatcher</servlet-name>
 		<url-pattern>/TER</url-pattern>
 	</servlet-mapping>
-
+<!--
+	<servlet>
+		<servlet-name>I_INB_S_HTTP_S01</servlet-name>
+		<servlet-class>com.inzent.igate.session.http.HttpServletForward</servlet-class>
+		<init-param>
+			<param-name>ConnectorId</param-name>
+			<param-value>I_INB_S_HTTP_S01</param-value>
+			</init-param>
+		<init-param>
+			<param-name>Methods</param-name>
+			<param-value>GET,POST</param-value>
+		</init-param>
+		<init-param>
+			<param-name>RefreshInterval</param-name>
+			<param-value>10000</param-value>
+		</init-param>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>I_INB_S_HTTP_S01</servlet-name>
+		<url-pattern>/INB</url-pattern>
+	</servlet-mapping>
+-->
 	<servlet>
 		<servlet-name>TestCase</servlet-name>
 		<servlet-class>com.inzent.igate.connector.testing.TestingServlet</servlet-class>
@@ -61,4 +83,5 @@
 		<servlet-name>TestCase</servlet-name>
 		<url-pattern>/_TestCase_</url-pattern>
 	</servlet-mapping>
+
 </web-app>
