@@ -21,6 +21,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/tui-grid.min.css' />">
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/tree.min.css' />">
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/common.css' />">
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/tui-pagination.css' />">
 
 <!-- js block -->
 <script type="text/javascript" src="<c:url value='/js/jquery.min.js' />"></script>
@@ -33,6 +34,8 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon-i18n.min.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon-i18n-ext.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/vue.min.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/tui-code-snippet.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/tui-pagination.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/tui-grid.min.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/moment.min.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/daterangepicker.min.js' />"></script>

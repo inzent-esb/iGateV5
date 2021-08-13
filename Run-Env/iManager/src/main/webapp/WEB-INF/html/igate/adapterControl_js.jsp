@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <script type="text/javascript">
+var dataCnt = 200;
 
 $(document).ready(function(){
 	
@@ -69,7 +70,10 @@ $(document).ready(function(){
 						$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
 					}
 					
-					vmList.makeGridObj.search(this);
+					vmList.makeGridObj.search(this, function() {
+    					if(dataCnt <= vmList.makeGridObj.getSearchGrid().getRowCount())
+    						normalAlert({message: '<fmt:message>igate.add.search.criteria<fmt:param value="' + dataCnt + '" /></fmt:message>'});
+					});
 				},
 	            initSearchArea: function(searchCondition) {
 	            	if(searchCondition) {

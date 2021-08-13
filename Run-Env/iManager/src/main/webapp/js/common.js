@@ -130,7 +130,7 @@ function resizeSearchGrid() {
 		adjustHeight += $(element).outerHeight(true);
 	});
 	
-	if($("#panel").find(".panel-dialog").find(".panel-content").length)
+	if(('none' != $("#panel").css('display')) && $("#panel").find(".panel-dialog").find(".panel-content").length)
 		adjustHeight += $("#panel").find(".panel-dialog").find(".panel-content").outerHeight(true);
 	
 	$("#" + window.mainListAreaId).find(".table-responsive").height('calc(100% - '+ adjustHeight +'px)');

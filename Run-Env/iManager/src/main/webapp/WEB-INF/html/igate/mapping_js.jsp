@@ -496,6 +496,16 @@ $(document).ready(function() {
     					drawArrow(_this.mappingDetails[_this.selectedRuleIdx])	
     				}, 200);
     			});
+    			
+		        sourceGrid.on('click', function(ev) {
+		        	if (ev.rowKey != null) {
+		        		sourceGrid.store.data.rawData.forEach(function(data) {
+		        			sourceGrid.removeRowClassName(data.rowKey, "row-selected");
+		        		});        
+
+		        		sourceGrid.addRowClassName(ev.rowKey, "row-selected");
+		        	}
+		        });
     		},
     		initMappingTargetGrid: function(data) {
     			targetGrid = new tui.Grid({
@@ -584,6 +594,16 @@ $(document).ready(function() {
     					drawArrow(_this.mappingDetails[_this.selectedRuleIdx])	
     				}, 200);
     			});    			
+    			
+		        targetGrid.on('click', function(ev) {
+		        	if (ev.rowKey != null) {
+		        		targetGrid.store.data.rawData.forEach(function(data) {
+		        			targetGrid.removeRowClassName(data.rowKey, "row-selected");
+		        		});        
+
+		        		targetGrid.addRowClassName(ev.rowKey, "row-selected");
+		        	}
+		        });    			
     		}
     	}
     });

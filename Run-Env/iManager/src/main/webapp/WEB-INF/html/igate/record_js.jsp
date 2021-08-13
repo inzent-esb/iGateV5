@@ -204,17 +204,6 @@ $(document).ready(function() {
     
     window.vmModelInfo = new Vue({
         el : '#ModelInfo',
-        mounted : function() {        	
-            $.ajax({
-       	   		type: "GET",
-       	    	url: "<c:url value='/iToolsConfig.xml'/>",
-       	       	dataType: "xml",
-       	       	success: function(result) {
-       	       		var config = JSON.parse(xml2json(result, ' '));
-       	        	this.initRecordGrid(config.Configuration.Record.GroupHeaders.GroupHeader);
-       	    	}.bind(this)
-         	});        	
-        },
         methods : {
         	initRecordGrid : function(extendColumnInfo) {        		
         		var bodyHeight = 230 ;
@@ -292,10 +281,34 @@ $(document).ready(function() {
 
 	           	    overCellElement.attr('title', overCellElement.text());	           	   	
 		    	});
+		        
+		        recordTreeGrid.on('click', function(ev) {
+		        	if (ev.rowKey != null) {
+		        		recordTreeGrid.store.data.rawData.forEach(function(data) {
+		        			recordTreeGrid.removeRowClassName(data.rowKey, "row-selected");
+		        		});        
+
+		        		recordTreeGrid.addRowClassName(ev.rowKey, "row-selected");
+		        	}
+		        });		        
 	        },
-          	initRecordGridData : function(recordTreeGridData) {
-          		recordTreeGrid.resetData(initTreeData(recordTreeGridData));
-          		recordTreeGrid.expandAll();
+          	initRecordGridData : function(recordTreeGridData) {          		
+          		if (!recordTreeGrid) {
+          			$.ajax({
+            	   		type: "GET",
+            	    	url: "<c:url value='/iToolsConfig.xml'/>",
+            	       	dataType: "xml",
+            	       	success: function(result) {
+            	       		var config = JSON.parse(xml2json(result, ' '));
+            	        	this.initRecordGrid(config.Configuration.Record.GroupHeaders.GroupHeader);
+                      		recordTreeGrid.resetData(initTreeData(recordTreeGridData));
+                      		recordTreeGrid.expandAll();
+            	    	}.bind(this)
+	              	});              		
+	            } else {
+	            	recordTreeGrid.resetData(initTreeData(recordTreeGridData));
+              		recordTreeGrid.expandAll();
+	            }
           	},
           	refresh : function() {
 

@@ -4,67 +4,67 @@
     <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="AdapterParameter" isParameter="true"/> 
   </Variables>  
   <Activities> 
-    <Start uniqueKey="0000" index="0" desc="start" xPos="354" yPos="46"> 
+    <Start uniqueKey="0000" index="0" desc="start" xPos="379" yPos="30"> 
       <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
         <Value><![CDATA[adapterParameter]]></Value> 
       </Parameter> 
     </Start>  
-    <End uniqueKey="0001" index="1" desc="End" xPos="374" yPos="623"/>  
-    <Scope height="387" width="496" uniqueKey="0003" index="3" desc="Scope" xPos="575" yPos="196"> 
+    <End uniqueKey="0001" index="1" desc="End" xPos="386" yPos="653"/>  
+    <Scope height="387" width="496" uniqueKey="0003" index="3" desc="Scope" xPos="587" yPos="226"> 
       <Activities> 
         <Activity uniqueKey="0004" index="1" desc="writeAsyncResponse" id="WriteAsyncResponse" xPos="72" yPos="127"> 
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter> 
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
         </Activity>  
         <Activity uniqueKey="0005" index="2" desc="Logging Trace" id="LoggingTrace" xPos="195" yPos="275"> 
-          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false"> 
-            <Value><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></Value>  
-            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></JavaExpression> 
-          </Parameter>  
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter>  
-          <Parameter type="java.lang.Throwable" desc="exception" from="Variable" dynamic="false"> 
-            <Value><![CDATA[null]]></Value> 
-          </Parameter> 
+          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false">
+            <Value><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></Value>
+            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></JavaExpression>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+            <Value><![CDATA[null]]></Value>
+          </Parameter>
         </Activity>  
         <FaultHandlers uniqueKey="0008" index="faultHandlers" desc="FaultHandler" xPos="357" yPos="56"> 
           <CatchAll target="3" desc=""/> 
         </FaultHandlers>  
         <Activity uniqueKey="0006" index="3" desc="Logging Trace" id="LoggingTrace" xPos="344" yPos="127"> 
-          <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false"> 
-            <Value><![CDATA["IEO"]]></Value> 
-          </Parameter>  
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter>  
-          <Parameter type="java.lang.Throwable" desc="exception" from="Variable" dynamic="false"> 
-            <Value><![CDATA[throwed]]></Value> 
-          </Parameter> 
+          <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
+            <Value><![CDATA["IEO"]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+            <Value><![CDATA[throwed]]></Value>
+          </Parameter>
         </Activity>  
         <ReThrow uniqueKey="0007" index="4" desc="ReThrow" xPos="359" yPos="201"/>  
         <Activity uniqueKey="000i" index="5" desc="Is Acknowledgement" id="IsInterfaceAck" xPos="70" yPos="201"> 
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[null]]></Value> 
-          </Parameter> 
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[null]]></Value>
+          </Parameter>
         </Activity>  
         <Activity uniqueKey="000j" index="6" desc="Logging Trace" id="LoggingTrace" xPos="30" yPos="275"> 
-          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false"> 
-            <Value><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></Value>  
-            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></JavaExpression> 
-          </Parameter>  
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter>  
-          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false"> 
-            <Value><![CDATA[null]]></Value> 
-          </Parameter> 
+          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false">
+            <Value><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></Value>
+            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></JavaExpression>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+            <Value><![CDATA[null]]></Value>
+          </Parameter>
         </Activity>  
         <Activity uniqueKey="0002" index="7" desc="ActiveRoundRobineSession" id="ActiveRoundRobineSession" xPos="54" yPos="56"> 
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter> 
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
         </Activity> 
       </Activities>  
       <Transitions> 
@@ -97,7 +97,7 @@
         </Transition> 
       </Transitions> 
     </Scope>  
-    <Condition uniqueKey="0009" index="4" desc="is Sync" xPos="347" yPos="115"> 
+    <Condition uniqueKey="0009" index="4" desc="is Sync" xPos="371" yPos="145"> 
       <When target="5" desc="Sync"> 
         <MethodExpression variableName="adapterParameter"> 
           <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isResponseSync" argumentTypes="" argumentType="boolean"/> 
@@ -112,56 +112,56 @@ if ( adapterParameter.isResponseSync() )
 else 
    return 1;]]></Value> 
     </Condition>  
-    <Scope width="505" height="306" uniqueKey="000a" index="5" desc="Scope" xPos="12" yPos="240"> 
+    <Scope width="505" height="306" uniqueKey="000a" index="5" desc="Scope" xPos="24" yPos="270"> 
       <Activities> 
         <Activity uniqueKey="000b" index="1" desc="Write Sync-Response" id="WriteSyncResponse" xPos="105" yPos="54"> 
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter> 
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
         </Activity>  
         <Activity uniqueKey="000c" index="2" desc="Logging Trace" id="LoggingTrace" xPos="200" yPos="207"> 
-          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false"> 
-            <Value><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></Value>  
-            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></JavaExpression> 
-          </Parameter>  
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter>  
-          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false"> 
-            <Value><![CDATA[null]]></Value> 
-          </Parameter> 
+          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false">
+            <Value><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></Value>
+            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></JavaExpression>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+            <Value><![CDATA[null]]></Value>
+          </Parameter>
         </Activity>  
         <FaultHandlers uniqueKey="000d" index="faultHandlers" desc="FaultHandler" xPos="372" yPos="54"> 
           <CatchAll target="3" desc=""/> 
         </FaultHandlers>  
         <Activity uniqueKey="000e" index="3" desc="Logging Trace" id="LoggingTrace" xPos="359" yPos="129"> 
-          <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false"> 
-            <Value><![CDATA["IEO"]]></Value> 
-          </Parameter>  
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter>  
-          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false"> 
-            <Value><![CDATA[throwed]]></Value> 
-          </Parameter> 
+          <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
+            <Value><![CDATA["IEO"]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+            <Value><![CDATA[throwed]]></Value>
+          </Parameter>
         </Activity>  
         <ReThrow uniqueKey="000f" index="4" desc="ReThrow" xPos="374" yPos="207"/>  
         <Activity uniqueKey="000g" index="5" desc="Is Acknowledgement" id="IsInterfaceAck" xPos="105" yPos="129"> 
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[null]]></Value> 
-          </Parameter> 
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[null]]></Value>
+          </Parameter>
         </Activity>  
         <Activity uniqueKey="000h" index="6" desc="Logging Trace" id="LoggingTrace" xPos="26" yPos="207"> 
-          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false"> 
-            <Value><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></Value>  
-            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></JavaExpression> 
-          </Parameter>  
-          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-            <Value><![CDATA[adapterParameter]]></Value> 
-          </Parameter>  
-          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false"> 
-            <Value><![CDATA[null]]></Value> 
-          </Parameter> 
+          <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false">
+            <Value><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></Value>
+            <JavaExpression><![CDATA[null == adapterParameter.getException() ? "IDO" : "IEO"]]></JavaExpression>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+            <Value><![CDATA[null]]></Value>
+          </Parameter>
         </Activity> 
       </Activities>  
       <Transitions> 
@@ -190,13 +190,40 @@ else
           <bendPoints/> 
         </Transition> 
       </Transitions> 
-    </Scope> 
+    </Scope>  
+    <Condition uniqueKey="000k" index="6" desc="Condition" xPos="364" yPos="85"> 
+      <When target="7" desc="Save">
+        <MethodExpression variableName="adapterParameter">
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isResponseSave" argumentTypes="" argumentType="boolean"/>
+        </MethodExpression>
+      </When>
+      <Others target="4" desc="Execute">
+        <JavaExpression><![CDATA[true]]></JavaExpression>
+      </Others>
+      <Value><![CDATA[
+// Save
+if ( adapterParameter.isResponseSave() ) 
+   return 0;
+// Execute
+else 
+   return 1;]]></Value>
+    </Condition>  
+    <Activity uniqueKey="000l" index="7" desc="Logging Trace" id="LoggingTrace" xPos="559" yPos="145"> 
+      <Parameter type="java.lang.String" desc="LogCode" from="JavaOperation" dynamic="false">
+        <Value><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></Value>
+        <JavaExpression><![CDATA[null == adapterParameter.getException() ? "INO" : "IEO"]]></JavaExpression>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[null]]></Value>
+      </Parameter>
+    </Activity>  
+    <End uniqueKey="000m" index="8" desc="End" xPos="753" yPos="145"/> 
   </Activities>  
   <Transitions> 
     <Transition from="3" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
-    <Transition from="0" to="4" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
     <Transition from="5" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
@@ -207,7 +234,19 @@ else
     </Transition>  
     <Transition from="4" to="3" order="1" desc="Async" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
-    </Transition> 
+    </Transition>  
+    <Transition from="0" to="6" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="7" to="8" order="0" fromTerminal="right" toTerminal="left"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="6" to="7" order="0" desc="Save" fromTerminal="bottom" toTerminal="top">
+      <bendPoints/>
+    </Transition>
+    <Transition from="6" to="4" order="1" desc="Execute" fromTerminal="bottom" toTerminal="top">
+      <bendPoints/>
+    </Transition>
   </Transitions>  
   <Imports/> 
 </Operation>

@@ -573,9 +573,55 @@ function getCreatePageObj()
           }
 
         }
-        else if ('property' == tabObj.type)
-        {
-
+        else if ('property' == tabObj.type) {
+         
+          if(tabObj.searchList) {
+        	  
+        	  var searchDiv = $("<div/>").addClass('viewGroup row').css({'width': '100%', 'margin' : '0 0 1.25rem 0'});
+        	  
+              tabObj.searchList.forEach(function(searchObj) {   
+            	  
+            	  var colDiv = $("<div/>").addClass(searchObj.className + ' searchArea-col');
+            	  
+            	  searchObj.searchSubList.forEach(function(searchSubObj) { 
+            		  
+            		  var appendTag = $("<div/>").addClass('form-group');            		  
+            		  appendTag.append( $('<label/>').append( $('<b/>').attr('class', 'control-label').text(searchSubObj.name) ));
+           	
+	            	  if('select' == searchSubObj.type) {
+	            		 
+	            		  selectDiv = $('<select/>').removeClass().addClass('form-control').css({'background-color': 'rgb(245, 246, 251)'}).attr({
+	            			  'id' : searchSubObj.mappingDataInfo.id,
+	                		  'v-model' : searchSubObj.mappingDataInfo.selectModel,
+	                		  'v-on:change' : (searchSubObj.mappingDataInfo.changeEvt) ? searchSubObj.mappingDataInfo.changeEvt : null
+	            		  });
+	            			  
+	                    
+	            		  if (searchSubObj.placeholder) {
+	            			  selectDiv.append($('<option/>').attr({
+	            				  'selected' : 'selected',
+	            				  'value' : ' '
+	            			  }).text(searchSubObj.placeholder)) ;
+	            		  }
+	
+	            		  selectDiv.append($("<option/>").attr({
+	            			  'v-for' : searchSubObj.mappingDataInfo.optionFor,
+	            			  'v-bind:value' : searchSubObj.mappingDataInfo.optionValue,
+	            			  'v-text' : searchSubObj.mappingDataInfo.optionText,
+	            		  })) ;
+	            		  
+	            		  appendTag.append(selectDiv);
+	            	  }
+	            	  
+	            	  colDiv.append(appendTag);
+            	  });
+            	  
+            	  searchDiv.append(colDiv);
+              });
+              
+              rowDiv.append(searchDiv);
+          }
+          
           rowDiv.append($("<div/>").addClass('form-table form-table-responsive').append($("<div/>").addClass('form-table-wrap')).append($("<div/>").addClass('form-table-head').append($("<button/>").addClass('btn-icon saveGroup updateGroup').attr(
           {
             'type' : 'button',

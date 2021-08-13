@@ -205,15 +205,12 @@
       <Parameter type="java.lang.Boolean" desc="Is send ack" from="Constant" dynamic="false">
         <Value><![CDATA[false]]></Value>
       </Parameter>
-      <Parameter type="java.lang.Boolean" desc="Is exists async-response" from="Constant" dynamic="false">
-        <Value><![CDATA[true]]></Value>
-      </Parameter>
     </Activity>  
-    <Activity uniqueKey="001c" index="11" desc="ValidateRequest" id="ValidateRequest" xPos="150" yPos="212">
+    <Activity uniqueKey="001c" index="11" desc="ValidateRequest" id="ValidateRequest" xPos="150" yPos="212"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
-    </Activity>
+    </Activity> 
   </Activities>  
   <Transitions> 
     <Transition from="0" to="4" order="0" fromTerminal="bottom" toTerminal="top"> 
@@ -230,10 +227,10 @@
     </Transition>  
     <Transition from="2" to="11" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
-    </Transition>
-    <Transition from="11" to="5" order="0" fromTerminal="bottom" toTerminal="left">
-      <bendPoints/>
-    </Transition>
+    </Transition>  
+    <Transition from="11" to="5" order="0" fromTerminal="bottom" toTerminal="left"> 
+      <bendPoints/> 
+    </Transition> 
   </Transitions>  
   <Imports/> 
 </Operation>

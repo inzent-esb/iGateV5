@@ -380,40 +380,6 @@ var SearchImngObj =
               vmMain.object.endTime = endDate.concat(" " + endTime) ;
             }
           }
-          // 거래제한 Rule
-          if (vmMain.object.startTime !== undefined)
-          {
-            if (vmMain.object.startTime.length == 6)
-            {
-              vmMain.object.startTime = vmMain.object.startTime.replace(/(.{2})/g, "$1:") ;
-              vmMain.object.startTime = vmMain.object.startTime.slice(0, -1) ;
-              vmMain.object.endTime = vmMain.object.endTime.replace(/(.{2})/g, "$1:") ;
-              vmMain.object.endTime = vmMain.object.endTime.slice(0, -1) ;
-            }
-            else
-            {
-              var startDate = vmMain.object.startTime.substring(0, 8) ;
-              var startTime = vmMain.object.startTime.substring(8) ;
-
-              startDate = startDate.replace(/(.{4})/g, "$1-") ;
-              startDate = startDate.replace(/(.{7})/g, "$1-") ;
-              startDate = startDate.slice(0, -1) ;
-              startTime = startTime.replace(/(.{2})/g, "$1:") ;
-              startTime = startTime.slice(0, -1) ;
-
-              var endDate = vmMain.object.endTime.substring(0, 8) ;
-              var endTime = vmMain.object.endTime.substring(8) ;
-
-              endDate = endDate.replace(/(.{4})/g, "$1-") ;
-              endDate = endDate.replace(/(.{7})/g, "$1-") ;
-              endDate = endDate.slice(0, -1) ;
-              endTime = endTime.replace(/(.{2})/g, "$1:") ;
-              endTime = endTime.slice(0, -1) ;
-
-              vmMain.object.startTime = startDate.concat(" " + startTime) ;
-              vmMain.object.endTime = endDate.concat(" " + endTime) ;
-            }
-          }
 
           if (vmMain.loaded)
             vmMain.loaded() ;
@@ -852,7 +818,13 @@ function getMakeGridObj()
       searchUri = instanceSettings.searchUri ;
       isModal = instanceSettings.isModal ;
 
-      tui.Grid.applyTheme('clean') ;
+      tui.Grid.applyTheme('clean', {
+    	  row: {
+    		  hover: {
+    			  background: '#f5f6fb'
+    		  }
+    	  }
+      }) ;
 
       tui.Grid.setLanguage('en',
       {
@@ -935,7 +907,7 @@ function getMakeGridObj()
       if ('undefined' != typeof (settings.onClick))
       {
 
-        if (instanceSettings.rowHeaders)
+        if (instanceSettings.rowHeaders && -1 < instanceSettings.rowHeaders.indexOf('checkbox'))
         {
 
           searchGrid.on('click', function(ev)
@@ -997,6 +969,13 @@ function getMakeGridObj()
           {
             if (ev.rowKey != null)
             {
+              searchGrid.store.data.rawData.forEach(function(data)
+              {
+                searchGrid.removeRowClassName(data.rowKey, "row-selected") ;
+              }) ;        
+
+              searchGrid.addRowClassName(ev.rowKey, "row-selected") ;
+              
               settings.onClick(searchGrid.getRow(ev.rowKey), ev) ;
             }
           }) ;
@@ -1005,7 +984,7 @@ function getMakeGridObj()
       }
       else
       {
-        if (instanceSettings.rowHeaders)
+        if (instanceSettings.rowHeaders && -1 < instanceSettings.rowHeaders.indexOf('checkbox'))
         {
           searchGrid.on('click', function(ev)
           {
@@ -1067,6 +1046,21 @@ function getMakeGridObj()
               searchGrid.removeRowClassName(data.rowKey, "row-selected") ;
             }) ;
           }) ;
+        }
+        else 
+        {
+          searchGrid.on('click', function(ev)
+          {
+            if (ev.rowKey != null)
+            {
+              searchGrid.store.data.rawData.forEach(function(data)
+              {
+                searchGrid.removeRowClassName(data.rowKey, "row-selected") ;
+              }) ;        
+
+              searchGrid.addRowClassName(ev.rowKey, "row-selected") ;
+            }
+          }) ;        	
         }
       }
 

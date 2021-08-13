@@ -793,6 +793,11 @@ $(document).ready(function() {
 					{name : '@desc', header : '<fmt:message>common.desc</fmt:message>', width: '30%'},					
 				];
 				
+				if('Activity' == data.nodeType) {
+					if(data.orgData['@id'])
+						rtnObj.title += '(id: ' + escapeHtml(data.orgData['@id']) + ')'; 	
+				}
+				
 				var parameterArr = (Array.isArray(data.orgData.Parameter))? data.orgData.Parameter : [data.orgData.Parameter];
 
 				settings.data = parameterArr.map(function(info) {

@@ -68,6 +68,8 @@ var dashboardNotificationTime = "<fmt:message>dashboard.notification</fmt:messag
 var dashboardNotificationMessage = "<fmt:message>igate.message</fmt:message>";
 var dashboardNotificationHeadStatus = "<fmt:message>head.status</fmt:message>";
 var dashboardNotificationInstanceId = "<fmt:message>igate.instance</fmt:message> ID";
+var dashboardNotificationHistoryList = "<fmt:message>dashboard.notification.history.list</fmt:message>";
+var dashboardRefresh = "<fmt:message>igate.refresh</fmt:message>";
 
 /* sentence */
 var dashboardMsg_selectContainer = "<fmt:message>dashboard.select.container</fmt:message>";

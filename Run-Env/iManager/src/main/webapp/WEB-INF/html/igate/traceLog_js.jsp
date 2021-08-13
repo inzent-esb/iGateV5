@@ -649,26 +649,12 @@
             grid : null
           },
           methods : {
-            modelModel : function()
-            {
-
-              $('a[href="#ModelInfo"]').on('shown.bs.tab', function(e)
-              {
-
-                ajaxCall("<c:url value='/igate/traceLog/record.json'/>", function(rcResult)
-                {
-
-                  var bodyHeight = 350 ;
-
-                  if ($('.panel-body').height() > 350)
-                    bodyHeight = $('.panel-body').height() - 50 ;
-
-                  $('#ModelInfo').empty() ;
-
-                  traceLogTreeGrid = new tui.Grid({
-                    el : document.getElementById('ModelInfo'),
-                    data : rcResult.object,
-                    bodyHeight : bodyHeight,
+        	initTreeGrid : function(data)
+        	{
+        		traceLogTreeGrid = new tui.Grid({
+        			el : document.getElementById('ModelInfo'),
+                    data : data,
+                    bodyHeight : $('.panel-body').height() - 72,
                     rowHeight : 30,
                     minRowHeight : 30,
                     columnOptions: {
@@ -677,112 +663,143 @@
                     treeColumnOptions : {
                       name : 'fieldId'
                     },
-                    columns : [{
-                      name : 'fieldId',
-                      header : "<fmt:message>head.field</fmt:message> <fmt:message>head.id</fmt:message>"
-                    }, {
-                      name : 'fieldName',
-                      header : "<fmt:message>head.field</fmt:message> <fmt:message>head.name</fmt:message>"
-                    }, {
-                      name : 'fieldType',
-                      header : "<fmt:message>head.field</fmt:message> <fmt:message>head.type</fmt:message>",
-                      formatter : function(value)
-                      {
+                    columns : [
+                    	{
+                    		name : 'fieldId',
+                    		header : "<fmt:message>head.field</fmt:message> <fmt:message>head.id</fmt:message>"
+                    	}, 
+                    	{
+                    		name : 'fieldName',
+                    		header : "<fmt:message>head.field</fmt:message> <fmt:message>head.name</fmt:message>"
+                    	}, 
+                    	{
+                    		name : 'fieldType',
+                    		header : "<fmt:message>head.field</fmt:message> <fmt:message>head.type</fmt:message>",
+                    		formatter : function(value) {
+                    			var fieldType = "" ;
 
-                        var fieldType = "" ;
+		                        switch (value.row.fieldType)
+		                        {
+		                        case 'B' : {
+		                          fieldType = "Byte" ;
+		                          break ;
+		                        }
+		                        case 'S' : {
+		                          fieldType = "Short" ;
+		                          break ;
+		                        }
+		                        case 'I' : {
+		                          fieldType = "Int" ;
+		                          break ;
+		                        }
+		                        case 'L' : {
+		                          fieldType = "Long" ;
+		                          break ;
+		                        }
+		                        case 'F' : {
+		                          fieldType = "Float" ;
+		                          break ;
+		                        }
+		                        case 'D' : {
+		                          fieldType = "Double" ;
+		                          break ;
+		                        }
+		                        case 'N' : {
+		                          fieldType = "Numeric" ;
+		                          break ;
+		                        }
+		                        case 'p' : {
+		                          fieldType = "TimeStamp" ;
+		                          break ;
+		                        }
+		                        case 'b' : {
+		                          fieldType = "Boolean" ;
+		                          break ;
+		                        }
+		                        case 'v' : {
+		                          fieldType = "Individual" ;
+		                          break ;
+		                        }
+		                        case 'A' : {
+		                          fieldType = "Raw" ;
+		                          break ;
+		                        }
+		                        case 'P' : {
+		                          fieldType = "PackedDecimal" ;
+		                          break ;
+		                        }
+		                        case 'R' : {
+		                          fieldType = "Record" ;
+		                          break ;
+		                        }
+		                        case 'T' : {
+		                          fieldType = "String" ;
+		                          break ;
+		                        }
+		                        }
+		                        if (value.row.fieldType === undefined || value.row.fieldLength === undefined)
+		                          return "" ;
+		
+		                        return fieldType + "( " + value.row.fieldLength + " )" ;
+                    		}
+                    	}, 
+                    	{
+                    		name : 'value',
+                    		header : "<fmt:message>common.property.value</fmt:message>"
+                    	}, 
+                    	{
+                    		name : 'rawValue',
+                    		header : "Hex",
+                    	}
+                    ]
+        		}) ;
+        		
+		        traceLogTreeGrid.on('click', function(ev) {
+		        	if (ev.rowKey != null) {
+		        		traceLogTreeGrid.store.data.rawData.forEach(function(data) {
+		        			traceLogTreeGrid.removeRowClassName(data.rowKey, "row-selected");
+		        		});        
 
-                        switch (value.row.fieldType)
-                        {
-                        case 'B' : {
-                          fieldType = "Byte" ;
-                          break ;
-                        }
-                        case 'S' : {
-                          fieldType = "Short" ;
-                          break ;
-                        }
-                        case 'I' : {
-                          fieldType = "Int" ;
-                          break ;
-                        }
-                        case 'L' : {
-                          fieldType = "Long" ;
-                          break ;
-                        }
-                        case 'F' : {
-                          fieldType = "Float" ;
-                          break ;
-                        }
-                        case 'D' : {
-                          fieldType = "Double" ;
-                          break ;
-                        }
-                        case 'N' : {
-                          fieldType = "Numeric" ;
-                          break ;
-                        }
-                        case 'p' : {
-                          fieldType = "TimeStamp" ;
-                          break ;
-                        }
-                        case 'b' : {
-                          fieldType = "Boolean" ;
-                          break ;
-                        }
-                        case 'v' : {
-                          fieldType = "Individual" ;
-                          break ;
-                        }
-                        case 'A' : {
-                          fieldType = "Raw" ;
-                          break ;
-                        }
-                        case 'P' : {
-                          fieldType = "PackedDecimal" ;
-                          break ;
-                        }
-                        case 'R' : {
-                          fieldType = "Record" ;
-                          break ;
-                        }
-                        case 'T' : {
-                          fieldType = "String" ;
-                          break ;
-                        }
-                        }
-                        if (value.row.fieldType === undefined || value.row.fieldLength === undefined)
-                          return "" ;
+		        		traceLogTreeGrid.addRowClassName(ev.rowKey, "row-selected");
+		        	}
+		        });
+		        
+        		traceLogTreeGrid.expandAll() ;
+        	},
+            modelModel : function()
+            {
+              if(traceLogTreeGrid)
+              {
+            	  traceLogTreeGrid.destroy() ;
+            	  traceLogTreeGrid = null ;
+              }
+              
+              if($('#ModelInfo').hasClass('active'))
+              {
+               	setTimeout(function() {
+                   	ajaxCall("<c:url value='/igate/traceLog/record.json'/>", function(rcResult)
+                    {
+                   		this.initTreeGrid(rcResult.object) ; 	
+                    }.bind(this)) ;                		
+               	}.bind(this), 350) ;
+              }
+            	
+              $('a[href="#ModelInfo"]').off('shown.bs.tab').on('shown.bs.tab', function(e)
+              {
+            	if(traceLogTreeGrid) return;
 
-                        return fieldType + "( " + value.row.fieldLength + " )" ;
-                      }
-                    }, {
-                      name : 'value',
-                      header : "<fmt:message>common.property.value</fmt:message>"
-                    }, {
-                      name : 'rawValue',
-                      header : "Hex",
-                    }]
-                  }) ;
-
-                  traceLogTreeGrid.expandAll() ;
-
+                ajaxCall("<c:url value='/igate/traceLog/record.json'/>", function(rcResult)
+                {
+                    this.initTreeGrid(rcResult.object) ; 	
                 }.bind(this)) ;
-
               }.bind(this)) ;
             },
             refresh : function()
             {
-
-              var bodyHeight = 350 ;
-
-              if ($('.panel-body').height() > 350)
-                bodyHeight = $('.panel-body').height() - 50 ;
-
-              if (traceLogTreeGrid)
-              {
-                traceLogTreeGrid.setBodyHeight(bodyHeight) ;
-                traceLogTreeGrid.refreshLayout() ;
-              }
+            	setTimeout(function() {
+            		if(traceLogTreeGrid)
+                		traceLogTreeGrid.setBodyHeight($('.panel-body').height() - 72) ;
+            	}, 350) ;
             }
           }
         }) ;

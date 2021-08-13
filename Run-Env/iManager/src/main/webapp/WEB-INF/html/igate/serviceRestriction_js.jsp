@@ -258,17 +258,8 @@ $(document).ready(function(){
 								header : "<fmt:message>igate.transactionRestriction.whiteListYn</fmt:message>",
 								align : "center",
 		                        width: "8%",
-								formatter : function(value)
-								{
-									switch (value.row['whitelistYn'])
-									{
-										case 'Y' : {
-											return 'Yes' ;
-										}
-										case 'N' : {
-											return 'No' ;
-										}
-									}
+								formatter : function(value) {
+									return ('Y' == value.row.whitelistYn)? 'Yes' : 'No';
 								}
 							},
 							{
@@ -276,17 +267,8 @@ $(document).ready(function(){
 								header : "<fmt:message>igate.transactionRestriction.enableYn</fmt:message>",
 								align : "center",
 		                        width: "8%",
-								formatter : function(value)
-								{
-									switch (value.row['enableYn'])
-									{
-										case 'Y' : {
-											return 'Yes' ;
-										}
-										case 'N' : {
-											return 'No' ;
-										}
-									}
+								formatter : function(value) {
+									return ('Y' == value.row.enableYn)? 'Yes' : 'No';
 								}
 							},
 							{
@@ -295,23 +277,7 @@ $(document).ready(function(){
 								align : "center",
 		                        width: "15%",
 								formatter : function(value) {
-									if (value.row['startTime'].length == 14){
-										var startDate = value.row['startTime'].substring(0, 8);
-										var startTime = value.row['startTime'].substring(8);
-										
-										startDate = startDate.replace(/(.{4})/g, "$1-") ;
-										startDate = startDate.replace(/(.{7})/g, "$1-") ;
-										startDate = startDate.slice(0, -1) ;
-										startTime = startTime.replace(/(.{2})/g, "$1:") ;
-										startTime = startTime.slice(0, -1) ;
-										startDate = startDate.concat(" " + startTime) ;
-
-										return escapeHtml(startDate);
-									}else if(value.row['startTime'].length == 6) {
-										var startTime = value.row['startTime'].replace(/(.{2})/g, "$1:");
-										startTime = startTime.slice(0,-1);
-										return escapeHtml(startTime);
-									}
+									return changeTime(value.row.startTime, true);
 								}
 							}, 
 							{
@@ -320,23 +286,7 @@ $(document).ready(function(){
 								align : "center",
 		                        width: "15%",
 								formatter : function(value) {
-									if (value.row.endTime.length == 14){
-										var endDate = value.row.endTime.substring(0, 8) ;
-										var endTime = value.row.endTime.substring(8) ;
-
-										endDate = endDate.replace(/(.{4})/g, "$1-") ;
-										endDate = endDate.replace(/(.{7})/g, "$1-") ;
-										endDate = endDate.slice(0, -1) ;
-										endTime = endTime.replace(/(.{2})/g, "$1:") ;
-										endTime = endTime.slice(0, -1) ;
-										endDate = endDate.concat(" " + endTime) ;
-
-										return escapeHtml(endDate);
-									}else if(value.row.endTime.length == 6) {
-										var endTime = value.row.endTime.replace(/(.{2})/g, "$1:");
-										endTime = endTime.slice(0,-1);
-										return escapeHtml(endTime) ;
-									}
+									return changeTime(value.row.endTime, true);
 								}
 							}
 						]
@@ -386,6 +336,9 @@ $(document).ready(function(){
 		methods : {
 			goDetailPanel: function() {
  				panelOpen('detail', null, function(){
+ 					this.object.startTime = changeTime(this.object.startTime, true);
+ 					this.object.endTime = changeTime(this.object.endTime, true);
+ 					
 					initDateDetailPicker(this, $('#panel').find('#MainBasic').find('#startTime'), $('#panel').find('#MainBasic').find('#endTime'), 'detail');
 				}.bind(this)); 
 			},
@@ -393,8 +346,8 @@ $(document).ready(function(){
 				if(object) {
 					this.object=object;
 				}else {
-					this.object.startTime = "00:00:00";
-					this.object.endTime = "23:59:59";
+					this.object.startTime = null;
+					this.object.endTime = null;
 					this.object.restrictionMessage = null;
 					this.object.ruleId = null;
 					this.object.rulePriority = null;
@@ -411,20 +364,19 @@ $(document).ready(function(){
 
 	new Vue({
 		el: '#panel-footer',
-		/* methods : $.extend(true, {}, panelMethodOption) */
-		  methods : $.extend(panelMethodOption, {
+		methods : $.extend(panelMethodOption, {
 			dumpInfo: function() {				
-				window.vmMain.object.startTime = convertTime(window.vmMain.object.startTime);
+				window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
 		   		ControlImngObj.dump();
 		   	},
 		   	removeInfo: function() {
-		   		window.vmMain.object.startTime = convertTime(window.vmMain.object.startTime);
+		   		window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
 		   		SaveImngObj.remove('<fmt:message>head.delete.conform</fmt:message>', '<fmt:message>head.delete.notice</fmt:message>');
 		   	},
 		   	updateInfo: function() {
-		   		window.vmSearch.object.startTime = convertTime(window.vmSearch.object.startTime);
-		   		window.vmMain.object.startTime = convertTime(window.vmMain.object.startTime);
-		        window.vmMain.object.endTime = convertTime(window.vmMain.object.endTime);
+		   		window.vmSearch.object.startTime = changeTime(window.vmSearch.object.startTime);
+		   		window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
+		        window.vmMain.object.endTime = changeTime(window.vmMain.object.endTime);
 		        
 		        if(!window.vmServiceRestrictionConds.validationCheck()) return;
 		        
@@ -436,8 +388,8 @@ $(document).ready(function(){
 		   		SaveImngObj.update('<fmt:message>head.update.notice</fmt:message>');
 		   	},
 		   	saveInfo: function() {
-		   		window.vmMain.object.startTime = convertTime(window.vmMain.object.startTime);
-		   		window.vmMain.object.endTime = convertTime(window.vmMain.object.endTime);
+		   		window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
+		   		window.vmMain.object.endTime = changeTime(window.vmMain.object.endTime);
 		   		
 		   		if(!window.vmServiceRestrictionConds.validationCheck()) return;
 		   		
@@ -522,7 +474,7 @@ function initDateSearchPicker(vueObj, dateSelector) {
 		}
 		
 		dateSelector.customTimePicker(function(time){
-			vueObj.object.startTime = convertTime(time);
+			vueObj.object.startTime = changeTime(time);
 		}, {startTime : startTime});	
 	}else{		
 		var paramOption = {
@@ -535,7 +487,7 @@ function initDateSearchPicker(vueObj, dateSelector) {
 		}	
 		
 		dateSelector.customDatePicker(function(time) {
-			vueObj.object.startTime = convertTime(time);
+			vueObj.object.startTime = changeTime(time);
 		}, paramOption);
 	}	
 }
@@ -578,24 +530,45 @@ function initDateDetailPicker(vueObj, dateFromSelector, dateToSelector, type) {
 	}	
 }
 
-function convertTime(time) {
+function changeTime(pTime, isDisplay) {
+	if(!pTime) return;
+		
+	if(!isDisplay) {
+		var convertTime = pTime.replace(/:/gi, '');
+		
+		convertTime = convertTime.replace(/-/gi, '');
+		
+		convertTime = convertTime.replace(/(\s*)/g, '');
+		
+		return convertTime;	
+	}else {
+		var dateFormat = '${dateFormat}';
+		
+		if(14 == dateFormat.length && 6 == pTime.length) {
+			pTime = moment().format('YYYYMMDD') + pTime;
+		}else if(6 == dateFormat.length && 14 == pTime.length) {
+			pTime = pTime.substring(8);
+		}		
+		
+		if(14 == pTime.length){
+			var date = pTime.substring(0, 8);
+			var time = pTime.substring(8);
+			
+			date = date.replace(/(.{4})/g, "$1-");
+			date = date.replace(/(.{7})/g, "$1-");
+			date = date.slice(0, -1);
+			
+			time = time.replace(/(.{2})/g, "$1:");
+			time = time.slice(0, -1);
 
-	if(!time) return time;
-
-	var tempTime = time;
-	var convertTime = tempTime.replace(/:/gi, '');
-	convertTime = convertTime.replace(/-/gi, '');
-	convertTime = convertTime.replace(/(\s*)/g, '');
-	
-	return convertTime;
-}
-
-function formatDate(date) {
-    var month = (1 + date.getMonth());          
-    month = month >= 10 ? month : '0' + month;     
-    var day = date.getDate();                   
-    day = day >= 10 ? day : '0' + day; 
-    
-    return  date.getFullYear() + '' + month + '' + day +' 00:00:00';
+			return date + ' ' + time;
+		}else if(6 == pTime.length) {
+			var time = pTime.replace(/(.{2})/g, "$1:");
+			
+			time = time.slice(0,-1);
+			
+			return time;
+		}
+	}
 }
 </script>

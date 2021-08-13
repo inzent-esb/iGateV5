@@ -4,19 +4,6 @@
     <Description height="80" />
   </Common>
 
-  <Interface>
-    <OnlineInterfaces>
-      <InterfaceType>Online</InterfaceType>
-    </OnlineInterfaces>
-  </Interface>
-
-  <Service>
-    <OnlineServices>
-      <ServiceType>Online</ServiceType>
-    </OnlineServices>
-  </Service>
-
-
   <Mapping> 
     <MappingRule fieldId="100" fieldType="100" fieldName="100">
       <Canvas width="150">
@@ -30,6 +17,7 @@
     <OperationTemplates>
       <OperationTemplate type="A" transaction="online" event="request.read" name="AOP_Online_Request_Read.xml">요청 수신</OperationTemplate>
       <OperationTemplate type="A" transaction="online" event="request.write" name="AOP_Online_Request_Write.xml">요청 송신</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="request.broadcast" name="AOP_Online_Request_Broadcast.xml">요청 배포</OperationTemplate>
       <OperationTemplate type="A" transaction="online" event="response.read" name="AOP_Online_Response_Read.xml">응답 수신</OperationTemplate>
       <OperationTemplate type="A" transaction="online" event="response.write" name="AOP_Online_Response_Write.xml">응답 송신</OperationTemplate>
 

@@ -65,12 +65,14 @@ var listMethodOption = {
     	var newTabSearchCondition = JSON.parse(localStorage.getItem(this.$el.id + '-newTabSearchCondition'));
     	
     	localStorage.removeItem(this.$el.id + '-newTabSearchCondition');
-
-    	window.vmSearch.initSearchArea(newTabSearchCondition);
     	
-    	this.$nextTick(function() {
-    		window.vmSearch.search();	
-    	});
+    	window.vmSearch.$nextTick(function() {
+        	window.vmSearch.initSearchArea(newTabSearchCondition);
+        	
+        	this.$nextTick(function() {
+        		window.vmSearch.search();	
+        	});    		
+    	}.bind(this));
     	
     	return true;
     }

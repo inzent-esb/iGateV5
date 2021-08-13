@@ -291,6 +291,7 @@
     }]) ;
 
     createPageObj.setPanelButtonList({
+      guideBtn : hasAdapterEditor,
       startBtn : hasAdapterEditor,
       stopBtn : hasAdapterEditor,
       dumpBtn : hasAdapterEditor,
@@ -740,6 +741,10 @@
     new Vue({
       el : '#panel-footer',
       methods : $.extend(true, {}, panelMethodOption, {
+        guide : function()
+        {
+          window.open("<c:url value='/manual/External Guide.htm' />", "_blank", "height=886, width=785,resizable=yes, toolbar=no, menubar=no, location=no, scrollbars=yes, status=no") ;
+        },
         start : function()
         {
           ControlImngObj.control("start", null, $.param({

@@ -358,13 +358,13 @@
             align : "left",
             width: "8%"
           }, {
+            name : "exceptionText",
+            header : "<fmt:message>igate.exceptionLog.exceptionText</fmt:message>",
+            align : "left",
+            width: "36%"
+          }, {
             name : "transactionId",
             header : "<fmt:message>igate.exceptionLog.transactionId</fmt:message>",
-            align : "left",
-            width: "16%"
-          }, {
-            name : "pk.exceptionId",
-            header : "<fmt:message>igate.exceptionLog</fmt:message> <fmt:message>head.id</fmt:message>",
             align : "left",
             width: "16%"
           }, {
@@ -376,14 +376,13 @@
             name : "adapterId",
             header : "<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>",
             align : "left",
-            width: "15%"
+            width: "5%"
           }, {
             name : "connectorId",
             header : "<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>",
             align : "left",
-            width: "15%"
-          },
-          {
+            width: "5%"
+          }, {
             name : "pk.exceptionDateTime",
             header : "<fmt:message>igate.exceptionLog.exceptionDateTime</fmt:message>",
             align : "center",

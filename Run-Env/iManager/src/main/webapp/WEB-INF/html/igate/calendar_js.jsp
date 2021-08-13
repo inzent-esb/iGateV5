@@ -15,18 +15,6 @@ $(document).ready(function() {
 		{'type': "text", 				'mappingDataInfo': "object.calendarId",     			'name': "<fmt:message>igate.calendar</fmt:message> <fmt:message>head.id</fmt:message>",    'placeholder': "<fmt:message>head.searchId</fmt:message>"},
 		{'type': "text",  				'mappingDataInfo': "object.calendarName",   			'name': "<fmt:message>igate.calendar</fmt:message> <fmt:message>head.name</fmt:message>",  'placeholder': "<fmt:message>head.searchName</fmt:message>"},	
 		{'type': "text", 				'mappingDataInfo': "object.calendarDesc",				'name': "<fmt:message>head.description</fmt:message>",									   'placeholder': "<fmt:message>head.searchComment</fmt:message>"},	
-		{
-			'type': "select", 
-  			'mappingDataInfo': {
-  				'selectModel': "object.holidayYear",
-  				'optionFor': 'option in holidayYearList',
-  				'optionValue': 'option',
-  				'optionText': 'option',
-  				'id': 'holidayYear',
-  			},
-  			'name': "<fmt:message>igate.calendar.date</fmt:message>", 
-  			'placeholder': "<fmt:message>head.all</fmt:message>"
-		},
 	]);
 	
 	createPageObj.searchConstructor();
@@ -69,6 +57,26 @@ $(document).ready(function() {
 			'addRowFunc': 'holidayParameters',
 			'removeRowFunc': 'removeHolidayParameters(index)',
 			'mappingDataInfo': 'calendarHolidayShow',
+			'searchList' : [
+				{
+					'className': 'col-lg-2',
+					'searchSubList' : [
+						{
+							'type': "select", 
+				  			'mappingDataInfo': {
+				  				'changeEvt' : 'calendarHolidayEqual()',
+				  				'selectModel': "holidayYear",
+				  				'optionFor': 'option in holidayYearList',
+				  				'optionValue': 'option',
+				  				'optionText': 'option',
+				  				'id': 'holidayYear',
+				  			},
+				  			'name': "<fmt:message>igate.calendar.date</fmt:message>", 
+				  			'placeholder': "<fmt:message>head.all</fmt:message>"
+						}
+					]	
+				}
+			],
 			'detailList': [
 				{'type': "singleDaterange", 'mappingDataInfo': {'id': 'searchSingleDaterange', 'dataDrops': 'up', 'vModel' : 'elm.pk.holidayDate'}, 'name': "<fmt:message>igate.calendar.date</fmt:message>"},
 				{'type': 'text', 'mappingDataInfo': 'elm.holidayDesc', 'name': '<fmt:message>igate.calendar.date.desc</fmt:message>'}, 
@@ -99,20 +107,16 @@ $(document).ready(function() {
     	el : '#' + createPageObj.getElementId('ImngSearchObject'),
     	data : {
     		pageSize : '10',
-    		object : {
-    			holidayYear : null,
+    		object : {    			
     			calendarId : null,
     			calendarName : null,
     			calendarDesc : null
     		},
-    		holidayYearList : [],
     		messageLocales : []
     	},
     	methods : {
 			search : function() {
-				
-				if(this.object.holidayYear == ' ') this.object.holidayYear = '';
-				
+								
 				if('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display')) {
 					$('#' + createPageObj.getElementId('ImngListObject')).show();
 					$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
@@ -128,24 +132,17 @@ $(document).ready(function() {
             		}            		
             	}else {
                 	this.pageSize = '10';
-                	this.object.holidayYear = new Date().getFullYear().toString();
             		this.object.calendarId = null;
             		this.object.calendarName = null;	
             		this.object.calendarDesc = null;            		
             	}
         		
-        		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
-        		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#holidayYear'), this.object.holidayYear);
+        		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);        		
             }
     	},
     	mounted: function() {
     		this.initSearchArea();
-    	},
-    	created: function(){
-    		for (var year = new Date().getFullYear() + 10; year >= new Date().getFullYear() - 10; year--) {
-    			this.holidayYearList.push(year); 
-    		}
-    	},
+    	}
     });
     
     var vmList = new Vue({
@@ -215,6 +212,11 @@ $(document).ready(function() {
     	data : {
     		viewMode : 'Open',
     		object : {
+    			calendarId : null,
+    			calendarName : null,
+    			saturdayYn : null,
+    			sundayYn : null,
+    			calendarDesc : null,
     			calendarHoliday : []
     		},
     		calendarSaturday : [],
@@ -228,6 +230,11 @@ $(document).ready(function() {
     			};
     		}
     	},
+    	watch : {
+    		panelMode : function() {
+    			if('detail' == this.panelMode) window.vmCalendarHoliday.calendarHolidayEqual();
+    		}
+    	},
     	created : function() {
     		PropertyImngObj.getProperties('List.Yn', true, function(properties) {
     			this.calendarSaturday = properties;
@@ -237,7 +244,6 @@ $(document).ready(function() {
         methods : {
 			goDetailPanel: function() {
 				panelOpen('detail');
-				window.vmCalendarHoliday.calendarHolidayEqual();
 			},
         	initDetailArea: function(object) {
         		
@@ -248,8 +254,10 @@ $(document).ready(function() {
     				this.object.saturdayYn = null;
     				this.object.sundayYn = null;
     				this.object.calendarDesc = null;
-    				this.object.calendarId=null;
-    				
+    				this.object.calendarId = null;
+    				this.object.calendarHoliday = [];
+
+    				window.vmCalendarHoliday.calendarHoliday = [];
     				window.vmCalendarHoliday.calendarHolidayShow = [];
         		}
 			},
@@ -261,7 +269,17 @@ $(document).ready(function() {
     	data: {
     		viewMode : 'Open',
     		calendarHoliday : [],
-    		calendarHolidayShow : []
+    		calendarHolidayShow : [],
+    		holidayYearList : [],
+    		holidayYear : null
+    	},
+    	mounted : function() {
+        	this.holidayYear = new Date().getFullYear().toString();     
+    	},
+    	created: function(){
+    		for (var year = new Date().getFullYear() + 10; year >= new Date().getFullYear() - 10; year--) {
+    			this.holidayYearList.push(year); 
+    		}
     	},
     	methods : {
     		holidayParameters : function() {
@@ -283,72 +301,83 @@ $(document).ready(function() {
     			
     			this.calendarHolidayShow = this.calendarHolidayShow.slice(0, index).concat(this.calendarHolidayShow.slice(index + 1));
     		},
-    		calendarHolidayEqual : function() {	
-				var holidayYear = window.vmSearch.object.holidayYear;	
+    		calendarHolidayEqual : function() {
     			
-				if(holidayYear){
-		   			this.calendarHolidayShow = this.calendarHoliday.filter(function(element){
-	    				if(holidayYear == element.pk.holidayDate.substring(0, 4)) return element;
-	    			});					
+    			this.holidayYear = $('#CalendarHoliday').find('#holidayYear option:selected').val();
+    			
+				if(this.holidayYear && this.holidayYear.trim().length < 1) {
+			   		this.calendarHolidayShow = this.calendarHoliday.map(function(calendar){ return $.extend(true, {}, calendar) });		   						
 				}else{
-					this.calendarHolidayShow = this.calendarHoliday;
+					this.calendarHolidayShow = this.calendarHoliday.filter(function(element){		
+	    				if(this.holidayYear == element.pk.holidayDate.substring(0, 4)) return element;
+	    			}.bind(this));		
 				}
+
+		   		this.$nextTick(function() {
+		   	    	$("#CalendarHoliday").find('.updateGroup, .saveGroup').hide() ;
+			    	$("#CalendarHoliday").find('.viewGroup').show() ;		   			
+			    	$("#CalendarHoliday").find('.view-disabled').attr('readonly', true) ;
+				});
     		}
     	}
-    });      
+    });     
 
 	new Vue({
 		el: '#panel-footer',
 		methods : $.extend(true, {}, panelMethodOption, {
+		   	goModifyPanel: function() {		   		
+		   		window.vmCalendarHoliday.calendarHolidayShow = window.vmCalendarHoliday.calendarHoliday;
+		   		
+		   		window.vmCalendarHoliday.$nextTick(function() {
+		   			for(var i = 0; i < window.vmCalendarHoliday.calendarHolidayShow.length; i++) {
+			       		initDatePicker(window.vmCalendarHoliday.calendarHolidayShow[i], $('#CalendarHoliday').find('#searchSingleDaterange' + i));
+		        	}
+				});
+		   		
+		   		panelMethodOption.goModifyPanel();
+		   	},
+			saveInfo: function() {
+				beforePanelMethod();
+				panelMethodOption.saveInfo();
+			},
 			updateInfo: function(){
-				var copyElement = true;
-				
-				window.vmCalendarHoliday.calendarHolidayShow.forEach(function(elementShow, indexShow){
-					this.calendarHoliday.forEach(function(element, index){
-						if(element.pk.holidayDate == elementShow.pk.holidayDate) {
-							copyElement = false;
-							element = elementShow;
-						}
-	       			}.bind(this));
-					
-					if(copyElement)   this.calendarHoliday.push(this.calendarHolidayShow[indexShow]);
-					copyElement = true;
-				}.bind(window.vmCalendarHoliday));
-				
+				beforePanelMethod();
 				panelMethodOption.updateInfo();
 		   	}
 		})
 	});
 });
 
+function beforePanelMethod() {
+	var copyElement = true;
+	
+	window.vmCalendarHoliday.calendarHolidayShow.forEach(function(elementShow, indexShow){
+		this.calendarHoliday.forEach(function(element, index){
+			if(element.pk.holidayDate == elementShow.pk.holidayDate) {
+				copyElement = false;
+				element = elementShow;
+			}
+		}.bind(this));
+		
+		if(copyElement)   this.calendarHoliday.push(this.calendarHolidayShow[indexShow]);
+		copyElement = true;
+	}.bind(window.vmCalendarHoliday));
+	
+	window.vmCalendarHoliday.calendarHolidayEqual();
+}
+
 function initDatePicker(vueObj, dateRangeSelector) {
-	var holidayYear = window.vmSearch.object.holidayYear;
 	var paramOption = {localeFormat : 'YYYYMMDD', drops: 'up'};
 	
-	if(vueObj.pk.holidayDate) paramOption.startDate = vueObj.pk.holidayDate;
-	
-	if(vueObj.pk.holidayDate == formatDate(holidayYear)) paramOption.autoUpdate = false;
-	else							  					 paramOption.autoUpdate = true;
-	
-	//휴일 일자에 따라 기간 지정 
-	if(holidayYear){
-		paramOption.minDate = new Date(holidayYear.toString(), 0, 1, 0, 0, 0, 0); 
-		paramOption.maxDate = new Date(holidayYear.toString(), 11, 31, 23, 59, 59, 59); 
-	}
+	if(vueObj.pk.holidayDate) paramOption.startDate = formatDate(vueObj.pk.holidayDate);
 
 	dateRangeSelector.customDatePicker(function(time) {
 		vueObj.pk.holidayDate = time;
 	}, paramOption);
 }
 
-function formatDate(selectedYear) {
-	var date = new Date();
-	var year = (selectedYear)? selectedYear : date.getFullYear();
-    var month = (1 + date.getMonth());          
-    month = month >= 10 ? month : '0' + month;     
-    var day = date.getDate();                   
-    day = day >= 10 ? day : '0' + day; 
-    
-    return  year + '/' + month + '/' + day;
+function formatDate(date_str) {
+    var dateStr = String(date_str);
+    return new Date(Number(dateStr.substring(0,4)), Number(dateStr.substring(4,6))-1, Number(dateStr.substring(6,8)));
 }
 </script>

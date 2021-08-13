@@ -205,9 +205,6 @@
       <Parameter type="java.lang.Boolean" desc="Is send ack" from="Constant" dynamic="false">
         <Value><![CDATA[true]]></Value>
       </Parameter>
-      <Parameter type="java.lang.Boolean" desc="Is exists async-response" from="Constant" dynamic="false">
-        <Value><![CDATA[true]]></Value>
-      </Parameter>
     </Activity>  
     <Scope width="401" height="444" uniqueKey="001f" index="14" desc="Scope" xPos="464" yPos="212"> 
       <Activities> 
@@ -219,7 +216,7 @@
             <Value><![CDATA[adapterParameter]]></Value>
           </Parameter>
         </Activity>  
-        <Scope width="339" height="155" uniqueKey="001g" index="4" desc="Scope" xPos="28" yPos="169"> 
+        <Scope width="339" height="180" uniqueKey="001g" index="4" desc="Scope" xPos="28" yPos="169"> 
           <Activities> 
             <Activity uniqueKey="001h" index="1" desc="Send Response" id="SendResponse" xPos="15" yPos="72"> 
               <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
@@ -250,7 +247,10 @@
             </Transition>  
             <Transition from="1" to="end" order="0" fromTerminal="bottom" toTerminal="bottom"> 
               <bendPoints/> 
-            </Transition> 
+            </Transition>  
+            <Transition from="2" to="end" order="0" fromTerminal="bottom" toTerminal="bottom">
+              <bendPoints/>
+            </Transition>
           </Transitions> 
         </Scope>  
         <Activity uniqueKey="001s" index="9" desc="Mapping Online-Response" id="MappingOnlineResponse" dynamic="true" xPos="107" yPos="131"> 
@@ -310,11 +310,11 @@ if ( !adapterParameter.isReply() )
 else 
    return 1;]]></Value> 
     </Condition>  
-    <Activity uniqueKey="001t" index="16" desc="ValidateRequest" id="ValidateRequest" xPos="166" yPos="173">
+    <Activity uniqueKey="001t" index="16" desc="ValidateRequest" id="ValidateRequest" xPos="166" yPos="173"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
-    </Activity>
+    </Activity> 
   </Activities>  
   <Transitions> 
     <Transition from="4" to="10" order="0" fromTerminal="right" toTerminal="left"> 
@@ -340,10 +340,10 @@ else
     </Transition>  
     <Transition from="2" to="16" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
-    </Transition>
-    <Transition from="16" to="5" order="0" fromTerminal="bottom" toTerminal="top">
-      <bendPoints/>
-    </Transition>
+    </Transition>  
+    <Transition from="16" to="5" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition> 
   </Transitions>  
   <Imports/> 
 </Operation>

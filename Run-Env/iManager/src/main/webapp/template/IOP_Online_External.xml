@@ -194,9 +194,6 @@ else
       <Parameter type="java.lang.Boolean" desc="Is send ack" from="Constant" dynamic="false">
         <Value><![CDATA[false]]></Value>
       </Parameter>
-      <Parameter type="java.lang.Boolean" desc="Is exists async-response" from="Constant" dynamic="false">
-        <Value><![CDATA[true]]></Value>
-      </Parameter>
     </Activity>  
     <Scope width="342" height="190" uniqueKey="0019" index="14" desc="Scope" xPos="516" yPos="333"> 
       <Activities> 
@@ -235,11 +232,11 @@ else
         </Transition> 
       </Transitions> 
     </Scope>  
-    <Activity uniqueKey="001c" index="15" desc="ValidateRequest" id="ValidateRequest" xPos="178" yPos="271">
+    <Activity uniqueKey="001c" index="15" desc="ValidateRequest" id="ValidateRequest" xPos="178" yPos="271"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
-    </Activity>
+    </Activity> 
   </Activities>  
   <Transitions> 
     <Transition from="0" to="8" order="1" fromTerminal="bottom" toTerminal="top"> 
@@ -271,10 +268,10 @@ else
     </Transition>  
     <Transition from="2" to="15" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
-    </Transition>
-    <Transition from="15" to="9" order="0" fromTerminal="bottom" toTerminal="top">
-      <bendPoints/>
-    </Transition>
+    </Transition>  
+    <Transition from="15" to="9" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition> 
   </Transitions>  
   <Imports> 
     <Import name="com.inzent.igate.repository.meta.AdapterPropertyPK"/> 

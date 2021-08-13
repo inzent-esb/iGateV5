@@ -15,57 +15,55 @@
     </Start>  
     <End uniqueKey="0001" index="1" desc="End" xPos="357" yPos="507"/>  
     <Activity uniqueKey="0002" index="2" desc="Execute Interface" id="ExecuteInterface" xPos="165" yPos="346"> 
-      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-        <Value><![CDATA[adapterParameter]]></Value> 
-      </Parameter> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
     </Activity>  
     <Activity uniqueKey="0003" index="3" desc="Logging Trace" id="LoggingTrace" xPos="172" yPos="267"> 
-      <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false"> 
-        <Value><![CDATA["INI"]]></Value> 
-      </Parameter>  
-      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-        <Value><![CDATA[adapterParameter]]></Value> 
-      </Parameter>  
-      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false"> 
-        <Value><![CDATA[throwed]]></Value> 
-      </Parameter> 
+      <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
+        <Value><![CDATA["INI"]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[throwed]]></Value>
+      </Parameter>
     </Activity>  
     <Activity uniqueKey="0004" index="4" desc="Release Session" id="ReleaseSession" xPos="52" yPos="187"> 
-      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-        <Value><![CDATA[adapterParameter]]></Value> 
-      </Parameter>  
-      <Parameter type="java.lang.Boolean" desc="Closing Session" from="Constant" dynamic="false"> 
-        <Value><![CDATA[false]]></Value> 
-      </Parameter> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Boolean" desc="Closing Session" from="Constant" dynamic="false">
+        <Value><![CDATA[false]]></Value>
+      </Parameter>
     </Activity>  
     <FaultHandlers uniqueKey="0008" index="faultHandlers" desc="FaultHandler" xPos="477" yPos="109"> 
       <CatchAll target="5" desc=""/> 
     </FaultHandlers>  
     <Activity uniqueKey="0005" index="5" desc="Make Response" id="MakeResponse" xPos="460" yPos="189"> 
-      <Parameter type="com.inzent.igate.message.Record" desc="Response Record" from="Variable" dynamic="false"> 
-        <Value><![CDATA[errorResponse]]></Value> 
-      </Parameter>  
-      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-        <Value><![CDATA[adapterParameter]]></Value> 
-      </Parameter>  
-      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false"> 
-        <Value><![CDATA[throwed]]></Value> 
-      </Parameter> 
+      <Parameter type="com.inzent.igate.message.Record" desc="Response Record" from="Variable" dynamic="false">
+        <Value><![CDATA[errorResponse]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[throwed]]></Value>
+      </Parameter>
     </Activity>  
     <Condition uniqueKey="0007" index="7" desc="Is Response" xPos="471" yPos="268"> 
-      <When target="11" desc="exists response"> 
-        <JavaExpression><![CDATA[null != errorResponse]]></JavaExpression> 
-      </When>  
-      <Others target="9" desc="no response"> 
-        <JavaExpression><![CDATA[true]]></JavaExpression> 
-      </Others>  
+      <When target="11" desc="exists response">
+        <JavaExpression><![CDATA[null != errorResponse]]></JavaExpression>
+      </When>
+      <Others target="12" desc="no response"/>
       <Value><![CDATA[
 // exists response
 if ( null != errorResponse ) 
    return 0;
 // no response
 else 
-   return 1;]]></Value> 
+   return 1;]]></Value>
     </Condition>  
     <Condition uniqueKey="0009" index="8" desc="Is Sync" xPos="192" yPos="115"> 
       <When target="3" desc="Sync Response"> 
@@ -82,7 +80,7 @@ if ( adapterParameter.isResponseSync() )
 else 
    return 1;]]></Value> 
     </Condition>  
-    <Condition uniqueKey="000a" index="9" desc="Is Sync" xPos="607" yPos="348"> 
+    <Condition uniqueKey="000a" index="9" desc="Is Sync" xPos="615" yPos="417"> 
       <When target="10" desc="Sync Response"> 
         <MethodExpression variableName="adapterParameter"> 
           <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isResponseSync" argumentTypes="" argumentType="boolean"/> 
@@ -97,18 +95,26 @@ if ( adapterParameter.isResponseSync() )
 else 
    return 1;]]></Value> 
     </Condition>  
-    <ReThrow uniqueKey="000b" index="10" desc="ReThrow" xPos="599" yPos="428"/>  
+    <ReThrow uniqueKey="000b" index="10" desc="ReThrow" xPos="608" yPos="497"/>  
     <Activity uniqueKey="000c" index="11" desc="Send Response" id="SendResponse" xPos="388" yPos="347"> 
-      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false"> 
-        <Value><![CDATA[adapterParameter]]></Value> 
-      </Parameter>  
-      <Parameter type="com.inzent.igate.message.Record" desc="Respone Record" from="Variable" dynamic="false"> 
-        <Value><![CDATA[errorResponse]]></Value> 
-      </Parameter>  
-      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false"> 
-        <Value><![CDATA[throwed]]></Value> 
-      </Parameter> 
-    </Activity> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="com.inzent.igate.message.Record" desc="Respone Record" from="Variable" dynamic="false">
+        <Value><![CDATA[errorResponse]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[throwed]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="000d" index="12" desc="Save Response" id="SaveResponse" xPos="591" yPos="347">
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[throwed]]></Value>
+      </Parameter>
+    </Activity>
   </Activities>  
   <Transitions> 
     <Transition from="4" to="3" order="0" fromTerminal="bottom" toTerminal="top"> 
@@ -138,18 +144,21 @@ else
     <Transition from="9" to="1" order="1" desc="No Response" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
-    <Transition from="7" to="11" order="0" desc="exists response" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
-    <Transition from="7" to="9" order="1" desc="no response" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
     <Transition from="11" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
     <Transition from="3" to="2" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
-    </Transition> 
+    </Transition>  
+    <Transition from="7" to="11" order="0" desc="exists response" fromTerminal="bottom" toTerminal="top">
+      <bendPoints/>
+    </Transition>
+    <Transition from="7" to="12" order="1" desc="no response" fromTerminal="bottom" toTerminal="top">
+      <bendPoints/>
+    </Transition>
+    <Transition from="12" to="9" order="0" fromTerminal="bottom" toTerminal="top">
+      <bendPoints/>
+    </Transition>
   </Transitions>  
   <Imports/> 
 </Operation>

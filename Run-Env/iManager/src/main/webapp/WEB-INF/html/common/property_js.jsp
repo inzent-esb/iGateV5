@@ -130,7 +130,9 @@ $(document).ready(function(){
             }    		
     	},
     	mounted: function() {
-    		this.initSearchArea();
+    		this.$nextTick(function() {
+    			this.initSearchArea();	
+    		}.bind(this));
     		
     		$.getJSON(this.uri, function(data) { 
     			this.dataList = data.object; 

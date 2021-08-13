@@ -124,6 +124,40 @@ function DashContainerParent() {
 		if(callBackFunc) callBackFunc();
 	};
 	
+	DashContainerParent.prototype.initDashModalLarge = function(callBackFunc) {
+		var strHtml = '';
+
+		strHtml += '<div id="dashModalLarge" class="modal fade" tabindex="-1" role="dialog">';
+		strHtml += '    <div class="modal-dialog modal-dialog-centered modal-lg">';
+		strHtml += '        <div class="modal-content"></div>';
+		strHtml += '    </div>';
+		strHtml += '</div>';
+
+		$('body').append($(strHtml));
+		
+		$('#dashModalLarge').on('show.bs.modal', function(e) {
+			function step() { 
+				if(0 == $('#dashModalLarge').length) {
+					cancelAnimationFrame(rafId);
+					return;
+				}
+				
+				if(0 < $('.modal-backdrop').length) { 	  
+					$('.modal-backdrop').css({'width': $("#ct").outerWidth(true), 'left': 'auto', 'right': '0px'});
+					$('#dashModalLarge').css({'width': $("#ct").outerWidth(true), 'left': 'auto', 'right': '0px'}) ;
+					cancelAnimationFrame(rafId);
+					return;
+				}
+           
+				rafId = requestAnimationFrame(step);
+			}
+         
+			var rafId = requestAnimationFrame(step);
+		});
+		
+		if(callBackFunc) callBackFunc();
+	};	
+	
 	DashContainerParent.prototype.customResizeFunc = function() {
 		if($("#dashBar").is(':visible')) $("#containerBody").width('100%').height('100%');
 		else						     $("#containerBody").width(this.containerInfo.containerWidth).height(this.containerInfo.containerHeight);

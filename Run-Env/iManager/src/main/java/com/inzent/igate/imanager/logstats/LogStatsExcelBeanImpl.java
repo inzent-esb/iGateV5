@@ -118,7 +118,7 @@ public class LogStatsExcelBeanImpl implements LogStatsExcelBean
       cell.setCellValue(values) ;
       
       //조회타입
-      values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily"): MessageGenerator.getMessage("igate.logStatistics.time", "Time") ;
+      values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily"): logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") :  MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
       row = writeSheet.getRow(4) ;
       cell = row.createCell(3) ;
       cell.setCellStyle(cellStyle_Base) ;
@@ -196,7 +196,18 @@ public class LogStatsExcelBeanImpl implements LogStatsExcelBean
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
-        
+        // 평균 처리 시간
+        values = String.valueOf(logStats2.getResponseTotal());
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+        // 최대 처리 시간
+        values = String.valueOf(logStats2.getResponseMax());
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+
+
         requestSum  += logStats2.getRequestCount() ;
         successSum += logStats2.getSuccessCount() ;
         exceptionSum += logStats2.getExceptionCount() ;

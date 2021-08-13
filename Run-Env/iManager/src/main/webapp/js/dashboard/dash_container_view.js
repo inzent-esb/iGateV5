@@ -18,11 +18,11 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	
 	var noticeGrid = null;
 	var noticeDataList = [];
+	var noticeDataHistoryList = [];
 		
 	//대상 동기화 시간.
 	var targetSyncRefreshTime = null;		
 
-	//this
 	var _this = this;
 	
 	DashContainerParent.call(_this);
@@ -36,6 +36,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		_this.initDashSubBar(
 			[
 				$('<button type="button" id="viewNoticeBtn" class="custom-control custom-switch btn-widget"></button>').append($('<span class="custom-control-label">' + dashboardNotificationSettings + '</span>')),
+				$('<a href="javascript:void(0);" id="evtHistoryListBtn" class="btn" data-toggle="modal"><i class="icon-list"></i>'+ dashboardNotificationHistoryList +'</a>'),
 				$('<a href="javascript:void(0);" id="previewContainerMode" class="btn" data-toggle="modal"><i class="icon-eye"></i>'+ dashboardLabel_fullScreen +'</a>'),
 				$('<a href="javascript:void(0);" id="shareContainerMode" class="btn" data-toggle="modal"><i class="icon-share"></i>'+ dashboardBtn_share +'</a>'),
 				$('<a href="javascript:void(0);" id="copyContainerMode" class="btn"><i class="icon-plus"></i>'+ dashboardBtn_copy +'</a>'),
@@ -61,6 +62,8 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		_this.initDashArea();
 		
 		_this.initDashModal();
+		
+		_this.initDashModalLarge();
 		
 		initDashViewNotice();
 		
@@ -879,6 +882,151 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 			$("#noticeArea").hide();
 			$("#noticeArea").data('temporaryCloseStartTime', Date.now());
 		});
+		
+		$('#evtHistoryListBtn').on('click', function(evt) {
+	    	if (!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
+	    		warnAlert({message : dashboardMsg_selectNoDashboard});
+	    		return;
+	    	};
+    
+	    	var dashModalLargeGrid = null;
+	    	
+	    	var strHtml = '';
+
+	    	strHtml += '<div class="modal-header">';
+	    	strHtml += '    <h2 class="modal-title">'+ dashboardNotificationHistoryList +'<span name="refreshTime" style="font-size: 0.8rem;"></span></h2>';
+	    	strHtml += '	<ul>';
+	    	strHtml += '		<li style="float: left;">';
+	    	strHtml += '    		<button type="button" class="btn-icon" name="refreshBtn" title="' + dashboardRefresh + '"><i class="icon-play"></i></button>';
+	    	strHtml += '		</li>';
+	    	strHtml += '		<li style="float: left;">';
+	    	strHtml += '    		<button type="button" class="btn-icon" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>';
+	    	strHtml += '		</li>';
+	    	strHtml += '	</ul>';
+	    	strHtml += '</div>';
+	    	strHtml += '<div class="modal-body">';
+	    	strHtml += '	<div id="dashModalLargeGrid"></div>';
+	    	strHtml += '</div>';
+	    	strHtml += '<div class="modal-footer">';
+	    	strHtml += '    <button type="button" id="closeModifyDashBtn" class="btn" data-dismiss="modal">'+ cancelBtn +'</button>';
+	    	strHtml += '</div>';
+	    	
+	    	$('#dashModalLarge').find('.modal-content').empty();
+	    	$('#dashModalLarge').find('.modal-content').append($(strHtml));
+	    	
+	    	$('#dashModalLarge').find('.modal-content').find('.modal-header').find('[name=refreshBtn]').off('click').on('click', function(evt) {
+	    		if(dashModalLargeGrid)
+	    			dashModalLargeGrid.destroy();
+	    		
+	    		var tmpNoticeDataHistoryList = noticeDataHistoryList.slice(0).reverse();
+	    		
+	    		$('#dashModalLarge').find('.modal-content').find('.modal-header').find('[name=refreshTime]').text(' (' + moment(new Date()).format('YYYY-MM-DD hh:mm:ss') + ')');
+	    		
+	    		var perPage = 20;
+				var scrollEndIdx = 1;
+				
+				var settings = {
+					el : document.getElementById('dashModalLargeGrid'),
+					bodyHeight: 250,
+					data: tmpNoticeDataHistoryList.slice(0, perPage),
+					columns : [
+								{
+									name : "noticeDateTime", 
+									header : dashboardNotificationTime, 
+									align : "center",
+									width: noticeDateTimeColWidth
+								},
+								{
+									name : "instanceId",     
+									header : dashboardNotificationInstanceId, 
+									width: noticeInstanceIdColWidth
+								},
+								{
+									name : "message",     	  
+									header : dashboardNotificationMessage, 
+									width: noticeMessageColWidth
+								},
+								{
+									name : "status",     	  
+									header : dashboardNotificationHeadStatus, 
+									align : "center",
+									width: noticeStatusColWidth
+								},								
+							  ],
+					columnOptions : {
+						resizable : true
+					},
+					usageStatistics : false,
+					header: {
+						height: 32,
+						align: 'center'
+					},
+					onGridMounted : function() {
+			        	var resetColumnWidths = [];
+			        	
+			        	dashModalLargeGrid.getColumns().forEach(function(columnInfo) {
+			        		if(!columnInfo.copyOptions) return;
+
+			        		if(columnInfo.copyOptions.widthRatio) {
+			        			resetColumnWidths.push($('#dashModalLargeGrid').width() * (columnInfo.copyOptions.widthRatio / 100));
+			        		}
+			        	});
+			        	
+			        	if(0 < resetColumnWidths.length)
+			        		dashModalLargeGrid.resetColumnWidths(resetColumnWidths);
+			        	
+			        	$('#dashModalLargeGrid').find('.tui-grid-column-resize-handle').removeAttr('title');	        	
+			        },				
+			    	scrollX: false,
+			    	scrollY: true,
+				};
+				
+				settings.columns.forEach(function(column) {
+					if(!column.formatter) 
+						column.escapeHTML = true;  
+
+					if(column.width && -1 < String(column.width).indexOf('%')) {
+						if(!column.copyOptions) 
+							column.copyOptions = {};
+			    		  
+						column.copyOptions.widthRatio = column.width.replace('%', '');
+			    		  
+						delete column.width;
+					}
+				});			
+				
+				dashModalLargeGrid = new tui.Grid(settings);
+				
+				dashModalLargeGrid.on('mouseover', function(ev) {
+					if('cell' != ev.targetType) return;
+			    	  
+					var overCellElement = $(dashModalLargeGrid.getElement(ev.rowKey, ev.columnName));    	  
+					overCellElement.attr('title', overCellElement.text());
+				});			
+				
+				dashModalLargeGrid.on('scrollEnd', function() {
+					if(scrollEndIdx > Math.ceil(tmpNoticeDataHistoryList.length / perPage)) return;
+					
+					dashModalLargeGrid.appendRows(tmpNoticeDataHistoryList.slice(perPage * scrollEndIdx, perPage * (scrollEndIdx + 1)));
+					scrollEndIdx += 1;
+				});
+	    	});
+	    	
+	    	$('#dashModalLarge').off('shown.bs.modal').on('shown.bs.modal', function() {
+	    		$('#dashModalLarge').find('.modal-content').find('.modal-header').find('[name=refreshBtn]').trigger('click');
+	    	});
+
+			$('#dashModalLarge').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+				if(dashModalLargeGrid)
+					dashModalLargeGrid.destroy();
+				
+				tmpNoticeDataHistoryList = null;
+				
+				$('#dashModalLarge').modal('dispose');
+			});
+	    	
+			$('#dashModalLarge').modal('show');
+		});
 	}
 	  
 	function setLocalStorage() {
@@ -1332,6 +1480,12 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 			  
 				if('true' == localStorage.getItem('isViewNotice_' + _this.containerInfo.containerId)) {
 					Array.prototype.push.apply(noticeDataList, bodyObj.noticeMessage);
+				}
+				
+				Array.prototype.push.apply(noticeDataHistoryList, bodyObj.noticeMessage);
+				
+				if(noticeDataHistoryListMaxCnt < noticeDataHistoryList.length) {
+					noticeDataHistoryList.splice(0, noticeDataHistoryList.length - noticeDataHistoryListMaxCnt);
 				}
 
 				for (var i = 0; i < _this.componentList.length; i++) {
@@ -2009,6 +2163,11 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		});
 		$('#dashModal').modal('hide');
 
+		$('#dashModalLarge').on('hidden.bs.modal', function() {
+			$('#dashModalLarge').remove(); 
+		});
+		$('#dashModalLarge').modal('hide');
+		
 		$("#noticeArea").remove();
 	  
 		var dashContainerOption = {mod : mod};
@@ -2061,6 +2220,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		}
 	  
 		noticeDataList = [];
+		noticeDataHistoryList = [];
 	}
 
 	function validationDashConfigModal() {

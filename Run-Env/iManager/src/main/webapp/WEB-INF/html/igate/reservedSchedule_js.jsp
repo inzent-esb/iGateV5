@@ -163,6 +163,9 @@ $(document).ready(function() {
 	    					$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
 	    				}
 	    				
+	    				if('' == this.object.pk.instanceId)
+	    					this.object.pk.instanceId = null;
+	    				
 	    				vmList.makeGridObj.search(this);
 	    			},
 	    	    	initSearchArea: function(searchCondition) {
