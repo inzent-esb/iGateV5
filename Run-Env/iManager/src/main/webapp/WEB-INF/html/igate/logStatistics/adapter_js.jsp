@@ -47,7 +47,7 @@ $(document).ready(function() {
 		{'type': "modal", 'mappingDataInfo': {'url' : '/igate/adapter.html', 'modalTitle': '<fmt:message>igate.adapter</fmt:message>', 'vModel': "object.pk.adapterId", 'callBackFuncName': 'setSearchAdapterId'}, 'name': "<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>", 'placeholder': "<fmt:message>head.searchId</fmt:message>"},
 	]);
 	
-	createPageObj.searchConstructor(true);
+	createPageObj.searchConstructor();
 	
 	createPageObj.setMainButtonList({
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
@@ -61,7 +61,7 @@ $(document).ready(function() {
 	
 	PropertyImngObj.getProperties('List.LogStats.statsDataTypes', false, function(pstatsDataTypes){
 		
-     	PropertyImngObj.getProperties('List.LogStats.DailyTime', true, function(pDailyTime){
+     	PropertyImngObj.getProperties('List.LogStats.SearchType', true, function(pDailyTime){
      		
      		window.vmSearch = new Vue({
      			el : '#' + createPageObj.getElementId('ImngSearchObject'),
@@ -86,6 +86,8 @@ $(document).ready(function() {
 	   						$('#' + createPageObj.getElementId('ImngListObject')).show();
 	   						$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
 	   					}
+	   					
+	   					vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
 	   					
 	   					vmList.makeGridObj.search(this, function(result) {
 	   						vmList.total(result);
@@ -191,6 +193,7 @@ $(document).ready(function() {
 		    	    	        header : "<fmt:message>head.transaction</fmt:message> <fmt:message>head.date</fmt:message>",
     			    	        align : "center",
     	                        width: "20%",
+    	                        sortable: true
     	    			    }, 
     	    			    {
     	    	        		name : "pk.statsType",
@@ -225,26 +228,48 @@ $(document).ready(function() {
     	    	        		header : "<fmt:message>igate.logStatistics.requestCount</fmt:message>",
     	    	        		align : "right",
     	                        width: "15%",
+    	                        sortable: true
     	    	      		}, 
     	    	      		{
     	    	        		name : "successCount",
     	    	        		header : "<fmt:message>igate.logStatistics.successCount</fmt:message>",
     	    	        		align : "right",
     	                        width: "15%",
+    	                        sortable: true
     	    	      		}, 
     	    	      		{
     	    	        		name : "exceptionCount",
     	    	        		header : "<fmt:message>igate.logStatistics.exceptionCount</fmt:message>",
     	    	        		align : "right",
     	                        width: "15%",
+    	                        sortable: true
     	    	      		}, 
     	    	      		{
     	    	        		name : "timeoutCount",
     	    	        		header : "<fmt:message>igate.logStatistics.timeoutCount</fmt:message>",
     	    	        		align : "right",
     	                        width: "15%",
-    	    	      		}
-    	    	      	],    	        	    
+    	                        sortable: true
+    	    	      		},
+    	                	{
+    	                		name : "responseTotal",
+    	                		header : "<fmt:message>igate.logStatistics.responseTotal</fmt:message>",
+    	                		align : "right",
+    	                        width: "15%",
+    	                        sortable: true
+    	                	}, 
+    	                	{
+    	                		name : "responseMax",
+    	                		header : "<fmt:message>igate.logStatistics.responseMax</fmt:message>",
+    	                		align : "right",
+    	                        width: "15%",
+    	                        sortable: true
+    	                	}
+    	    	      	], 
+    	    	      	pageOptions: {
+    	    	      		useClient: true,
+    	    	      		perPage: 10
+    	    	      	}     	    	      	
     	        	});
     	        	
     	        	SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
