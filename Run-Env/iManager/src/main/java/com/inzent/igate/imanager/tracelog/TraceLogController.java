@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping ;
 import com.inzent.igate.repository.log.TraceLog ;
 
 @Controller
-@RequestMapping(value = { AbstractTraceLogController.URI })
+@RequestMapping(AbstractTraceLogController.URI)
 public class TraceLogController extends AbstractTraceLogController<TraceLog>
 {
 }
