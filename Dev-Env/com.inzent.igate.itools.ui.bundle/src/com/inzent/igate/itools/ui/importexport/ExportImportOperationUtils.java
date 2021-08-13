@@ -284,7 +284,7 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
         responseObject = ClientManager.getInstance().getIManagerClient().insert(operation) ;
       }
 
-      if (null != responseObject.getObject())
+      if (null != responseObject.getIManagerException())
         throw responseObject.getIManagerException() ;
     }
     catch (Throwable t)

@@ -523,7 +523,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
           responseObject = ClientManager.getInstance().getIManagerClient().insert(jsonRecord) ;
         }
 
-        if (null != responseObject.getObject())
+        if (null != responseObject.getIManagerException())
         {
           String errorMessage = StringUtils.EMPTY ;
 
@@ -613,7 +613,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
           responseObject = ClientManager.getInstance().getIManagerClient().insert(excelRecord) ;
         }
 
-        if (null != responseObject.getObject())
+        if (null != responseObject.getIManagerException())
         {
           String errorMessage = StringUtils.EMPTY ;
 
@@ -667,7 +667,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
 
   protected Record importExcelSheet(Workbook readBook, Sheet readSheet, Record record) throws Exception
   {
-    if (Objects.equals("Data_Model", readSheet.getSheetName()))
+    if (!Objects.equals("Data_Model", readSheet.getSheetName()))
       throw new Exception(UiMessage.ERROR_IMPORT_EXPORT_IO_MESSAGE1) ;
 
     Row row ;
