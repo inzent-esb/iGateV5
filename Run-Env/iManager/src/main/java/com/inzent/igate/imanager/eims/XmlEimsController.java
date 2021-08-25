@@ -472,12 +472,12 @@ public class XmlEimsController extends AbstractEimsController
       if (isRequest)
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_REQ_RECORD_ID, "SFD_{0}_I"), service.getServiceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_REQ_RECORD_ID, "{0} 요청"), service.getServiceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_REQ_RECORD_NAME, "{0} 요청"), service.getServiceName())) ;
       }
       else
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_RES_RECORD_ID, "SFD_{0}_O"), service.getServiceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_RES_RECORD_ID, "{0} 응답"), service.getServiceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_RES_RECORD_NAME, "{0} 응답"), service.getServiceName())) ;
       }
 
       record.setPrivilegeId(service.getPrivilegeId()) ;
@@ -493,12 +493,12 @@ public class XmlEimsController extends AbstractEimsController
       if (isRequest)
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_RECORD_ID, "IFD_{0}_I"), interfaceMeta.getInterfaceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_RECORD_ID, "{0} 요청"), interfaceMeta.getInterfaceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_RECORD_NAME, "{0} 요청"), interfaceMeta.getInterfaceName())) ;
       }
       else
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_RECORD_ID, "IFD_{0}_O"), interfaceMeta.getInterfaceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_RECORD_ID, "{0} 응답"), interfaceMeta.getInterfaceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_RECORD_NAME, "{0} 응답"), interfaceMeta.getInterfaceName())) ;
       }
 
       record.setPrivilegeId(interfaceMeta.getPrivilegeId()) ;
