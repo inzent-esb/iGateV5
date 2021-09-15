@@ -874,7 +874,7 @@ function getMakeGridObj()
         		searchGrid.resetColumnWidths(resetColumnWidths);
         },
         scrollX : false,
-        scrollY : false
+        scrollY : true
       } ;
 
       $.extend(settings, instanceSettings) ;
@@ -1086,7 +1086,14 @@ function getMakeGridObj()
         }() ;
       }
     }
-
+    
+    this.noDataHidePage = function(listAreaId){
+    	if('none' == $('#' + listAreaId).children('.empty').css('display')) return;
+    	
+		$('#' + listAreaId).children('.empty').hide();					
+		$('#' + listAreaId).children('.table-responsive').show();
+    };
+    
     this.search = function(vueSearchObj, callback)
     {
       submit(JsonImngObj.serialize($.extend(
@@ -1102,7 +1109,7 @@ function getMakeGridObj()
             resizeSearchGridPagination(elementId) ;
           }, 0)
         else
-          windowResizeSearchGrid() ;
+          resizeSearchGrid() ;
 
         if (callback)
         {
@@ -1242,7 +1249,20 @@ function getMakeGridObj()
       
       $("#" + elementId).find('.ImngSearchGridPagination').find('[name=pageNum], [name=prev], [name=next]').on('click', function()
       {
-        page($(this).data('page_param')) ;
+        page($(this).data('page_param'), function() {
+          if(isModal)
+          {
+            setTimeout(function()
+            {
+              searchGrid.refreshLayout() ;
+              resizeSearchGridPagination(elementId) ;
+            }, 0)        	  
+          }
+          else
+          {
+            resizeSearchGrid() ;
+          }
+        }) ;
       }) ;
     }
   }

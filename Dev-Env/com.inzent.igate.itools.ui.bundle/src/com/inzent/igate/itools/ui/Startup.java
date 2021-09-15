@@ -12,9 +12,9 @@ import org.eclipse.jface.resource.ImageDescriptor ;
 import org.eclipse.ui.IStartup ;
 import org.eclipse.wb.swt.ResourceManager ;
 
-import com.inzent.igate.itools.activity.ActivityActivator ;
 import com.inzent.igate.itools.activity.dialogs.ActivityFilterDialog ;
 import com.inzent.igate.itools.activity.editors.ActivityEditor ;
+import com.inzent.igate.itools.activity.utils.ActivityUtils ;
 import com.inzent.igate.itools.editors.EntityEditorInput ;
 import com.inzent.igate.itools.handlers.FilterHandler ;
 import com.inzent.igate.itools.interfaces.InterfaceActivator ;
@@ -34,9 +34,9 @@ import com.inzent.igate.itools.operation.OperationActivator ;
 import com.inzent.igate.itools.operation.dialogs.OperationFilterDialog ;
 import com.inzent.igate.itools.operation.editors.OperationEditor ;
 import com.inzent.igate.itools.operation.utils.OperationUtils ;
-import com.inzent.igate.itools.query.QueryActivator;
 import com.inzent.igate.itools.query.dialogs.QueryFilterDialog;
 import com.inzent.igate.itools.query.editors.QueryEditor;
+import com.inzent.igate.itools.query.utils.QueryUtils ;
 import com.inzent.igate.itools.record.RecordActivator ;
 import com.inzent.igate.itools.record.RecordExportHandlerImpl ;
 import com.inzent.igate.itools.record.RecordImportHandlerImpl ;
@@ -100,7 +100,7 @@ public class Startup implements IStartup
     EntityEditorInput.appendEntity(TestSuite.class, TestSuiteEditor.ID, ResourceManager.getPluginImageDescriptor(InterfaceActivator.PLUGIN_ID, "icons/obj16/testSuite.png")) ;
     FilterHandler.appendEntity(TestSuite.class, TestSuiteFilterDialog.class) ;
     
-    EntityEditorInput.appendEntity(Query.class, QueryEditor.ID, ResourceManager.getPluginImageDescriptor(QueryActivator.PLUGIN_ID, "icons/obj16/query.png")) ;
+    EntityEditorInput.appendEntity(Query.class, QueryEditor.ID, QueryUtils.getFigureImageDescriptor(QueryUtils.IMAGE_QUERY)) ;
     FilterHandler.appendEntity(Query.class, QueryFilterDialog.class) ;
     
     MappingUtils.classLoader = this.getClass().getClassLoader() ;
@@ -144,7 +144,7 @@ public class Startup implements IStartup
       case "Fork" :
         return OperationUtils.getFigureImageDescriptor(OperationUtils.IMAGE_FORK) ;
       case "InvokeActivity" :
-        return OperationUtils.getFigureImageDescriptor(OperationUtils.IMAGE_ACTIVITY) ;
+        return ActivityUtils.getFigureImageDescriptor(ActivityUtils.IMAGE_ACTIVITY) ;
       case "InvokeOperation" :
         return OperationUtils.getFigureImageDescriptor(OperationUtils.IMAGE_OPERATION) ;
       case "ReThrow" :
@@ -162,7 +162,10 @@ public class Startup implements IStartup
       }
 
     default :
-      return ResourceManager.getPluginImageDescriptor(ActivityActivator.PLUGIN_ID, "icons/obj16/activity.png") ;
+      if (t.getActivityProject() == null)
+        return ActivityUtils.getFigureImageDescriptor(ActivityUtils.IMAGE_ACTIVITY) ;
+      else
+        return ActivityUtils.getFigureImageDescriptor(ActivityUtils.IMAGE_ACTIVITY_CUSTOM) ;
     }
   }
 }

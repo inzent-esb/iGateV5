@@ -19,6 +19,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/iGate/lib/iGate-Lib-5.0.17.jar"/>
+	<classpathentry kind="lib" path="/iGate/lib/iGate-Lib-5.0.18.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

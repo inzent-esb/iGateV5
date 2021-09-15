@@ -20,12 +20,30 @@
 	    'mappingDataInfo' : "object.serviceName",
 	    'name' :  "<fmt:message>igate.service</fmt:message> <fmt:message>head.name</fmt:message>",
 	    'placeholder' : "<fmt:message>head.searchName</fmt:message>"
+	}, 
+	{
+      	'type' : "modal",
+      	'mappingDataInfo' : {
+	      	'url' : '/igate/adapter.html',
+	      	'modalTitle' : '<fmt:message>igate.adapter</fmt:message>',
+	      	'vModel' : "object.adapterId",
+	      	"callBackFuncName" : "setSearchAdapterId"
+		},
+	    'name' : "<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>",
+	    'placeholder' : "<fmt:message>head.searchId</fmt:message>"
+	},
+	{
+	    'type' : "text",
+	    'mappingDataInfo' : "object.serviceGroup",
+	    'name' :  "<fmt:message>head.group</fmt:message>",
+	    'placeholder' : "<fmt:message>head.searchId</fmt:message>"
 	}]) ;
 
     createPageObj.searchConstructor() ;
 
     createPageObj.setMainButtonList({
       searchInitBtn : true,
+      downloadBtn : true,
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
     }) ;
 
@@ -126,15 +144,13 @@
         	object : {
          		serviceId : null,
           		serviceName : null,
+          		adapterId : null,
+          		serviceGroup : null,
         	},
       	},
       	methods : {
         	search : function() {
-          		if ('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display')) {
-            		$('#' + createPageObj.getElementId('ImngListObject')).show() ;
-            		$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide() ;
-          		}
-
+        		vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
           		vmList.makeGridObj.search(this) ;
         	},
         	initSearchArea : function(searchCondition) {
@@ -147,6 +163,8 @@
 	            	this.pageSize = '10' ;
 	            	this.object.serviceId = null ;
 	            	this.object.serviceName = null ;
+	            	this.object.adapterId = null ;
+	            	this.object.serviceGroup = null;
 	          	}	  
 
           	initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize) ;
@@ -154,6 +172,9 @@
         	openModal : function(openModalParam) {
          		createPageObj.openModal.call(this, openModalParam) ;
         	},
+            setSearchAdapterId : function(param){
+              	this.object.adapterId = param.adapterId ;
+            },
         	setSearchServiceId : function(param) {
           		this.object.serviceId = param.serviceId ;
        	 	},
@@ -173,7 +194,19 @@
         initSearchArea : function()
         {
           window.vmSearch.initSearchArea() ;
-        }
+        },
+        downloadFile : function() {
+			var myForm = document.popForm;
+			
+       		$("[name=serviceId]").val(window.vmSearch.object.serviceId);
+       	  	$("[name=serviceName]").val(window.vmSearch.object.serviceName);
+       	  	$("[name=adapterId]").val(window.vmSearch.object.adapterId);
+       	  	$("[name=serviceGroup]").val(window.vmSearch.object.serviceGroup);
+
+       	  	var popup = window.open("", "hiddenframe", "toolbar=no, width=0, height=0, directories=no, status=no,    scrollorbars=no, resizable=no") ;
+       	  	myForm.target = "hiddenframe";
+       	  	myForm.submit();
+		}
       }),
       mounted : function()
       {
@@ -191,17 +224,22 @@
             name : "serviceId",
             header : "<fmt:message>igate.service</fmt:message><fmt:message>head.id</fmt:message>",
             align : "left",
-            width: "25%"
+            width: "20%"
           }, {
             name : "serviceName",
             header : "<fmt:message>igate.service</fmt:message><fmt:message>head.name</fmt:message>",
             align : "left",
-            width: "50%"
+            width: "40%"
           }, {
-            name : "privilegeId",
-            header : "<fmt:message>common.privilege</fmt:message>",
+              name : "adapterId",
+              header : "<fmt:message>igate.adapter</fmt:message>",
+              align : "left",
+              width: "20%"
+          }, {
+            name : "serviceGroup",
+            header : "<fmt:message>head.group</fmt:message>",
             align : "left",
-            width: "25%"
+            width: "20%"
           }]
         }) ;
 

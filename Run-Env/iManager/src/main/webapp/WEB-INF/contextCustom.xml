@@ -8,8 +8,6 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
 	default-lazy-init="false">
 	
-	<bean id="LogStatsExcelBean" class="com.inzent.igate.imanager.logstats.LogStatsExcelBeanImpl" />
-	
 	<bean id="objectIdValidator" class="com.inzent.igate.imanager.ObjectIdValidatorImpl" />
 
 	<task:scheduler id="scheduler" pool-size="1" /> <!-- pool-size는 task 갯수에 맞추어야 함 -->

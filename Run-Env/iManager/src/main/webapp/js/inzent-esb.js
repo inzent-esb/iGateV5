@@ -536,16 +536,6 @@ function getCreatePageObj()
 
                 object.children('.input-group').children('span[type=datalist]').show() ;
               }
-              else if ('validateThreadMax' == detailSubObj.type)
-              {
-                object.children('.input-group').children('input[type=text]').removeClass().addClass(formControl).attr(
-                {
-                  'v-model' : detailSubObj.mappingDataInfo,
-                  'readonly' : detailSubObj.readonly,
-                  'disabled' : detailSubObj.disabled,
-                  'v-on:change' : detailSubObj.changeEvt
-                }).show() ;
-              }
               else if ('grid' == detailSubObj.type)
               {
             	object.append($("<div/>").addClass('table-responsive').append($("<div/>").attr({'id' : detailSubObj.id})));  
@@ -954,7 +944,7 @@ function panelOpen(o, object, callBackFunc) {
 		target.data('backdrop') !== false && target.after('<div class="backdrop"></div>') ;
 
 		if ($body.hasClass('fixed')) {
-			$body.removeAttr('class') ;
+			$body.removeClass('panel-open-detail panel-open-add panel-open-mod panel-open-done fixed');
 		    $('.panel').hide() ;
 		}
 

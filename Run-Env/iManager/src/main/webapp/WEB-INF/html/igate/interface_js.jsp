@@ -24,6 +24,32 @@ $(document).ready(function() {
 		    'mappingDataInfo' : "object.interfaceName",
 		    'name' :  "<fmt:message>igate.interface</fmt:message> <fmt:message>head.name</fmt:message>",
 		    'placeholder' : "<fmt:message>head.searchName</fmt:message>"
+		}, {
+	      	'type' : "modal",
+	      	'mappingDataInfo' : {
+		      	'url' : '/igate/adapter.html',
+		      	'modalTitle' : '<fmt:message>igate.adapter</fmt:message>',
+		      	'vModel' : "object.adapterId",
+		      	"callBackFuncName" : "setSearchAdapterId"
+			},
+		    'name' : "<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>",
+		    'placeholder' : "<fmt:message>head.searchId</fmt:message>"
+		}, {
+		    'type' : "text",
+		    'mappingDataInfo' : "object.interfaceGroup",
+		    'name' :  "<fmt:message>head.group</fmt:message>",
+		    'placeholder' : "<fmt:message>head.searchId</fmt:message>"
+		}, {
+	      	'type' : "select",
+	      	'mappingDataInfo' : {
+		        'selectModel' : "object.usedYn",
+		        'optionFor' : 'option in usedYns',
+		        'optionValue' : 'option.pk.propertyKey',
+		        'optionText' : 'option.propertyValue',
+	        	'id' : 'usedYns'
+	      	},
+	      	'name' :  "<fmt:message>igate.interface.usedYn</fmt:message>",
+		    'placeholder' : "<fmt:message>head.all</fmt:message>"
 		}
 	]) ;
 
@@ -31,6 +57,7 @@ $(document).ready(function() {
 
     createPageObj.setMainButtonList({
       searchInitBtn : true,
+      downloadBtn : true,
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
     }) ;
 
@@ -117,7 +144,8 @@ $(document).ready(function() {
 					{'type': "text",   'mappingDataInfo': 'object.lockUserId',  'name': "<fmt:message>head.lock.userId</fmt:message>"},
 					{'type': "text",   'mappingDataInfo': 'object.updateVersion', 'name': "<fmt:message>head.updateVersion</fmt:message>"},
 					{'type': "text",   'mappingDataInfo': 'object.updateUserId',  'name': "<fmt:message>head.update.userId</fmt:message>"},
-					{'type': "text",   'mappingDataInfo': 'object.updateTimestamp',  'name': "<fmt:message>head.update.timestamp</fmt:message>"},							
+					{'type': "text",   'mappingDataInfo': 'object.updateTimestamp',  'name': "<fmt:message>head.update.timestamp</fmt:message>"},
+					{'type': "text",   'mappingDataInfo': 'object.usedTimestamp',  'name': "<fmt:message>igate.interface.usedTimestamp</fmt:message>"},
 				]
 			},									
  		]
@@ -135,42 +163,57 @@ $(document).ready(function() {
       controlUri : "<c:url value='/igate/interface/control.json'/>"
     }) ;
 
-    window.vmSearch = new Vue({
-      el : '#' + createPageObj.getElementId('ImngSearchObject'),
-      data : {
-        pageSize : '10',
-        object : {
-          interfaceId : null,
-          interfaceName : null,
-        },
-      },
-      methods : {
-        search : function() {
-          if ('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display')) {
-            $('#' + createPageObj.getElementId('ImngListObject')).show() ;
-            $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide() ;
-          }
-
-          vmList.makeGridObj.search(this) ;
-        },
-        initSearchArea : function(searchCondition) {
-          if(searchCondition) {
-            for(var key in searchCondition) {
-              this.$data[key] = searchCondition[key];
-            }
-          } else {
-            this.pageSize = '10' ;
-            this.object.interfaceId = null ;
-            this.object.interfaceName = null ;
-          }	  
-
-          initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize) ;
-        },
-      },
-      mounted : function() {
-        this.initSearchArea() ;
-      }
-    }) ;
+    PropertyImngObj.getProperties('List.Yn', true, function(usedYns) {
+	    window.vmSearch = new Vue({
+	      el : '#' + createPageObj.getElementId('ImngSearchObject'),
+	      data : {
+	        pageSize : '10',
+	        object : {
+	          interfaceId : null,
+	          interfaceName : null,
+	          adapterId : null,
+	    	  interfaceGroup : null,
+	    	  usedYn : ' '
+	        },
+	        usedYns : [],
+	      },
+	      methods : {
+	        search : function() {
+	        	vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
+	        	vmList.makeGridObj.search(this) ;
+	        },
+	        initSearchArea : function(searchCondition) {
+	          if(searchCondition) {
+	            for(var key in searchCondition) {
+	              this.$data[key] = searchCondition[key];
+	            }
+	          } else {
+	            this.pageSize = '10' ;
+	            this.object.interfaceId = null ;
+	            this.object.interfaceName = null ;
+	            this.object.adapterId = null ;
+	        	this.object.interfaceGroup = null;
+	        	this.object.usedYn = ' ';
+	          }	  
+	
+	          initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize) ;
+	          initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#usedYns'), this.object.usedYn) ;
+	        },
+	        openModal : function(openModalParam) {
+	     		createPageObj.openModal.call(this, openModalParam) ;
+	    	},
+	        setSearchAdapterId : function(param){
+	          	this.object.adapterId = param.adapterId ;
+	        },
+	      },
+	      mounted : function() {
+	        this.initSearchArea() ;
+	      },
+	      created : function(){
+	        this.usedYns = usedYns ;
+	      }
+	    }) ;
+    });
 
     var vmList = new Vue({
       el : '#' + createPageObj.getElementId('ImngListObject'),
@@ -182,7 +225,20 @@ $(document).ready(function() {
         initSearchArea : function()
         {
           window.vmSearch.initSearchArea() ;
-        }
+        },
+		downloadFile : function() {
+			var myForm = document.popForm;
+			
+       		$("[name=interfaceId]").val(window.vmSearch.object.interfaceId);
+       	  	$("[name=interfaceName]").val(window.vmSearch.object.interfaceName);
+       	  	$("[name=adapterId]").val(window.vmSearch.object.adapterId);
+       	  	$("[name=interfaceGroup]").val(window.vmSearch.object.interfaceGroup);
+       	 	$("[name=usedYn]").val(window.vmSearch.object.usedYn);
+       	 
+       	  	var popup = window.open("", "hiddenframe", "toolbar=no, width=0, height=0, directories=no, status=no,    scrollorbars=no, resizable=no") ;
+       	  	myForm.target = "hiddenframe";
+       	  	myForm.submit();
+		}
       }),
       mounted : function() {
 
@@ -199,18 +255,37 @@ $(document).ready(function() {
             name : "interfaceId",
             header : "<fmt:message>igate.interface</fmt:message><fmt:message>head.id</fmt:message>",
             align : "left",
-            width: "25%"
+            width: "15%"
           }, {
             name : "interfaceName",
             header : "<fmt:message>igate.interface</fmt:message><fmt:message>head.name</fmt:message>",
             align : "left",
-            width: "50%"
-          }, {
-            name : "privilegeId",
-            header : "<fmt:message>common.privilege</fmt:message>",
+            width: "30%"
+          }, 
+          {
+              name : "adapterId",
+              header : "<fmt:message>igate.adapter</fmt:message>",
+              align : "left",
+              width: "15%"
+          }, 
+          {
+            name : "interfaceGroup",
+            header : "<fmt:message>head.group</fmt:message>",
             align : "left",
-            width: "25%"
-          }]
+            width: "10%"
+          },
+		  {
+	      	name : "updateTimestamp",
+	        header : "<fmt:message>igate.interface.updateTimestamp</fmt:message>",
+	        align : "left",
+	        width: "15%"
+		  },
+		  {
+	      	name : "usedTimestamp",
+	        header : "<fmt:message>igate.interface.usedTimestamp</fmt:message>",
+	        align : "left",
+	        width: "15%"
+		  }]
         }) ;
 
         SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid() ;
@@ -244,11 +319,16 @@ $(document).ready(function() {
         scheduleTypes : [],
         privilegeIds : [],
         calendarList : [],
+        usedYns : [],
         interfaceProperties : []
       },
       created : function() {
           PropertyImngObj.getProperties('List.Interface.InterfaceType', true, function(properties) {
           this.interfaceTypes = properties ;
+        }.bind(this)) ;
+          
+        PropertyImngObj.getProperties('List.Yn', true, function(properties){
+          this.usedYns = properties;
         }.bind(this)) ;
           
         PropertyImngObj.getProperties('Property.Interface', true, function(properties) {
@@ -288,7 +368,8 @@ $(document).ready(function() {
     		window.vmResouceInUse.object.lockUserId = this.object.lockUserId;
             window.vmResouceInUse.object.updateVersion = this.object.updateVersion;
             window.vmResouceInUse.object.updateUserId = this.object.updateUserId;
-            window.vmResouceInUse.object.updateTimestamp = this.object.updateTimestamp;                        
+            window.vmResouceInUse.object.updateTimestamp = this.object.updateTimestamp;
+            window.vmResouceInUse.object.usedTimestamp = this.object.usedTimestamp;
     	},
         goDetailPanel : function() {
         	panelOpen('detail', null, function() {        	  
@@ -327,6 +408,7 @@ $(document).ready(function() {
               window.vmResouceInUse.object.updateVersion = null;
               window.vmResouceInUse.object.updateUserId = null;
               window.vmResouceInUse.object.updateTimestamp = null;
+              window.vmResouceInUse.object.usedTimestamp = null;
           }
         },
       },
@@ -465,6 +547,7 @@ $(document).ready(function() {
        	  	updateVersion : null,
             updateUserId : null,
             updateTimestamp : null,
+            usedTimestamp : null,
        	}
        },
     }) ;

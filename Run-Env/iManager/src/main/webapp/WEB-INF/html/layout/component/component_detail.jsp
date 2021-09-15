@@ -61,7 +61,7 @@
 					<a href="javascript:void(0);" id="restoreMetaBtn"  class="btn btn-primary"							style="display: none;"    v-on:click="restoreMeta"><fmt:message>common.metaHistory.restore</fmt:message></a>
 					<a href="javascript:void(0);" id="downloadBtn" 	   class="btn detail"							    style="display: none;"    v-on:click="downloadFile"><fmt:message>head.download</fmt:message></a>	
 					<a href="javascript:void(0);" id="migrationBtn"    class="btn detail btn-primary" 					style="display: none;"    v-on:click="migration"><fmt:message>head.migration</fmt:message></a>				
-					<a href="javascript:void(0);" id="guideBtn"    	   class="btn viewGroup"	    		   		   	style="display: none;"    v-on:click="guide"><fmt:message>igate.connector.guide</fmt:message></a>
+					<a href="javascript:void(0);" id="guideBtn"    	   class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="guide"><fmt:message>igate.connector.guide</fmt:message></a>
 					<a href="javascript:void(0);" id="startBtn"    	   class="btn viewGroup" 	    				   	style="display: none;"    v-on:click="start"><i class="icon-play"></i><fmt:message>head.execute</fmt:message></a>
 					<a href="javascript:void(0);" id="stopBtn"    	   class="btn viewGroup" 	    		           	style="display: none;"    v-on:click="stop"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
 					<a href="javascript:void(0);" id="stopForceBtn"    class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="stopForce"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>

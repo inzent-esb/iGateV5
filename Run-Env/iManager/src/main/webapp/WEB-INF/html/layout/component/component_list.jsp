@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<span id="ImngListObject" class="ct-content" style="display: none;">
+<div id="ImngListObject" class="ct-content">
 
 	<div class="sub-bar">
 		<div class="ml-auto form-inline m-full">
@@ -39,15 +39,15 @@
 			<a id="reorderBtn"		href="javascript:void(0);" class="btn btn-m"  							v-on:click="reorder" style="display: none;"><fmt:message>igate.transactionRestriction.reOrder</fmt:message></span></a>
 		</div>
 	</div>
-	
-	<div class="table-responsive">
+
+	<div class="empty">
+		<p><fmt:message>layout.component.conditions</fmt:message></p>
+		<img src="<c:url value='/img/empty.svg' />" class="center-block" alt="">
+	</div>
+		
+	<div class="table-responsive" style="display: none;">
 		<div id="ImngSearchGrid"></div>
 	</div>		
-</span>
-
-<div class="empty">
-	<p><fmt:message>layout.component.conditions</fmt:message></p>
-	<img src="<c:url value='/img/empty.svg' />" class="center-block" alt="">
 </div>
 
 <script type="text/javascript">

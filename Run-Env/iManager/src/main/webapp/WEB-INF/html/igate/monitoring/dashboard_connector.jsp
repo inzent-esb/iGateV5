@@ -15,11 +15,14 @@
 			<span class="status"><i class="dot bg-cht-2-l"></i><fmt:message>dashboard.legend.square.idleThread</fmt:message></span>
 		</div>
 		<div class="legend">
-			<span class="status"><i class="dot bg-normal"></i><fmt:message>dashboard.legend.status.normal</fmt:message></span> 
-			<span class="status"><i class="dot bg-warn"></i><fmt:message>dashboard.legend.status.warn</fmt:message></span> 
-			<span class="status"><i class="dot bg-cht-1"></i><fmt:message>dashboard.legend.status.error</fmt:message></span> 
-			<span class="status"><i class="dot bg-danger"></i><fmt:message>dashboard.legend.status.fetal</fmt:message></span> 
-			<span class="status"><i class="dot bg-down"></i><fmt:message>dashboard.legend.status.down</fmt:message></span>
+			<span class="status"><i class="dot bg-normal"></i>Normal</span> 
+			<span class="status"><i class="dot bg-warn"></i>Warn</span> 
+			<span class="status"><i class="dot bg-cht-1"></i>Error</span> 
+			<span class="status"><i class="dot bg-danger"></i>Fail</span> 
+			<span class="status"><i class="dot bg-cht-2"></i>Starting</span>
+			<span class="status"><i class="dot bg-cht-3"></i>Stoping</span>
+			<span class="status"><i class="dot bg-cht-4"></i>Blocking</span>
+			<span class="status"><i class="dot bg-down"></i>Down</span>
 		</div>
 	</div>
 </span>

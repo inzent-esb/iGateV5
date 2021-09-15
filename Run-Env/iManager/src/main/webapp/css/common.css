@@ -608,7 +608,7 @@ body{display: flex}
     .modal-header, .modal-footer{margin-left: 1rem;margin-right: 1rem}
 
     /* content */
-    .ct-header{margin: 0 -1rem}
+    .ct-header{margin: 0 -1rem; overflow-y: auto; max-height: 260px;}
     .btn-filter{display: flex;align-items: center;justify-content: space-between;width: 100%;background: none;border: 0;padding: .5rem 1rem;text-align: left;outline: 0 !important}
     .btn-filter:not(.collapsed) .icon-down{transform: scaleY(-1)}
     .filter{position: relative;border-top: 1px solid #f0f1f6;background: #fdfdfd}
@@ -794,4 +794,8 @@ input::-ms-reveal {
 	display: none; 
 	width : 0; 
 	height: 0;
+}
+
+.ct-content .empty {
+	height: calc(100% - 56px)
 }

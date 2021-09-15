@@ -71,9 +71,26 @@ $(document).ready(function() {
 				},
 				{
 					'className': 'col-lg-4',
-					'detailSubList': [
-						{'type': "text", 'mappingDataInfo': "object.pk.scheduleType",   'name': "<fmt:message>igate.reservedSchedule</fmt:message> <fmt:message>head.type</fmt:message>", isPk: true},
-						{'type': "text", 'mappingDataInfo': "object.executeStatus",     'name': "<fmt:message>igate.reservedSchedule.execute.status</fmt:message>", 					  isPk: true},
+					'detailSubList': [{
+			          'type' : "select",
+			          'mappingDataInfo' : {
+			            'selectModel' : 'object.pk.scheduleType',
+			            'optionFor' : 'option in scheduleTypes',
+			            'optionValue' : 'option.pk.propertyKey',
+			            'optionText' : 'option.propertyValue'
+			          },
+			          'name' : "<fmt:message>igate.reservedSchedule</fmt:message> <fmt:message>head.type</fmt:message>",
+			          isPk: true
+			        },{
+			          'type' : "select",
+			          'mappingDataInfo' : {
+			            'selectModel' : 'object.executeStatus',
+			            'optionFor' : 'option in executeStatus',
+			            'optionValue' : 'option.pk.propertyKey',
+			            'optionText' : 'option.propertyValue'
+			          },
+			          'name' : "<fmt:message>igate.reservedSchedule.execute.status</fmt:message>",
+			        },
 						{'type': "text", 'mappingDataInfo': "object.executeTimestamp",  'name': "<fmt:message>igate.reservedSchedule.execute.timestamp</fmt:message>"},
 					]
 				},
@@ -108,6 +125,8 @@ $(document).ready(function() {
         	object : {
         		pk : {}
         	},
+        	scheduleTypes : [],
+        	executeStatus : [],
     		panelMode : null
         },
         computed : {
@@ -117,6 +136,18 @@ $(document).ready(function() {
         			'pk.metaDomain' : this.object.pk.metaDomain
         		};
         	}
+        },
+        created : function()
+        {
+          PropertyImngObj.getProperties('List.ReservedSchedule.ScheduleType', false, function(properties)
+              {
+                this.scheduleTypes = properties ;
+              }.bind(this)) ;
+
+              PropertyImngObj.getProperties('List.ReservedSchedule.ExecuteStatus', false, function(properties)
+              {
+                this.executeStatus = properties ;
+              }.bind(this)) ;
         },
 		methods : {
 			goDetailPanel: function() {
@@ -158,10 +189,7 @@ $(document).ready(function() {
 	    		},
 	    		methods: {
 	    			search : function() {
-	    				if('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display')) {
-	    					$('#' + createPageObj.getElementId('ImngListObject')).show();
-	    					$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
-	    				}
+	    				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 	    				
 	    				if('' == this.object.pk.instanceId)
 	    					this.object.pk.instanceId = null;

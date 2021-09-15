@@ -411,13 +411,9 @@
         methods : {
           search : function()
           {
-            if ('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display'))
-            {
-              $('#' + createPageObj.getElementId('ImngListObject')).show() ;
-              $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide() ;
-            }
+        	vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 
-            vmList.makeGridObj.search(this, function(result)
+        	vmList.makeGridObj.search(this, function(result)
             {
               if (paramActivityId && window.vmSearch.isfirst && result.object)
               {

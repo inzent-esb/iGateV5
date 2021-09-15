@@ -306,12 +306,7 @@
         methods : {
           search : function()
           {
-            if ('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display'))
-            {
-              $('#' + createPageObj.getElementId('ImngListObject')).show() ;
-              $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide() ;
-            }
-
+        	vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
             vmList.makeGridObj.search(this) ;
           },
           initSearchArea : function(searchCondition)
@@ -442,8 +437,6 @@
         dataType : "json",
         success : function(result)
         {
-          console.log(result) ;
-
           //onChangeTypeValue 에서 호출된 경우,
           if (typeof value.attributeName == "undefined")
             window.vmMain.object.instanceProperties = result.object ; //필수 값인 항목들 표시 용도
@@ -469,7 +462,6 @@
   //프로퍼티 키 필드의 값 변경 시, onchange 이벤트
   function searchPropertyKey(index)
   {
-    console.log(window.vmInstanceProperties.propertyKeys) ;
     onCheckPropertyCount() ;
 
     var paramPropertyKey = window.vmInstanceProperties.instanceProperties[index] ; // Property Key
@@ -494,7 +486,6 @@
         dataType : "json",
         success : function(result)
         {
-          console.log(result) ;
           if (result.result == "ok")
           {
             // propertyKey가 "" 공백으로 다 건 조회되는 경우 회피.

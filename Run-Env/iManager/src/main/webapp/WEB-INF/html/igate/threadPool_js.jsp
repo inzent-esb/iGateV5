@@ -35,8 +35,8 @@ $(document).ready(function() {
 					'className': 'col-lg-6',
 					'detailSubList': [
 						{'type': "text", 'mappingDataInfo': "object.threadPoolId", 'name': "<fmt:message>igate.threadPool</fmt:message> <fmt:message>head.id</fmt:message>", isPk: true}, 
-						{'type': "text", 'mappingDataInfo': "object.threadMin", 'name': "<fmt:message>igate.threadPool.min</fmt:message>"},
-						{'type': "validateThreadMax", 'mappingDataInfo': "object.threadMax", 'changeEvt' : 'isValid','name': "<fmt:message>igate.threadPool.max</fmt:message>"},
+						{'type': "text", 'mappingDataInfo': "object.threadMin", 'name': "<fmt:message>igate.threadPool.min</fmt:message>"},						
+						{'type': "textEvt", 'mappingDataInfo': "object.threadMax", 'name': "<fmt:message>igate.threadPool.max</fmt:message>",  'changeEvt' : 'isValid'},
 						{'type': "select", 'mappingDataInfo': {'selectModel': 'object.rejectWarnYn', 'optionFor': 'option in rejectWarnYns', 'optionValue': 'option.pk.propertyKey', 'optionText': 'option.propertyValue' }, 'name': "<fmt:message>igate.threadPool.rejectWarnYn</fmt:message>"},
 					]
 				},
@@ -79,11 +79,7 @@ $(document).ready(function() {
     	},
     	methods : {
 			search : function() {
-				if('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display')) {
-					$('#' + createPageObj.getElementId('ImngListObject')).show();
-					$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
-				}
-				
+				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 				vmList.makeGridObj.search(this);
 			},
             initSearchArea: function(searchCondition) {

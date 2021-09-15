@@ -79,10 +79,7 @@ $(document).ready(function(){
 		      	},
 		      	methods: {
 	   				search : function() {
-	   					if('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display')) {
-	   						$('#' + createPageObj.getElementId('ImngListObject')).show();
-	   						$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
-	   					}
+	   					vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 	   					
 	   					vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
 	   					
@@ -264,6 +261,8 @@ $(document).ready(function(){
     	        	});
     	        	
     	        	SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
+    	        	
+    	        	$('#' + createPageObj.getElementId('ImngSearchGrid')).find('.tui-pagination').off('click').on('click', resizeSearchGrid);
     	        	
     	        	this.newTabSearchGrid();
     	        }    	        

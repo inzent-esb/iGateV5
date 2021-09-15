@@ -98,11 +98,7 @@ $(document).ready(function(){
                 },
                 methods: {
         			search : function() {
-        				if('none' != $('#' + createPageObj.getElementId('ImngListObject')).next('.empty').css('display')) {
-        					$('#' + createPageObj.getElementId('ImngListObject')).show();
-        					$('#' + createPageObj.getElementId('ImngListObject')).next('.empty').hide();					
-        				}
-        				
+        				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
         				vmList.makeGridObj.search(this, function() {
         					if(dataCnt <= vmList.makeGridObj.getSearchGrid().getRowCount())
         						normalAlert({message: '<fmt:message>igate.add.search.criteria<fmt:param value="' + dataCnt + '" /></fmt:message>'});
