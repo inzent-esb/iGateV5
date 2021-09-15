@@ -947,6 +947,9 @@ function panelOpen(o, object, callBackFunc) {
 			$body.removeClass('panel-open-detail panel-open-add panel-open-mod panel-open-done fixed');
 		    $('.panel').hide() ;
 		}
+		
+		if(o != 'done' && $('#item-result').hasClass('active'))
+			$("#panel").find('.flex-shrink-0').children().first().children('a').trigger('click') ;
 
 		$body.addClass('fixed') ;
 
@@ -962,11 +965,6 @@ function panelOpen(o, object, callBackFunc) {
 				}
 			});
 		}, 200) ;		
-
-		/*
-		  if ((o == 'detail' || o == 'add') && !object)
-		    $("#panel").find('.flex-shrink-0').children().first().children('a').trigger('click') ;
-		*/
 	}
 }
 
