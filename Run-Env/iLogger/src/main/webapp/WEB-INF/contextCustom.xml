@@ -15,6 +15,10 @@
 
 	<bean class="com.inzent.igate.tracelog.CryptoDataSerializer"/>
 
+	<bean class="com.custom.tracelog.CustomTraceLogStatisticsBean">
+		<property name="updateUsedTimestamp" value="#{systemProperties['igate.logger.updateUsedTimestamp']?:'false'}" />
+	</bean>
+
 	<bean class="com.custom.tracelog.CustomTraceLogDbFile">
 		<!-- <constructor-arg value="com.inzent.igate.repository.log.TraceLog" /> -->
 		<property name="socketTimeout" value="#{systemProperties['igate.monitoring.socketTimeout']?:'5000'}" />
