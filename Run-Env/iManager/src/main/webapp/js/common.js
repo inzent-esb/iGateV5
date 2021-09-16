@@ -131,7 +131,7 @@ function resizeSearchGrid() {
 	//width
 	var adjustWidth = window.innerWidth - ($('#ct').innerWidth() - $('#ct').width());
 	
-	if(992 <= window.innerWidth && !$('body').hasClass('sidebar-toggled')){
+	if(992 <= window.innerWidth && !$('body').hasClass('sidebar-toggled') && 0 < $('#sidebar').length){
 		adjustWidth -= $('#sidebar').outerWidth(true);
 	}
 
