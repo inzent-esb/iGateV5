@@ -309,8 +309,15 @@
       			if(property) serviceProperty['propertyDesc'] = property.propertyDesc;          		
       		}.bind(this));
       		
-      		if(this.object.requestRecordId) this.object.requestRecordName = this.object.requestRecordId + ' - ' +  this.object.requestRecordObject.recordName;
-      		if(this.object.responseRecordId) this.object.responseRecordName = this.object.responseRecordId + ' - ' +  this.object.responseRecordObject.recordName;
+      		if(this.object.requestRecordId){
+      			this.object.requestRecordName = this.object.requestRecordId + (this.object.requestRecordObject.recordName? ' - ' +  this.object.requestRecordObject.recordName : '');
+      			
+      			if(this.object.requestRecordId == this.object.responseRecordId)
+      				this.object.responseRecordObject = $.extend(true, {}, this.object.requestRecordObject); 
+      		} 
+      		
+      		if(this.object.responseRecordId) 
+      			this.object.responseRecordName = this.object.responseRecordId + (this.object.responseRecordObject.recordName? ' - ' +  this.object.responseRecordObject.recordName : '');
       		
     		window.vmResouceInUse.object.lockUserId = this.object.lockUserId;
             window.vmResouceInUse.object.updateVersion = this.object.updateVersion;
