@@ -100,9 +100,11 @@ $(document).ready(function() {
     	}
 	]) ;
 
-    createPageObj.setPanelButtonList() ;
+    createPageObj.setPanelButtonList({
+    	dumpBtn: hasRecordEditor,
+    }) ;
 
-    createPageObj.panelConstructor(true) ;
+    createPageObj.panelConstructor() ;
 
     SaveImngObj.setConfig({
       objectUri : "<c:url value='/igate/record/object.json'/>"
@@ -352,6 +354,13 @@ $(document).ready(function() {
 		],
         privilegeIds : [],
         recordProperties : []
+      },
+      computed: {
+    	  pk: function() {
+    		  return {
+    			  recordId: this.object.recordId  
+    		  };
+    	  }  
       },
       created : function() {
   	    PropertyImngObj.getProperties('Property.Record', true, function(properties) {

@@ -99,9 +99,11 @@
 	     }
 	]);
 
-    createPageObj.setPanelButtonList() ;
+    createPageObj.setPanelButtonList({
+    	dumpBtn: hasQueryEditor,
+    }) ;
 
-    createPageObj.panelConstructor(true) ;
+    createPageObj.panelConstructor() ;
 
     SaveImngObj.setConfig({
       objectUri : "<c:url value='/igate/query/object.json'/>"
@@ -216,6 +218,13 @@
             queryTypes: [],
             dataSourceList : [],
 	    },
+	    computed: {
+	    	pk: function() {
+	    		return { 
+	    			queryId: this.object.queryId 
+	    		};
+	    	}
+	    },	    
 	    created : function() {
 	      	$.getJSON("<c:url value='/common/auth/businessPrivileges.json'/>", function(privilegeIdData) {
 	    		this.privilegeIds = privilegeIdData.object;	

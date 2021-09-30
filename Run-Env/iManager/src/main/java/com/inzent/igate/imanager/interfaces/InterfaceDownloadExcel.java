@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonEncoding;
@@ -52,15 +53,55 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 	public void generateDownload(OutputStream outputStream, String templateFile, Interface entity,
 			List<Interface> entityList) throws Exception {
 		Workbook workbook;
-
-		try (FileInputStream fileInputStream = new FileInputStream(templateFile)) {
-			workbook = WorkbookFactory.create(fileInputStream);
-		}
 		Row row = null;
 		Cell cell = null;
 		String values = null;
-
-		Sheet writeSheet = workbook.getSheetAt(0);
+		Sheet writeSheet;
+		
+		try {
+			FileInputStream fileInputStream = new FileInputStream(templateFile);
+			workbook = WorkbookFactory.create(fileInputStream);
+			writeSheet = workbook.getSheetAt(0);
+		}catch (Exception e){
+			/* Template Load Error */
+			/* Create Base Excel Template */
+			workbook = new XSSFWorkbook();
+			writeSheet = workbook.createSheet();
+			row = writeSheet.createRow(3);
+			cell = row.createCell(0);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
+			cell = row.createCell(2);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+			cell = row.createCell(4);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.adapter", "Adapter ID"));
+			cell = row.createCell(6);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.group", "Interface Group"));
+			cell = row.createCell(8);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.usedYn", "Interface Usage Status"));
+			
+			row = writeSheet.createRow(4);
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 4, 5));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 6, 7));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 8, 9));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 10, 11));
+			
+			cell = row.createCell(0);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
+			cell = row.createCell(2);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+			cell = row.createCell(4);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.adapter", "Adapter ID"));
+			cell = row.createCell(6);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.group", "Interface Group"));
+			cell = row.createCell(8);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.usedTimestamp", "Used Timestamp"));
+			cell = row.createCell(10);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface.updateTimestamp", "Update Timestamp"));
+			/* Create Base Excel Template */
+		}
+		
 
 		// Cell 스타일 지정.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);

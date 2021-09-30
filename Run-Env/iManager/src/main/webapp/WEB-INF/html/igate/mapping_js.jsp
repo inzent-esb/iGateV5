@@ -103,9 +103,11 @@ $(document).ready(function() {
 		},
 	]);
 	
-	createPageObj.setPanelButtonList();
+	createPageObj.setPanelButtonList({
+		dumpBtn: hasMappingEditor,
+	});
 	
-	createPageObj.panelConstructor(true);	
+	createPageObj.panelConstructor();	
     
 	SaveImngObj.setConfig({
 		objectUri: "<c:url value='/igate/mapping/object.json' />"

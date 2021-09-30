@@ -125,9 +125,11 @@
 	     }
 	]);
 
-    createPageObj.setPanelButtonList() ;
+    createPageObj.setPanelButtonList({
+    	dumpBtn: hasServiceEditor,
+    }) ;
 
-    createPageObj.panelConstructor(true) ;
+    createPageObj.panelConstructor() ;
 
     SaveImngObj.setConfig({
       objectUri : "<c:url value='/igate/service/object.json'/>"
@@ -302,6 +304,14 @@
 	          	SearchImngObj.load($.param(this.selectedRowService));
 	        }
 	      },
+	      
+	  computed: {
+		  pk: function() {
+			  return { 
+				  serviceId: this.object.serviceId 
+			  };
+		  }
+	  },	      
       methods : {
       	loaded : function() {     		
       		window.vmServiceProperties.serviceProperties.forEach(function(serviceProperty) {

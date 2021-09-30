@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.inzent.igate.repository.meta.Service;
@@ -51,14 +52,47 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 	protected void generateDownload(OutputStream outputStream, String templateFile, Service entity,
 			List<Service> entityList) throws Exception {
 		Workbook workbook;
-		try (FileInputStream fileInputStream = new FileInputStream(templateFile)) {
-			workbook = WorkbookFactory.create(fileInputStream);
-		}
 		Row row = null;
 		Cell cell = null;
 		String values = null;
+		Sheet writeSheet;
 
-		Sheet writeSheet = workbook.getSheetAt(0);
+		try {
+			FileInputStream fileInputStream = new FileInputStream(templateFile);
+			workbook = WorkbookFactory.create(fileInputStream);
+			writeSheet = workbook.getSheetAt(0);
+		}catch (Exception e){
+			/* Template Load Error */
+			/* Create Base Excel Template */
+			workbook = new XSSFWorkbook();
+			writeSheet = workbook.createSheet();
+			row = writeSheet.createRow(3);
+			cell = row.createCell(0);
+			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+			cell = row.createCell(2);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+			cell = row.createCell(4);
+			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+			cell = row.createCell(6);
+			cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
+			
+			row = writeSheet.createRow(4);
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 4, 5));
+			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 6, 7));
+			
+			cell = row.createCell(0);
+			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+			cell = row.createCell(2);
+			cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+			cell = row.createCell(4);
+			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+			cell = row.createCell(6);
+			cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
+			/* Create Base Excel Template */
+		}
+
 
 		// Cell 스타일 지정.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
@@ -99,14 +133,14 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 			row = writeSheet.createRow(i);
 			int c = 0;
 
-			// 인터페이스 ID
+			// 서비스 ID
 			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 0, 1));
 			values = service2.getServiceId();
 			cell = row.createCell(c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// 인터페이스 이름
+			// 서비스 이름
 			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 2, 3));
 			values = service2.getServiceName();
 			cell = row.createCell(c += 2);

@@ -7,9 +7,9 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
 	default-lazy-init="false">
-	
+
 	<bean class="com.inzent.imanager.common.user.UserPasswordBean">
-	    <property name="minLength" value="#{systemProperties['imanager.password.length']?:'8'}"/>
+		<property name="minLength" value="#{systemProperties['imanager.password.length']?:'8'}"/>
 	</bean>
 
 	<bean id="objectIdValidator" class="com.inzent.igate.imanager.ObjectIdValidatorImpl" />
@@ -32,7 +32,6 @@
 		</property>
 	</bean>
 
-	<security:http pattern="/igate/migration/*/recv.json" security="none"/>
 	<security:http auto-config="true" entry-point-ref="clientAuthenticationEntryPoint">
 		<security:intercept-url pattern="/*/*/popup.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/*/*/*/popup.*" access="isAuthenticated()"/>
@@ -41,6 +40,8 @@
 		<security:intercept-url pattern="/common/menu/**" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/common/metaHistory.*" access="hasRole('ROLE_MetaHistoryViewer')"/>
 		<security:intercept-url pattern="/common/metaHistory/**" access="hasRole('ROLE_MetaHistoryViewer')"/>
+		<security:intercept-url pattern="/common/notice.*" access="isAuthenticated()" />
+		<security:intercept-url pattern="/common/notice/**" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/common/privilege.*" access="hasRole('ROLE_PrivilegeViewer')"/>
 		<security:intercept-url pattern="/common/privilege/**" access="hasRole('ROLE_PrivilegeViewer')"/>
 		<security:intercept-url pattern="/common/property.*" access="hasRole('ROLE_PropertyViewer')"/>
@@ -99,6 +100,7 @@
 		<security:intercept-url pattern="/igate/mapping/**" access="hasRole('ROLE_MappingViewer')"/>
 		<security:intercept-url pattern="/igate/message.*" access="hasRole('ROLE_MessageViewer')"/>
 		<security:intercept-url pattern="/igate/message/**" access="hasRole('ROLE_MessageViewer')"/>
+		<security:intercept-url pattern="/igate/migration/*/recv.json" access="permitAll()"/>
 		<security:intercept-url pattern="/igate/migration/record.*" access="hasRole('ROLE_RecordViewer')"/>
 		<security:intercept-url pattern="/igate/migration/record/**" access="hasRole('ROLE_RecordViewer')"/>
 		<security:intercept-url pattern="/igate/migration/mapping.*" access="hasRole('ROLE_MappingViewer')"/>
@@ -149,15 +151,13 @@
 		<security:intercept-url pattern="/igate/transactionLoss/**" access="hasRole('ROLE_TransactionLossViewer')"/>
 		<security:intercept-url pattern="/igate/webservice.*" access="hasRole('ROLE_ServiceEditor')" />
 		<security:intercept-url pattern="/igate/webservice/**" access="hasRole('ROLE_ServiceEditor')"/>				
-		<security:intercept-url pattern="/common/notice.*" access="isAuthenticated()" />
-		<security:intercept-url pattern="/common/notice/**" access="isAuthenticated()"/>		
 		<security:access-denied-handler ref="accessDeniedHandler" />
 		<security:form-login login-processing-url="/common/auth/login.*" login-page="/common/auth/login.html"
 			username-parameter="userId" password-parameter="password"
 			authentication-success-handler-ref="authenticationSuccessHandler"
 			authentication-failure-handler-ref="authenticationFailureHandler" />
 		<security:logout logout-url="/common/auth/logout.*" logout-success-url="/common/portal.html" />
-		<security:session-management session-fixation-protection="changeSessionId" /> <!-- migrateSession servlet 3.0-  -->
+		<security:session-management session-fixation-protection="changeSessionId" />
 		<security:headers>
 			<security:frame-options disabled="true" />
 		</security:headers>

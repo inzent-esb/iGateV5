@@ -6,7 +6,7 @@
 <script type="text/javascript">
   $(document).ready(function()
   {
-
+	var data = null ;
     var createPageObj = getCreatePageObj() ;
 
     createPageObj.setViewName('service') ;
@@ -476,53 +476,21 @@
       methods : {
         selectFile : function()
         {
-
-          window.vmImport.fileName = "" ;
-          window.vmImport.errorMessage = "" ;
-          window.vmImport.object = {} ;
-
-          // remove current detail form
-          data = new FormData() ;
-
-          var formElm = $("#SearchForm") ;
-          var fields = formElm.serializeArray() ;
-
-          var param = {} ;
-
-          $.each(fields, function(index, elm)
-          {
-            var jElm = $(elm) ;
-
-            var key = jElm.attr("name") ;
-            var value = jElm.attr("value") ;
-
-            data.append(key, value) ;
-            param[key] = value ;
-          }) ;
-
-          var paramElm = jQuery(document.createElement('input')) ;
-          paramElm.attr("type", "file").attr("name", "body").css("display", "none").appendTo("body") ;
-
-          paramElm.change(function()
-          {
-            if (!this.files || this.files.length != 1)
-            {
-              warnAlert({message : "<fmt:message>common.noFileError</fmt:message>"}) ;
-              return ;
-            }
-
-            data.append('body', this.files[0]) ;
-            window.vmImport.fileName = this.files[0].name ;
-          }) ;
-
-          paramElm.trigger("click") ;
-
-          return false ;
+		  var fileEle = $("<input/>").attr({'type': 'file'});
+		  
+		  fileEle.trigger('click');
+		  
+		  fileEle.on('change', function(evt) 
+		  {
+		    data = new FormData() ;
+		    data.append('body', this.files[0]) ;
+		    window.vmImport.fileName = this.files[0].name ;
+		  }) ;
         },
         uploadFile : function()
         {
 
-          if (null === data)
+          if (null == data)
           {
             warnAlert({message : "<fmt:message>igate.migration.fileSelectError</fmt:message>"}) ;
             return ;

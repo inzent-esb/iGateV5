@@ -151,9 +151,11 @@ $(document).ready(function() {
  		]
      }]) ;
 
-    createPageObj.setPanelButtonList() ;
+    createPageObj.setPanelButtonList({
+    	dumpBtn: hasInterfaceEditor,
+    }) ;
 
-    createPageObj.panelConstructor(true) ;
+    createPageObj.panelConstructor() ;
 
     SaveImngObj.setConfig({
       objectUri : "<c:url value='/igate/interface/object.json'/>"
@@ -322,6 +324,13 @@ $(document).ready(function() {
         usedYns : [],
         interfaceProperties : []
       },
+	  computed: {
+		  pk: function() {
+			  return { 
+				  interfaceId: this.object.interfaceId 
+			  };
+		  }
+	  },
       created : function() {
           PropertyImngObj.getProperties('List.Interface.InterfaceType', true, function(properties) {
           this.interfaceTypes = properties ;

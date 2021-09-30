@@ -34,25 +34,26 @@
 	    <property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"></property>
 	</bean>	
 	
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="contentNegotiationManager">
-			<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-				<property name="mediaTypes">
-					<map>
-						<entry key="json" value="application/json" />
-						<entry key="html" value="text/html" />
-						<entry key="script" value="text/javascript" />
-					</map>
-				</property>
-			</bean>
-		</property>
-		<property name="viewResolvers">
-			<list>
-				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
-				<bean class="com.inzent.imanager.view.JsonViewResolver" />				
-			</list>
-		</property>
-	</bean>
+    <bean id="jsonViewResolver" class="com.inzent.imanager.view.JsonViewResolver" />
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="contentNegotiationManager">
+            <bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+                <property name="mediaTypes">
+                    <map>
+                        <entry key="json" value="application/json" />
+                        <entry key="html" value="text/html" />
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+                <ref bean="jsonViewResolver" />
+            </list>
+        </property>
+    </bean>
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
