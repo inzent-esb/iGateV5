@@ -148,8 +148,6 @@
 		<security:intercept-url pattern="/igate/traceLog/**" access="hasRole('ROLE_TraceLogViewer')"/>
 		<security:intercept-url pattern="/igate/transactionContext.*" access="hasRole('ROLE_TransactionContextViewer')" />
 		<security:intercept-url pattern="/igate/transactionContext/**" access="hasRole('ROLE_TransactionContextViewer')"/>
-		<security:intercept-url pattern="/igate/transactionLoss.*" access="hasRole('ROLE_TransactionLossViewer')" />
-		<security:intercept-url pattern="/igate/transactionLoss/**" access="hasRole('ROLE_TransactionLossViewer')"/>
 		<security:intercept-url pattern="/igate/webservice.*" access="hasRole('ROLE_ServiceEditor')" />
 		<security:intercept-url pattern="/igate/webservice/**" access="hasRole('ROLE_ServiceEditor')"/>				
 		<security:access-denied-handler ref="accessDeniedHandler" />
