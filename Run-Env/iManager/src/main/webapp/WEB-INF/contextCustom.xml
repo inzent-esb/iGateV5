@@ -28,6 +28,7 @@
 			<list>
 				<value>/common/auth/login.*</value>
 				<value>/common/auth/logout.*</value>
+				<value>/igate/migration/*/recv.json</value>
 			</list>
 		</property>
 	</bean>
