@@ -76,7 +76,7 @@
 .widget-item-list .nav-link+.nav-link{margin-top: 8px}
 .widget-item-list .nav-link [class*=icon], .nav-link.ui-draggable-dragging [class*=icon]{font-size: 1rem;margin-right: .5rem}
 .nav-link.ui-draggable-dragging{width: 192px;background: #e6e8f6 !important;box-shadow: 0 16px 16px -12px rgba(0, 0, 0, 0.3);z-index: 50}
-#root{display: flex;width: calc(100% + 10px);min-height: calc(100% + 10px);margin: -5px;flex-wrap: wrap}
+#root{position: relative;display: flex;width: calc(100% + 10px);min-height: calc(100% + 10px);margin: -5px;flex-wrap: wrap}
 #root .card{height: calc(100% - 10px);margin: 5px}
 .edit-mode .card{overflow: auto;overflow: overlay}
 .component{position: relative;overflow: hidden}
@@ -465,4 +465,26 @@
 
 .dark .dark .filterModal .tui-grid-lside-area {
 	border-left: 1px solid #545A77;
+}
+
+.addHover {
+	position: absolute;
+	background-color: rgba(63, 88, 209, 0.5);
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+}
+
+.addAreaHover {
+	position: absolute;
+	background-color: rgba(63, 88, 209, 0.8);
+	z-index: 3;
+}
+
+.dark .addHover {
+	background-color: rgba(236, 237, 242, 0.5);
+}
+
+.dark .addAreaHover {
+	background-color: rgba(236, 237, 242, 0.8);
 }

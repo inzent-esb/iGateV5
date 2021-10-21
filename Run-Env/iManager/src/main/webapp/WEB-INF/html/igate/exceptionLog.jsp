@@ -9,6 +9,13 @@
 
 <%@ include file="/WEB-INF/html/layout/component/component_detail.jsp"%>
 
+<form name="popForm" action="${pageContext.request.contextPath}/igate/exceptionLog/exportExcel.json" method="post">
+	<iframe width=0 height=0 type="hidden" name='hiddenframe' value="openPop" style='display: none;'></iframe>
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<div id="popFormInputs">
+	</div>
+</form>
+
 <span id="exceptionStackCt" style="display: none;">
 	<div class="col-lg-12" style="min-height: 270px;">
 		<div class="form-group" style="height: 100%;">

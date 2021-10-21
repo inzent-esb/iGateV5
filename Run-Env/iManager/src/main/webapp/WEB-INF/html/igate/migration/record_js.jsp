@@ -365,14 +365,14 @@
         {
 		  var fileEle = $("<input/>").attr({'type': 'file'});
 		  
-		  fileEle.trigger('click');
-		  
 		  fileEle.on('change', function(evt) 
 		  {
 		    data = new FormData() ;
 		    data.append('body', this.files[0]) ;
 		    window.vmImport.fileName = this.files[0].name ;
 		  }) ;
+		  
+		  fileEle.trigger('click');
         },
         uploadFile : function()
         {

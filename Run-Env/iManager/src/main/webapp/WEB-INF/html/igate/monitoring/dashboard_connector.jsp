@@ -17,10 +17,10 @@
 		<div class="legend">
 			<span class="status"><i class="dot bg-normal"></i>Normal</span> 
 			<span class="status"><i class="dot bg-warn"></i>Warn</span> 
-			<span class="status"><i class="dot bg-cht-1"></i>Error</span> 
-			<span class="status"><i class="dot bg-danger"></i>Fail</span> 
-			<span class="status"><i class="dot bg-cht-2"></i>Starting</span>
-			<span class="status"><i class="dot bg-cht-3"></i>Stoping</span>
+			<span class="status"><i class="dot bg-error"></i>Error</span> 
+			<span class="status"><i class="dot bg-fail"></i>Fail</span> 
+			<span class="status"><i class="dot bg-cht-3"></i>Starting</span>
+			<span class="status"><i class="dot bg-cht-2"></i>Stoping</span>
 			<span class="status"><i class="dot bg-cht-4"></i>Blocking</span>
 			<span class="status"><i class="dot bg-down"></i>Down</span>
 		</div>

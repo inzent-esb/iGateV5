@@ -62,6 +62,9 @@ var dashboardLabel_colCnt = "<fmt:message>dashboard.col.cnt</fmt:message>";
 var dashboardLabel_adapterId = "<fmt:message>igate.adapter.id</fmt:message>";
 var dashboardLabel_instanceId = "<fmt:message>igate.instance.id</fmt:message>";
 
+var dashboardLabel_group = "<fmt:message>head.group</fmt:message>";
+var dashboardLabel_type = "<fmt:message>head.type</fmt:message>";
+
 var dashboardNotification = "<fmt:message>dashboard.notification</fmt:message>";
 var dashboardNotificationSettings = "<fmt:message>dashboard.notification.settings</fmt:message>";
 var dashboardNotificationTime = "<fmt:message>dashboard.notification</fmt:message> <fmt:message>head.time</fmt:message>";
@@ -70,6 +73,8 @@ var dashboardNotificationHeadStatus = "<fmt:message>head.status</fmt:message>";
 var dashboardNotificationInstanceId = "<fmt:message>igate.instance</fmt:message> ID";
 var dashboardNotificationHistoryList = "<fmt:message>dashboard.notification.history.list</fmt:message>";
 var dashboardRefresh = "<fmt:message>igate.refresh</fmt:message>";
+
+var dashboardComponent = "<fmt:message>dashboard.component</fmt:message>";
 
 /* sentence */
 var dashboardMsg_selectContainer = "<fmt:message>dashboard.select.container</fmt:message>";

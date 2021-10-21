@@ -165,7 +165,7 @@
 	</section>
 	<section class="tab-section">
 		<header class="sub-bar">
-			<h3 class="sub-bar-text"><fmt:message>head.modelInfo</fmt:message></h3>
+			<h3 class="sub-bar-text"><fmt:message>igate.traceLog.relatedLog</fmt:message></h3>
 		</header>
 		<div class="table-responsive">
 			<div id="basicInfoGrid"></div>

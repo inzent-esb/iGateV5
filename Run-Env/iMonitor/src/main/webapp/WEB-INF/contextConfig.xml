@@ -16,14 +16,13 @@
 
 	<context:component-scan base-package="com.inzent.igate" />
 
-	<bean class="com.inzent.igate.monitoring.MonitoringReceiver">
-		<property name="transactionThresholdShort" value="#{systemProperties['igate.monitor.transactionThresholdShort']?:'5000'}" />
-		<property name="transactionThresholdMiddle" value="#{systemProperties['igate.monitor.transactionThresholdMiddle']?:'30000'}" />
-		<property name="snapshotDuration" value="#{systemProperties['igate.monitor.snapshotDuration']?:'60000'}" />
-		<property name="snapshotLimit" value="#{systemProperties['igate.monitor.snapshotLimit']?:'9000'}" />
-		<property name="snapshotDelete" value="#{systemProperties['igate.monitor.snapshotDelete']?:'500'}" />
-		<property name="transactionSnapshotQueueSize" value="#{systemProperties['igate.monitor.snapshotQueue']?:'10000'}" />
-	</bean>
+    <bean class="com.inzent.igate.monitoring.MonitoringReceiver">
+        <property name="transactionThresholdShort" value="#{systemProperties['igate.monitor.transactionThresholdShort']?:'5000'}" />
+        <property name="transactionThresholdMiddle" value="#{systemProperties['igate.monitor.transactionThresholdMiddle']?:'30000'}" />
+        <property name="snapshotDuration" value="#{systemProperties['igate.monitor.snapshotDuration']?:'60000'}" />
+        <property name="snapshotLimit" value="#{systemProperties['igate.monitor.snapshotLimit']?:'9000'}" />
+        <property name="snapshotDelete" value="#{systemProperties['igate.monitor.snapshotDelete']?:'500'}" />
+    </bean>
 
 	<bean id="monitoringWebSocketHandler" class="com.inzent.igate.monitoring.MonitoringWebSocketHandler" />
 

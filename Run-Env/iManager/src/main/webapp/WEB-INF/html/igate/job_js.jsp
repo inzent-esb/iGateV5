@@ -159,7 +159,7 @@
         var detailHtml = '' ;
 
         detailHtml += '<ul class="list-group" style="width: 100%;">' ;
-        detailHtml += '    <li class="list-group-item" v-for="(elm, index) in instanceList" v-if="elm.instanceType==\'T\'">' ;
+        detailHtml += '    <li class="list-group-item" v-for="(elm, index) in instanceList">' ;
         detailHtml += '        <label class="custom-control custom-checkbox">' ;
         detailHtml += '            <input type="checkbox" class="custom-control-input view-disabled" v-model="jobSubDeploies[index]" @change="push(elm.instanceId, $event)">' ;
         detailHtml += '            <span class="custom-control-label">{{elm.instanceId}}</span>' ;
@@ -346,15 +346,12 @@
       methods : {
         loaded : function()
         {
-
           var deploies = window.vmJobDeploies ;
 
           deploies.jobSubDeploies = [] ;
           deploies.instanceList.forEach(function(element)
           {
 
-            if (element.instanceType == 'T')
-            {
               var value = -1 ;
               for (var i = 0 ; i < deploies.jobDeploies.length ; i++)
               {
@@ -370,7 +367,6 @@
                 deploies.jobSubDeploies.push(true) ;
               else
                 deploies.jobSubDeploies.push(false) ;
-            }
           }) ;
         },
         goDetailPanel : function()
@@ -453,7 +449,9 @@
       {
         $.getJSON(this.uri, function(data)
         {
-          this.instanceList = data.object ;
+          this.instanceList = data.object.filter(function(obj) {
+        	  return 'T' == obj.instanceType;
+          }) ;
         }.bind(this)) ;
       },
       computed : {

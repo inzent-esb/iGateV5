@@ -35,6 +35,8 @@ function DashContainerModify(dashContainerElement, dashContainerOptions) {
 		
 		_this.initDashConfigArea();
 		
+		_this.initDashModal();
+		
 		_this.setTargetInfo(function() {
 			_this.setPerfItemConfigList(function() {
 				_this.initDashConfigEvent(function() {

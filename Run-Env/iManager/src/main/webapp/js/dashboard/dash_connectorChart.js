@@ -58,10 +58,10 @@ $.fn.connectorChart = function(createOptions) {
 				
 				if('Normal' == dataInfo.status)     		statusClass = "bg-normal";
 				else if('Warn' == dataInfo.status)   		statusClass = "bg-warn";
-				else if('Error' == dataInfo.status)			statusClass = "bg-cht-1";
-				else if('Fail' == dataInfo.status)			statusClass = "bg-danger";
-				else if('Starting' == dataInfo.status)		statusClass = "bg-cht-2";
-				else if('Stoping' == dataInfo.status)		statusClass = "bg-cht-3";
+				else if('Error' == dataInfo.status)			statusClass = "bg-error";
+				else if('Fail' == dataInfo.status)			statusClass = "bg-fail";
+				else if('Starting' == dataInfo.status)		statusClass = "bg-cht-3";
+				else if('Stoping' == dataInfo.status)		statusClass = "bg-cht-2";
 				else if('Blocking' == dataInfo.status)		statusClass = "bg-cht-4";
 				else if('Down' == dataInfo.status)			statusClass = "bg-down";
 				else										statusClass = "bg-danger";		

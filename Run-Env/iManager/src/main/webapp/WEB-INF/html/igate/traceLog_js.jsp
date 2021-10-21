@@ -519,6 +519,17 @@
               popup.focus() ;
             }
           },
+          created : function()
+          {
+        	var _this = this;
+        	
+            $('a[href="#MainBasic"]').off('shown.bs.tab').on('shown.bs.tab', function(e)
+            {
+           	  setTimeout(function(){
+           		  _this.makebasicInfoGridObj.getSearchGrid().setWidth($('#panel').find('.panel-body').width()) ;
+           	  }, 350);
+            }) ;
+          },
           mounted : function()
           {
 

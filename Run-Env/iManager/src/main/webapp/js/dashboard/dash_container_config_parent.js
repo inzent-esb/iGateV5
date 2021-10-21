@@ -245,18 +245,111 @@ function DashContainerConfigParent() {
             	var type = $(this).data('type');
             	var componentTypeDirection = $(this).parent().parent().data('dataObj').componentTypeDirection;
             	var itemId = $(ui.draggable).data('itemId');
+
+            	var selectAddType = function(callBack){
+            		if(2 > $('#root').find('.component, .component-horizontal, .component-vertical').length){
+            			callBack($(this).parent());
+            		}else{
+                		var groupArr = [];
+
+            			var group = $(this).parent().parent();
+            			
+            			while(true){
+        					if(1 < group.children('.component, .component-horizontal, .component-vertical').length){
+        						groupArr.push(group);            						
+        					}
+        					
+        					if('root' == group.attr('id')){
+        						break;
+        					}else{
+        						group = group.parent();	
+        					}
+            			}
+                		
+                		var strHtml = '';
+                		
+            	    	strHtml += '<div class="modal-header">';
+            	        strHtml += '    <h2 class="modal-title">' + dashboardLabel_addWidget + ' ' + dashboardLabel_type + '</h2>';
+            	        strHtml += '</div>';
+            	        strHtml += '<div class="modal-body py-0">';
+            	        strHtml += '    <select id="addType" class="form-control">';
+            	        strHtml += '    </select>';
+            	        strHtml += '</div>';
+            	        strHtml += '<div class="modal-footer">';
+            	        strHtml += '    <button type="button" id="cancel" class="btn">'+ cancelBtn +'</button>';
+            	        strHtml += '    <button type="button" id="ok" class="btn btn-primary">'+ checkBtn +'</button>';
+            	        strHtml += '</div>';
+                		
+            	        $('#dashModal').attr({'data-backdrop': 'static', 'data-keyboard': "false"});
+            	        $('#dashModal').find('.modal-content').empty();
+            	        $('#dashModal').find('.modal-content').append($(strHtml));
+            	        $('#dashModal').modal('show');
+            	        
+            	        $('#dashModal').find('#addType').append( $('<option/>').text(dashboardComponent + '_1').data('element', $(this).parent()) );
+            	        
+            	        groupArr.forEach(function(element, index) {
+            	        	$('#dashModal').find('#addType').append( $('<option/>').text(dashboardComponent + '_' + (index + 2)).data('element', element) );	
+            	        });
+            	        
+            	        $('#dashModal').find('#addType').off('change').on('change', function() {
+            	        	$('.addHover, .addAreaHover').remove();
+            	        	var element = $('#dashModal').find('#addType').find(":selected").data('element');
+            	        	
+            	        	var addHover = $("<div/>").addClass('addHover');
+            	        	element.prepend(addHover);
+            	        	
+            	        	var addAreaHover = $("<div/>").addClass('addAreaHover'); 
+            	        	
+            	        	if('l' == type){
+            	        		addAreaHover.css({'top': '5%', 'left': '5%'}).width('40%').height('90%');
+            	        	}else if('t' == type){
+            	        		addAreaHover.css({'top': '5%', 'left': '5%'}).width('90%').height('40%');
+            	        	}else if('r' == type){
+            	        		addAreaHover.css({'top': '5%', 'left': '55%'}).width('40%').height('90%');
+            	        	}else if('b' == type){
+            	        		addAreaHover.css({'top': '55%', 'left': '5%'}).width('90%').height('40%');
+            	        	}
+            	        	
+            	        	element.prepend(addAreaHover);
+            	        });
+            	        
+            	        $('#dashModal').find('#addType').trigger('change');
+            	        
+              	        $('#dashModal').find('#ok').off('click').on('click', function() {
+              	        	$('#dashModal').find('#cancel').trigger('click');
+              	        	callBack($('#dashModal').find('#addType').find(":selected").data('element'));
+            	        }.bind(this));
+              	        
+            	        $('#dashModal').find('#cancel').off('click').on('click', function() {
+        	        		$('#dashModal').modal('hide');
+        	        		$('.addHover, .addAreaHover').remove();
+            	        });            	        
+            		}
+            	}.bind(this);
             	
             	if('l' == type || 'r' == type){
             		if(!componentTypeDirection || 'h' == componentTypeDirection){
-            			initSameDirection.call($(this).parent(), type, 'h', itemId);
+            			selectAddType(function(element) {
+            				if($(element).hasClass('component')) 	initSameDirection.call($(element), type, 'h', itemId);
+            				else									initGroupDirection.call($(element), type, itemId);
+            			}.bind(this));            				
             		}else{
-            			initDifferentDirection.call($(this).parent(), type, 'h', itemId);
+            			selectAddType(function(element) {
+            				if($(element).hasClass('component'))	initDifferentDirection.call($(element), type, 'h', itemId);
+            				else									initGroupDirection.call($(element), type, itemId);
+            			}.bind(this));            			
             		}
             	}else{
             		if(!componentTypeDirection || 'v' == componentTypeDirection){
-            			initSameDirection.call($(this).parent(), type, 'v', itemId);
+            			selectAddType(function(element) {
+            				if($(element).hasClass('component'))	initSameDirection.call($(element), type, 'v', itemId);
+            				else									initGroupDirection.call($(element), type, itemId);
+            			}.bind(this));            				
             		}else{
-            			initDifferentDirection.call($(this).parent(), type, 'v', itemId);
+            			selectAddType(function(element) {
+            				if($(element).hasClass('component'))	initDifferentDirection.call($(element), type, 'v', itemId);
+            				else									initGroupDirection.call($(element), type, itemId);
+            			}.bind(this));
             		}
             	}
             }
@@ -411,6 +504,95 @@ function DashContainerConfigParent() {
             _this.initResizable(component);
             _this.initDelete(component);
             _this.initChange(component);
+            
+            //new component event bind
+            _this.initDroppable(newComponentDiv);
+            _this.initResizable(newComponentDiv);
+            _this.initDelete(newComponentDiv);
+            _this.initChange(newComponentDiv);
+            
+            newComponentDiv.find("[name=targetType]").trigger('change');
+        }
+        
+        function initGroupDirection(type, itemId){
+        	var group = $(this);
+        	
+        	var groupComponentTypeDirection = group.data('dataObj').componentTypeDirection;
+        	
+        	group.data('dataObj').componentTypeDirection = ('l' == type || 'r' == type)? 'h' : 'v';
+        	
+        	if('root' != group.attr('id')){
+        		group.removeClass('component-horizontal component-vertical').addClass(('l' == type || 'r' == type)? 'component-horizontal' : 'component-vertical');	
+        	}
+        	
+			//group
+			_this.componentList.push(_this.getBasicComponentStruct());        	
+			
+			var newGroupDataObj = _this.componentList[_this.componentList.length - 1];
+			
+            newGroupDataObj.componentId = getUUID();
+            newGroupDataObj.pComponentId = group.data('dataObj').componentId;
+            newGroupDataObj.componentOrder = ('t' == type || 'l' == type)? 2 : 1;
+            newGroupDataObj.componentWidth = ('t' == type || 'b' == type)? '100%' : '50%';
+            newGroupDataObj.componentHeight = ('t' == type || 'b' == type)? '50%' : '100%';
+            newGroupDataObj.componentTypeDirection = groupComponentTypeDirection;
+            newGroupDataObj.componentType = 'G';
+            
+            var newGroupDiv = $("<div/>").addClass('component-' + (('h' == groupComponentTypeDirection)? 'horizontal' : 'vertical')).css({'width': newGroupDataObj.componentWidth, 'height': newGroupDataObj.componentHeight}).data('dataObj', newGroupDataObj);
+            
+            //new component element
+            _this.componentList.push(_this.getBasicComponentStruct());
+            
+            var newComponentDataObj = _this.componentList[_this.componentList.length - 1];
+            
+            newComponentDataObj.componentId = getUUID();
+            newComponentDataObj.pComponentId = group.data('dataObj').componentId;
+            newComponentDataObj.componentOrder = ('t' == type || 'l' == type)? 1 : 2;
+            newComponentDataObj.componentWidth = ('t' == type || 'b' == type)? '100%' : '50%';
+            newComponentDataObj.componentHeight = ('t' == type || 'b' == type)? '50%' : '100%';
+            newComponentDataObj.componentType = 'C';
+            newComponentDataObj.itemId = itemId;
+            
+            var perfItemInfo = _this.perfItemList.filter(function(perfItemInfo) { return perfItemInfo.itemId == newComponentDataObj.itemId })[0];
+            
+            newComponentDataObj.componentName = perfItemInfo.itemName;
+            
+            var defaultTypeObj = getDefaultType(perfItemInfo);
+            newComponentDataObj.chartType = defaultTypeObj.chartType;
+            newComponentDataObj.targetType = defaultTypeObj.targetType;
+            newComponentDataObj.unitType = defaultTypeObj.unitType;
+            newComponentDataObj.inoutType = defaultTypeObj.inoutType;
+            
+            var newComponentDiv = initNewComponent(newComponentDataObj).data('dataObj', newComponentDataObj);
+            
+            newComponentDiv.css({'width': newComponentDataObj.componentWidth, 'height': newComponentDataObj.componentHeight});
+            
+            //append
+            group.children('.component-vertical, .component-horizontal, .component').each(function(idx, element) {
+				$(element).find('.ui-droppable-active').removeClass('ui-droppable-active');
+				
+				newGroupDiv.append($(element));
+
+				$(element).data('dataObj').pComponentId = newGroupDiv.data('dataObj').componentId;
+			});
+            
+            group.prepend(newGroupDiv);
+         
+            if('t' == type || 'l' == type) newGroupDiv.before(newComponentDiv);
+            else						   newGroupDiv.after(newComponentDiv);
+            
+            //group event bind
+            _this.initResizable(newGroupDiv);
+            
+            //component event bind
+            newGroupDiv.find('.component-vertical, .component-horizontal, .component').each(function(idx, element) {
+                _this.initResizable($(element));
+                _this.initDelete($(element));
+                _this.initChange($(element));
+                
+                if($(element).hasClass('component'))
+                	_this.initDroppable($(element));            		
+            });
             
             //new component event bind
             _this.initDroppable(newComponentDiv);

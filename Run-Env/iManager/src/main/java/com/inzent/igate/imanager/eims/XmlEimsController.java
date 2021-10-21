@@ -47,6 +47,7 @@ import com.inzent.igate.repository.meta.Record ;
 import com.inzent.igate.repository.meta.Service ;
 import com.inzent.igate.repository.meta.ServiceProperty ;
 import com.inzent.igate.repository.meta.ServicePropertyPK ;
+import com.inzent.igate.util.PropertyUtils ;
 import com.inzent.imanager.common.property.PropertyService ;
 
 /**
@@ -549,7 +550,7 @@ public class XmlEimsController extends AbstractEimsController
     if (null != format.attributeValue(ATTRIBUTE_ECR_MCD))
       properties.setProperty(ATTRIBUTE_ECR_MCD, format.attributeValue(ATTRIBUTE_ECR_MCD)) ;
 
-    return Record.encode(properties) ;
+    return PropertyUtils.encode(properties) ;
   }
 
   protected void unmarshalField(Record record, int order, Element childElement)

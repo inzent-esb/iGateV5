@@ -1865,7 +1865,16 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		_this.setTargetInfo(function() {
 	        _this.instanceList.forEach(function(instance, index) {
 	        	instance.color = COLORS[index];
-	        	instance.isFiltered = false;
+	        	
+	        	var isFiltered = false;
+	        	
+	        	for(var i = 0; i < oldInstanceList.length; i++) {
+	        		if(oldInstanceList[i].instanceId == instance.instanceId) {
+	        			isFiltered = oldInstanceList[i].isFiltered;
+	        		}
+	        	}
+	        	
+	        	instance.isFiltered = isFiltered;
 	        });
 	        
 	        if(!_this.componentList) return;
@@ -2159,7 +2168,17 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		$("#dashboard").remove();
 	  
 		$('#dashModal').on('hidden.bs.modal', function() {
-			$('#dashModal').remove(); 
+			$('#dashModal').remove();
+			
+			var dashContainerOption = {mod : mod};
+			  
+			if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
+	    
+			if (pDashContainerOption) {
+				dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
+			}
+		  
+			$(dashContainerElement).dashContainer(dashContainerOption);			
 		});
 		$('#dashModal').modal('hide');
 
@@ -2170,15 +2189,17 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		
 		$("#noticeArea").remove();
 	  
-		var dashContainerOption = {mod : mod};
-	  
-		if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
-    
-		if (pDashContainerOption) {
-			dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
+		if('none' == $('#dashModal').css('display')){
+			var dashContainerOption = {mod : mod};
+			  
+			if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
+	    
+			if (pDashContainerOption) {
+				dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
+			}
+		  
+			$(dashContainerElement).dashContainer(dashContainerOption);			
 		}
-	  
-		$(dashContainerElement).dashContainer(dashContainerOption);
 	}
   
 	function unloadContainer() {

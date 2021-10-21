@@ -78,9 +78,11 @@ br{font-family: arial}
 .bg-normal{background-color: #62d36f !important}
 .bg-alarm{background-color: #fd9a02 !important}
 .bg-danger{background-color: #ed3137 !important}
+.bg-fail{background-color: #9932a1 !important}
 .bg-down{background-color: #8a8b92 !important}
 .bg-dark{background-color: #2b2c3a !important}
 .bg-warn{background-color: #efc302 !important}
+.bg-error{background-color: #ff0000 !important}
 .bg-cht-1{background-color: #448ef2 !important}
 .bg-cht-2{background-color: #f3743e !important}
 .bg-cht-3{background-color: #a4cf2f !important}

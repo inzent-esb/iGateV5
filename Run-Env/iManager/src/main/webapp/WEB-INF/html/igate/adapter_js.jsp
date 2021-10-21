@@ -278,7 +278,7 @@
         var detailHtml = '' ;
 
         detailHtml += '<ul class="list-group" style="width: 100%;">' ;
-        detailHtml += '    <li class="list-group-item" v-for="(elm, index) in instanceList" v-if="elm.instanceType==\'T\'">' ;
+        detailHtml += '    <li class="list-group-item" v-for="(elm, index) in instanceList">' ;
         detailHtml += '        <label class="custom-control custom-checkbox">' ;
         detailHtml += '            <input type="checkbox" class="custom-control-input view-disabled" v-model="adapterSubDeploies[index]" @change="push(elm.instanceId, $event)">' ;
         detailHtml += '            <span class="custom-control-label">{{elm.instanceId}}</span>' ;
@@ -509,25 +509,21 @@
           deploies.adapterSubDeploies = [] ;
           deploies.instanceList.forEach(function(element)
           {
-
-            if (element.instanceType == 'T')
+            var value = -1 ;
+            for (var i = 0 ; i < deploies.adapterQueueDeploies.length ; i++)
             {
-              var value = -1 ;
-              for (var i = 0 ; i < deploies.adapterQueueDeploies.length ; i++)
+
+              if (deploies.adapterQueueDeploies[i].pk.instanceId === element.instanceId)
               {
-
-                if (deploies.adapterQueueDeploies[i].pk.instanceId === element.instanceId)
-                {
-                  value = i ;
-                  break ;
-                }
+                value = i ;
+                break ;
               }
-
-              if (value != -1)
-                deploies.adapterSubDeploies.push(true) ;
-              else
-                deploies.adapterSubDeploies.push(false) ;
             }
+
+            if (value != -1)
+              deploies.adapterSubDeploies.push(true) ;
+            else
+              deploies.adapterSubDeploies.push(false) ;
           }) ;
         },
         openModal : function(openModalParam)
@@ -694,7 +690,9 @@
       {
         $.getJSON(this.uri, function(data)
         {
-          this.instanceList = data.object ;
+          this.instanceList = data.object.filter(function(obj) {
+        	  return 'T' == obj.instanceType;
+          }) ;
         }.bind(this)) ;
       },
       computed : {

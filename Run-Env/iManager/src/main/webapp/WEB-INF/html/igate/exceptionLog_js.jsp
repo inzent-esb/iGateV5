@@ -264,39 +264,82 @@
           window.vmSearch.initSearchArea() ;
         },
         downloadFile : function()
-        {
-          var gridObj = this.makeGridObj.getSearchGrid() ;
-
-          var csvData = '' ;
-
-          csvData += '<fmt:message>head.from</fmt:message>, ' + window.vmSearch.object.fromExceptionDateTime + '\r\n' ;
-          csvData += '<fmt:message>head.to</fmt:message>, ' + window.vmSearch.object.toExceptionDateTime + '\r\n' ;
-          csvData += '<fmt:message>igate.instance</fmt:message><fmt:message>head.id</fmt:message>, ' + ((null == window.vmSearch.object.instanceId) ? '' : window.vmSearch.object.instanceId) + '\r\n' ;
-          csvData += '<fmt:message>igate.exceptionLog.transactionId</fmt:message>, ' + ((null == window.vmSearch.object.transactionId) ? '' : window.vmSearch.object.transactionId) + '\r\n' ;
-          csvData += '<fmt:message>igate.exceptionCode</fmt:message>, ' + ((null == window.vmSearch.object.exceptionCode) ? '' : window.vmSearch.object.exceptionCode) + '\r\n' ;
-          csvData += '<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>, ' + ((null == window.vmSearch.object.interfaceId) ? '' : window.vmSearch.object.interfaceId) + '\r\n' ;
-          csvData += '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>, ' + ((null == window.vmSearch.object.adapterId) ? '' : window.vmSearch.object.adapterId) + '\r\n' ;
-          csvData += '<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>, ' + ((null == window.vmSearch.object.connectorId) ? '' : window.vmSearch.object.connectorId) + '\r\n' ;
-          csvData += '<fmt:message>igate.page.num</fmt:message>, ' + $('#' + createPageObj.getElementId('ImngSearchGrid')).find('.ImngSearchGridPagination').find('.active').text() + '\r\n\r\n' ;
-
-          gridObj.getColumns().forEach(function(column, index)
-          {
-            csvData += ((0 == index) ? '' : ',') + column.header ;
-          }) ;
-
-          csvData += '\r\n' ;
-
-          gridObj.getData().forEach(function(dataObj)
-          {
-            gridObj.getColumns().forEach(function(column, index)
-            {
-              csvData += ((0 == index) ? '' : ',') + ((null == dataObj[column.name]) ? '' : ' ' + dataObj[column.name]) ;
-            }) ;
-            csvData += '\r\n' ;
-          }) ;
-
-          downloadCSV('<fmt:message>igate.exceptionLog</fmt:message>_<fmt:message>head.excel.output</fmt:message>_' + Date.now(), csvData) ;
-        },
+        {    
+        	var myForm = document.popForm;
+			var ipt = null;
+        	var inputs = document.getElementById("popFormInputs");
+        	
+        	while ( inputs.hasChildNodes() ) { inputs.removeChild( inputs.firstChild ); }
+        	
+        	if(window.vmSearch.object.fromExceptionDateTime){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="fromExceptionDateTime";
+        		ipt.value=window.vmSearch.object.fromExceptionDateTime;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.toExceptionDateTime){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="toExceptionDateTime";
+        		ipt.value=window.vmSearch.object.toExceptionDateTime;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.instanceId){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="instanceId";
+        		ipt.value=window.vmSearch.object.instanceId;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.transactionId){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="transactionId";
+        		ipt.value=window.vmSearch.object.transactionId;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.exceptionCode){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="exceptionCode";
+        		ipt.value=window.vmSearch.object.exceptionCode;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.interfaceId){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="interfaceId";
+        		ipt.value=window.vmSearch.object.interfaceId;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.adapterId){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="adapterId";
+        		ipt.value=window.vmSearch.object.adapterId;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.connectorId){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="connectorId";
+        		ipt.value=window.vmSearch.object.connectorId;
+        		inputs.appendChild(ipt);
+        	}
+        	
+	 		
+	 	  	var popup = window.open("", "hiddenframe", "toolbar=no, width=0, height=0, directories=no, status=no,    scrollorbars=no, resizable=no") ;
+	 	  	myForm.target = "hiddenframe";
+	 	  	myForm.submit();
+ 	  	},
         refresh : function()
         {
           this.isStartRefresh = !this.isStartRefresh ;
