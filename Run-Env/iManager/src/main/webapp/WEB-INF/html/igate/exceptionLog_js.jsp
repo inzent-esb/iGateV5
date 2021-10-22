@@ -357,6 +357,7 @@
 
 			var data = new FormData(myForm);
 
+<<<<<<< HEAD
 			startSpinner();
 			
 			var req = new XMLHttpRequest();
@@ -368,6 +369,19 @@
 			    	  
 			req.onload = function (event) {
 				stopSpinner();
+=======
+			//startSpinner();
+			
+			var req = new XMLHttpRequest();
+			req.open("POST", "<c:url value='/igate/exceptionLog/exportExcel.json' />", true);
+			
+			req.setRequestHeader('X-CSRF-TOKEN', myForm.elements._csrf.value);
+			req.responseType = "blob";
+			req.send(data);
+			    	  
+			req.onload = function (event) {
+				//stopSpinner();
+>>>>>>> branch 'main' of https://github.com/inzent-esb/iGateV5.git/
 				var blob = req.response;
 				var file_name = "<fmt:message>igate.exceptionLog</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
 				
