@@ -64,7 +64,7 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			writeSheet = workbook.getSheetAt(0);
 		}catch (Exception e){
 			/* Template Load Error */
-			/* Create Base Excel Template */
+			/* Create Base Excel Template */			
 			workbook = new XSSFWorkbook();
 			writeSheet = workbook.createSheet();
 			
@@ -81,9 +81,12 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			cell = row.createCell(6);
 			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
 			
+			cell = row.createCell(8);
+			cell.setCellValue(MessageGenerator.getMessage("head.exception.code", "Exception Code"));
+			
 			row = writeSheet.createRow(4);
 			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("head.exception.code", "Exception Code"));
+			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
 			
 			cell = row.createCell(2);
 			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
@@ -94,30 +97,33 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			cell = row.createCell(6);
 			cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID") );
 
+			int rc = 0;
 			row = writeSheet.createRow(6);
-			cell = row.createCell(0);
+			cell = row.createCell(rc);
 			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionDateTime", "DateTime"));
-			cell = row.createCell(1);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog", "ExceptionLog") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(2);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("head.exception.code", "Exception Code"));
-			cell = row.createCell(3);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
-			cell = row.createCell(4);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
-			cell = row.createCell(5);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
-			cell = row.createCell(6);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
-			cell = row.createCell(7);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("apim.requestmngr.requestMessage", "Message") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(8);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(9);
+			cell = row.createCell(rc+=1);
+			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.activity.id", "igate.activity.id"));
-			cell = row.createCell(10);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionText", "Exception Text"));
-			cell = row.createCell(11);
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionStack", "Exception Stack"));
 			
 		}
@@ -150,9 +156,15 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 		cell = row.createCell(7);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
-		
+
 		// 에러 코드
 		values = entity.getExceptionCode();
+		cell = row.createCell(9);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+		
+		// 서비스 ID
+		values = entity.getServiceId();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(1);
 		cell.setCellStyle(cellStyle_Base);
@@ -228,7 +240,12 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
 
-			//커넥터 ID
+			//서비스 ID
+			values = data.getServiceId();
+			cell = row.createCell(c += 1);
+			cell.setCellValue(values);
+			
+			//액티비티 ID
 			values = data.getActivityId();
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
