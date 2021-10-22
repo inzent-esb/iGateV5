@@ -86,10 +86,11 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			
 			row = writeSheet.createRow(4);
 			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			
-			cell = row.createCell(2);
 			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
+
+			cell = row.createCell(2);
+			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+
 			
 			cell = row.createCell(4);
 			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
@@ -108,17 +109,17 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
 			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+			cell.setCellValue(MessageGenerator.getMessage("apim.requestmngr.requestMessage", "Message") + " " + MessageGenerator.getMessage("head.id", "ID"));
 			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
 			cell = row.createCell(rc+=1);
+			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
 			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("apim.requestmngr.requestMessage", "Message") + " " + MessageGenerator.getMessage("head.id", "ID"));
+			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
 			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
 			cell = row.createCell(rc+=1);
 			cell.setCellValue(MessageGenerator.getMessage("igate.activity.id", "igate.activity.id"));
 			cell = row.createCell(rc+=1);
@@ -163,15 +164,15 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// 서비스 ID
-		values = entity.getServiceId();
+		// 인터페이스 ID
+		values = entity.getInterfaceId();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(1);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// 인터페이스 ID
-		values = entity.getInterfaceId();
+		// 서비스 ID
+		values = entity.getServiceId();
 		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
@@ -215,13 +216,18 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
 
-			//어댑터 ID
-			values = data.getAdapterId();
+			//메시지 ID
+			values = data.getMessageId();
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
-
+			
 			//인터페이스 ID
 			values = data.getInterfaceId();
+			cell = row.createCell(c += 1);
+			cell.setCellValue(values);
+			
+			//서비스 ID
+			values = data.getServiceId();
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
 			
@@ -230,18 +236,13 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
 			
-			//메시지 ID
-			values = data.getMessageId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//커넥터 ID
-			values = data.getConnectorId();
+			//어댑터 ID
+			values = data.getAdapterId();
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
 
-			//서비스 ID
-			values = data.getServiceId();
+			//커넥터 ID
+			values = data.getConnectorId();
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
 			

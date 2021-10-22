@@ -285,6 +285,7 @@
         },
         downloadFile : function()
         {    
+
         	var myForm = document.popForm;
 			var ipt = null;
         	var inputs = document.getElementById("popFormInputs");
@@ -354,6 +355,14 @@
         		ipt.value=window.vmSearch.object.connectorId;
         		inputs.appendChild(ipt);
         	}
+        	
+        	if(window.vmSearch.object.serviceId){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="serviceId";
+        		ipt.value=window.vmSearch.object.serviceId;
+        		inputs.appendChild(ipt);
+        	}
 
 			var data = new FormData(myForm);
 
@@ -378,7 +387,7 @@
 				
 				if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
 			        window.navigator.msSaveOrOpenBlob(blob, file_name);
-			    } else { // for Non-IE (chrome, firefox etc.)
+			    } else {
 					var link=document.createElement('a');
 					link.href=window.URL.createObjectURL(blob);
 					link.download=file_name;
