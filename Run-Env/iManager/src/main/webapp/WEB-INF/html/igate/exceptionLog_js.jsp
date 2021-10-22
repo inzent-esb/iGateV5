@@ -52,6 +52,16 @@
     }, {
       'type' : "modal",
       'mappingDataInfo' : {
+        'url' : '/igate/service.html',
+        'modalTitle' : '<fmt:message>igate.service</fmt:message>',
+        'vModel' : "object.serviceId",
+        'callBackFuncName' : 'setSearchServiceId'
+      },
+      'name' : "<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>",
+      'placeholder' : "<fmt:message>head.searchId</fmt:message>"
+    }, {
+      'type' : "modal",
+      'mappingDataInfo' : {
         'url' : '/igate/adapter.html',
         'modalTitle' : '<fmt:message>igate.adapter</fmt:message>',
         'vModel' : "object.adapterId",
@@ -134,6 +144,10 @@
           'name' : "<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>"
         }, {
           'type' : "text",
+          'mappingDataInfo' : "object.serviceId",
+          'name' : "<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>"
+        }, {
+          'type' : "text",
           'mappingDataInfo' : "object.activityId",
           'name' : "<fmt:message>igate.activity</fmt:message> <fmt:message>head.id</fmt:message>"
         }, ]
@@ -179,6 +193,7 @@
           toExceptionDateTime : '',
           fromExceptionDateTime : '',
           interfaceId : null,
+          serviceId : null,
           adapterId : null,
           connectorId : null,
           exceptionCode : null,
@@ -208,6 +223,7 @@
             this.object.toExceptionDateTime = '' ;
             this.object.fromExceptionDateTime = '' ;
             this.object.interfaceId = null ;
+            this.object.serviceId = null ;
             this.object.adapterId = null ;
             this.object.connectorId = null ;
             this.object.exceptionCode = null ;
@@ -235,6 +251,10 @@
         setSearchInterfaceId : function(param)
         {
           this.object.interfaceId = param.interfaceId ;
+        },
+        setSearchServiceId : function(param)
+        {
+          this.object.serviceId = param.serviceId ;
         },
         setSearchConnectorId : function(param)
         {
@@ -334,12 +354,40 @@
         		ipt.value=window.vmSearch.object.connectorId;
         		inputs.appendChild(ipt);
         	}
-        	
-	 		
-	 	  	var popup = window.open("", "hiddenframe", "toolbar=no, width=0, height=0, directories=no, status=no,    scrollorbars=no, resizable=no") ;
-	 	  	myForm.target = "hiddenframe";
-	 	  	myForm.submit();
- 	  	},
+
+			var data = new FormData(myForm);
+
+			//startSpinner();
+			
+			var req = new XMLHttpRequest();
+			req.open("POST", "<c:url value='/igate/exceptionLog/exportExcel.json' />", true);
+			
+			req.setRequestHeader('X-CSRF-TOKEN', myForm.elements._csrf.value);
+			req.responseType = "blob";
+			req.send(data);
+			    	  
+			req.onload = function (event) {
+				//stopSpinner();
+				var blob = req.response;
+				var file_name = "<fmt:message>igate.exceptionLog</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
+				
+				if(blob.size <= 0){
+					warnAlert({message : "<fmt:message>igate.sap.error</fmt:message>"}) ;
+        			return;
+				}
+				
+				if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+			        window.navigator.msSaveOrOpenBlob(blob, file_name);
+			    } else { // for Non-IE (chrome, firefox etc.)
+					var link=document.createElement('a');
+					link.href=window.URL.createObjectURL(blob);
+					link.download=file_name;
+					link.click();
+					URL.revokeObjectURL(link.href)
+			        link.remove();
+			    }
+			};
+        },
         refresh : function()
         {
           this.isStartRefresh = !this.isStartRefresh ;
@@ -389,25 +437,30 @@
             name : "instanceId",
             header : "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>",
             align : "left",
-            width: "8%"
+            width: "6%"
           }, {
             name : "exceptionCode",
             header : "<fmt:message>igate.exceptionCode</fmt:message>",
             align : "left",
-            width: "8%"
+            width: "6%"
           }, {
             name : "exceptionText",
             header : "<fmt:message>igate.exceptionLog.exceptionText</fmt:message>",
             align : "left",
-            width: "36%"
+            width: "33%"
           }, {
             name : "transactionId",
             header : "<fmt:message>igate.exceptionLog.transactionId</fmt:message>",
             align : "left",
-            width: "16%"
+            width: "13%"
           }, {
             name : "interfaceId",
             header : "<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>",
+            align : "left",
+            width: "10%"
+          }, {
+            name : "serviceId",
+            header : "<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>",
             align : "left",
             width: "10%"
           }, {
@@ -469,6 +522,7 @@
           this.object.transactionId = null ;
           this.object.adpaterId = null ;
           this.object.interfaceId = null ;
+          this.object.serviceId = null ;
           this.object.instanceId = null ;
           this.object.messageId = null ;
           this.object.connectorId = null ;
