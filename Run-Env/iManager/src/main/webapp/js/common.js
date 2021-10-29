@@ -309,6 +309,30 @@ function downloadCSV(pCsvFileName, pCsvData) {
 	}
 }
 
+function downloadJson(pJsonFileName, pJsonData) {
+	var jsonFileName = pJsonFileName + ".json";
+	
+	var jsonData = pJsonData;
+	
+	if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+		var blob = new Blob([jsonData], {type: 'text/json;charset=utf8'});
+		window.navigator.msSaveOrOpenBlob(blob, jsonFileName);
+	} else {
+		var downloadLink = document.createElement('a');
+		
+		var blob = new Blob([jsonData], {type: 'text/json;charset=utf-8;'});
+		
+		downloadLink.href = URL.createObjectURL(blob);
+		downloadLink.download = jsonFileName;
+		
+		document.body.appendChild(downloadLink);
+		
+		downloadLink.click();
+		
+		document.body.removeChild(downloadLink);
+	}
+}
+
 function escapeHtml(text) {
 	return $('<span />').text(text).html();
 }

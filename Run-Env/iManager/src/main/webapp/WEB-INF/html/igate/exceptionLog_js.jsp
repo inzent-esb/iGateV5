@@ -121,7 +121,7 @@
         'className' : 'col-lg-4',
         'detailSubList' : [{
           'type' : "text",
-          'mappingDataInfo' : "object.adpaterId",
+          'mappingDataInfo' : "object.adapterId",
           'name' : "<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>"
         }, {
           'type' : "text",
@@ -380,12 +380,12 @@
 				var blob = req.response;
 				var file_name = "<fmt:message>igate.exceptionLog</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
 				
-				if(blob.size <= 0){
+				if(blob.size <= 0  || event.target.status != "200"){
 					warnAlert({message : "<fmt:message>igate.sap.error</fmt:message>"}) ;
         			return;
 				}
 				
-				if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+				if (window.navigator && window.navigator.msSaveOrOpenBlob) {
 			        window.navigator.msSaveOrOpenBlob(blob, file_name);
 			    } else {
 					var link=document.createElement('a');
@@ -529,7 +529,7 @@
           this.object.pk.exceptionId = null ;
           this.object.exceptionCode = null ;
           this.object.transactionId = null ;
-          this.object.adpaterId = null ;
+          this.object.adapterId = null ;
           this.object.interfaceId = null ;
           this.object.serviceId = null ;
           this.object.instanceId = null ;

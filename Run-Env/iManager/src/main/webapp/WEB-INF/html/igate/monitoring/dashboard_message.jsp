@@ -64,6 +64,10 @@ var dashboardLabel_instanceId = "<fmt:message>igate.instance.id</fmt:message>";
 
 var dashboardLabel_group = "<fmt:message>head.group</fmt:message>";
 var dashboardLabel_type = "<fmt:message>head.type</fmt:message>";
+var dashboardLabel_migration = "<fmt:message>head.migration</fmt:message>";
+var dashboardLabel_download = "<fmt:message>head.download</fmt:message>";
+var dashboardLabel_fileSelect = "<fmt:message>head.file</fmt:message> <fmt:message>head.select</fmt:message>";
+var dashboardLabel_upload = "<fmt:message>head.upload</fmt:message>";
 
 var dashboardNotification = "<fmt:message>dashboard.notification</fmt:message>";
 var dashboardNotificationSettings = "<fmt:message>dashboard.notification.settings</fmt:message>";
@@ -103,6 +107,9 @@ var dashboardMsg_noMatchCriteria= "<fmt:message>dashboard.noMatch.criteria</fmt:
 var dashboardMsg_xViewNumerialCheck= "<fmt:message>dashboard.enter.xview.numericalCheck</fmt:message>";
 var dashboardMsg_xViewRangeCheck= "<fmt:message>dashboard.enter.xview.rangeCheck</fmt:message>";
 var dashboardMsg_xViewExportMaxCnt = '<fmt:message>dashboard.xview.export.maxCnt<fmt:param value="' + xViewMaxExportCnt + '" /></fmt:message>';
+var dashboardMsg_fileSelectError = "<fmt:message>igate.migration.fileSelectError</fmt:message>";
+var dashboardMsg_migrationMake = "<fmt:message>igate.migration.make</fmt:message>";
+var dashboardMsg_jsonFileFormatOnly = "<fmt:message>dashboard.json.file.format.only</fmt:message>";
 
 /* button */
 var dashboardBtn_share = "<fmt:message>head.share</fmt:message>";

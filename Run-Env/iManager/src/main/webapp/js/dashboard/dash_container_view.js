@@ -39,6 +39,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 				$('<a href="javascript:void(0);" id="evtHistoryListBtn" class="btn" data-toggle="modal"><i class="icon-list"></i>'+ dashboardNotificationHistoryList +'</a>'),
 				$('<a href="javascript:void(0);" id="previewContainerMode" class="btn" data-toggle="modal"><i class="icon-eye"></i>'+ dashboardLabel_fullScreen +'</a>'),
 				$('<a href="javascript:void(0);" id="shareContainerMode" class="btn" data-toggle="modal"><i class="icon-share"></i>'+ dashboardBtn_share +'</a>'),
+				$('<a href="javascript:void(0);" id="migrationContainerMode" class="btn" data-toggle="modal"><i class="icon-model"></i>'+ dashboardLabel_migration +'</a>'),
 				$('<a href="javascript:void(0);" id="copyContainerMode" class="btn"><i class="icon-plus"></i>'+ dashboardBtn_copy +'</a>'),
 				$('<a href="javascript:void(0);" id="modifyContainerMode" class="btn"><i class="icon-edit"></i>'+ dashboardBtn_modify +'</a>'),
 				$('<a href="javascript:void(0);" id="deleteContainer" class="btn"><i class="icon-delete"></i>'+ dashboardBtn_delete +'</a>'),
@@ -51,6 +52,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 
 				if(!hasDashBoardEditor) {
 					$('#shareContainerMode').hide();
+					$('#migrationContainerMode').hide();
 					$('#copyContainerMode').hide();
 					$('#modifyContainerMode').hide();
 					$('#deleteContainer').hide();
@@ -394,6 +396,285 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	        });
 		});
 
+		$('#migrationContainerMode').on('click', function() {
+
+			var strHtml = '';
+
+	    	strHtml += '<div class="modal-header">';
+	        strHtml += '    <h2 class="modal-title">'+ dashboardLabel_migration +'</h2>';
+	        strHtml += '    <button type="button" class="btn-icon" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>';
+	        strHtml += '</div>';
+	        strHtml += '<div class="modal-body py-0">';
+	        strHtml += '	<ul class="nav nav-tabs flex-shrink-0">';
+	        strHtml += '		<li class="nav-item"><a class="nav-link active" href="#download" data-toggle="tab">' + dashboardLabel_download + '</a></li>';
+	        strHtml += '		<li class="nav-item"><a class="nav-link" href="#migration" data-toggle="tab">' + dashboardLabel_migration + '</a></li>';
+	        strHtml += '	</ul>';
+	        strHtml += '	<div class="modal-body tab-content py-4" style="padding-top: 1.0rem !important;">';
+	        strHtml += '		<div id="download" class="tab-pane active">';
+	        strHtml += '			<div class="sub-bar" style="padding-top: 0px;">';
+	        strHtml += '				<div class="ml-auto form-inline m-full">';
+	        strHtml += '					<a id="migrationDownloadBtn" href="javascript:void(0);" class="btn btn-m"><i class="icon-export"></i><span class="hide">' + dashboardLabel_download + '</span></a>';
+	        strHtml += '				</div>';
+	        strHtml += '			</div>';
+	        strHtml += '			<div id="dashModalLargeGrid"></div>';
+	        strHtml += '		</div>';
+	        strHtml += '		<div id="migration" class="tab-pane">';
+	        strHtml += '			<div class="row frm-row">';
+	        strHtml += '				<div class="col-lg-12">';
+	        strHtml += '					<div class="form-group">';
+	        strHtml += '						<label class="control-label">' + dashboardLabel_fileSelect + '</label>';
+	        strHtml += '						<div class="input-group">';
+	        strHtml += '							<input class="form-control view-disabled" id="fileName" type="text" readonly="readonly" placeholder="' + dashboardMsg_fileSelectError + '" />';
+	        strHtml += '							<button type="button" id="fileSelectBtn" class="btn" style="margin-left: 5px; margin-right: 5px;">' + dashboardLabel_fileSelect + '</button>';
+	        strHtml += '							<button type="button" id="fileUploadBtn" class="btn btn-primary">' + dashboardLabel_upload + '</button>';
+	        strHtml += '						</div>';
+	        strHtml += '					</div>';
+	        strHtml += '				</div>';	        
+	        strHtml += '			</div>';
+	        strHtml += '		</div>';	        
+	        strHtml += '	</div>';
+	        strHtml += '</div>';
+	        strHtml += '<div class="modal-footer">';
+	        strHtml += '    <button type="button" id="closeMigrationBtn" class="btn" data-dismiss="modal">'+ cancelBtn +'</button>';
+	        strHtml += '</div>';
+
+	        $('#dashModalLarge').find('.modal-content').empty();
+	        $('#dashModalLarge').find('.modal-content').append($(strHtml));
+	        $('#dashModalLarge').modal('show');
+	        
+	        var dashModalLargeGrid = null;
+	        
+	        $('#dashModalLarge').off('shown.bs.modal').on('shown.bs.modal', function() {
+				var settings = {
+					el : document.getElementById('dashModalLargeGrid'),
+					bodyHeight: 200,
+					data: containerList.map(function(containerInfo) {
+		        		return {
+		        			containerId: containerInfo.containerId,
+		        			containerName: containerInfo.containerName,
+		        			resolution : containerInfo.containerWidth + ' X ' + containerInfo.containerHeight
+		        		}
+		        	}),
+		        	rowHeaders : ['checkbox'],
+					columns : [
+						{
+							name : "containerName", 
+							header : dashboardLabel_dashboard + ' ' + dashboardLabel_name, 
+							width: '70%'
+						},
+						{
+							name : "resolution",     
+							header : dashboardLabel_resolution,
+							align : "center",
+							width: '30%'
+						},
+						{
+							name : "containerId",
+							hidden: true,
+						},						
+					],
+					columnOptions : {
+						resizable : true
+					},
+					usageStatistics : false,
+					header: {
+						height: 32,
+						align: 'center'
+					},
+					onGridMounted : function() {
+			        	var resetColumnWidths = [];
+			        	
+			        	dashModalLargeGrid.getColumns().forEach(function(columnInfo) {
+			        		if(!columnInfo.copyOptions) return;
+
+			        		if(columnInfo.copyOptions.widthRatio) {
+			        			resetColumnWidths.push($('#dashModalLargeGrid').width() * (columnInfo.copyOptions.widthRatio / 100));
+			        		}
+			        	});
+			        	
+			        	if(0 < resetColumnWidths.length)
+			        		dashModalLargeGrid.resetColumnWidths(resetColumnWidths);
+			        	
+			        	$('#dashModalLargeGrid').find('.tui-grid-column-resize-handle').removeAttr('title');	        	
+			        },				
+			    	scrollX: false,
+			    	scrollY: true,
+				};
+				
+				settings.columns.forEach(function(column) {
+					if(!column.formatter) 
+						column.escapeHTML = true;  
+
+					if(column.width && -1 < String(column.width).indexOf('%')) {
+						if(!column.copyOptions) 
+							column.copyOptions = {};
+			    		  
+						column.copyOptions.widthRatio = column.width.replace('%', '');
+			    		  
+						delete column.width;
+					}
+				});				
+				
+				var dashModalLargeGrid = new tui.Grid(settings);
+				
+				dashModalLargeGrid.on('mouseover', function(ev) {
+					if('cell' != ev.targetType) return;
+			    	  
+					var overCellElement = $(dashModalLargeGrid.getElement(ev.rowKey, ev.columnName));    	  
+					overCellElement.attr('title', overCellElement.text());
+				});
+				
+				dashModalLargeGrid.on('click', function(evt) {
+					if('rowHeader' != evt.targetType) return;
+
+					setTimeout(function() {
+						if(-1 < dashModalLargeGrid.getCheckedRowKeys().indexOf(evt.rowKey)){
+							dashModalLargeGrid.addRowClassName(evt.rowKey, "row-selected");
+						}else{
+							dashModalLargeGrid.removeRowClassName(evt.rowKey, "row-selected");
+						}
+					}, 0);
+				});
+				
+				dashModalLargeGrid.on('checkAll', function(ev) {
+					var allRows = dashModalLargeGrid.getData(); 
+					
+					for(var i = 0; i < allRows.length; i++){
+						dashModalLargeGrid.addRowClassName(allRows[i].rowKey, "row-selected");
+					}
+				});
+				
+				dashModalLargeGrid.on('uncheckAll', function(ev) {
+					var allRows = dashModalLargeGrid.getData(); 
+					
+					for(var i = 0; i < allRows.length; i++){
+						dashModalLargeGrid.removeRowClassName(allRows[i].rowKey, "row-selected");
+					}
+				});				
+				
+				$('#migrationDownloadBtn').off('click').on('click', function() {
+					if(0 == dashModalLargeGrid.getCheckedRowKeys().length){
+						warnAlert({message: dashboardMsg_selectNoDashboard});
+						return;
+					}
+					
+					var exportContainerList = [];
+					
+					dashModalLargeGrid.getCheckedRowKeys().forEach(function(rowKey) {
+						var filterContainerList = containerList.filter(function(containerInfo) {
+							return containerInfo.containerId == dashModalLargeGrid.getRow(rowKey).containerId; 
+						});
+
+						var exportContainerInfo = $.extend(true, {}, filterContainerList[0]);
+						
+						delete exportContainerInfo.monitorContainerUsers;
+						
+						for(var i = 0; i < exportContainerInfo.monitorComponents.length; i++){
+							delete exportContainerInfo.monitorComponents[i].monitorComponentTargets;
+						}
+						
+						exportContainerList.push(exportContainerInfo);
+					});
+					
+					var jsonFileName = 'DashBoardMigration_' + moment(new Date()).format('YYYY-MM-DD hh-mm-ss') + '_' + getUUID();
+					var jsonData = JSON.stringify(exportContainerList);
+					
+					downloadJson(jsonFileName, jsonData);
+				});
+				
+				var importContainerList = null;
+				
+				$('#fileSelectBtn').off('click').on('click', function() {
+					importContainerList = null;
+					
+					var fileEle = $("<input/>").attr({'type': 'file'}).hide();
+					
+					fileEle.on('change', function(evt){
+						var fileName = this.files[0].name;
+						
+						if('json' != fileName.substring(fileName.length - 4)){
+							warnAlert({message: dashboardMsg_jsonFileFormatOnly});
+							return;
+						}
+						
+						$('#fileName').val(escapeHtml(fileName));
+						
+						var reader = new FileReader();
+				        
+				        reader.readAsText(this.files[0], 'utf-8');
+				        
+						reader.onload = function() {
+							importContainerList = JSON.parse(reader.result);
+				        };
+					});
+					
+					fileEle.trigger('click');
+				});
+				
+				$('#fileUploadBtn').off('click').on('click', function() {
+					if(null == importContainerList){
+						warnAlert({message: dashboardMsg_fileSelectError});
+						return;
+					}
+
+					var resultArr = [];
+					
+					importContainerList.forEach(function(importContainerInfo) {
+						importContainerInfo.monitorComponents.forEach(function(component, index) {
+			    			for(var key in component){
+			    				importContainerInfo['monitorComponents[' + index + '].' + key] = component[key];	
+			    			}
+			    		});
+						
+						delete importContainerInfo.monitorComponents;
+					});
+					
+					importContainerList.forEach(function(importContainerInfo) {
+						$.ajax({
+							type: 'POST',
+					        url: contextPath + '/igate/monitoring/dashboard/container.json',
+					        data: importContainerInfo,
+					        dataType: "json",
+					        success: function(result) {
+					        	resultArr.push({
+					        		message: importContainerInfo.containerName + " : " + (('ok' == result.result)? dashboardMsg_migrationMake : result.error[0].message)
+					        	});
+					        },
+					        error: function() {
+					        	resultArr.push({
+					        		message: importContainerInfo.containerName + " : Unknown Error"
+					        	});					        	
+					        },
+					        complete: function(jqXHR, textStatus) {
+					        	if(resultArr.length == importContainerList.length){
+					        		importContainerList = null;
+					        		
+					        		$('#fileName').val('');
+					        		
+					        		var alertMsg = '';
+					        		
+					        		resultArr.forEach(function(resultObj, idx) {
+					        			alertMsg += ((0 == idx)? '' : '<br/>') + escapeHtml(resultObj.message);
+					        		});
+					        		
+					        		normalAlert({message: alertMsg, isXSSMode: false});
+					        		
+					        		$('#dashModalLarge').find('#closeMigrationBtn').trigger('click');
+					        		
+					        		getContainerList();
+					        	}
+					        },
+					    });	
+					});
+				});
+	        });
+	        
+			$('#dashModalLarge').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+				if(dashModalLargeGrid)
+					dashModalLargeGrid.destroy();
+			});
+		});
+		
 		$("#saveContainerMode").on('click', function() {
     	
 	    	var strHtml = '';
@@ -884,7 +1165,8 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		});
 		
 		$('#evtHistoryListBtn').on('click', function(evt) {
-	    	if (!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
+
+			if (!_this.containerInfo.containerId || '-' == $("#containerList").val()) {
 	    		warnAlert({message : dashboardMsg_selectNoDashboard});
 	    		return;
 	    	};
@@ -1021,8 +1303,6 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 					dashModalLargeGrid.destroy();
 				
 				tmpNoticeDataHistoryList = null;
-				
-				$('#dashModalLarge').modal('dispose');
 			});
 	    	
 			$('#dashModalLarge').modal('show');
@@ -1095,21 +1375,32 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 							targetType += '-';
 						        
 							if('ADAPTER' == childComponent.targetType) {
-								_this.adapterList.forEach(function(adapterInfo) { 
-									if(adapterInfo.adapterId == childComponent.monitorComponentTargets[0].pk.componentTargetId) targetType += adapterInfo.adapterId;
-								});
+								if(0 < childComponent.monitorComponentTargets.length){
+									_this.adapterList.forEach(function(adapterInfo) { 
+										if(adapterInfo.adapterId == childComponent.monitorComponentTargets[0].pk.componentTargetId) targetType += adapterInfo.adapterId;
+									});									
+								}
 							}else if('CONNECTOR' == childComponent.targetType)	{
-								_this.connectorList.forEach(function(connectorInfo) { 
-									if(connectorInfo.connectorId == childComponent.monitorComponentTargets[0].pk.componentTargetId) targetType += connectorInfo.connectorId;
-								});
+								if(0 < childComponent.monitorComponentTargets.length){
+									_this.connectorList.forEach(function(connectorInfo) { 
+										if(connectorInfo.connectorId == childComponent.monitorComponentTargets[0].pk.componentTargetId) 
+											targetType += connectorInfo.connectorId;
+									});									
+								}
 							}else if('QUEUE' == childComponent.targetType) {
-								_this.queueList.forEach(function(queueInfo) { 
-									if(queueInfo.connectorId == childComponent.monitorComponentTargets[0].pk.componentTargetId) targetType += queueInfo.connectorId;
-								});        			
+								if(0 < childComponent.monitorComponentTargets.length){
+									_this.queueList.forEach(function(queueInfo) { 
+										if(queueInfo.connectorId == childComponent.monitorComponentTargets[0].pk.componentTargetId) 
+											targetType += queueInfo.connectorId;
+									});									
+								}
 							}else if('THREAD' == childComponent.targetType) {
-								_this.threadList.forEach(function(threadInfo) { 
-									if(threadInfo.threadPoolId == childComponent.monitorComponentTargets[0].pk.componentTargetId) targetType += threadInfo.threadPoolId;
-								});
+								if(0 < childComponent.monitorComponentTargets.length){
+									_this.threadList.forEach(function(threadInfo) { 
+										if(threadInfo.threadPoolId == childComponent.monitorComponentTargets[0].pk.componentTargetId) 
+											targetType += threadInfo.threadPoolId;
+									});									
+								}
 							}
 						}
 						  
@@ -1513,21 +1804,22 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 							dataObj = null;
     					
 						}else if ('ADAPTER' == component.targetType) {
+							if(0 < component.monitorComponentTargets.length){
+								var recvDataArr = ('IN' == component.inoutType) ? bodyObj.adapter_trafficIn : bodyObj.adapter_trafficOut;
 
-							var recvDataArr = ('IN' == component.inoutType) ? bodyObj.adapter_trafficIn : bodyObj.adapter_trafficOut;
-
-							var dataObj = recvDataArr.filter(function(recvData) {
-								return recvData.adapterId == component.monitorComponentTargets[0].pk.componentTargetId;
-							})[0];
-    					
-							if ("LINE" == component.chartType || "COLUMN" == component.chartType) {
-								seriesArr.forEach(function(seriesId, seriesIndex) {
-									dataArr.push({targetId : seriesId, x : sendTime, y : dataObj[seriesId]});
-								});
+								var dataObj = recvDataArr.filter(function(recvData) {
+									return recvData.adapterId == component.monitorComponentTargets[0].pk.componentTargetId;
+								})[0];
+	    					
+								if ("LINE" == component.chartType || "COLUMN" == component.chartType) {
+									seriesArr.forEach(function(seriesId, seriesIndex) {
+										dataArr.push({targetId : seriesId, x : sendTime, y : dataObj[seriesId]});
+									});
+								}
+							  
+								dataObj = null;
+								recvDataArr = null;								
 							}
-						  
-							dataObj = null;
-							recvDataArr = null;
 						}
 					  
 					}else if ('INSTANCE' == component.targetType) {
@@ -1617,25 +1909,27 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 						
 						if ("SPEEDBAR" == component.chartType) {
 
-							var speedbar_traffic_arr = ('IN' == component.inoutType) ? bodyObj.adapter_trafficIn : bodyObj.adapter_trafficOut;
+							if(0 < component.monitorComponentTargets.length){
+								var speedbar_traffic_arr = ('IN' == component.inoutType) ? bodyObj.adapter_trafficIn : bodyObj.adapter_trafficOut;
 
-							var speedbar_traffic_obj = speedbar_traffic_arr.filter(function(speedbar_traffic_data) {
-								return speedbar_traffic_data.adapterId == component.monitorComponentTargets[0].pk.componentTargetId;
-							})[0];
-    					
-							dataArr.push({
-								rps : speedbar_traffic_obj.rps,
-								tps : speedbar_traffic_obj.tps,
-								tpsShort : speedbar_traffic_obj.tpsShort,
-								tpsMiddle : speedbar_traffic_obj.tpsMiddle,
-								tpsLong : speedbar_traffic_obj.tpsLong,
-								activeShort : speedbar_traffic_obj.activeShort,
-								activeMiddle : speedbar_traffic_obj.activeMiddle,
-								activeLong : speedbar_traffic_obj.activeLong,
-							});
-						  
-							speedbar_traffic_obj = null;
-							speedbar_traffic_arr = null;
+								var speedbar_traffic_obj = speedbar_traffic_arr.filter(function(speedbar_traffic_data) {
+									return speedbar_traffic_data.adapterId == component.monitorComponentTargets[0].pk.componentTargetId;
+								})[0];
+	    					
+								dataArr.push({
+									rps : speedbar_traffic_obj.rps,
+									tps : speedbar_traffic_obj.tps,
+									tpsShort : speedbar_traffic_obj.tpsShort,
+									tpsMiddle : speedbar_traffic_obj.tpsMiddle,
+									tpsLong : speedbar_traffic_obj.tpsLong,
+									activeShort : speedbar_traffic_obj.activeShort,
+									activeMiddle : speedbar_traffic_obj.activeMiddle,
+									activeLong : speedbar_traffic_obj.activeLong,
+								});
+							  
+								speedbar_traffic_obj = null;
+								speedbar_traffic_arr = null;								
+							}
 						  
 						}else if ("DATATABLE" == component.chartType) {
 
@@ -1664,7 +1958,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 					  
 					}else if ('THREAD' == component.targetType) {
 						if ("THREAD" == component.chartType) {
-							if (bodyObj.thread) {
+							if (bodyObj.thread && 0 < component.monitorComponentTargets.length) {
 								bodyObj.thread[component.monitorComponentTargets[0].pk.componentTargetId].forEach(function(data) {
 									dataArr.push({status : data.status, threadActive : data.threadActive, threadIdle : data.threadIdle, instanceId : data.instanceId});
 								});
@@ -1673,7 +1967,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 					}else if ('CONNECTOR' == component.targetType) {
 
 						if ("CONNECTOR" == component.chartType) {
-							if (bodyObj.connector) {
+							if (bodyObj.connector && 0 < component.monitorComponentTargets.length) {
 								bodyObj.connector[component.monitorComponentTargets[0].pk.componentTargetId].forEach(function(data) {
 									dataArr.push({
 										instanceId : data.instanceId,
@@ -1695,7 +1989,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 					  
 					}else if ('QUEUE' == component.targetType) {
 						if ("QUEUE" == component.chartType) { 
-							if (bodyObj.queue) {
+							if (bodyObj.queue && 0 < component.monitorComponentTargets.length) {
 								bodyObj.queue[component.monitorComponentTargets[0].pk.componentTargetId].forEach(function(data) {
 									dataArr.push({
 										instanceId : data.instanceId,
@@ -2169,16 +2463,6 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	  
 		$('#dashModal').on('hidden.bs.modal', function() {
 			$('#dashModal').remove();
-			
-			var dashContainerOption = {mod : mod};
-			  
-			if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
-	    
-			if (pDashContainerOption) {
-				dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
-			}
-		  
-			$(dashContainerElement).dashContainer(dashContainerOption);			
 		});
 		$('#dashModal').modal('hide');
 
@@ -2188,18 +2472,16 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		$('#dashModalLarge').modal('hide');
 		
 		$("#noticeArea").remove();
-	  
-		if('none' == $('#dashModal').css('display')){
-			var dashContainerOption = {mod : mod};
-			  
-			if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
-	    
-			if (pDashContainerOption) {
-				dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
-			}
+		
+		var dashContainerOption = {mod : mod};
 		  
-			$(dashContainerElement).dashContainer(dashContainerOption);			
+		if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
+    
+		if (pDashContainerOption) {
+			dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
 		}
+	  
+		$(dashContainerElement).dashContainer(dashContainerOption);			
 	}
   
 	function unloadContainer() {

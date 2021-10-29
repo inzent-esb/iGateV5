@@ -122,9 +122,38 @@ $(document).ready(function() {
 	   	        	  	$("[name=searchType]").val(this.object.searchType);
 	   	        	  	$("[name=pk\\.adapterId]").val(this.object.pk.adapterId);
 
-	   	        	  	var popup = window.open("", "hiddenframe", "toolbar=no, width=0, height=0, directories=no, status=no,    scrollorbars=no, resizable=no") ;
-	   	        	  	myForm.target = "hiddenframe";
-	   	        	  	myForm.submit();
+	   	        		var data = new FormData(myForm);
+
+		   				startSpinner();
+		   				
+		   				var req = new XMLHttpRequest();
+		   				req.open("POST", "<c:url value='/igate/logStatistics/generateExcelAdapter.json' />", true);
+		   				
+		   				req.setRequestHeader('X-CSRF-TOKEN', myForm.elements._csrf.value);
+		   				req.responseType = "blob";
+		   				req.send(data);
+		   				    	  
+		   				req.onload = function (event) {
+		   					stopSpinner();
+		   					var blob = req.response;
+		   					var file_name = "<fmt:message>igate.logStatistics.adapterStatistics</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
+		   					
+		   					if(blob.size <= 0){
+		   						warnAlert({message : "<fmt:message>igate.sap.error</fmt:message>"}) ;
+		   	     			return;
+		   					}
+		   					
+		   					if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+		   				        window.navigator.msSaveOrOpenBlob(blob, file_name);
+		   				    } else {
+		   						var link=document.createElement('a');
+		   						link.href=window.URL.createObjectURL(blob);
+		   						link.download=file_name;
+		   						link.click();
+		   						URL.revokeObjectURL(link.href)
+		   				        link.remove();
+		   				    }
+		   				};
 	   	        	}
 		    	},
 	      		created : function(){

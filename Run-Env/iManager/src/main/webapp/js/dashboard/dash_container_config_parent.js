@@ -1214,25 +1214,25 @@ function DashContainerConfigParent() {
 	    	    			detailInfoHtml += '';
 	    	    		}else if('INSTANCE' != childComponent.targetType) {
 	
-	        		        detailInfoHtml += '				<select name="selectedTarget" class="form-control" title="' + escapeHtml(childComponent.monitorComponentTargets[0].pk.componentTargetId) + '">';
+	        		        detailInfoHtml += '				<select name="selectedTarget" class="form-control" title="' + (0 < childComponent.monitorComponentTargets.length? escapeHtml(childComponent.monitorComponentTargets[0].pk.componentTargetId) : '') + '">';
 	        		        
 	                		if('ADAPTER' == childComponent.targetType) {
 	                			_this.adapterList.forEach(function(adapterInfo) { 
-	                				detailInfoHtml += '			<option value="' + adapterInfo.adapterId + '"  ' + ((adapterInfo.adapterId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(adapterInfo.adapterId) + '</option>';
+	                				detailInfoHtml += '			<option value="' + adapterInfo.adapterId + '"  ' + ((0 < childComponent.monitorComponentTargets.length && adapterInfo.adapterId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(adapterInfo.adapterId) + '</option>';
 	                			});
 	                		}else if('CONNECTOR' == childComponent.targetType)	{
 	                			_this.connectorList.forEach(function(connectorInfo) { 
-	                				detailInfoHtml += '			<option value="' + connectorInfo.connectorId + '"  ' + ((connectorInfo.connectorId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(connectorInfo.connectorId) + '</option>';
+	                				detailInfoHtml += '			<option value="' + connectorInfo.connectorId + '"  ' + ((0 < childComponent.monitorComponentTargets.length && connectorInfo.connectorId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(connectorInfo.connectorId) + '</option>';
 	                			});
 	                		}
 	                		else if('QUEUE' == childComponent.targetType) {
 	                			_this.queueList.forEach(function(queueInfo) { 
-	                				detailInfoHtml += '			<option value="' + queueInfo.adapterId + '"  ' + ((queueInfo.adapterId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(queueInfo.adapterId) + '</option>';
+	                				detailInfoHtml += '			<option value="' + queueInfo.adapterId + '"  ' + ((0 < childComponent.monitorComponentTargets.length && queueInfo.adapterId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(queueInfo.adapterId) + '</option>';
 	                			});        			
 	                		}
 	                		else if('THREAD' == childComponent.targetType) {
 	                			_this.threadList.forEach(function(threadInfo) { 
-	                				detailInfoHtml += '			<option value="' + threadInfo.threadPoolId + '"  ' + ((threadInfo.threadPoolId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(threadInfo.threadPoolId) + '</option>';
+	                				detailInfoHtml += '			<option value="' + threadInfo.threadPoolId + '"  ' + ((0 < childComponent.monitorComponentTargets.length && threadInfo.threadPoolId == childComponent.monitorComponentTargets[0].pk.componentTargetId)? 'selected' : '') + ' >' + escapeHtml(threadInfo.threadPoolId) + '</option>';
 	                			});
 	                		}        		        
 	        		        

@@ -70,8 +70,17 @@ function getCreatePageObj()
 
     this.searchConstructor = function(isHidePageSize, callBackFunc)
     {
-
-      var beforeSelector = $('#' + this.getElementId('ImngSearchObject')).find('#list-select') ;
+      var startSearchExpandCnt = 5 ;
+      var isNeedExtension = startSearchExpandCnt < (searchList.length + (isHidePageSize? 0 : 1) + searchList.filter(function(searchInfo) { return 'daterange' == searchInfo.type && 1 < searchInfo.mappingDataInfo.daterangeInfo.length }).length) ;
+      
+      var searchRootSelector = $('#' + this.getElementId('ImngSearchObject')) ;
+      
+      if(isNeedExtension)
+        searchRootSelector.find('.toggleSearchExpandBtn').show() ;
+      else
+        searchRootSelector.find('.toggleSearchExpandBtn').hide() ;
+        
+      var beforeSelector = searchRootSelector.find('#list-select') ;
 
       searchList.forEach(function(searchInfo, index)
       {
@@ -220,9 +229,22 @@ function getCreatePageObj()
             'v-text' : mappingDataInfo.dataListText
           })))))
         }
+
+    	if(isNeedExtension)
+    	{
+    	  while(true)
+    	  {
+    	    if(startSearchExpandCnt >= searchRootSelector.find('#list-select').prevAll('.col').length)
+    	    {
+    	      break;
+    	    }
+    	    
+    	    searchRootSelector.find('.toggleSearchExpandArea').children('.filter').find('.col-auto').before(beforeSelector.prev());
+    	  }
+    	}
         
         if(searchInfo.isShowFlagDataName)
-        	beforeSelector.parent().find('.col').first().attr({'v-if': searchInfo.isShowFlagDataName});
+        	beforeSelector.prev().attr({'v-if': searchInfo.isShowFlagDataName});
         
         if(callBackFunc)
         	callBackFunc() ;
@@ -230,7 +252,14 @@ function getCreatePageObj()
 
       if (isHidePageSize)
       {
-        $('#' + this.getElementId('ImngSearchObject')).find('#list-select').remove() ;
+        searchRootSelector.find('#list-select').remove() ;
+      }
+      else
+      {
+        if(isNeedExtension)
+        {
+          searchRootSelector.find('.toggleSearchExpandArea').children('.filter').find('.col-auto').before(searchRootSelector.find('#list-select'));        	
+        }
       }
 
       $("#panel").find('.nav-tabs').off('click').on('click', function(evt)

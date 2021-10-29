@@ -258,6 +258,14 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			
 			//Exception Stack
 			values = data.getExceptionStack();
+			
+			/* ===Excel의 한 field에 들어갈 수 있는 글자수는 32,767이므로 이가 넘어가는 값이 있다면 사용=== */
+			//뒤에서 32000자 자르기 (Caused by 보기 용)
+			if(values.length() > 32000) values = values.substring(values.length()-32000, values.length());
+			// 앞에서 32000자 자르기
+			//if(values.length() > 32000) values = values.substring(0, 32000);
+			/* ====================================================================== */
+			
 			cell = row.createCell(c += 1);
 			cell.setCellValue(values);
 			

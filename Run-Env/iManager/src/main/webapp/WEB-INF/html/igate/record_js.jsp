@@ -393,7 +393,7 @@ $(document).ready(function() {
             }
             
 			var recordProperties = this.object.recordOptions.split(',');
-      		
+      					
       		window.vmRecordProperties.recordProperties = recordProperties.map(function(recordProperty) {
       			
       			var property = recordProperty.split('=');
@@ -402,8 +402,13 @@ $(document).ready(function() {
       			obj.propertyKey = property[0];
       			obj.propertyValue = property[1];
       			
+      			if(this.recordProperties[0].pk.propertyKey === obj.propertyKey) {
+      				obj.propertyDesc = this.recordProperties[0].propertyDesc;   	
+      			}
+      			
       			return obj; 
-      		});
+      			
+      		}.bind(this));
     	},
         goDetailPanel : function()
         {
