@@ -83,7 +83,9 @@
 
 	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
 
-	<bean id="messageSource" class="com.inzent.igate.util.message.MessageSource" />
+	<bean id="messageSource" class="com.inzent.igate.util.message.MessageSource">
+		<property name="caching" value="false" />
+	</bean>
 
 	<bean class="com.inzent.imanager.message.MessageGenerator" />
 
