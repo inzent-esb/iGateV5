@@ -861,7 +861,8 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
         cell = row.getCell(15) ;
         if (Objects.equals("Y", getStringNumericValue(cell)))
         {
-          subRecord.setRecordId(getStringNumericValue(row.getCell(16))) ;
+          String recordID = getStringNumericValue(row.getCell(16)) ;
+          subRecord.setRecordId(recordID) ;
 
           try
           {
@@ -873,6 +874,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
           }
 
           subRecord.setRecordType(Record.TYPE_REFER) ;
+          field.setSubRecordId(recordID) ;
         }
         else
           subRecord.setRecordType(Record.TYPE_EMBED) ;

@@ -20,6 +20,13 @@
 	</div>
 </span>
 
+<form name="popForm" action="${pageContext.request.contextPath}/igate/traceLog/exportExcel.json" method="post">
+	<iframe width=0 height=0 type="hidden" name='hiddenframe' value="openPop" style='display: none;'></iframe>
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<div id="popFormInputs">
+	</div>
+</form>
+
 <div id="traceLog-panel" style="display : none;">
 	<section class="tab-section">
 		<header class="sub-bar">

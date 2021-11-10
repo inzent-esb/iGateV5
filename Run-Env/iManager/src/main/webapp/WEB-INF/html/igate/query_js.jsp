@@ -252,7 +252,11 @@
 	            window.vmResouceInUse.object.updateTimestamp = this.object.updateTimestamp;
     		},
         	goDetailPanel : function() {
-        		panelOpen('detail');
+        		panelOpen('detail', null, function() {
+        			$('.underlineTxt').each(function(index, element) {
+                		$(element).parent().css('cursor', ($(element).val().length < 1? 'auto' : 'pointer'));
+                	});
+        		});
         	},
         	initDetailArea : function(object) {        	
 	          	if (object) {  
@@ -277,7 +281,9 @@
 	              	window.vmResouceInUse.object.updateTimestamp = null;
 	          	}
         	},
-        	clickRecord : function(param) {        	
+        	clickRecord : function(param) {   
+        		if(!param) return;
+        		
         		localStorage.setItem('selectedMessageModel', JSON.stringify({recordId : param})) ;
 				window.open("<c:url value='/igate/record.html' />") ;
         	}

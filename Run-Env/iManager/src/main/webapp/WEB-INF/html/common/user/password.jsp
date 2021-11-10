@@ -63,6 +63,11 @@ function passwordValidation() {
 		$("#warnAlert-text").text('<fmt:message>common.password.noPassword</fmt:message>')
 		$("#alert").modal('show');
 	}else {
+		$('[name=passwordOld]').val(encryptPassword($('[name=passwordOld]').val()));
+		$('[name=passwordNew]').val(encryptPassword($('[name=passwordNew]').val()));
+		
+		startSpinner('full');
+		
 		$('#passwordForm').submit() ;
 	}
 }

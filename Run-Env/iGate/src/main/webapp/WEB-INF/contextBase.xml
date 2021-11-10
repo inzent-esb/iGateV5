@@ -124,6 +124,6 @@
 
 	<bean class="com.inzent.imanager.message.MessageGenerator" />
 
-	<bean id="iGateInstance" class="com.inzent.igate.context.IGateInstance" />
+	<bean id="iGateInstance" class="com.inzent.igate.context.IGateRuntimeInstance" />
 	
 </beans>

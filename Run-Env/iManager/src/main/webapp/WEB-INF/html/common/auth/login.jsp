@@ -24,7 +24,7 @@ $(document).ready(function() {
     </c:if>
 
     <c:if test="${(not empty error) and (not empty passwordUrl)}">
-      location.href = '<c:url value="${passwordUrl}" />' ;	
+      location.href = contextPath + unescapeHtml('<c:out value="${passwordUrl}" />');
     </c:if>
 
     initEventBind();
@@ -62,6 +62,10 @@ function login() {
 		localStorage.removeItem('ckSaveUserId');
 		localStorage.removeItem('saveUserId');		
 	}
+	
+	$('[name=password]').val(encryptPassword($('[name=password]').val()));
+	
+	startSpinner('full');
 	
 	$('#loginForm')[0].submit();
 }

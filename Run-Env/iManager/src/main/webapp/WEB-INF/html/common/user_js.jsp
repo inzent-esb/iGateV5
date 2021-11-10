@@ -73,7 +73,7 @@ $(document).ready(function() {
 					'detailSubList': [
 						{'type': "select", 'mappingDataInfo': {'selectModel': 'object.userDisableYn', 'optionFor': 'option in disableYns', 'optionValue': 'option.pk.propertyKey', 'optionText': 'option.propertyValue'}, 'name': "<fmt:message>common.user.disable</fmt:message>", 'disabled' : isDisabled},
 						{'type': "text", 'mappingDataInfo': 'object.loginIp', 'name': "<fmt:message>common.user.loginIp</fmt:message>",'disabled' : true},
-						{'type': "password", 'mappingDataInfo': 'object.passwordNew', 'name': "<fmt:message>common.user.newPassword</fmt:message>", 'cryptType': 'cryptType','disabled' : isDisabled},
+						{'type': "password", 'mappingDataInfo': 'object.password', 'name': "<fmt:message>common.user.newPassword</fmt:message>", 'cryptType': 'cryptType','disabled' : isDisabled},
 					]
 				},
 				{
@@ -294,7 +294,8 @@ $(document).ready(function() {
         			this.object[key] = window.vmAuthentication.object[key];
         		}
         		
-        		this.object.password = window.vmAuthentication.object.passwordNew;
+        		this.object.passwordNew = encryptPassword(window.vmAuthentication.object.password);
+        		window.vmAuthentication.object.password = null;
         	},
         	initDetailArea: function(object) {
         		
@@ -346,7 +347,7 @@ $(document).ready(function() {
     		object : {
 				userDisableYn : null,
 				userExpiration : null,
-				passwordNew : null,
+				password : null,
 				passwordExpiration : null,
 				loginIp : null,
 				loginAttempts : null,
@@ -467,7 +468,7 @@ $(document).ready(function() {
 	new Vue({
 		el: '#panel-footer',
 		methods : $.extend(true, {}, panelMethodOption, {
-			updateInfo: function() {
+			setInfo: function(_method) {
 				var vmMain = window.vmMain;
 			    var object = vmMain.object;
 			    
@@ -479,10 +480,11 @@ $(document).ready(function() {
 
 			    vmMain.saving();
 			    
-			    object._method = "POST";
+			    object._method = _method;
 
-			    SaveImngObj.submit(SaveImngObj.objectUri, JsonImngObj.serialize(object), '<fmt:message>head.update.notice</fmt:message>', function(result) {
-	                
+			    var message = 'PUT' == _method? '<fmt:message>head.insert.notice</fmt:message>' : '<fmt:message>head.update.notice</fmt:message>';
+			    		
+			    SaveImngObj.submit(SaveImngObj.objectUri, JsonImngObj.serialize(object), message, function(result) {
 			    	startSpinner();
 	                
 	                $.ajax({
@@ -495,7 +497,13 @@ $(document).ready(function() {
 	                      stopSpinner();
 	                   }
 	                })
-			    });
+			    });				
+			},
+			saveInfo: function() {
+				this.setInfo('PUT');
+			},
+			updateInfo: function() {
+				this.setInfo('POST');
 			}
 		})
 	});

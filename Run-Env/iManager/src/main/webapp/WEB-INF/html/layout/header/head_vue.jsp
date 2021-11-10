@@ -43,6 +43,7 @@
 <script type="text/javascript" src="<c:url value='/js/imanager_vue.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/cytoscape.min.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/xml2json.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/aes.js' />"></script>
 
 <%@ include file="authorize_js.jsp"%>
 <%@ include file="fmt_message_js.jsp"%>

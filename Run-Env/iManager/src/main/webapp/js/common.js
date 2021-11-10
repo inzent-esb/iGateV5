@@ -340,3 +340,23 @@ function escapeHtml(text) {
 function unescapeHtml(text) {
 	return $('<span />').html(text).text();
 }
+
+function encryptPassword(password) {
+	if(!password) return null;
+	
+	var key = (function() {
+		var characters ='ABCDEF0123456789';
+		
+	    var result = '';
+	    
+	    for (var i = 0; i < 32; i++) {
+	        result += characters.charAt(Math.floor(Math.random() * characters.length));
+	    }
+
+	    return result;
+    })();	
+	
+	var encrypt = CryptoJS.AES.encrypt(password, CryptoJS.enc.Hex.parse(key), { iv: CryptoJS.enc.Hex.parse(key) });
+	
+	return '{jst}' + btoa(key + encrypt.toString());
+}

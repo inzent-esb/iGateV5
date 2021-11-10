@@ -369,6 +369,11 @@
             		$("#panel").find("[data-target='#panel']").trigger('click') ;
                 	$("#panel").find('#panel-header').find('.ml-auto').remove() ; 
             	}
+        		
+    			$('.underlineTxt').each(function(index, element) {
+            		$(element).parent().css('cursor', ($(element).val().length < 1? 'auto' : 'pointer'));
+            	});
+    			
         	}.bind(this));
         },
         initDetailArea : function(object) {
@@ -398,11 +403,15 @@
               window.vmResouceInUse.object.updateTimestamp = null;
           }
         },
-        clickOperation : function(param) {
+        clickOperation : function(param) {        	
+        	if(!param) return;
+     
         	localStorage.setItem('selectedOperation', JSON.stringify({operationId : param})) ;
             window.open("<c:url value='/igate/operation.html' />") ;
         },
-        clickRecord : function(param) {        	
+        clickRecord : function(param) {       
+        	if(!param) return;
+        	
         	localStorage.setItem('selectedMessageModel', JSON.stringify({recordId : param})) ;
 			window.open("<c:url value='/igate/record.html' />") ;
         },

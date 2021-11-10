@@ -11,7 +11,19 @@ $(document).ready(function(){
 	createPageObj.setViewName('service');
 	createPageObj.setIsModal(false);
 	
-	createPageObj.setSearchList([{   
+	createPageObj.setSearchList([{
+			'type': "select", 
+			'mappingDataInfo': {
+				'selectModel': "object.searchType",
+				'optionFor': 'option in dailyTimes',
+				'optionValue': 'option.pk.propertyKey',
+				'optionText': 'option.propertyValue',
+				'id': 'dailyTimes'
+			},			
+			'name': "<fmt:message>igate.logStatistics.searchType</fmt:message>",
+			'isHideAllOption' : true
+		},
+		{   
 		   'type' : "daterange",
 	       'mappingDataInfo': {
 	        	'daterangeInfo': [
@@ -32,18 +44,6 @@ $(document).ready(function(){
 			'name': "<fmt:message>igate.logStatistics.classification</fmt:message>", 
 			'placeholder': "<fmt:message>head.all</fmt:message>"
 		},
-		{
-			'type': "select", 
-  			'mappingDataInfo': {
-  				'selectModel': "object.searchType",
-  				'optionFor': 'option in dailyTimes',
-  				'optionValue': 'option.pk.propertyKey',
-  				'optionText': 'option.propertyValue',
-  				'id': 'dailyTimes'
-  			},			
-			'name': "<fmt:message>igate.logStatistics.searchType</fmt:message>",
-			'isHideAllOption' : true
-		},
 		{'type': "modal", 'mappingDataInfo': {'url' : '/igate/service.html', 'modalTitle': '<fmt:message>igate.service</fmt:message>', 'modalTitle': '<fmt:message>igate.service</fmt:message>', 'vModel': "object.pk.interfaceServiceId", 'callBackFuncName': 'setSearchServiceId'}, 'name': "<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>", 'placeholder': "<fmt:message>head.searchId</fmt:message>"},
 	]);
 	
@@ -57,7 +57,7 @@ $(document).ready(function(){
 	
 	createPageObj.mainConstructor();
 	
-	$("#" + createPageObj.getElementId('ImngListObject')).find('.table-responsive').before($("#logStatisticsSummary").show());
+	$("#" + createPageObj.getElementId('ImngListObject')).find('.table-responsive').before($("#logStatisticsSummary"));
 	
 	PropertyImngObj.getProperties('List.LogStats.service.statsDataTypes', false, function(pstatsDataTypes){
     	
@@ -83,6 +83,8 @@ $(document).ready(function(){
 		      	methods: {
 	   				search : function() {
 	   					vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
+	   					
+	   					$("#logStatisticsSummary").show();
 	   					
 	   					vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
 	   					

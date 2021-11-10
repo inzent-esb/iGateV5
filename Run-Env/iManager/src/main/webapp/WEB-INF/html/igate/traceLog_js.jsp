@@ -137,6 +137,7 @@
 
     createPageObj.setMainButtonList({
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
+      downloadBtn : true,
       searchInitBtn : true,
     }) ;
 
@@ -307,6 +308,135 @@
               window.vmSearch.initSearchArea() ;
               this.$forceUpdate();
             },
+            downloadFile : function()
+            {
+            	var myForm = document.popForm;
+    			var ipt = null;
+            	var inputs = document.getElementById("popFormInputs");
+            	
+            	while ( inputs.hasChildNodes() ) { inputs.removeChild( inputs.firstChild ); }
+            	
+            	if(window.vmSearch.object.fromLogDateTime){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="fromLogDateTime";
+            		ipt.value=window.vmSearch.object.fromLogDateTime;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.toLogDateTime){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="toLogDateTime";
+            		ipt.value=window.vmSearch.object.toLogDateTime;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.adapterId){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="adapterId";
+            		ipt.value=window.vmSearch.object.adapterId;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.connectorId){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="connectorId";
+            		ipt.value=window.vmSearch.object.connectorId;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.interfaceId){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="interfaceId";
+            		ipt.value=window.vmSearch.object.interfaceId;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.serviceId){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="serviceId";
+            		ipt.value=window.vmSearch.object.serviceId;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.transactionId){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="transactionId";
+            		ipt.value=window.vmSearch.object.transactionId;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.remoteAddr){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="remoteAddr";
+            		ipt.value=window.vmSearch.object.remoteAddr;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.logCode){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="logCode";
+            		ipt.value=window.vmSearch.object.logCode;
+            		inputs.appendChild(ipt);
+            	}
+
+            	if(window.vmSearch.object.instanceId){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="instanceId";
+            		ipt.value=window.vmSearch.object.instanceId;
+            		inputs.appendChild(ipt);
+            	}
+            	
+            	if(window.vmSearch.object.timeoutYn){
+            		ipt = document.createElement("input");
+            		ipt.type="hidden";
+            		ipt.name="timeoutYn";
+            		ipt.value=window.vmSearch.object.timeoutYn;
+            		inputs.appendChild(ipt);
+            	}
+            	
+    			var data = new FormData(myForm);
+
+    			startSpinner();
+    			
+    			var req = new XMLHttpRequest();
+    			req.open("POST", "<c:url value='/igate/traceLog/exportExcel.json' />", true);
+    			
+    			req.setRequestHeader('X-CSRF-TOKEN', myForm.elements._csrf.value);
+    			req.responseType = "blob";
+    			req.send(data);
+    			    	  
+    			req.onload = function (event) {
+    				stopSpinner();
+    				var blob = req.response;
+    				var file_name = "<fmt:message>igate.traceLog</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
+    				
+    				if(blob.size <= 0  || event.target.status != "200"){
+    					warnAlert({message : "<fmt:message>igate.sap.error</fmt:message>"}) ;
+            			return;
+    				}
+    				
+    				if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    			        window.navigator.msSaveOrOpenBlob(blob, file_name);
+    			    } else {
+    					var link=document.createElement('a');
+    					link.href=window.URL.createObjectURL(blob);
+    					link.download=file_name;
+    					link.click();
+    					URL.revokeObjectURL(link.href)
+    			        link.remove();
+    			    }
+    			};
+            }
           }),
           mounted : function()
           {
@@ -400,6 +530,7 @@
                 logDateTime : '',
                 logId : ''
               },
+              selectedTraceSearch : null,
             },
             panelMode : null,
             treeGrid : null,
@@ -529,6 +660,13 @@
            		  _this.makebasicInfoGridObj.getSearchGrid().setWidth($('#panel').find('.panel-body').width()) ;
            	  }, 350);
             }) ;
+            
+            if(localStorage.getItem('selectedTraceSearch')){
+        	  this.selectedTraceSearch = JSON.parse(localStorage.getItem('selectedTraceSearch'));
+        	  localStorage.removeItem('selectedTraceSearch');
+        	  window.vmSearch.object.transactionId = this.selectedTraceSearch.transactionId;
+        	  window.vmSearch.search() ;
+          }
           },
           mounted : function()
           {

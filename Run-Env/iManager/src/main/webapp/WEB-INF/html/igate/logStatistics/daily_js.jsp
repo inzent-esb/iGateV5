@@ -12,6 +12,18 @@ $(document).ready(function() {
 	createPageObj.setIsModal(false);
 	
 	createPageObj.setSearchList([{
+			'type': "select", 
+			'mappingDataInfo': {
+				'selectModel': "object.searchType",
+				'optionFor': 'option in dailyTimes',
+				'optionValue': 'option.pk.propertyKey',
+				'optionText': 'option.propertyValue',
+				'id': 'dailyTimes'
+			},			
+			'name': "<fmt:message>igate.logStatistics.searchType</fmt:message>", 
+			'isHideAllOption' : true
+		},
+		{
 	       'type' : "daterange",
 	       'mappingDataInfo': {
 	        	'daterangeInfo': [
@@ -31,19 +43,7 @@ $(document).ready(function() {
   			},
 			'name': "<fmt:message>igate.logStatistics.classification</fmt:message>", 
 			'placeholder': "<fmt:message>head.all</fmt:message>"
-		},
-		{
-			'type': "select", 
-  			'mappingDataInfo': {
-  				'selectModel': "object.searchType",
-  				'optionFor': 'option in dailyTimes',
-  				'optionValue': 'option.pk.propertyKey',
-  				'optionText': 'option.propertyValue',
-  				'id': 'dailyTimes'
-  			},			
-			'name': "<fmt:message>igate.logStatistics.searchType</fmt:message>", 
-			'isHideAllOption' : true
-		}		
+		}
 	]);
 	
 	createPageObj.searchConstructor();
@@ -56,7 +56,7 @@ $(document).ready(function() {
 	
 	createPageObj.mainConstructor();
 	
-	$("#" + createPageObj.getElementId('ImngListObject')).find('.table-responsive').before($("#logStatisticsSummary").show());
+	$("#" + createPageObj.getElementId('ImngListObject')).find('.table-responsive').before($("#logStatisticsSummary"));
 	
 	PropertyImngObj.getProperties('List.LogStats.statsDataTypes', false, function(pstatsDataTypes){
 		
@@ -77,9 +77,10 @@ $(document).ready(function() {
      		        statsTypes : []
      		    },
 			 	methods : {
-			 		
 					search : function() {
 						vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
+						
+						$("#logStatisticsSummary").show();
 						
 						vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
 						

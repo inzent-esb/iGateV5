@@ -143,8 +143,8 @@
               object[key] = window[name][key] ;
           }
 
-          object.passwordNew = passwordObj.passwordNew ;
-          object.passwordOld = passwordObj.passwordOld ;
+          object.passwordNew = encryptPassword(passwordObj.passwordNew) ;
+          object.passwordOld = encryptPassword(passwordObj.passwordOld) ;
           
           startSpinner() ;
 
