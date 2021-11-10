@@ -188,7 +188,7 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
     }
 
     Operation operation = new Operation() ;
-
+    
     try
     {
       Document document ;
@@ -199,7 +199,7 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
       }
 
       Element element = document.getRootElement() ;
-
+      
       operation.setOperationId(StringUtils.defaultString(element.attributeValue(OperationNode.XML_ATTRIBUTE_ID))) ;  // operationId
       operation.setOperationType(StringUtils.defaultString(element.attributeValue(OperationNode.XML_ATTRIBUTE_TYPE, operation.getOperationId())).charAt(0)) ; // operationType
       operation.setOperationName(StringUtils.defaultString(element.attributeValue(OperationNode.XML_ATTRIBUTE_NAME))) ; // operationName
@@ -256,6 +256,7 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
         writer.flush() ;
 
         operation.setOperationRule(out.toByteArray()) ;
+        operation.setOperationRuleDirty(true) ;
       }
 
       // ======================================================================================================
