@@ -33,7 +33,7 @@
 .graph-vs .progress{height: calc(100% - .625rem);margin: 0 .75rem}
 .gate-row{display: flex;flex-wrap: wrap;align-items: center;height: 3.6rem}
 .gate-row+.gate-row{margin-top: .375rem}
-.gate{font-size: 1.1em;line-height: .82rem;width: 3.413em;white-space: nowrap; margin-top: .125rem; margin-right: .625rem; }
+.gate{font-size: 1.1em;line-height: .82rem;width: 5.413em;white-space: nowrap; margin-top: .125rem; margin-right: .625rem; }
 .gate .status, .label .status{display: inline-block;margin-right: .25rem;vertical-align: middle;min-width: .68rem;height: .68rem;;border-radius: 1px; margin-top: 1px; }
 .gate .status { margin-top: -.2em; }
 .gate .t-xs{opacity: .7; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 4.2em; }
@@ -487,4 +487,16 @@
 
 .dark .addAreaHover {
 	background-color: rgba(236, 237, 242, 0.8);
+}
+
+.graph-caption .iconb-warn {
+	width: 0.925rem;
+	height: 0.925rem;
+	margin-left: 0.25rem;
+}
+
+.gate .iconb-warn {
+	width: 0.68rem;
+	height: 0.68rem;
+	margin-top: -2px;
 }

@@ -3,8 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div id="ImngListObject" class="ct-content">
-
 	<div class="sub-bar">
+        <div id="totalCount" class="form-inline m-full" showLater="true" style="display: none;">
+        	<fmt:message key="head.totalCount"><fmt:param value="{{ totalCount }}" /></fmt:message>
+        </div>
 		<div class="ml-auto form-inline m-full">
 			<a id="newTabBtn" href="javascript:void(0);" class="btn btn-m" v-on:click="goNewTab" style="display: none;"><i class="icon-info"></i><span class="hide"><fmt:message>common.open.new.tab</fmt:message></span></a>
 			<span id="timerRange">

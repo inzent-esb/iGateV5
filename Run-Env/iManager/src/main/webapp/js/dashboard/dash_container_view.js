@@ -303,13 +303,17 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	    	}
 
 	    	var strHtml = '';
-
-	    	strHtml += '<div class="modal-header">';
+	        strHtml += '<div class="modal-header">';
 	        strHtml += '    <h2 class="modal-title">'+ dashboardBtn_share +'</h2>';
 	        strHtml += '    <button type="button" class="btn-icon" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>';
 	        strHtml += '</div>';
 	        strHtml += '<div class="modal-body py-0">';
-	        strHtml += '    <ul id="shareUserList" class="list-group list-group-flush list-profile overflow-y" style="max-height: 250px"></ul>';
+	        strHtml += '	<div class="sub-bar" style="padding-top: 0px;">';
+	        strHtml += '		<div class="form-inline m-full" style="width: 100%">';
+	        strHtml += '			<input id="searchShareUser" type="text" class="form-control input-search" placeholder="'+ dashboardMsg_shareSearch +'" autocomplete="off" style="width: 100%">';
+	        strHtml += '		</div>';
+	        strHtml += '	</div>';
+	        strHtml += '	<div id="shareUserListGrid"></div>';
 	        strHtml += '</div>';
 	        strHtml += '<div class="modal-footer">';
 	        strHtml += '    <button type="button" id="closeShareBtn" class="btn" data-dismiss="modal">'+ cancelBtn +'</button>';
@@ -319,43 +323,153 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	        $('#dashModal').find('.modal-content').empty();
 	        $('#dashModal').find('.modal-content').append($(strHtml));
 	        $('#dashModal').modal('show');
-        
-	        $.ajax({
-	        	type : 'GET',
-	        	url : contextPath + '/igate/monitoring/dashboard/user.json',
-	        	data : {
-	        		containerId : _this.containerInfo.containerId
-	        	},
-	        	dataType : "json",
-	        	success : function(res) {
-	        		if ('ok' != res.result) return;
+	        
+	        var shareUserListGrid = null;
+	        
+	        $('#dashModal').off('shown.bs.modal').on('shown.bs.modal', function() {
+				var settings = {
+					el : document.getElementById('shareUserListGrid'),
+					bodyHeight: 200,
+					rowHeaders: ['checkbox'],
+					columns : [
+						{
+							name : 'userId', 
+							header : dashboardMsg_shareUserId, 
+							formatter: function(info) {
+								return escapeHtml(info.row.userId);
+							}
+						},
+					],
+					columnOptions : {
+						hidden: true,
+					},
+					pageOptions: {
+						useClient: true,
+						type: 'scroll',
+						perPage: 10
+				   },
+					usageStatistics : false,
+					header: {
+						height: 32,
+						align: 'center'
+					},
+					onGridMounted : function() {
+			        	var resetColumnWidths = [];
+			        	
+			        	shareUserListGrid.getColumns().forEach(function(columnInfo) {
+			        		if(!columnInfo.copyOptions) return;
 
-	        		var allUserList = res.object.allUserList;
-	        		var registerDashUserList = res.object.registerDashUserList;
-	          
-	        		allUserList.forEach(function(userInfo) {
-	            
-	        			var isRegisterUser = 0 < registerDashUserList.filter(function(registerDashUser) { return registerDashUser.pk.containerUserId == userInfo.userId }).length;
-	        			
-	        			var userHtml = '';
+			        		if(columnInfo.copyOptions.widthRatio) {
+			        			resetColumnWidths.push($('#shareUserListGrid').width() * (columnInfo.copyOptions.widthRatio / 100));
+			        		}
+			        	});
+			        	
+			        	if(0 < resetColumnWidths.length)
+			        		shareUserListGrid.resetColumnWidths(resetColumnWidths);
+			        	
+			        	$('#shareUserListGrid').find('.tui-grid-column-resize-handle').removeAttr('title');	        	
+			        },				
+			    	scrollX: false,
+			    	scrollY: true,
+				};
+				
+				settings.columns.forEach(function(column) {
+					if(!column.formatter) 
+						column.escapeHTML = true;  
 
-	        			userHtml += '<li class="list-group-item">';
-	        			userHtml += '   <i class="icon-profile"></i>';
-			            userHtml += '   <span class="profile-name">' + escapeHtml(userInfo.userId) + '</span>';
-			            userHtml += '   <label class="custom-control custom-switch custom-switch-sm">';
-			            userHtml += '       <input type="checkbox" name="userCk" value="' + escapeHtml(userInfo.userId) + '" class="custom-control-input" ' + ((isRegisterUser) ? 'checked' : '') + '  >';
-			            userHtml += '       <span class="custom-control-label" data-off="'+ dashboardLabel_shareOff +'" data-on="'+ dashboardLabel_shareOn +'"></span>';
-			            userHtml += '   </label>';
-			            userHtml += '</li>';
+					if(column.width && -1 < String(column.width).indexOf('%')) {
+						if(!column.copyOptions) 
+							column.copyOptions = {};
+			    		  
+						column.copyOptions.widthRatio = column.width.replace('%', '');
+			    		  
+						delete column.width;
+					}
+				});
+				
+				shareUserListGrid = new tui.Grid(settings);
+				
+				shareUserListGrid.on('mouseover', function(ev) {
+					if('cell' != ev.targetType) return;
+			    	  
+					var overCellElement = $(shareUserListGrid.getElement(ev.rowKey, ev.columnName));    	  
+					overCellElement.attr('title', overCellElement.text());
+				});
+				
+				shareUserListGrid.on('click', function(evt) {
+					if('rowHeader' != evt.targetType) return;
 
-			            $("#shareUserList").append($(userHtml));
-	        		});
-	        	}
-	        });
+					setTimeout(function() {
+						if(-1 < shareUserListGrid.getCheckedRowKeys().indexOf(evt.rowKey)){
+							shareUserListGrid.addRowClassName(evt.rowKey, "row-selected");
+						}else{
+							shareUserListGrid.removeRowClassName(evt.rowKey, "row-selected");
+						}
+					}, 0);
+				});
+				
+				shareUserListGrid.on('checkAll', function(ev) {
+					var allRows = shareUserListGrid.getData(); 
+					
+					for(var i = 0; i < allRows.length; i++){
+						shareUserListGrid.addRowClassName(allRows[i].rowKey, "row-selected");
+						shareUserListGrid.check(allRows[i].rowKey);
+					}
+				});
+				
+				shareUserListGrid.on('uncheckAll', function(ev) {
+					var allRows = shareUserListGrid.getData(); 
+					
+					for(var i = 0; i < allRows.length; i++){
+						shareUserListGrid.removeRowClassName(allRows[i].rowKey, "row-selected");
+						shareUserListGrid.uncheck(allRows[i].rowKey);
+					}
+				});
 
+				$.ajax({
+		        	type : 'GET',
+		        	url : contextPath + '/igate/monitoring/dashboard/user.json',
+		        	data : {
+		        		containerId : _this.containerInfo.containerId
+		        	},
+		        	dataType : "json",
+		        	success : function(res) {
+		        		if ('ok' != res.result) return;
+
+		        		var allUserList = res.object.allUserList;
+		        		var registerDashUserList = res.object.registerDashUserList;
+
+		        		shareUserListGrid.resetData(allUserList);
+		        	
+		        		allUserList.forEach(function(userInfo, index) {
+		            
+		        			var isRegisterUser = 0 < registerDashUserList.filter(function(registerDashUser) { return registerDashUser.pk.containerUserId == userInfo.userId }).length;		        			
+		        			
+		        			if(isRegisterUser) {
+		        				var rowKey = shareUserListGrid.getRowAt(index).rowKey;
+		        				shareUserListGrid.check(rowKey);
+		        				shareUserListGrid.addRowClassName(rowKey, "row-selected");
+		        			}
+		        		});
+		        		
+		        		$('#dashModal').find('#searchShareUser').on('keyup', function(key) {
+		 		        	if(13 == key.keyCode) {
+		 		        		var data = $(this).val();
+		 		        		shareUserListGrid.resetData(allUserList.filter(function(row) { return row.userId.indexOf(data) > -1; }));
+		 		        	}
+		 		        });
+		        	}
+		        });
+			});
+	        
+	        $('#dashModal').on('hidden.bs.modal', function(e) {
+	        	shareUserListGrid.destroy();
+	        }) ;
+	        
 	        $('#dashModal').find('#confirmShareBtn').off('click').on('click', function() {
 
 	        	var shareParam = {
+	        		_method: 'PUT',
 					containerId : _this.containerInfo.containerId,
 		            containerName : _this.containerInfo.containerName,
 		            containerWidth : _this.containerInfo.containerWidth,
@@ -366,24 +480,24 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 		            monitorContainerUsers : (function() {
 		            	var monitorContainerUsers = [];
 		            	
-		            	$.each($('#dashModal').find('[name="userCk"]:checked'), function(idx, tag) {
+		            	shareUserListGrid.getCheckedRows().forEach(function(shareUserInfo) {
 		            		monitorContainerUsers.push({
 		            			pk : {
 		            				containerId : _this.containerInfo.containerId,
-		            				containerUserId : $(tag).val()
+		            				containerUserId : shareUserInfo.userId
 		            			}
 		            		});
-		            	});
-
+		            	})
+		            
 		            	return monitorContainerUsers;
 		            })()		        			
 	        	};
-	        	
+
 	        	$.ajax({
-	        		type : 'PUT',
+	        		type : 'POST',
 	        		url : contextPath + '/igate/monitoring/dashboard/container.json',
-	        		contentType : 'application/json; charset=utf-8',
-	        		data : JSON.stringify(shareParam),
+	        		processData : false,
+	        		data : JsonImngObj.serialize(shareParam),
 	        		dataType : "json",
 	        		success : function(result) {
 	        			if ('ok' != result.result) return;
@@ -629,42 +743,71 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 						delete importContainerInfo.monitorComponents;
 					});
 					
-					importContainerList.forEach(function(importContainerInfo) {
-						$.ajax({
-							type: 'POST',
-					        url: contextPath + '/igate/monitoring/dashboard/container.json',
-					        data: importContainerInfo,
-					        dataType: "json",
-					        success: function(result) {
-					        	resultArr.push({
-					        		message: importContainerInfo.containerName + " : " + (('ok' == result.result)? dashboardMsg_migrationMake : result.error[0].message)
-					        	});
-					        },
-					        error: function() {
-					        	resultArr.push({
-					        		message: importContainerInfo.containerName + " : Unknown Error"
-					        	});					        	
-					        },
-					        complete: function(jqXHR, textStatus) {
-					        	if(resultArr.length == importContainerList.length){
-					        		importContainerList = null;
-					        		
-					        		$('#fileName').val('');
-					        		
-					        		var alertMsg = '';
-					        		
-					        		resultArr.forEach(function(resultObj, idx) {
-					        			alertMsg += ((0 == idx)? '' : '<br/>') + escapeHtml(resultObj.message);
-					        		});
-					        		
-					        		normalAlert({message: alertMsg, isXSSMode: false});
-					        		
-					        		$('#dashModalLarge').find('#closeMigrationBtn').trigger('click');
-					        		
-					        		getContainerList();
-					        	}
-					        },
-					    });	
+					var allCompleteFunc = function() {
+						if(resultArr.length != importContainerList.length) return;
+						
+		        		importContainerList = null;
+		        		
+		        		$('#fileName').val('');
+		        		
+		        		var alertMsg = '';
+		        		
+		        		resultArr.forEach(function(resultObj, idx) {
+		        			alertMsg += ((0 == idx)? '' : '<br/>') + escapeHtml(resultObj.message);
+		        		});
+		        		
+		        		normalAlert({message: alertMsg, isXSSMode: false});
+		        		
+		        		$('#dashModalLarge').find('#closeMigrationBtn').trigger('click');
+		        		
+		        		getContainerList();
+					};
+					
+					importContainerList.forEach(function(containerInfo) {
+						var importContainerInfo = $.extend(true, {}, containerInfo);
+							
+			    		$.ajax({
+			    			type : 'GET',
+			    			url : contextPath + '/igate/monitoring/dashboard/existEqualsContainerName.json',
+			    			data : {
+			    				containerName: $.trim(importContainerInfo.containerName),
+			    			},
+			    			dataType : "json",
+			    			success : function(res) {
+			    				if('ok' != res.result) return;
+			    				
+			    				if (res.object) {
+						        	resultArr.push({
+						        		message: importContainerInfo.containerName + " : " + dashboardMsg_overlapWarn
+						        	});
+						        	
+						        	allCompleteFunc();
+			    				} else {
+			    					importContainerInfo._method = 'POST';
+
+									$.ajax({
+										type: 'POST',
+								        url: contextPath + '/igate/monitoring/dashboard/container.json',
+								        processData : false,
+								        data: JsonImngObj.serialize(importContainerInfo),
+								        dataType: "json",
+								        success: function(result) {
+								        	resultArr.push({
+								        		message: importContainerInfo.containerName + " : " + (('ok' == result.result)? dashboardMsg_migrationMake : result.error[0].message)
+								        	});
+								        },
+								        error: function() {
+								        	resultArr.push({
+								        		message: importContainerInfo.containerName + " : Unknown Error"
+								        	});					        	
+								        },
+								        complete: function(jqXHR, textStatus) {
+								        	allCompleteFunc();
+								        },
+								    });
+			    				}
+			    			}
+			    		});
 					});
 				});
 	        });
@@ -741,9 +884,12 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
       
 	    	normalConfirm({message : dashboardMsg_deleteWarn, callBackFunc : function() {
 	    		$.ajax({
-	    			type : 'DELETE',
-	    			url : contextPath + '/igate/monitoring/dashboard/container.json?containerId=' + _this.containerInfo.containerId,
-	    			data : null,
+	    			type : 'POST',
+	    			url : contextPath + '/igate/monitoring/dashboard/container.json',
+	    			data : JsonImngObj.serialize({
+	    				_method: 'DELETE',
+	    				containerId: _this.containerInfo.containerId
+	    			}),
 	    			dataType : "json",
 	    			success : function(result) {
 	    				if ('ok' != result.result) return;
@@ -815,7 +961,13 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	    	    			containerHeight : Number(containerHeight),
 	    	    			remarkYn : _this.containerInfo.remarkYn,
 	    	    			darkmodeYn : _this.containerInfo.darkmodeYn,
-	    	    			componentList : _this.componentList.map(function(component) { return $.extend(true, {}, component); }),
+	    	    			componentList : _this.componentList.map(function(component) {
+	    	    				var cloneComponent = $.extend(true, {}, component);
+	    	    				
+	    	    				delete cloneComponent.chart;
+	    	    				
+	    	    				return cloneComponent; 
+	    	    			}),
 	    	    			monitorContainerUsers : _this.containerInfo.monitorContainerUsers
 	    	    		});
 	    			}
@@ -927,7 +1079,6 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 			    		});
 			    
 			    		copyComponentList.forEach(function(component) {
-			    			
 			    			parentComponentIdList.forEach(function(parentComponentObj) {
 	    	                	if(parentComponentObj.beforeChangeId == component.pComponentId) {
 	    	                		component.pComponentId = parentComponentObj.afterChangeId;
@@ -935,27 +1086,18 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	    	                });
 			    			
 			    			component.monitorComponentTargets.forEach(function(monitorComponentTarget, index) {
-			    				
 			    				monitorComponentTarget.pk.componentId = component.componentId;
-			    				
-			    				for(var key in monitorComponentTarget.pk) {
-			    					component['monitorComponentTargets[' + index + '].pk.' + key] = monitorComponentTarget.pk[key];	
-			    				}
 			    			});
-			    			
-			    			delete component['monitorComponentTargets'];
 			    		});
 			    		
-			    		copyComponentList.forEach(function(component, index) {
-			    			for(var key in component){
-			    				copyContainerInfo['monitorComponents[' + index + '].' + key] = component[key];	
-			    			}
-			    		});
+			    		copyContainerInfo.monitorComponents = copyComponentList;
+			    		
+			    		copyContainerInfo._method = 'POST';
 			    		
 			    		$.ajax({
 							type: 'POST',
 					        url: contextPath + '/igate/monitoring/dashboard/container.json',
-					        data: copyContainerInfo,
+					        data: JsonImngObj.serialize(copyContainerInfo),
 					        dataType: "json",
 					        success: function(result) {
 					        	if('ok' != result.result) return;
@@ -1778,7 +1920,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 				if(noticeDataHistoryListMaxCnt < noticeDataHistoryList.length) {
 					noticeDataHistoryList.splice(0, noticeDataHistoryList.length - noticeDataHistoryListMaxCnt);
 				}
-
+				
 				for (var i = 0; i < _this.componentList.length; i++) {
 
 					if (!_this.componentList[i].chart) continue;
@@ -2019,6 +2161,23 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 					 
 					dataArr = null;
 				}
+
+	            for (var i = 0; i < _this.componentList.length; i++) {
+	                if (!_this.componentList[i].chart) continue;
+	                
+	                var component = _this.componentList[i];
+	                
+	                if ('INSTANCE' != component.chartType && 'CONNECTOR' != component.chartType && 'THREAD' != component.chartType && 'QUEUE' != component.chartType) continue;
+	                
+	                _this.instanceList.forEach(function(instanceInfo, index) {
+	                	var filterInstanceList = bodyObj.instance.filter(function(info) {
+	                		return info.instanceId == instanceInfo.instanceId;
+	                	});
+
+	                    if(component.chart.updateTarget)
+	                    	component.chart.updateTarget(instanceInfo.instanceId, {isDataEmpty: 0 == filterInstanceList.length, downStatus: instanceInfo.downStatus});	                	
+	                });
+	            }
 			  
 				bodyObj = null;
 			}
@@ -2396,7 +2555,7 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 			oldAdapterList = null;
 			oldConnectorList = null;
 			oldQueueList = null;
-			oldExternalLineList = null;		        
+			oldExternalLineList = null;
 		});
 	}
 	
@@ -2463,25 +2622,31 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	  
 		$('#dashModal').on('hidden.bs.modal', function() {
 			$('#dashModal').remove();
+			setDashContainer();
 		});
 		$('#dashModal').modal('hide');
 
 		$('#dashModalLarge').on('hidden.bs.modal', function() {
-			$('#dashModalLarge').remove(); 
+			$('#dashModalLarge').remove();
+			setDashContainer();
 		});
 		$('#dashModalLarge').modal('hide');
 		
 		$("#noticeArea").remove();
 		
-		var dashContainerOption = {mod : mod};
+		function setDashContainer() {
+			$('#dashModal, #dashModalLarge').remove();
+			
+			var dashContainerOption = {mod : mod};
+			  
+			if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
+	    
+			if (pDashContainerOption) {
+				dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
+			}
 		  
-		if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
-    
-		if (pDashContainerOption) {
-			dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
+			$(dashContainerElement).dashContainer(dashContainerOption);			
 		}
-	  
-		$(dashContainerElement).dashContainer(dashContainerOption);			
 	}
   
 	function unloadContainer() {

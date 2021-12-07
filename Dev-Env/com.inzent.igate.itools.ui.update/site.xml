@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.inzent.igate.itools.ui.feature_5.0.20.qualifier.jar" id="com.inzent.igate.itools.ui.feature" version="5.0.20.qualifier">
+   <feature url="features/com.inzent.igate.itools.feature_5.0.22.202112070945.jar" id="com.inzent.igate.itools.feature" version="5.0.22.202112070945">
       <category name="com.inzent.igate.itools.ui"/>
    </feature>
-   <feature url="features/com.inzent.igate.itools.feature_5.0.20.202110290925.jar" id="com.inzent.igate.itools.feature" version="5.0.20.202110290925">
+   <feature url="features/com.inzent.igate.itools.ui.feature_5.0.22.202112071938.jar" id="com.inzent.igate.itools.ui.feature" version="5.0.22.202112071938">
       <category name="com.inzent.igate.itools.ui"/>
    </feature>
    <category-def name="com.inzent.igate.itools.ui" label="iGate iTools"/>

@@ -60,6 +60,7 @@
 
     createPageObj.setMainButtonList({
       searchInitBtn : true,
+      totalCount: true,
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       addBtn : hasActivityEditor,
     }) ;
@@ -428,7 +429,17 @@
                 }
                 window.vmSearch.isfirst = false ;
               }
-            }) ;
+              
+              $.ajax({
+                  type : "GET",
+                  url : "<c:url value='/igate/activity/rowCount.json' />",
+                  data: JsonImngObj.serialize(this.object),
+                  processData : false,
+                  success : function(result) {
+                      vmList.totalCount = result.object;
+                  }
+              });
+            }.bind(this)) ;
           },
           initSearchArea : function(searchCondition)
           {
@@ -466,7 +477,8 @@
         el : '#' + createPageObj.getElementId('ImngListObject'),
         data : {
           makeGridObj : null,
-          newTabPageUrl: "<c:url value='/igate/activity.html' />"
+          newTabPageUrl: "<c:url value='/igate/activity.html' />",
+          totalCount: '0',
         },
         methods : $.extend(true, {}, listMethodOption, {
           initSearchArea : function()

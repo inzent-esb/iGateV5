@@ -32,6 +32,7 @@ $(document).ready(function() {
 	createPageObj.setMainButtonList({
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
+		totalCount: true,
 	});
 	
 	createPageObj.mainConstructor();
@@ -145,7 +146,17 @@ $(document).ready(function() {
         	methods: {
     			search: function() {
     				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-    				vmList.makeGridObj.search(this);
+    				vmList.makeGridObj.search(this, function(result) {
+	    	            $.ajax({
+	    	                  type : "GET",
+	    	                  url : "<c:url value='/igate/operation/rowCount.json' />",
+	    	                  data: JsonImngObj.serialize(this.object),
+	    	                  processData : false,
+	    	                  success : function(result) {
+	    	                      vmList.totalCount = result.object;
+	    	                  }
+	    	              });
+    	            }.bind(this)) ;
     			},
                 initSearchArea: function(searchCondition) {
                 	if(searchCondition) {
@@ -175,7 +186,8 @@ $(document).ready(function() {
         	el: '#' + createPageObj.getElementId('ImngListObject'),
             data: {
             	makeGridObj: null,
-            	newTabPageUrl: "<c:url value='/igate/operation.html' />"
+            	newTabPageUrl: "<c:url value='/igate/operation.html' />",
+            	totalCount: '0',
             },
             methods: $.extend(true, {}, listMethodOption, {
             	initSearchArea: function() {
@@ -355,7 +367,7 @@ $(document).ready(function() {
         			FaultHandlers: {imgName: 'faultHandler', img: null},
         			ForEach: {imgName: 'for', img: null},
         			Fork: {imgName: 'fork', img: null},
-        			Activity: {imgName: 'activity', img: null},
+        			Activity: {imgName: 'activity', img: null, imgCustom: null},
         			Operation: {imgName: 'operation', img: null},
         			Query: {imgName: 'query', img: null},
         			InvokeActivity: {imgName: 'activity', img: null},
@@ -394,6 +406,11 @@ $(document).ready(function() {
            			for(var key in this.imgObj) {
            				this.imgObj[key].img = new Image(); 
            				this.imgObj[key].img.src = '<c:url value="/img/operation/' + this.imgObj[key].imgName + '.png"/>';
+           				
+           				if ('Activity' == key) {
+               				this.imgObj[key].imgCustom = new Image();
+               				this.imgObj[key].imgCustom.src = '<c:url value="/img/operation/activityCustom.png"/>';
+           				}
            			}
         		}
         	},
@@ -482,36 +499,84 @@ $(document).ready(function() {
              	      .update();   				
                		<%-- style --%>
                		
+               		var activityInfoList = [];
+               		
+        			var activityIdList = nodes.filter(function(node) {
+        				return 'Activity' == node.data.nodeType;
+        			}).map(function(node) {
+        				return node.data.orgData['@id'];
+        			});
+               		
+        			if (0 < activityIdList.length) {
+	 					$.ajax({
+							type : "GET",
+						    url : "<c:url value='/igate/activity/list.json' />",
+						    processData : false,
+						    data: (function() {
+						    	var rtnParam = {};
+											
+						    	activityIdList.forEach(function(activityId, idx) {
+						    		rtnParam['activityIdList[' + idx + ']'] = activityId;
+						    	});
+						    	
+						    	return $.param(rtnParam);
+						    })(),
+						    dataType : "json",
+						    success : function(result) {
+						    	if ('ok' == result.result) {
+						    		activityInfoList = result.object;
+						    	}
+						    	
+						    	onRender();
+						    }
+					    });
+        			} else {
+        				onRender();
+        			}
+               		
                		var imgObj = this.imgObj;
                		
-					cy.onRender(function() {
-						cy.nodes().forEach(function(info) {
-                   			width = Math.max(width, info._private.bodyBounds.x2 + info._private.bodyBounds.w);
-                   			height = Math.max(height, info._private.bodyBounds.y2 + info._private.bodyBounds.h);
-                   		});							
+               		function onRender() {
+    					cy.onRender(function() {
+    						cy.nodes().forEach(function(info) {
+                       			width = Math.max(width, info._private.bodyBounds.x2 + info._private.bodyBounds.w);
+                       			height = Math.max(height, info._private.bodyBounds.y2 + info._private.bodyBounds.h);
+                       		});							
 
-						width = Math.max(width, $('#panel').find('.panel-body').width());
-						height = Math.max(height, $('#panel').find('.panel-body').height());
-						
-                   		$('#topology').width(width).height(height);
-                   		
-               			ctx.beginPath();
-               			
-                   		cy.nodes().each(function(e, t) {
-                   			if(e._private.data.nodeType) {
-                   				var img = (imgObj[e._private.data.nodeType])? imgObj[e._private.data.nodeType].img : imgObj['Default'].img;
-                   				ctx.drawImage(img, e._private.rscratch.labelX - (e._private.rscratch.labelWidth / 2) - img.width + 5, e._private.rscratch.labelY - ((0 == e._private.children.length)? (img.height / 2) : img.height));
-                   			}
-                   		});
-                   		
-                   		ctx.closePath();
-                   		
-                   		if($('#Workflow').hasClass('active') && 0 == $('#topology').find('canvas').width()) {
-                       		setTimeout(function() {
-                       			cy.resize();
-                       		}, 0);                   			
-                   		}
-					});
+    						width = Math.max(width, $('#panel').find('.panel-body').width());
+    						height = Math.max(height, $('#panel').find('.panel-body').height());
+    						
+                       		$('#topology').width(width).height(height);
+                       		
+                   			ctx.beginPath();
+                   			
+                       		cy.nodes().each(function(e, t) {
+                       			if(e._private.data.nodeType) {
+                       				var img = null;
+                       				
+                       				if ('Activity' == e._private.data.nodeType) {
+                       					var tmpActivityInfoList = activityInfoList.filter(function(activityInfo) {
+                       						return activityInfo.activityId == e._private.data.orgData['@id'];
+                       					});
+                       					
+                       					img = (0 == tmpActivityInfoList.length || 'undefined' == typeof tmpActivityInfoList[0].activityProject)? imgObj[e._private.data.nodeType].img : imgObj[e._private.data.nodeType].imgCustom;
+                       				} else {
+                       					img = (imgObj[e._private.data.nodeType])? imgObj[e._private.data.nodeType].img : imgObj['Default'].img;
+                       				}
+                       				
+                       				ctx.drawImage(img, e._private.rscratch.labelX - (e._private.rscratch.labelWidth / 2) - img.width + 5, e._private.rscratch.labelY - ((0 == e._private.children.length)? (img.height / 2) : img.height));
+                       			}
+                       		});
+                       		
+                       		ctx.closePath();
+                       		
+                       		if($('#Workflow').hasClass('active') && 0 == $('#topology').find('canvas').width()) {
+                           		setTimeout(function() {
+                           			cy.resize();
+                           		}, 0);                   			
+                       		}
+    					});               			
+               		}
 					
 					var isDetailExist = this.isDetailExist;
 					
@@ -597,7 +662,7 @@ $(document).ready(function() {
 		<%-- uuid --%>
 		var uuid = (function() {
 			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-				var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+				var r = mathRandom() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
 				return v.toString(16);
 			});			
 		})();

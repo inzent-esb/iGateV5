@@ -46,6 +46,31 @@ $.fn.connectorChart = function(createOptions) {
 			$(chartTag).find('.col-6').empty();
 		};
 		
+		this.updateTarget = function(targetId, updateOption) {
+			var findIndex = targetInfoList.map(function(targetInfo) { return targetInfo.targetId; }).indexOf(targetId);
+			
+			if(-1 == findIndex) return;
+			
+			var targetInfo = targetInfoList[findIndex];
+			
+			if (updateOption.isDataEmpty) {
+				targetInfo.element.find('[name=instanceStatus]').removeClass().addClass('status').addClass('bg-down');
+				targetInfo.element.find('[name=instanceActiveSessionInuseGraph]').width('0%');
+				targetInfo.element.find('[name=instanceActiveSessionInuseNum]').text('0');
+				targetInfo.element.find('[name=instanceSessionWaitGraph]').width('0%');
+				targetInfo.element.find('[name=instanceSessionWaitNum]').text('0');				
+				targetInfo.element.find('[name=instanceThreadInuseGraph]').width('0%');
+				targetInfo.element.find('[name=instanceThreadInuseNum]').text(0);
+				targetInfo.element.find('[name=instanceThreadWaitGraph]').width('0%');
+				targetInfo.element.find('[name=instanceThreadWaitNum]').text('0');
+				
+				if ('Y' != updateOption.downStatus)	   targetInfo.element.find('.iconb-warn').show();
+				else							       targetInfo.element.find('.iconb-warn').hide();				
+			} else {
+				targetInfo.element.find('.iconb-warn').hide();
+			}
+		};
+		
 		this.addData = function(dataArr) {
 			dataArr.forEach(function(dataInfo) {
 				var targetInfo = targetInfoList.filter(function(targetInfo) {
@@ -74,7 +99,7 @@ $.fn.connectorChart = function(createOptions) {
 				targetInfo.element.find('[name=instanceThreadInuseGraph]').width((((dataInfo.threadInuse / (dataInfo.threadInuse + dataInfo.threadWait)) * 100)|| 0).toFixed(2) + '%' || 0);
 				targetInfo.element.find('[name=instanceThreadInuseNum]').text(dataInfo.threadInuse);
 				targetInfo.element.find('[name=instanceThreadWaitGraph]').width((((dataInfo.threadWait / (dataInfo.threadInuse + dataInfo.threadWait)) * 100)|| 0).toFixed(2) + '%' || 0);
-				targetInfo.element.find('[name=instanceThreadWaitNum]').text(dataInfo.threadWait);				
+				targetInfo.element.find('[name=instanceThreadWaitNum]').text(dataInfo.threadWait);
 			});
 		};
 		

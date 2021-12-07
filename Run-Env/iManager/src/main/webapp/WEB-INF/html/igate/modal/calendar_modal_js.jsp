@@ -33,7 +33,8 @@
     createPageObj.searchConstructor() ;
 
     createPageObj.setMainButtonList({
-      searchInitBtn : true
+      searchInitBtn : true,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -54,7 +55,17 @@
         search : function()
         {
           vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-          vmList.makeGridObj.search(this) ;
+          vmList.makeGridObj.search(this, function() {
+              $.ajax({
+                  type : "GET",
+                  url : "<c:url value='/igate/calendar/rowCount.json' />",
+                  data: JsonImngObj.serialize(this.object),
+                  processData : false,
+                  success : function(result) {
+                      vmList.totalCount = result.object;
+                  }
+              });
+          }.bind(this));
         },
         initSearchArea : function()
         {
@@ -79,6 +90,7 @@
       el : '#' + createPageObj.getElementId('ImngListObject'),
       data : {
         makeGridObj : null,
+        totalCount: '0',
       },
       methods : {
         initSearchArea : function()

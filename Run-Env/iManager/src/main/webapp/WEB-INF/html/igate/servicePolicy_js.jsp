@@ -40,6 +40,7 @@
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       searchInitBtn : true,
       addBtn : hasServicePolicyEditor,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -117,7 +118,17 @@
         search : function()
         {
           vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-          vmList.makeGridObj.search(this) ;
+          vmList.makeGridObj.search(this, function() {
+              $.ajax({
+                  type : "GET",
+                  url : "<c:url value='/igate/servicePolicy/rowCount.json' />",
+                  data: JsonImngObj.serialize(this.object),
+                  processData : false,
+                  success : function(result) {
+                      vmList.totalCount = result.object;
+                  }
+              });
+          }.bind(this));
         },
         initSearchArea : function(searchCondition)
         {
@@ -131,9 +142,9 @@
           else
           {
             this.pageSize = '10' ;
-            this.object.pk.adapterId = null ;     
+            this.object.pk.adapterId = null ;
             this.object.activityId = null ;
-          }	  
+          }
 
           initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize) ;
         },
@@ -168,6 +179,7 @@
       el : '#' + createPageObj.getElementId('ImngListObject'),
       data : {
         makeGridObj : null,
+        totalCount: '0',
         newTabPageUrl: "<c:url value='/igate/servicePolicy.html' />"
       },
       methods : $.extend(true, {}, listMethodOption, {

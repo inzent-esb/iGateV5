@@ -30,15 +30,20 @@
       'name' : "<fmt:message>igate.instance</fmt:message><fmt:message>head.id</fmt:message>",
       'placeholder' : "<fmt:message>head.searchId</fmt:message>"
     }, {
-      'type' : "text",
-      'mappingDataInfo' : "object.transactionId",
-      'name' : "<fmt:message>igate.exceptionLog.transactionId</fmt:message>",
-      'placeholder' : "<fmt:message>head.searchId</fmt:message>"
+        'type' : "text",
+        'mappingDataInfo' : "object.pk.exceptionId",
+        'name' : "<fmt:message>igate.exceptionLog</fmt:message> <fmt:message>head.id</fmt:message>",
+        'placeholder' : "<fmt:message>head.searchId</fmt:message>"
     }, {
       'type' : "text",
       'mappingDataInfo' : "object.exceptionCode",
       'name' : "<fmt:message>igate.exceptionCode</fmt:message>",
       'placeholder' : "<fmt:message>head.searchData</fmt:message>"
+    }, {
+       'type' : "text",
+       'mappingDataInfo' : "object.transactionId",
+       'name' : "<fmt:message>igate.exceptionLog.transactionId</fmt:message>",
+       'placeholder' : "<fmt:message>head.searchId</fmt:message>"
     }, {
       'type' : "modal",
       'mappingDataInfo' : {
@@ -88,6 +93,7 @@
       downloadBtn : true,
       refreshArea : true,
       searchInitBtn : true,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -113,9 +119,10 @@
           'mappingDataInfo' : "object.exceptionCode",
           'name' : "<fmt:message>igate.exceptionCode</fmt:message>"
         }, {
-          'type' : "text",
+          'type' : "textEvt",
           'mappingDataInfo' : "object.transactionId",
-          'name' : "<fmt:message>igate.exceptionLog.transactionId</fmt:message>"
+          'name' : "<fmt:message>igate.exceptionLog.transactionId</fmt:message>",
+          'clickEvt' : 'clickTransactionInfo({"transactionId" : object.transactionId})'
         }, ]
       }, {
         'className' : 'col-lg-4',
@@ -197,14 +204,26 @@
           adapterId : null,
           connectorId : null,
           exceptionCode : null,
-          pk : {}
+          pk : {
+        	  exceptionId: null,
+          }
         }
       },
       methods : {
         search : function()
         {
           vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-          vmList.makeGridObj.search(this) ;
+          vmList.makeGridObj.search(this, function() {
+              $.ajax({
+                  type : "GET",
+                  url : "<c:url value='/igate/exceptionLog/rowCount.json' />",
+                  data: JsonImngObj.serialize(this.object),
+                  processData : false,
+                  success : function(result) {
+                      vmList.totalCount = result.object;
+                  }
+              });
+          }.bind(this));
         },
         initSearchArea : function(searchCondition)
         {
@@ -218,6 +237,7 @@
           else
           {
             this.pageSize = '10' ;
+            this.object.pk.exceptionId = null ;
             this.object.instanceId = null ;
             this.object.transactionId = null ;
             this.object.toExceptionDateTime = '' ;
@@ -276,7 +296,8 @@
         timerSecondsList : [10, 20, 30, 40, 50, 60],
         isStartRefresh : false,
         refreshIntervalId : null,
-        newTabPageUrl: "<c:url value='/igate/exceptionLog.html' />"
+        newTabPageUrl: "<c:url value='/igate/exceptionLog.html' />",
+        totalCount: '0',
       },
       methods : $.extend(true, {}, listMethodOption, {
         initSearchArea : function()
@@ -361,6 +382,14 @@
         		ipt.type="hidden";
         		ipt.name="serviceId";
         		ipt.value=window.vmSearch.object.serviceId;
+        		inputs.appendChild(ipt);
+        	}
+        	
+        	if(window.vmSearch.object.pk.exceptionId){
+        		ipt = document.createElement("input");
+        		ipt.type="hidden";
+        		ipt.name="pk.exceptionId";
+        		ipt.value=window.vmSearch.object.pk.exceptionId;
         		inputs.appendChild(ipt);
         	}
 
@@ -448,6 +477,11 @@
             align : "left",
             width: "6%"
           }, {
+              name : "pk.exceptionId",
+              header : "<fmt:message>igate.exceptionLog</fmt:message> <fmt:message>head.id</fmt:message>",
+              align : "left",
+              width: "10%"
+          }, {
             name : "exceptionCode",
             header : "<fmt:message>igate.exceptionCode</fmt:message>",
             align : "left",
@@ -514,6 +548,11 @@
           } ;
         }
       },
+      created: function() {
+    	  if (localStorage.getItem('selectedExceptionInfo')) {
+    		  SearchImngObj.load($.param(JSON.parse(localStorage.getItem('selectedExceptionInfo')))) ;
+    	  }
+      },
       methods : {
         loaded : function()
         {
@@ -521,7 +560,16 @@
         },
         goDetailPanel : function()
         {
-          panelOpen('detail') ;
+          panelOpen('detail', null, function() {
+        	  if (localStorage.getItem('selectedExceptionInfo')) {
+        		  localStorage.removeItem('selectedExceptionInfo') ;
+        		  $("#panel").find("[data-target='#panel']").trigger('click') ;
+        	  }
+        	  
+        	  $('.underlineTxt').each(function(index, element) {
+          		$(element).parent().css('cursor', ($(element).val().length < 1? 'auto' : 'pointer'));
+          	});
+          }) ;
         },
         initDetailArea : function()
         {
@@ -537,6 +585,12 @@
           this.object.connectorId = null ;
           this.object.activityId = null ;
           this.object.exceptionText = null ;
+        },
+        clickTransactionInfo: function(transactionInfo) {
+        	if(!transactionInfo['transactionId']) return ;
+        	
+        	localStorage.setItem('selectedTransactionInfo', JSON.stringify(transactionInfo));        	
+        	window.open("<c:url value='/igate/traceLog.html' />");
         }
       }
     }) ;

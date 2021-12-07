@@ -7,7 +7,7 @@ function normalAlert(alertObj) {
 	var message = (alertObj.hasOwnProperty('isXSSMode') && !alertObj.isXSSMode)? alertObj.message : escapeHtml(alertObj.message);
 	var modalHtml = '';
 	
-	modalHtml += '<div id="modal1" class="modal fade" tabindex="-1" role="dialog" style="position: absolute; width: 100%; height: 100%; z-index: 9998;">';
+	modalHtml += '<div id="modal1" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" style="position: absolute; width: 100%; height: 100%; z-index: 9998;">';
 	modalHtml += '    <div class="modal-dialog modal-dialog-centered modal-dialog-alert">';
 	modalHtml += '	      <div class="modal-content">';
 	modalHtml += '		      <div class="modal-body">';
@@ -15,7 +15,7 @@ function normalAlert(alertObj) {
 	modalHtml += '				  <p id="normalAlert-text" class="alert-text">' + message + '</p>';
 	modalHtml += '			  </div>';
 	modalHtml += '			  <div class="modal-footer">';
-	modalHtml += '			      <button type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message>head.ok</fmt:message></button>';
+	modalHtml += '			      <button id="ok" type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message>head.ok</fmt:message></button>';
 	modalHtml += '			  </div>';
 	modalHtml += '	      </div>';
 	modalHtml += '    </div>';
@@ -28,6 +28,10 @@ function normalAlert(alertObj) {
 	initModalArea('modal1', alertObj.isSpinnerMode);
 
 	$('#modal1').modal('show');
+	
+	$("#modal1").find('#ok').off().on('click', function() {
+		if(alertObj.callBackFunc) alertObj.callBackFunc();
+	});
 }
 
 function warnAlert(alertObj) {
@@ -35,7 +39,7 @@ function warnAlert(alertObj) {
 	var message = (alertObj.hasOwnProperty('isXSSMode') && !alertObj.isXSSMode)? alertObj.message : escapeHtml(alertObj.message);
 	var modalHtml = '';
 	
-	modalHtml += '<div id="modal2" class="modal fade" tabindex="-1" role="dialog" style="position: absolute; width: 100%; height: 100%; z-index: 9998;">';
+	modalHtml += '<div id="modal2" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" style="position: absolute; width: 100%; height: 100%; z-index: 9998;">';
 	modalHtml += '    <div class="modal-dialog modal-dialog-centered modal-dialog-alert">';
 	modalHtml += '        <div class="modal-content">';
 	modalHtml += '            <div class="modal-body">';
@@ -43,7 +47,7 @@ function warnAlert(alertObj) {
 	modalHtml += '                <p id="warnAlert-text" class="alert-text">' + message + '</p>';
 	modalHtml += '            </div>';
 	modalHtml += '            <div class="modal-footer">';
-	modalHtml += '                <button type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message>head.ok</fmt:message></button>';
+	modalHtml += '                <button id="ok" type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message>head.ok</fmt:message></button>';
 	modalHtml += '            </div>';
 	modalHtml += '        </div>';
 	modalHtml += '    </div>';
@@ -56,6 +60,10 @@ function warnAlert(alertObj) {
 	initModalArea('modal2', alertObj.isSpinnerMode);
 	
 	$('#modal2').modal('show');
+	
+	$("#modal2").find('#ok').off().on('click', function() {
+		if(alertObj.callBackFunc) alertObj.callBackFunc();
+	});
 }
 
 function normalConfirm(confirmObj) {

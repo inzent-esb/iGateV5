@@ -1,6 +1,7 @@
 package com.inzent.igate.imanager.service;
 
 import java.io.FileInputStream;
+import java.io.IOException ;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.poi.EncryptedDocumentException ;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -27,6 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.fasterxml.jackson.core.JsonEncoding;
+import com.inzent.igate.imanager.CommonTools;
 import com.inzent.igate.repository.meta.Service;
 import com.inzent.imanager.message.MessageGenerator;
 
@@ -51,48 +54,26 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 
 	protected void generateDownload(OutputStream outputStream, String templateFile, Service entity,
 			List<Service> entityList) throws Exception {
-		Workbook workbook;
-		Row row = null;
-		Cell cell = null;
-		String values = null;
-		Sheet writeSheet;
-
-		try {
-			FileInputStream fileInputStream = new FileInputStream(templateFile);
-			workbook = WorkbookFactory.create(fileInputStream);
-			writeSheet = workbook.getSheetAt(0);
-		}catch (Exception e){
-			/* Template Load Error */
-			/* Create Base Excel Template */
-			workbook = new XSSFWorkbook();
-			writeSheet = workbook.createSheet();
-			row = writeSheet.createRow(3);
-			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(2);
-			cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
-			cell = row.createCell(4);
-			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
-			cell = row.createCell(6);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
-			
-			row = writeSheet.createRow(4);
-			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
-			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
-			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 4, 5));
-			writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 6, 7));
-			
-			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(2);
-			cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
-			cell = row.createCell(4);
-			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
-			cell = row.createCell(6);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
-			/* Create Base Excel Template */
-		}
-
+		Workbook workbook ;
+		Sheet writeSheet ;
+		Row row = null ;
+		Cell cell = null ;
+		String values = null ;
+        Object[] objects = null ;
+        try
+        {
+          FileInputStream fileInputStream = new FileInputStream(templateFile) ;
+          workbook = WorkbookFactory.create(fileInputStream) ;
+          writeSheet = workbook.getSheetAt(0) ;
+        }
+        catch (EncryptedDocumentException | IOException e)
+        {
+          objects = generateTemplete() ;
+          workbook = (Workbook)objects[0] ;
+          writeSheet = (Sheet)objects[1] ;
+          row = (Row)objects[2] ;
+          cell = (Cell)objects[3] ;
+        }
 
 		// Cell 스타일 지정.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
@@ -173,12 +154,53 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 		cell.setCellValue(values);
 
 		// sum
+		values = CommonTools.numberWithComma(Long.toString(sum));
 		cell = row.createCell(1);
 		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(sum);
+		cell.setCellValue(values);
 
+		entityList = null ;
 		workbook.write(outputStream);
 	}
+
+    public Object[] generateTemplete()
+    {
+      /* Template Load Error */
+      /* Create Base Excel Template */
+      Workbook workbook = new XSSFWorkbook();
+      Sheet writeSheet = workbook.createSheet();
+      Row row = writeSheet.createRow(3);
+      Cell cell ;
+
+      cell = row.createCell(0);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+      cell = row.createCell(4);
+      cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+      cell = row.createCell(6);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
+      
+      row = writeSheet.createRow(4);
+      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
+      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
+      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 4, 5));
+      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 6, 7));
+      
+      cell = row.createCell(0);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+      cell = row.createCell(4);
+      cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+      cell = row.createCell(6);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
+      /* Create Base Excel Template */
+      
+      return new Object[] {
+          workbook, writeSheet, row, cell
+      } ;
+    }
 
 	public XSSFCellStyle getBaseCellStyle(Workbook workbook) {
 		// Cell 스타일 지정.

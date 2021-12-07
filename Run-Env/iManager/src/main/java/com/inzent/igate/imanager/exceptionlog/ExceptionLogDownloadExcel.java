@@ -1,6 +1,7 @@
 package com.inzent.igate.imanager.exceptionlog;
 
 import java.io.FileInputStream;
+import java.io.IOException ;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.poi.EncryptedDocumentException ;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -27,6 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonEncoding;
+import com.inzent.igate.imanager.CommonTools;
 import com.inzent.igate.repository.log.ExceptionLog;
 import com.inzent.imanager.message.MessageGenerator;
 
@@ -52,82 +55,26 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 	public void generateDownload(OutputStream outputStream, String templateFile, ExceptionLog entity,
 			List<ExceptionLog> entityList) throws Exception {
 		
-		Workbook workbook;
-		Row row = null;
-		Cell cell = null;
-		String values = null;
-		Sheet writeSheet;
+        Workbook workbook ;
+        Sheet writeSheet ;
+        Row row = null ;
+        Cell cell = null ;
+        String values = null ;
+        Object[] objects = null ;
 		
 		try {
 			FileInputStream fileInputStream = new FileInputStream(templateFile);
 			workbook = WorkbookFactory.create(fileInputStream);
 			writeSheet = workbook.getSheetAt(0);
-		}catch (Exception e){
-			/* Template Load Error */
-			/* Create Base Excel Template */			
-			workbook = new XSSFWorkbook();
-			writeSheet = workbook.createSheet();
-			
-			row = writeSheet.createRow(3);
-			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("head.from", "From"));
-			
-			cell = row.createCell(2);
-			cell.setCellValue(MessageGenerator.getMessage("head.to", "To"));
-			
-			cell = row.createCell(4);
-			cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
-			
-			cell = row.createCell(6);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
-			
-			cell = row.createCell(8);
-			cell.setCellValue(MessageGenerator.getMessage("head.exception.code", "Exception Code"));
-			
-			row = writeSheet.createRow(4);
-			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
-
-			cell = row.createCell(2);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
-
-			
-			cell = row.createCell(4);
-			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
-			
-			cell = row.createCell(6);
-			cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID") );
-
-			int rc = 0;
-			row = writeSheet.createRow(6);
-			cell = row.createCell(rc);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionDateTime", "DateTime"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog", "ExceptionLog") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("head.exception.code", "Exception Code"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("apim.requestmngr.requestMessage", "Message") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.activity.id", "igate.activity.id"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionText", "Exception Text"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionStack", "Exception Stack"));
-			
 		}
+        catch (EncryptedDocumentException | IOException e)
+        {
+          objects = generateTemplete() ;
+          workbook = (Workbook)objects[0] ;
+          writeSheet = (Sheet)objects[1] ;
+          row = (Row)objects[2] ;
+          cell = (Cell)objects[3] ;
+        }
 		
 		// Cell 스타일 지정.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
@@ -186,6 +133,12 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 		// 커넥터 ID
 		values = entity.getConnectorId();
 		cell = row.createCell(7);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+		
+		// 에러로그 ID		
+		values = (null != entity.getPk())? entity.getPk().getExceptionId() : null;
+		cell = row.createCell(9);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
@@ -282,12 +235,87 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 		cell.setCellValue(values);
 
 		// sum
+		values = CommonTools.numberWithComma(Long.toString(sum));
 		cell = row.createCell(1);
 		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(sum);
+		cell.setCellValue(values);
 		
+		entityList = null ;
 		workbook.write(outputStream);
 	}
+
+    public Object[] generateTemplete()
+    {
+      /* Template Load Error */
+      /* Create Base Excel Template */
+      Workbook workbook = new XSSFWorkbook();
+      Sheet writeSheet = workbook.createSheet();
+      Row row = writeSheet.createRow(3);
+      Cell cell ;
+
+      row = writeSheet.createRow(3);
+      cell = row.createCell(0);
+      cell.setCellValue(MessageGenerator.getMessage("head.from", "From"));
+      
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("head.to", "To"));
+      
+      cell = row.createCell(4);
+      cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
+      
+      cell = row.createCell(6);
+      cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
+      
+      cell = row.createCell(8);
+      cell.setCellValue(MessageGenerator.getMessage("head.exception.code", "Exception Code"));
+      
+      row = writeSheet.createRow(4);
+      cell = row.createCell(0);
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
+
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+
+      
+      cell = row.createCell(4);
+      cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+      
+      cell = row.createCell(6);
+      cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID") );
+
+      int rc = 0;
+      row = writeSheet.createRow(6);
+      cell = row.createCell(rc);
+      cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionDateTime", "DateTime"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog", "ExceptionLog") + " " + MessageGenerator.getMessage("head.id", "ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("head.exception.code", "Exception Code"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("apim.requestmngr.requestMessage", "Message") + " " + MessageGenerator.getMessage("head.id", "ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.activity.id", "Activity ID"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionText", "Exception Text"));
+      cell = row.createCell(rc+=1);
+      cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.exceptionStack", "Exception Stack"));
+
+      return new Object[] {
+          workbook, writeSheet, row, cell
+      } ;
+    }
 
 	public XSSFCellStyle getBaseCellStyle(Workbook workbook) {
 		// Cell 스타일 지정.

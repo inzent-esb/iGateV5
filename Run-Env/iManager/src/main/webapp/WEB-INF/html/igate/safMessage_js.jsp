@@ -81,6 +81,7 @@
       updateCancelBtn : hasSafMessageEditor,
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       searchInitBtn : true,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -142,52 +143,6 @@
       objectUri : "<c:url value='/igate/safMessage/object.json'/>"
     }) ;
 
-    window.vmMain = new Vue({
-      el : '#MainBasic',
-      data : {
-        viewMode : 'Open',
-        object : {
-          pk : {}
-        },
-        panelMode : null
-      },
-      computed : {
-        pk : function()
-        {
-          return {
-            'pk.createDateTime' : this.object.pk.createDateTime,
-            'pk.adapterId' : this.object.pk.adapterId,
-            'pk.instanceId' : this.object.pk.instanceId,
-            'pk.safId' : this.object.pk.safId
-          } ;
-        }
-      },
-      methods : {
-        goDetailPanel : function()
-        {
-          panelOpen('detail') ;
-        },
-        initDetailArea : function(object)
-        {
-          if (object)
-          {
-            this.object = object ;
-          }
-          else
-          {
-            this.object.transactionId = null ;
-            this.object.messageId = null ;
-            this.object.interfaceId = null ;
-            this.object.serviceId = null ;
-          }
-          this.object.pk.createDateTime = null ;
-          this.object.pk.adapterId = null ;
-          this.object.pk.instanceId = null ;
-          this.object.pk.safId = null ;
-        }
-      },
-    }) ;
-
     new Vue({
       el : '#panel-footer',
       methods : $.extend(true, {}, panelMethodOption)
@@ -208,6 +163,8 @@
               serviceId : null,
               safStatus : " ",
               transactionId : null,
+              fromCreateTime : null,
+              toCreateTime : null,
               pk : {
                 adapterId : null,
                 fileDate : null,
@@ -224,7 +181,17 @@
             search : function()
             {
               vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-              vmList.makeGridObj.search(this) ;
+              vmList.makeGridObj.search(this, function() {
+	                $.ajax({
+	                    type : "GET",
+	                    url : "<c:url value='/igate/safMessage/rowCount.json' />",
+	                    data: JsonImngObj.serialize(this.object),
+	                    processData : false,
+	                    success : function(result) {
+	                        vmList.totalCount = result.object;
+	                    }
+	                });
+	            }.bind(this));
             },
             initSearchArea : function(searchCondition)
             {
@@ -245,7 +212,7 @@
                 this.object.pk.instanceId = ' ' ;
                 this.object.safStatus = ' ' ;
                 this.object.fromCreateDateTime = null ;
-                this.object.toCreateDateTime = null ;            	  
+                this.object.toCreateDateTime = null ;
               }
 
               initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize) ;
@@ -283,7 +250,8 @@
           el : '#' + createPageObj.getElementId('ImngListObject'),
           data : {
             makeGridObj : null,
-            newTabPageUrl: "<c:url value='/igate/safMessage.html' />"
+            newTabPageUrl: "<c:url value='/igate/safMessage.html' />",
+            totalCount: '0',
           },
           methods : $.extend(true, {}, listMethodOption, {
             initSearchArea : function()
@@ -402,6 +370,65 @@
             this.newTabSearchGrid();
           }
         }) ;
+        
+        window.vmMain = new Vue({
+          el : '#MainBasic',
+          data : {
+            viewMode : 'Open',
+            object : {
+              pk : {},
+              selectedSafSearch: null
+            },
+            panelMode : null
+          },
+          computed : {
+            pk : function()
+            {
+              return {
+                'pk.createDateTime' : this.object.pk.createDateTime,
+                'pk.adapterId' : this.object.pk.adapterId,
+                'pk.instanceId' : this.object.pk.instanceId,
+                'pk.safId' : this.object.pk.safId
+              } ;
+            }
+          },
+          methods : {
+            goDetailPanel : function()
+            {
+              panelOpen('detail') ;
+            },
+            initDetailArea : function(object)
+            {
+              if (object)
+              {
+                this.object = object ;
+              }
+              else
+              {
+                this.object.transactionId = null ;
+                this.object.messageId = null ;
+                this.object.interfaceId = null ;
+                this.object.serviceId = null ;
+              }
+              this.object.pk.createDateTime = null ;
+              this.object.pk.adapterId = null ;
+              this.object.pk.instanceId = null ;
+              this.object.pk.safId = null ;
+            }
+          },
+          created : function() {
+            if(localStorage.getItem('selectedSafSearch')){
+          	  this.selectedTraceSearch = JSON.parse(localStorage.getItem('selectedSafSearch'));
+          	  localStorage.removeItem('selectedSafSearch');
+          	  window.vmSearch.object.fromCreateDateTime = this.selectedTraceSearch.fromLogDateTime;
+          	  window.vmSearch.object.toCreateDateTime = this.selectedTraceSearch.toLogDateTime;
+          	  window.vmSearch.object.pk.safId = this.selectedTraceSearch.safId;
+          	  window.vmSearch.search() ;
+          	  initDatePicker(window.vmSearch, $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateFrom'), $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateTo')) ;
+            }
+          }
+        }) ;
+        
       }) ;
     }) ;
   }) ;

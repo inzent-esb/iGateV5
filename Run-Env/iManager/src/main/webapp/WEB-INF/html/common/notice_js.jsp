@@ -20,6 +20,7 @@ $(document).ready(function(){
 	createPageObj.setMainButtonList({
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
+		totalCount: true,
 		addBtn: hasNoticeEditor,
 	});
 	
@@ -85,7 +86,17 @@ $(document).ready(function(){
     	methods : {
 			search : function() {
 				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-				vmList.makeGridObj.search(this);
+				vmList.makeGridObj.search(this, function() {
+	                $.ajax({
+	                    type : "GET",
+	                    url : "<c:url value='/common/notice/rowCount.json' />",
+	                    data: JsonImngObj.serialize(this.object),
+	                    processData : false,
+	                    success : function(result) {
+	                    	vmList.totalCount = result.object;
+	                    }
+	                });
+	            }.bind(this));
 			},
             initSearchArea: function(searchCondition) {
             	if(searchCondition) {
@@ -110,7 +121,8 @@ $(document).ready(function(){
         el: '#' + createPageObj.getElementId('ImngListObject'),
         data: {
         	makeGridObj: null,
-        	newTabPageUrl: "<c:url value='/common/notice.html' />"
+        	totalCount: '0',
+            newTabPageUrl: "<c:url value='/common/notice.html' />"
         },        
         methods : $.extend(true, {}, listMethodOption, {
         	initSearchArea: function() {
@@ -192,7 +204,6 @@ $(document).ready(function(){
     				this.object.pk.noticeId = '';
         		}
         		
-        		this.object.userId = $("#userId").val();		
 			},
         },
     });

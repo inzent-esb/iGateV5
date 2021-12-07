@@ -178,8 +178,9 @@
             },
             complete : function(jqXHR, textStatus )
             {
+              this.cancelModeChange() ;
            	  window.vmDetail.initDetail() ;
-            }
+            }.bind(this)
           }) ;
         }
       },

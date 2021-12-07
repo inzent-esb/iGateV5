@@ -86,6 +86,7 @@ $(document).ready(function() {
 						
 						vmList.makeGridObj.search(this, function(result) {
 							vmList.total(result);
+							vmList.totalCount = vmList.makeGridObj.getSearchGrid().getRowCount();
 						});
 					},
 	   	        	initSearchArea: function(searchCondition) {
@@ -190,6 +191,11 @@ $(document).ready(function() {
     			 			this.exceptionCount += element.exceptionCount;
     			 			this.timeoutCount += element.timeoutCount;
     			 		}.bind(this));
+    			 		
+    			 		this.requestCount = numberWithComma(this.requestCount);
+    			 		this.successCount = numberWithComma(this.successCount);
+    			 		this.exceptionCount = numberWithComma(this.exceptionCount);
+    			 		this.timeoutCount = numberWithComma(this.timeoutCount);
     	      		}
     	        }),
     	        mounted: function() {
@@ -238,42 +244,60 @@ $(document).ready(function() {
     	                		header : "<fmt:message>igate.logStatistics.requestCount</fmt:message>",
     	                		align : "right",
     	                        width: "15%",
-    	                        sortable: true
+    	                        sortable: true,
+    	                        formatter: function(info) {
+    	                        	return numberWithComma(info.row.requestCount);
+    	                        }
     	                	}, 
     	                	{
     	                		name : "successCount",
     	                		header : "<fmt:message>igate.logStatistics.successCount</fmt:message>",
     	                		align : "right",
     	                        width: "15%",
-    	                        sortable: true
+    	                        sortable: true,
+    	                        formatter: function(info) {
+    	                        	return numberWithComma(info.row.successCount);
+    	                        }
     	                	}, 
     	                	{
     	                		name : "exceptionCount",
     	                		header : "<fmt:message>igate.logStatistics.exceptionCount</fmt:message>",
     	                		align : "right",
     	                        width: "15%",
-    	                        sortable: true
+    	                        sortable: true,
+    	                        formatter: function(info) {
+    	                        	return numberWithComma(info.row.exceptionCount);
+    	                        }
     	                	}, 
     	                	{
     	                		name : "timeoutCount",
     	                		header : "<fmt:message>igate.logStatistics.timeoutCount</fmt:message>",
     	                		align : "right",
     	                        width: "15%",
-    	                        sortable: true
+    	                        sortable: true,
+    	                        formatter: function(info) {
+    	                        	return numberWithComma(info.row.timeoutCount);
+    	                        }
     	                	},
     	                	{
     	                		name : "responseTotal",
     	                		header : "<fmt:message>igate.logStatistics.responseTotal</fmt:message>",
     	                		align : "right",
     	                        width: "15%",
-    	                        sortable: true
+    	                        sortable: true,
+    	                        formatter: function(info) {
+    	                        	return numberWithComma(info.row.responseTotal);
+    	                        }
     	                	}, 
     	                	{
     	                		name : "responseMax",
     	                		header : "<fmt:message>igate.logStatistics.responseMax</fmt:message>",
     	                		align : "right",
     	                        width: "15%",
-    	                        sortable: true
+    	                        sortable: true,
+    	                        formatter: function(info) {
+    	                        	return numberWithComma(info.row.responseMax);
+    	                        }
     	                	}
     	                 ],
     	                 pageOptions: {

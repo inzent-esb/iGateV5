@@ -532,6 +532,23 @@ body{display: flex}
 .frm-row:not(:last-child){margin-bottom: 1.5rem}
 .form-group-editor .well{border-radius: .25rem;border: 1px solid #aaacb4;padding: .375rem .5rem}
 
+/* Cron Expression - 커스텀 css */
+.form-control-cron{border-radius: .25rem !important; height: 2rem;padding: .375rem .5rem;background: #fff;border-color: #babbc2;font-size: .875rem;-webkit-appearance: none;box-shadow: none !important}
+.form-control-cron[disabled], .form-control-cron.disabled{background-color: #f5f6fb;border-color: #aaacb4}
+select.form-control-cron{padding-right: 2rem;background: #fff url(../img/select.svg) no-repeat center right .5rem/auto 1rem}
+select.form-control-cron:focus{padding-right: calc(2rem - 1px)}
+#cronVueJob .custom-radio.hide-ie-select .custom-control-label::before, .custom-radio.hide-ie-select .custom-control-label::after{
+	top: 9px;
+}
+#cronVueJob .custom-radio.show-ie-select .custom-control-label::before, .custom-radio.show-ie-select .custom-control-label::after{
+	top: -13px;
+}
+
+/* Only works in IE11 */
+@media all and (-ms-high-contrast: none), (-ms-hight-constrast: active) {
+	.week {top:-7.5px;}
+}
+
 @media (min-width: 992px){
     .panel~.backdrop{display: none}
 
@@ -607,6 +624,7 @@ body{display: flex}
     #collapse-filter .toggleSearchExpandBtn:not(.collapsed) .icon-down{ transform: scaleY(-1); }
     #collapse-filter .filter .col-auto { display: flex; }
     #collapse-filter .toggleSearchExpandArea .filter .col-auto { display: none; }
+    #collapse-filter .toggleSearchExpandArea .col { max-width: 20%; border-right: 1px solid #f0f1f6; border-bottom: 1px solid #f0f1f6; }
 }
 
 @media (max-width: 767.95px){
@@ -628,6 +646,7 @@ body{display: flex}
     #collapse-filter .toggleSearchExpandArea { display: block; }
     #collapse-filter .filter .col-auto { display: none; }
     #collapse-filter .toggleSearchExpandArea .filter .col-auto { display: block; }    
+    #collapse-filter .toggleSearchExpandArea .col { max-width: none; border-right: none; border-bottom: none; }
 }
 
 @media (max-width: 991.95px){
@@ -686,6 +705,7 @@ body{display: flex}
     .login #hd{padding-left: 1rem}
     .login #ct{align-items: center;justify-content: flex-start}
     .form-login>img{display: block;margin-left: auto;margin-right: auto}
+    .passwordLabel{text-align: center;}
 
     /* loader */
     .spinner{width: 4rem;height: 4rem}
@@ -832,8 +852,12 @@ input::-ms-reveal {
 #collapse-filter .toggleSearchExpandArea .filter {
     background-color: #fff;
     border-bottom: 1px solid #f0f1f6;
+    border-top: none;
 }
 
-#collapse-filter .toggleSearchExpandArea .col {
-    border-bottom: 1px solid #f0f1f6;
+#collapse-filter .toggleSearchExpandArea .col:before { 
+	border-left: none; 
 }
+
+#passwordForm .passwordLabel{margin-bottom: 0.8rem !important; }
+#passwordForm > img {margin-bottom: 0.5rem !important;}

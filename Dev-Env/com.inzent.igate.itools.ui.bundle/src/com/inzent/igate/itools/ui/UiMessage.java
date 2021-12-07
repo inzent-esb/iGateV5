@@ -31,6 +31,7 @@ public class UiMessage extends NLS
   public static String INFORMATION_IO_MESSAGE9 ; // There are [{0}] of the items that were successfully imported.
   public static String ERROR_IMPORT_EXPORT_IO_MESSAGE1 ; // Fail (There is no recognizable sheet)
   public static String ERROR_IMPORT_EXPORT_IO_MESSAGE10 ; // OperationRule is null.
+  public static String ERROR_IMPORT_EXPORT_IO_MESSAGE11 ; // [{0}] Failed to open folder.
   public static String ERROR_IMPORT_EXPORT_IO_MESSAGE2 ; // Fail (Failed for the following reasons)
   public static String ERROR_IMPORT_EXPORT_IO_MESSAGE3 ; // This file is not in the correct format.
   public static String ERROR_IMPORT_EXPORT_IO_MESSAGE4 ; // Fail (DRM release failed)

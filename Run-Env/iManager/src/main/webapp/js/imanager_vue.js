@@ -1079,7 +1079,7 @@ function getMakeGridObj()
 
           var S4 = function()
           {
-            return (Math.floor(Math.random() * 0x10000).toString(16)) ;
+            return (Math.floor(mathRandom() * 0x10000).toString(16)) ;
           }
 
           return "GUID-" + (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4()) ;
@@ -1091,7 +1091,8 @@ function getMakeGridObj()
     	if('none' == $('#' + listAreaId).children('.empty').css('display')) return;
     	
 		$('#' + listAreaId).children('.empty').hide();					
-		$('#' + listAreaId).children('.table-responsive').show();
+		$('#' + listAreaId).children('.table-responsive').show();		
+		$('#' + listAreaId).find("[showLater='true']").show();
     };
     
     this.search = function(vueSearchObj, callback)

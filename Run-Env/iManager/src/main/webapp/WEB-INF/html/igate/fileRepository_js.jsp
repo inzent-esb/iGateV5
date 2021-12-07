@@ -77,6 +77,7 @@
       updateReadyBtn : hasFileLogEditor,
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       searchInitBtn : true,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -188,7 +189,17 @@
             search : function()
             {
               vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-              vmList.makeGridObj.search(this) ;
+              vmList.makeGridObj.search(this, function() {
+	                $.ajax({
+	                    type : "GET",
+	                    url : "<c:url value='/igate/fileRepository/rowCount.json' />",
+	                    data: JsonImngObj.serialize(this.object),
+	                    processData : false,
+	                    success : function(result) {
+	                        vmList.totalCount = result.object;
+	                    }
+	                });
+	            }.bind(this));
             },
             initSearchArea : function(searchCondition)
             {
@@ -249,7 +260,8 @@
           el : '#' + createPageObj.getElementId('ImngListObject'),
           data : {
             makeGridObj : null,
-            newTabPageUrl: "<c:url value='/igate/fileRepository.html' />"
+            newTabPageUrl: "<c:url value='/igate/fileRepository.html' />",
+            totalCount: '0',
           },
           methods : $.extend(true, {}, listMethodOption, {
             initSearchArea : function()
@@ -347,7 +359,10 @@
                 name : "fileLength",
                 header : "<fmt:message>head.file</fmt:message> <fmt:message>head.length</fmt:message>",
                 align : "right",
-                width: "6%"
+                width: "6%",
+                formatter: function(info) {
+              	  return numberWithComma(info.row.fileLength);
+                }
               }, {
                 name : "createDateTime",
                 header : "<fmt:message>igate.connectorControl.create</fmt:message> <fmt:message>head.date</fmt:message>",
@@ -480,8 +495,8 @@
   function initDateSinglePicker(vueObj, dateRangeSelector)
   {
     var startDate = null;
-		
-    if(vueObj.object.pk.fileDate) 
+
+    if(vueObj.object.pk.fileDate)
     {
    	  var year = vueObj.object.pk.fileDate.substring(0, 4);
    	  var month = vueObj.object.pk.fileDate.substring(4, 6);

@@ -33,6 +33,7 @@ $(document).ready(function(){
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
 		addBtn: hasPropertyEditor,
+		totalCount: true,
 	});
 	
 	createPageObj.mainConstructor();
@@ -106,7 +107,17 @@ $(document).ready(function(){
     	methods : {
 			search : function() {
 				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-				vmList.makeGridObj.search(this);
+				vmList.makeGridObj.search(this, function() {
+	                $.ajax({
+	                    type : "GET",
+	                    url : "<c:url value='/common/property/rowCount.json' />",
+	                    data: JsonImngObj.serialize(this.object),
+	                    processData : false,
+	                    success : function(result) {
+	                    	vmList.totalCount = result.object;
+	                    }
+	                });
+	            }.bind(this));
 			},
             initSearchArea: function(searchCondition) {
             	if(searchCondition) {
@@ -141,6 +152,7 @@ $(document).ready(function(){
         el: '#' + createPageObj.getElementId('ImngListObject'),
         data: {
         	makeGridObj: null,
+            totalCount: '0',
         	newTabPageUrl: "<c:url value='/common/property.html' />"
         },
         methods : $.extend(true, {}, listMethodOption, {

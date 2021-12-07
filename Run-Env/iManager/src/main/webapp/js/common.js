@@ -258,26 +258,41 @@ window.onresize = function()
 } ;
 // tui grid resize end
 
-function downloadExcel(csvData) {
+function downloadExcel(url, csvData) {	
 	
-	var excelDataForm = document.excelForm;
+	var excelDataForm = document.createElement('form');
+	excelDataForm.setAttribute('action', PropertyImngObj.contextRoot + url);
+	excelDataForm.setAttribute('method', 'post');
+	excelDataForm.setAttribute('target', 'hiddenframe');
+	
+	var iframe = document.createElement('iframe'); 
+	iframe.setAttribute('width', 0);
+	iframe.setAttribute('height', 0);
+	iframe.setAttribute('type', 'hiddenframe');
+	iframe.setAttribute('value', 'openPop');
+	iframe.style.display = 'none';
+	excelDataForm.appendChild(iframe);
+	
+	var _csrf = document.createElement('input'); 
+	_csrf.setAttribute('type', 'hidden');	
+	_csrf.setAttribute('name', $("meta[name='_csrf_parameter']").attr("content"));
+	_csrf.setAttribute('value', $("meta[name='_csrf']").attr("content"));
+	excelDataForm.appendChild(_csrf);
+	
 	var key = Object.keys(csvData);
 	
 	for(var i = 0; i < key.length; i++) {
 		var input = document.createElement('input'); 
-		input.setAttribute("type", "hidden"); 
-		input.setAttribute("class", 'excelFrom_TempData'); 
+		input.setAttribute("type", "hidden");
 		input.setAttribute("name", key[i]); 
 		input.setAttribute("value", csvData[key[i]]);
 		
 		excelDataForm.appendChild(input);
 	}
 	
-  	var popup = window.open("", "hiddenframe", "toolbar=no, width=0, height=0, directories=no, status=no,    scrollorbars=no, resizable=no") ;
-  	excelDataForm.target = "hiddenframe";
-  	excelDataForm.submit();
-  	$('.excelFrom_TempData').remove();
-
+	document.body.appendChild(excelDataForm);
+	excelDataForm.submit();
+	document.body.removeChild(excelDataForm);
 }
 
 function downloadCSV(pCsvFileName, pCsvData) {
@@ -289,11 +304,7 @@ function downloadCSV(pCsvFileName, pCsvData) {
 	if (window.navigator && window.navigator.msSaveOrOpenBlob) { 
 		var blob = new Blob([csvData], {type: 'text/csv;charset=utf8'});
 		window.navigator.msSaveOrOpenBlob(blob, csvFileName);
-	} else {
-		
-		if (!(window.Blob && window.URL))
-			csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(chartDataArr);
-		
+	} else {		
 		var downloadLink = document.createElement('a');
 		
 		var blob = new Blob([csvData], {type: 'text/csv;charset=utf-8;'});
@@ -350,7 +361,7 @@ function encryptPassword(password) {
 	    var result = '';
 	    
 	    for (var i = 0; i < 32; i++) {
-	        result += characters.charAt(Math.floor(Math.random() * characters.length));
+	        result += characters.charAt(Math.floor(mathRandom() * characters.length));
 	    }
 
 	    return result;
@@ -359,4 +370,18 @@ function encryptPassword(password) {
 	var encrypt = CryptoJS.AES.encrypt(password, CryptoJS.enc.Hex.parse(key), { iv: CryptoJS.enc.Hex.parse(key) });
 	
 	return '{jst}' + btoa(key + encrypt.toString());
+}
+
+function mathRandom() {
+   var cryptoObj = window.crypto || window.msCrypto;
+   
+   var arr = new Uint32Array(1);
+   
+   cryptoObj.getRandomValues(arr);
+   
+   return arr[0] / Math.pow(2, 32); //4294967296
+}
+
+function numberWithComma(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

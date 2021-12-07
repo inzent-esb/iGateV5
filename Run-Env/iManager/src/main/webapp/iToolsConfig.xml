@@ -41,7 +41,7 @@
   <Record>
     <GroupHeaders>
       <GroupHeader label="기본정보" expanded="true">
-        <Column label="ID" align="left" width="180" name="fieldId" editType="edit" />
+        <Column label="ID" align="left" width="180" name="fieldId" editType="regEdit" availableValue="^[_$A-z가-힣][a-zA-Z0-9가-힣_$]*$" />
         <Column label="이름" align="left" width="120" name="fieldName" editType="edit" />
         <Column label="Index" align="left" width="50" name="fieldIndex" editType="edit" />
         <Column label="타입" align="center" width="80" name="fieldType" editType="select" availableValue="B=Byte,S=Short,I=Int,L=Long,F=Float,D=Double,b=Boolean,p=TimeStamp,T=String,N=Numeric,P=PackedDecimal,A=Raw,R=Group" availableDefaultValue="T" />

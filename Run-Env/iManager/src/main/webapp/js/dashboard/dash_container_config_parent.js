@@ -1089,7 +1089,7 @@ function DashContainerConfigParent() {
         	
         	detailInfoHtml += '			<div class="form-group">';
             detailInfoHtml += '				<label class="control-label">'+ dashboardLabel_colCnt +'</label>';
-            detailInfoHtml += '				<input type="text" name="instanceSummaryColCnt" class="form-control" maxlength="1" value="'+ componentDataObj.instanceSummaryColCnt +'">';
+            detailInfoHtml += '				<input type="text" name="instanceSummaryColCnt" class="form-control" maxlength="2" value="'+ componentDataObj.instanceSummaryColCnt +'">';
             detailInfoHtml += '			</div>';
         }
         
@@ -1301,7 +1301,7 @@ function DashContainerConfigParent() {
 	    		        	
 	    		        	detailInfoHtml += '			<div class="form-group">';
 	    		        	detailInfoHtml += '				<label class="control-label">'+ dashboardLabel_colCnt +'</label>';
-	    		        	detailInfoHtml += '				<input type="text" name="instanceSummaryColCnt" class="form-control" maxlength="1" value="'+ childComponent.instanceSummaryColCnt +'">';
+	    		        	detailInfoHtml += '				<input type="text" name="instanceSummaryColCnt" class="form-control" maxlength="2" value="'+ childComponent.instanceSummaryColCnt +'">';
 	    		        	detailInfoHtml += '			</div>';	    		        	
 	    		        }
 	    		        

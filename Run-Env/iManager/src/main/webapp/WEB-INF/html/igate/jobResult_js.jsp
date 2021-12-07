@@ -22,14 +22,26 @@ $(document).ready(function() {
        }
     },
 	{'type': "modal", 'mappingDataInfo': {'url' : '/igate/job.html', 'modalTitle': '<fmt:message>igate.job</fmt:message>', 'vModel': "object.pk.jobId", 'callBackFuncName': 'setSearchJobId'}, 'name': "<fmt:message>igate.job</fmt:message> <fmt:message>head.id</fmt:message>",      'placeholder': "<fmt:message>head.searchId</fmt:message>"},
-	{'type': "modal", 'mappingDataInfo': {'url' : '/igate/instance.html', 'modalTitle': '<fmt:message>igate.instance</fmt:message>', 'vModel': "object.pk.instanceId", 'callBackFuncName': 'setSearchInstanceId'}, 'name': "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>", 'placeholder': "<fmt:message>head.searchId</fmt:message>"}
-	]);
+	{'type': "modal", 'mappingDataInfo': {'url' : '/igate/instance.html', 'modalTitle': '<fmt:message>igate.instance</fmt:message>', 'vModel': "object.pk.instanceId", 'callBackFuncName': 'setSearchInstanceId'}, 'name': "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>", 'placeholder': "<fmt:message>head.searchId</fmt:message>"},
+	{
+      'type' : "select",
+      'mappingDataInfo' : {
+        'selectModel' : "object.successYn",
+        'optionFor' : 'option in successYns',
+        'optionValue' : 'option.pk.propertyKey',
+        'optionText' : 'option.propertyValue',
+        'id' : 'successYns',
+      },
+      'name': "<fmt:message>igate.jobResult.successYn</fmt:message>",
+      'placeholder' : "<fmt:message>head.all</fmt:message>"
+    }]);
 	
 	createPageObj.searchConstructor();
 
     createPageObj.setMainButtonList({
     	newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
-        searchInitBtn : true
+        searchInitBtn : true,
+        totalCount: true,
     }) ;
 
 	createPageObj.mainConstructor();
@@ -46,17 +58,26 @@ $(document).ready(function() {
 						{'type': "text", 'mappingDataInfo': "object.pk.scheduledDateTime", 'name': "<fmt:message>igate.jobResult.scheduledDateTime</fmt:message>", 			  isPk: true}, 
 						{'type': "text", 'mappingDataInfo': "object.pk.jobId", 			   'name': "<fmt:message>igate.job</fmt:message> <fmt:message>head.id</fmt:message>", isPk: true},
 						{'type': "text", 'mappingDataInfo': "object.pk.instanceId", 	   'name': "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>"},
-						{'type': "text", 'mappingDataInfo': "object.successYn", 		   'name': "<fmt:message>igate.jobResult.successYn</fmt:message>"},
+						{
+					      'type' : "select",
+					      'mappingDataInfo' : {
+					        'selectModel' : "object.successYn",
+					        'optionFor' : 'option in successYns',
+					        'optionValue' : 'option.pk.propertyKey',
+					        'optionText' : 'option.propertyValue',
+					        'id' : 'successYns',
+					      },
+					      'name': "<fmt:message>igate.jobResult.successYn</fmt:message>"
+					    }
 					]
 				},
 				{
 					'className': 'col-lg-6',
 					'detailSubList': [
-						
-						{'type': "text", 'mappingDataInfo': "object.executeTimestamp",	   'name': "<fmt:message>igate.jobResult.executeTimestamp</fmt:message>"},
-						{'type': "text", 'mappingDataInfo': "object.exceptionMessage", 	   'name': "<fmt:message>head.exception.message</fmt:message>"},	
-						{'type': "text", 'mappingDataInfo': "object.exceptionDateTime",    'name': "<fmt:message>igate.jobResult.exceptionDateTime</fmt:message>"},
-						{'type': "text", 'mappingDataInfo': "object.exceptionId", 		   'name': "<fmt:message>head.exception</fmt:message> <fmt:message>head.id</fmt:message>"}
+						{'type': "text",    'mappingDataInfo': "object.executeTimestamp",	   'name': "<fmt:message>igate.jobResult.executeTimestamp</fmt:message>"},
+						{'type': "text",    'mappingDataInfo': "object.exceptionMessage", 	   'name': "<fmt:message>head.exception.message</fmt:message>"},	
+						{'type': "text",    'mappingDataInfo': "object.exceptionDateTime",     'name': "<fmt:message>igate.jobResult.exceptionDateTime</fmt:message>"},
+						{'type': "textEvt", 'mappingDataInfo': "object.exceptionId",           'name': "<fmt:message>head.exception</fmt:message> <fmt:message>head.id</fmt:message>",  'clickEvt': 'clickExceptionInfo({"pk.exceptionId": object.exceptionId, "pk.exceptionDateTime": object.exceptionDateTime})'},
 					]
 				},				
 			]
@@ -70,149 +91,189 @@ $(document).ready(function() {
 	SaveImngObj.setConfig({
 		objectUri : "<c:url value='/igate/jobResult/object.json' />"
     });
-
-    window.vmSearch = new Vue({
-    	el : '#' + createPageObj.getElementId('ImngSearchObject'),
-    	data : {
-    		pageSize : '10',
-    		object : {
-    			pk : {
-    				jobId : null,
-    				instanceId : null
-    			}
-    		}
-    	},
-    	methods: {
-			search : function() {
-				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-				vmList.makeGridObj.search(this);
-			},
-            initSearchArea: function(searchCondition) {
-            	
-            	if(searchCondition) {
-            		for(var key in searchCondition) {
-            		    this.$data[key] = searchCondition[key];
-            		}            		
-            	}else {
-                	this.pageSize = '10';
-            		this.object.fromScheduledDateTime = null;
-            		this.object.toScheduledDateTime = null;            	
-            		this.object.pk.jobId = null;	
-            		this.object.pk.instanceId = null;            		
-            	}
-            	
-    	   		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
-    	   		initDatePicker(this, $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateFrom'), $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateTo'));
-            },
-			openModal: function(openModalParam) {
-				createPageObj.openModal.call(this, openModalParam);	
-			},
-            setSearchJobId: function(param) {
-            	console.log(param)
-            	this.object.pk.jobId = param.jobId;
-            },
-            setSearchInstanceId: function(param) {
-            	this.object.pk.instanceId = param.instanceId;
-            }
-    	},
-    	mounted: function() {
-			this.initSearchArea();
-    	}
-    });
-    
-    var vmList = new Vue({
-        el: '#' + createPageObj.getElementId('ImngListObject'),
-        data: {
-        	makeGridObj: null,
-        	newTabPageUrl: "<c:url value='/igate/jobResult.html' />"
-        },
-        methods : $.extend(true, {}, listMethodOption, {
-        	initSearchArea: function() {
-        		window.vmSearch.initSearchArea();
-        	}
-        }),
-        mounted: function() {
-        	
-        	this.makeGridObj = getMakeGridObj();
-        	
-        	this.makeGridObj.setConfig({
-        		elementId: createPageObj.getElementId('ImngSearchGrid'),
-        		onClick: SearchImngObj.clicked,
-        		searchUri : "<c:url value='/igate/jobResult/search.json' />",
-        		viewMode : "${viewMode}",
-        		popupResponse : "${popupResponse}",
-        		popupResponsePosition : "${popupResponsePosition}",
-        		columns : [
-        			{
-        				name : "pk.scheduledDateTime",
-        	        	header : "<fmt:message>igate.jobResult.scheduledDateTime</fmt:message>",
-        	        	align : "center",
-        	            width: "40%",
-        	      	},
-        	      	{
-        	        	name : "pk.instanceId",
-        	        	header : "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>",
-        	        	align : "left",
-        	            width: "30%",
-        	      	},
-        	      	{
-        	        	name : "pk.jobId",
-        	        	header : "<fmt:message>igate.job</fmt:message> <fmt:message>head.id</fmt:message>",
-        	        	align : "left",
-        	            width: "30%",
-        	      	}
-        	    ]        	    
-        	});
-        	
-        	SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
-        	
-        	this.newTabSearchGrid();
-        }        
-    });	    
-
-    window.vmMain = new Vue({
-    	el : '#MainBasic',
-    	data : {
-    		viewMode : 'Open',
-    		object : {
-    			pk : {}
-    		},
-    		panelMode : null
-    	},
-    	computed : {
-    		pk : function() {
-    			return{
-    				"pk.scheduledDateTime" : this.object.pk.scheduledDateTime,
-    	            "pk.instanceId" : this.object.pk.instanceId,
-    	            "pk.jobId" : this.object.pk.jobId
-    			} ;
-    		}
-    	},
-        methods : {
-			goDetailPanel: function() {
-				panelOpen('detail');
-			},
-        	initDetailArea: function(object) {
-        		if(object) {
-        			this.object=object;
-        		}else {
-    				this.object.successYn = null;
-    				this.object.executeTimestamp = null;
-    				this.object.exceptionMessage = null;	
-    				this.object.exceptionDateTime = null;
-    				this.object.exceptionId = null;
-        			this.object.pk.scheduledDateTime = null; 
-    				this.object.pk.jobId = null;
-    				this.object.pk.instanceId = null;
-        		}
-			}
-        },    	
-    }) ;	
 	
-	new Vue({
-		el: '#panel-footer',
-		methods : $.extend(true, {}, panelMethodOption)
-	});    
+	PropertyImngObj.getProperties('List.Yn', true, function(properties) {
+
+	    window.vmSearch = new Vue({
+	    	el : '#' + createPageObj.getElementId('ImngSearchObject'),
+	    	data : {
+	    		pageSize : '10',   
+	    		successYns: [],
+	    		object : {
+	    			pk : {
+	    				jobId : null,
+	    				instanceId : null
+	    			},
+	    			successYn: ' ',
+	    		}
+	    	},
+	    	methods: {
+				search : function() {
+					vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
+					vmList.makeGridObj.search(this, function() {
+		                $.ajax({
+		                    type : "GET",
+		                    url : "<c:url value='/igate/jobResult/rowCount.json' />",
+		                    data: JsonImngObj.serialize(this.object),
+		                    processData : false,
+		                    success : function(result) {
+		                    	vmList.totalCount = result.object;
+		                    }
+		                });
+		            }.bind(this));
+				},
+	            initSearchArea: function(searchCondition) {
+	            	
+	            	if(searchCondition) {
+	            		for(var key in searchCondition) {
+	            		    this.$data[key] = searchCondition[key];
+	            		}            		
+	            	}else {
+	                	this.pageSize = '10';
+	            		this.object.fromScheduledDateTime = null;
+	            		this.object.toScheduledDateTime = null;            	
+	            		this.object.pk.jobId = null;	
+	            		this.object.pk.instanceId = null; 
+	            		this.object.pk.successYn = ' '; 
+	            	}
+	            	
+	    	   		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
+	    	   		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#successYns'), this.object.successYn) ;
+	    	   		initDatePicker(this, $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateFrom'), $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateTo'));
+	            },
+				openModal: function(openModalParam) {
+					createPageObj.openModal.call(this, openModalParam);	
+				},
+	            setSearchJobId: function(param) {
+	            	this.object.pk.jobId = param.jobId;
+	            },
+	            setSearchInstanceId: function(param) {
+	            	this.object.pk.instanceId = param.instanceId;
+	            }
+	    	},
+	    	mounted: function() {
+				this.initSearchArea();
+	    	},
+	    	created: function() {
+	    		this.successYns = properties;	
+	    	}
+	    });
+	    
+	    var vmList = new Vue({
+	        el: '#' + createPageObj.getElementId('ImngListObject'),
+	        data: {
+	        	successYns: [],
+	        	makeGridObj: null,
+	            totalCount: '0',
+	        	newTabPageUrl: "<c:url value='/igate/jobResult.html' />"
+	        },
+	        methods : $.extend(true, {}, listMethodOption, {
+	        	initSearchArea: function() {
+	        		window.vmSearch.initSearchArea();
+	        	}
+	        }),
+	        mounted: function() {
+	        	
+	        	this.makeGridObj = getMakeGridObj();
+	        	
+	        	this.makeGridObj.setConfig({
+	        		elementId: createPageObj.getElementId('ImngSearchGrid'),
+	        		onClick: SearchImngObj.clicked,
+	        		searchUri : "<c:url value='/igate/jobResult/search.json' />",
+	        		viewMode : "${viewMode}",
+	        		popupResponse : "${popupResponse}",
+	        		popupResponsePosition : "${popupResponsePosition}",
+	        		columns : [
+	        			{
+	        				name : "pk.scheduledDateTime",
+	        	        	header : "<fmt:message>igate.jobResult.scheduledDateTime</fmt:message>",
+	        	        	align : "center",
+	        	            width: "26%",
+	        	      	},
+	        	      	{
+	        	        	name : "pk.instanceId",
+	        	        	header : "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>",
+	        	        	align : "left",
+	        	            width: "26%",
+	        	      	},
+	        	      	{
+	        	        	name : "pk.jobId",
+	        	        	header : "<fmt:message>igate.job</fmt:message> <fmt:message>head.id</fmt:message>",
+	        	        	align : "left",
+	        	            width: "27%",
+	        	      	},
+	        	      	{
+	        	        	name : "successYn",
+	        	        	header : "<fmt:message>igate.jobResult.successYn</fmt:message>",
+	        	        	align : "center",
+	        	            width: "20%",
+	        	            formatter : function(value) {
+								return ('Y' == value.row.successYn)? 'Yes' : 'No';
+							}
+	        	      	}
+	        	    ]        	    
+	        	});
+	        	
+	        	SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
+	        	
+	        	this.newTabSearchGrid();
+	        }        
+	    });	    
+	
+	    window.vmMain = new Vue({
+	    	el : '#MainBasic',
+	    	data : {
+	    		viewMode : 'Open',
+	    		object : {
+	    			pk : {}
+	    		},
+	    		panelMode : null
+	    	},
+	    	computed : {
+	    		pk : function() {
+	    			return{
+	    				"pk.scheduledDateTime" : this.object.pk.scheduledDateTime,
+	    	            "pk.instanceId" : this.object.pk.instanceId,
+	    	            "pk.jobId" : this.object.pk.jobId
+	    			} ;
+	    		}
+	    	},
+	    	created: function() {
+	    		this.successYns = properties;	
+	    	},
+	        methods : {
+				goDetailPanel: function() {
+					panelOpen('detail');
+				},
+	        	initDetailArea: function(object) {
+	        		if(object) {
+	        			this.object=object;
+	        		}else {
+	    				this.object.successYn = null;
+	    				this.object.executeTimestamp = null;
+	    				this.object.exceptionMessage = null;	
+	    				this.object.exceptionDateTime = null;
+	    				this.object.exceptionId = null;
+	        			this.object.pk.scheduledDateTime = null; 
+	    				this.object.pk.jobId = null;
+	    				this.object.pk.instanceId = null;
+	        		}
+				},
+				clickExceptionInfo(exceptionInfo) {
+		        	if(!(exceptionInfo['pk.exceptionId'] && exceptionInfo['pk.exceptionDateTime'])) return ;
+		        	
+		        	localStorage.setItem('selectedExceptionInfo', JSON.stringify(exceptionInfo)) ;
+		        	
+					window.open("<c:url value='/igate/exceptionLog.html' />") ;
+				}
+	        },    	
+	    }) ;	
+		
+		new Vue({
+			el: '#panel-footer',
+			methods : $.extend(true, {}, panelMethodOption)
+		});    
+	});
 });
 
 function initDatePicker(vueObj, dateFromSelector,dateToSelector) {

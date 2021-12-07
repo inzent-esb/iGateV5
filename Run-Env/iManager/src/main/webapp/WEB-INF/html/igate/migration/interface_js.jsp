@@ -69,6 +69,7 @@
       importBtn : hasInterfaceEditor,
       makeBtn : hasInterfaceEditor,
       searchInitBtn : true,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -233,7 +234,9 @@
 	        search : function()
 	        {
 	          vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-	          vmList.makeGridObj.search(this) ;
+	          vmList.makeGridObj.search(this, function() {
+	        	  vmList.totalCount = vmList.makeGridObj.getSearchGrid().getRowCount();
+	           });
 	        },
 	        initSearchArea : function(searchCondition)
 	        {
@@ -281,6 +284,7 @@
 	        el : '#' + createPageObj.getElementId('ImngListObject'),
 	        data : {
 	          makeGridObj : null,
+	          totalCount: '0',
 	          newTabPageUrl: "<c:url value='/igate/migration/interface.html' />"
 	        },
 	        methods : $.extend(true, {}, listMethodOption, {

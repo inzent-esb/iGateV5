@@ -21,6 +21,7 @@ $(document).ready(function() {
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
 		addBtn: hasThreadPoolEditor,
+		totalCount: true,
 	});
 	
 	createPageObj.mainConstructor();
@@ -80,7 +81,17 @@ $(document).ready(function() {
     	methods : {
 			search : function() {
 				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-				vmList.makeGridObj.search(this);
+				vmList.makeGridObj.search(this, function() {
+	                $.ajax({
+	                    type : "GET",
+	                    url : "<c:url value='/igate/threadPool/rowCount.json' />",
+	                    data: JsonImngObj.serialize(this.object),
+	                    processData : false,
+	                    success : function(result) {
+	                    	vmList.totalCount = result.object;
+	                    }
+	                });
+	            }.bind(this));
 			},
             initSearchArea: function(searchCondition) {
             	if(searchCondition) {
@@ -104,6 +115,7 @@ $(document).ready(function() {
         el: '#' + createPageObj.getElementId('ImngListObject'),
         data: {
         	makeGridObj: null,
+            totalCount: '0',
         	newTabPageUrl: "<c:url value='/igate/threadPool.html' />"
         },        
         methods : $.extend(true, {}, listMethodOption, {
@@ -149,24 +161,36 @@ $(document).ready(function() {
 	                  header : "<fmt:message>igate.threadPool.min</fmt:message>",
 	                  align : "right",
                       width: "16%",
+                      formatter: function(info) {
+                  		return numberWithComma(info.row.threadMin);
+                      }
 	                },
 	                {
 	                  name : "threadMax",
 	                  header : "<fmt:message>igate.threadPool.max</fmt:message>",
 	                  align : "right",
                       width: "16%",
+                      formatter: function(info) {
+                      	return numberWithComma(info.row.threadMax);
+                      }
 	                },
 	                {
 	                  name : "threadIdle",
 	                  header : "<fmt:message>igate.threadPool.idle</fmt:message>",
 	                  align : "right",
                       width: "16%",
+                      formatter: function(info) {
+                      	return numberWithComma(info.row.threadIdle);
+                      }
 	                },
 	                {
 	                  name : "threadThreshold",
 	                  header : "<fmt:message>igate.threadPool.threshold</fmt:message>",
 	                  align : "right",
                       width: "16%",
+                      formatter: function(info) {
+                      	return numberWithComma(info.row.threadThreshold);
+                      }
 	                }
 	            ]        	    
         	});

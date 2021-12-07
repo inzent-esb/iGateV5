@@ -7,6 +7,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/html/layout/header/head_vue.jsp"%>
+<%@ include file="/WEB-INF/html/layout/modal/footer_modal.jsp"%>
 </head>
 <body>
 <div id="wrap" class="login">
@@ -16,21 +17,31 @@
 		</h1>
 	</header>
 	<div id="ct">
-		<form id='passwordForm' class='form-login' action="<c:url value='/common/user/password.html' />" method='POST'>
+		<form id='passwordForm' class='form-login'>
+			<input type="hidden" name="_method" value="POST"/>
 			<img src="<c:url value='/img/product-name.svg' />" alt="ESB">
-			<div class="form-group">
-				<i class="icon-lock"></i>
-				<input id="passwordOld" type='password' name='passwordOld' class="form-control form-control-lg" placeholder="<fmt:message>common.user.oldPassword</fmt:message>" required onKeyup="javascript:if(event.keyCode == 13) passwordValidation() ;" />
-				<i class="icon-eye" onclick="changeType('passwordOld')"></i>
+			<div class="passwordLabel">
+				<span><fmt:message>common.password.page</fmt:message></span>
 			</div>
 			<div class="form-group">
 				<i class="icon-lock"></i>
-				<input id="passwordNew" type='password' name='passwordNew' class="form-control form-control-lg" placeholder="<fmt:message>common.user.newPassword</fmt:message>" required autofocus />
-				<i class="icon-eye" onclick="changeType('passwordNew')"></i>
+				<input type="hidden" name='passwordOld'>
+				<input id="passwordStrOld" type='password'  class="form-control form-control-lg" placeholder="<fmt:message>common.user.oldPassword</fmt:message>" required onKeyup="javascript:if(event.keyCode == 13) passwordValidation() ;" />
+				<i class="icon-eye" onclick="changeType('passwordStrOld')"></i>
 			</div>
-			<c:if test="${not empty error}">
+			<div class="form-group">
+				<i class="icon-lock"></i>
+				<input type="hidden" name='passwordNew'>
+				<input id="passwordStrNew" type='password' class="form-control form-control-lg" placeholder="<fmt:message>common.user.newPassword</fmt:message>" required autofocus />
+				<i class="icon-eye" onclick="changeType('passwordStrNew')"></i>
+			</div>			
+			<%-- <c:if test="${not empty error}">
 				<div class="alert alert-danger"><imc:throwable throwable="${error}"/></div>
-			</c:if>
+			</c:if> --%>
+			<div class="alert alert-danger" style="display: none;"><span id="errorMsg"></span></div>
+			<p style="font-size: 0.73rem;">
+				<fmt:message>common.user.validationPassCheck</fmt:message>
+			</p>
 		    <button type="button" class="btn btn-block btn-danger btn-lg" onclick="passwordValidation()"><fmt:message>head.update</fmt:message></button>
 		    <sec:csrfInput />
 		    <c:if test="${not empty _client_mode}">
@@ -39,36 +50,38 @@
 		</form>
 		<p class="copy">&copy; <b>2020 INZENT. All rights reserved</b></p>
 	</div>
-	<div id="alert" class="modal fade" tabindex="-1" role="dialog" style="position: absolute; width: 100%; height: 100%; z-index: 9998;">
-		<div class="modal-dialog modal-dialog-centered modal-dialog-alert">
-			<div class="modal-content">
-				<div class="modal-body">
-					<i class="iconb-warn"></i>
-					<p id="warnAlert-text" class="alert-text"></p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message>head.update</fmt:message></button>
-				</div>
-			</div>
-		</div>
-	</div>	
 </div>	
 </body>
 <script type="text/javascript">
 function passwordValidation() {
-	if(0 == $.trim($("#passwordNew").val()).length) {
-		$("#warnAlert-text").text('<fmt:message>common.password.noNewPassword</fmt:message>');
-		$("#alert").modal('show');
-	}else if(0 == $.trim($("#passwordOld").val()).length) {
-		$("#warnAlert-text").text('<fmt:message>common.password.noPassword</fmt:message>')
-		$("#alert").modal('show');
+	if(0 == $.trim($("#passwordStrNew").val()).length) {
+		warnAlert({message: '<fmt:message>common.password.noNewPassword</fmt:message>'});
+	}else if(0 == $.trim($("#passwordStrOld").val()).length) {
+		warnAlert({message: '<fmt:message>common.password.noPassword</fmt:message>'});
 	}else {
-		$('[name=passwordOld]').val(encryptPassword($('[name=passwordOld]').val()));
-		$('[name=passwordNew]').val(encryptPassword($('[name=passwordNew]').val()));
+		$('[name=passwordOld]').val(encryptPassword($('#passwordStrOld').val()));
+		$('[name=passwordNew]').val(encryptPassword($('#passwordStrNew').val()));
 		
 		startSpinner('full');
-		
-		$('#passwordForm').submit() ;
+
+		$.ajax({
+            type : "POST",
+            url : "<c:url value='/common/user/password.json' />",
+            data: $('#passwordForm').serialize(),
+            processData : false,
+            success : function(result) {
+            	stopSpinner();
+            	
+            	if('error' === result.result) {
+            		$('#errorMsg').text('<fmt:message>common.password.change.fail</fmt:message>').parent().show();
+            		return;
+            	}
+            	
+            	normalAlert({message : '<fmt:message>common.password.change.success</fmt:message><br><fmt:message>common.password.go.to.login</fmt:message>', isSpinnerMode: true, isXSSMode: false, callBackFunc : function() {
+            		location.href = "<c:url value='/common/auth/login.html' />";
+            	}});
+            }
+        });
 	}
 }
 

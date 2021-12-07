@@ -26,6 +26,7 @@
 <span id="tmpThreadPoolSummaryContent" style="display: none;">
 	<div class="gate-row">
 		<div class="gate">
+			<i class="iconb-warn" style="display: none;" title="Down"></i>
 			<i name="instanceStatus" class="status bg-normal"></i>
 			<span name="instanceId" class="t-xs"></span>
 		</div>

@@ -62,6 +62,7 @@ $(document).ready(function(){
 	createPageObj.setMainButtonList({
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
+		totalCount: true,
 		startBtn: hasConnectorEditor,
 		stopBtn: hasConnectorEditor,
 		stopForceBtn: hasConnectorEditor,
@@ -102,7 +103,9 @@ $(document).ready(function(){
         				vmList.makeGridObj.search(this, function() {
         					if(dataCnt <= vmList.makeGridObj.getSearchGrid().getRowCount())
         						normalAlert({message: '<fmt:message>igate.add.search.criteria<fmt:param value="' + dataCnt + '" /></fmt:message>'});
-        				});
+        					
+        					vmList.totalCount = vmList.makeGridObj.getSearchGrid().getRowCount();
+        				}.bind(this));
         			},
                     initSearchArea: function(searchCondition) {
                     	if(searchCondition) {
@@ -139,7 +142,8 @@ $(document).ready(function(){
         		el: '#' + createPageObj.getElementId('ImngListObject'),
                 data: {
                 	makeGridObj: null,
-                	newTabPageUrl: "<c:url value='/igate/connectorControl.html' />"
+                	newTabPageUrl: "<c:url value='/igate/connectorControl.html' />",
+                	totalCount: '0',
                 },
                 methods: $.extend(true, {}, listMethodOption, {
                 	initSearchArea: function() {
@@ -293,13 +297,19 @@ $(document).ready(function(){
                 	        	name : "sessionCount",
                 	        	header : "<fmt:message>igate.connectorControl.create</fmt:message>",
                 	        	align : "right",
-		                        width: "5%"
+		                        width: "5%",
+		                        formatter: function(info) {
+	                        		return numberWithComma(info.row.sessionCount);
+	                          	}
                 	      	}, 
                 	      	{
                 	        	name : "sessionInuse",
                 	        	header : "<fmt:message>igate.connectorControl.inuse</fmt:message>",
                 	        	align : "right",
-		                        width: "5%"
+		                        width: "5%",
+		                        formatter: function(info) {
+	                        		return numberWithComma(info.row.sessionInuse);
+	                          	}
                 	      	}, 	
                 	      	{
                 	        	name : "sessionMaxCount",
@@ -308,20 +318,26 @@ $(document).ready(function(){
 		                        width: "5%",
                 	        	formatter : function(name) {
                 	        		if(name.row.sessionMaxCount == "2147483647") return "MAX";
-                	        		else										 return escapeHtml(name.row.sessionMaxCount);
+                	        		else										 return numberWithComma(name.row.sessionMaxCount);
                 	        	}
                 	      	}, 
                 	      	{
                 	      		name : "threadCount",
                 	      		header : "<fmt:message>igate.connectorControl.create</fmt:message>",
                 	      		align : "right",
-		                        width: "5%"
+		                        width: "5%",
+		                        formatter: function(info) {
+	                        		return numberWithComma(info.row.threadCount);
+	                          	}
                 	      	}, 
                 	      	{
                 	        	name : "threadInuse",
                 	        	header : "<fmt:message>igate.connectorControl.inuse</fmt:message>",
                 	        	align : "right",
-		                        width: "5%"
+		                        width: "5%",
+		                        formatter: function(info) {
+	                        		return numberWithComma(info.row.threadInuse);
+	                          	}
                 	      	}, 
                 	      	{
                 	        	name : "threadMax",
@@ -330,7 +346,7 @@ $(document).ready(function(){
 		                        width: "5%",
                 	        	formatter : function(name) {
                 	        		if(name.row.threadMax == "2147483647")  return "MAX";
-                	        		else									return escapeHtml(name.row.threadMax);
+                	        		else									return numberWithComma(name.row.threadMax);
                 	        	}
                 	      	}, 
                 	      	{

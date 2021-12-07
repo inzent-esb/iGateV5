@@ -13,6 +13,7 @@ import java.io.File ;
 import java.io.IOException ;
 import java.util.Map ;
 
+import org.eclipse.osgi.util.NLS ;
 import org.eclipse.ui.PlatformUI ;
 
 import com.inzent.igate.itools.record.utils.RecordExportHandler ;
@@ -92,7 +93,7 @@ public class RecordExportHandlerImpl implements RecordExportHandler
         }
         catch (IOException e)
         {
-          ;
+          LogHandler.openError(RecordActivator.PLUGIN_ID, NLS.bind(UiMessage.ERROR_IMPORT_EXPORT_IO_MESSAGE11, selectedPath)) ;
         }
       }
     }

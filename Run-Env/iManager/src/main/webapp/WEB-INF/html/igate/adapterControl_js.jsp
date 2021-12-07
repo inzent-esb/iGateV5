@@ -39,6 +39,7 @@ $(document).ready(function(){
 	createPageObj.setMainButtonList({
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
+		totalCount: true,
 		startBtn: hasAdapterEditor,
 		stopBtn: hasAdapterEditor,
 	});
@@ -70,6 +71,8 @@ $(document).ready(function(){
 					vmList.makeGridObj.search(this, function() {
     					if(dataCnt <= vmList.makeGridObj.getSearchGrid().getRowCount())
     						normalAlert({message: '<fmt:message>igate.add.search.criteria<fmt:param value="' + dataCnt + '" /></fmt:message>'});
+    					
+    					vmList.totalCount = vmList.makeGridObj.getSearchGrid().getRowCount();
 					});
 				},
 	            initSearchArea: function(searchCondition) {
@@ -102,7 +105,8 @@ $(document).ready(function(){
 			el: '#' + createPageObj.getElementId('ImngListObject'),
 	        data: {
 	        	makeGridObj: null,
-	        	newTabPageUrl: "<c:url value='/igate/adapterControl.html' />"
+	        	newTabPageUrl: "<c:url value='/igate/adapterControl.html' />",
+	        	totalCount: '0'
 	        },
 			methods : $.extend(true, {}, listMethodOption, {
 	        	initSearchArea: function() {
@@ -212,18 +216,27 @@ $(document).ready(function(){
 	        	      		header : "<fmt:message>igate.queue.consumerCount</fmt:message>",
 	        	      		align : "right",
 	                        width: "8%",
+	                        formatter: function(info) {
+                        		return numberWithComma(info.row.consumerCount);
+                          	}
 	        	      	}, 
 	        	      	{
 	        	      		name : "consumerMax",
 	        	      		header : "<fmt:message>igate.queue.consumerMax</fmt:message>",
 	        	      		align : "right",
 	                        width: "8%",
+	                        formatter: function(info) {
+                        		return numberWithComma(info.row.consumerMax);
+                          	}
 	        	      	}, 
 	        	      	{
 	        	      		name : "messageCount",
 	        	      		header : "<fmt:message>igate.queue.messageCount</fmt:message>",
 	        	      		align : "right",
 	                        width: "8%",
+	                        formatter: function(info) {
+                        		return numberWithComma(info.row.messageCount);
+                          	}
 	        	      	}, 
 	        	      	{
 	        	      		name : "messageMax",
@@ -232,7 +245,7 @@ $(document).ready(function(){
 	                        width: "8%",
 	        	      		formatter : function(name) {
 	        	      			if (name.row.messageMax == "2147483647") return "MAX";
-	        	      			else									 return escapeHtml(name.row.messageMax);
+	        	      			else									 return numberWithComma(name.row.messageMax);
 	        	      		}
 	        	      	}, 
 	        	      	{

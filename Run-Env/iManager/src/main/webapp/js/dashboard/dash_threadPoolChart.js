@@ -41,6 +41,27 @@ $.fn.threadPoolChart = function(createOptions) {
 			targetInfoList.splice(findIndex, 1);
 		};
 		
+		this.updateTarget = function(targetId, updateOption) {
+			var findIndex = targetInfoList.map(function(targetInfo) { return targetInfo.targetId; }).indexOf(targetId);
+			
+			if(-1 == findIndex) return;
+			
+			var targetInfo = targetInfoList[findIndex];
+			
+			if (updateOption.isDataEmpty) {
+				targetInfo.element.find('[name=instanceStatus]').removeClass().addClass('status').addClass('bg-down');
+				targetInfo.element.find('[name=instanceActiveThreadGraph]').width('0%');
+				targetInfo.element.find('[name=instanceActiveThreadNum]').text('0');
+				targetInfo.element.find('[name=instanceIdleThreadGraph]').width('0%');
+				targetInfo.element.find('[name=instanceIdleThreadNum]').text('0');
+				
+				if ('Y' != updateOption.downStatus)	   targetInfo.element.find('.iconb-warn').show();
+				else							       targetInfo.element.find('.iconb-warn').hide();				
+			} else {
+				targetInfo.element.find('.iconb-warn').hide();
+			}
+		};
+		
 		this.addData = function(dataArr) {
 			dataArr.forEach(function(dataInfo) {
 				var targetInfo = targetInfoList.filter(function(targetInfo) {

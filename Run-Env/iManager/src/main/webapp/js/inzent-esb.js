@@ -138,8 +138,8 @@ function getCreatePageObj()
         else if (type === 'daterange')
         {
 
-          mappingDataInfo.daterangeInfo.forEach(function(daterangeObj){    		
-	    	  beforeSelector.before($('<div/>').attr('class', 'col').append($('<label/>').attr('class', 'form-control-label').append($('<b/>').attr('class', 'control-label').text(daterangeObj.name)).append($('<input/>').attr(
+          mappingDataInfo.daterangeInfo.forEach(function(daterangeObj, idx){    		
+	    	  beforeSelector.before($('<div/>').attr('class', 'col').data('idx', idx).append($('<label/>').attr('class', 'form-control-label').append($('<b/>').attr('class', 'control-label').text(daterangeObj.name)).append($('<input/>').attr(
 	          {
 	            'id' : daterangeObj.id,
 	            'class' : 'form-control input-daterange',
@@ -239,7 +239,9 @@ function getCreatePageObj()
     	      break;
     	    }
     	    
-    	    searchRootSelector.find('.toggleSearchExpandArea').children('.filter').find('.col-auto').before(beforeSelector.prev());
+    	    searchRootSelector.find('.toggleSearchExpandArea').children('.filter').find('.col-auto').before(
+    	    	('daterange' === type && 0 === beforeSelector.prev().prev().data('idx'))? beforeSelector.prev().prev() : beforeSelector.prev()
+    	    );
     	  }
     	}
         
@@ -272,17 +274,25 @@ function getCreatePageObj()
     {
       if (mainButtonList)
       {
-        $.each($('#' + this.getElementId('ImngListObject')).find('.sub-bar').find('.ml-auto').children(), function(index, element)
-        {
-          if (!mainButtonList[element.id])
-          {
-            $(element).remove() ;
-          }
-          else
-          {
-            $(element).show() ;
-          }
-        }) ;
+    	var mainButtonIdList = [];
+    	
+    	var listObj = $('#' + this.getElementId('ImngListObject'));
+    	
+    	listObj.find('.sub-bar').children().each(function(index, element) {
+    		if ($(element).hasClass('ml-auto')) {
+    			$(element).children().each(function(subIndex, subElement) {
+    				if(!$(subElement).attr('id')) return;
+    				mainButtonIdList.push($(subElement).attr('id'));
+    			});
+    		} else if($(element).attr('id')) {
+    			mainButtonIdList.push($(element).attr('id'));	
+    		}
+    	});
+    	
+    	mainButtonIdList.forEach(function(id) {
+    		if(!mainButtonList[id])					listObj.find('#' + id).remove() ;
+    		else if(!$('#' + id).attr('showLater')) listObj.find('#' + id).show() ;				
+    	});
       }
       else
       {
@@ -464,6 +474,29 @@ function getCreatePageObj()
                   }) ;
                 }
               }
+              else if ('cron' == detailSubObj.type)
+              {
+                var searchClass = (detailSubObj.isPk) ? 'input-group-append saveGroup' : 'input-group-append saveGroup updateGroup' ;
+
+                object.children('.input-group').children('input[type=text]').removeClass().addClass(formControl).attr(
+                {
+                  'name' : 'detail_type_cron',
+                  'v-model' : detailSubObj.mappingDataInfo.vModel,
+                  'readonly' : false
+                }).show() ;
+                object.children('.input-group').children('.input-group-append').attr(
+                {
+                  'class' : searchClass
+                }).show() ;
+                object.children('.input-group').children('.input-group-append').find('#lookupBtn').attr(
+                {
+                  'v-on:click' : 'openCustomModal(' + JSON.stringify(detailSubObj.mappingDataInfo) + ')'
+                }).show() ;
+                object.children('.input-group').children('.input-group-append').find('#resetBtn').attr(
+                {
+                  'v-on:click' : detailSubObj.mappingDataInfo.vModel + '= null;' + 'window.vmMain.$forceUpdate();'
+                }) ;
+              }
               else if ('singleDaterange' == detailSubObj.type)
               {
                 object.children('.input-group').children('input[type=text]').removeClass().addClass(formControl + ' input-date').attr(
@@ -570,7 +603,7 @@ function getCreatePageObj()
             	object.append($("<div/>").addClass('table-responsive').append($("<div/>").attr({'id' : detailSubObj.id})));  
               }
               
-              if ('search' != detailSubObj.type)
+              if ('search' != detailSubObj.type && 'cron' != detailSubObj.type)
               {
                 object.children('.input-group').children('.input-group-append').remove() ;
               }
@@ -800,10 +833,17 @@ function getCreatePageObj()
       var callBackFuncName = openModalParam.callBackFuncName ;
       var isMultiCheck = openModalParam.isMultiCheck ;
 
+      var modalSize = '-lg';
+      
+      if(openModalParam.modalParam && openModalParam.modalParam.modalSize) {    	  
+    	  var size = openModalParam.modalParam.modalSize;
+    	  modalSize = ('small' === size)? '-sm' : ('extraLarge' === size)? '-xl' : '';
+      }
+      
       var modalHtml = '' ;
 
       modalHtml += '<div id="' + viewName + 'ModalSearch"  class="modal fade" tabindex="-1" role="dialog">' ;
-      modalHtml += '    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">' ;
+      modalHtml += '    <div class="modal-dialog modal-dialog-centered modal'+ modalSize +' modal-dialog-scrollable">' ;
       modalHtml += '        <div class="modal-content">' ;
       modalHtml += '            <div class="modal-header">' ;
       modalHtml += '                <h2 class="modal-title">' + modalTitle + '</h2>' ;
@@ -885,6 +925,47 @@ function getCreatePageObj()
       $('#' + viewName + 'ModalSearch').find($(".modal-body")).load(url + '&popupId=' + viewName + 'ModalSearch') ;
       $('#' + viewName + 'ModalSearch').modal('show') ;
     }
+    
+    this.openCustomModal = function(modalInfo)
+    {
+    	var modalTitle = modalInfo.modalTitle;
+    	var spinnerMode = modalInfo.spinnerMode;
+    	var bodyHtml = modalInfo.bodyHtml;
+    	var shownCallBackFunc = modalInfo.shownCallBackFunc;
+    	var okCallBackFunc = modalInfo.okCallBackFunc;
+    	
+    	var modalHtml = '' ;
+
+        modalHtml += '<div id="' + viewName + 'ModalSearch"  class="modal fade" tabindex="-1" role="dialog">' ;
+        modalHtml += '    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">' ;
+        modalHtml += '        <div class="modal-content">' ;
+        modalHtml += '            <div class="modal-header">' ;
+        modalHtml += '                <h2 class="modal-title">' + modalTitle + '</h2>' ;
+        modalHtml += '                <button type="button" class="btn-icon" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>' ;
+        modalHtml += '            </div>' ;
+        modalHtml += '            <div class="modal-body"></div>' ;
+        modalHtml += '            <div class="modal-footer">' ;
+        modalHtml += '                <button type="button" class="btn btn-primary" id="modalOk" >OK</button>' ;
+        modalHtml += '                <button type="button" class="btn" data-dismiss="modal" id="modalClose">Close</button>' ;
+        modalHtml += '            </div>' ;
+        modalHtml += '        </div>' ;
+        modalHtml += '    </div>' ;
+        modalHtml += '</div>' ;
+
+        $('#' + viewName + 'ModalSearch').remove() ;
+        
+        $("body").append($(modalHtml)) ;
+        
+        $('#' + viewName + 'ModalSearch').find('.modal-body').append($(bodyHtml));
+        
+        initModalArea(viewName + 'ModalSearch', spinnerMode, shownCallBackFunc);
+        
+        $('#' + viewName + 'ModalSearch').modal('show');
+        
+		$('#' + viewName + 'ModalSearch').find('#modalOk').off().on('click', function() {
+			okCallBackFunc() ;
+		});	
+    }
   }
 
   return new createPageObj() ;
@@ -920,6 +1001,7 @@ function panelOpen(o, object, callBackFunc) {
 		    	$("#panel").find('.view-disabled').not("input[type='checkbox']").attr('readonly', false) ;
 		    	$("#panel").find('.view-disabled').filter("input[type='checkbox']").attr('disabled', false) ;
 		    	$("#panel").find('.form-control').filter('[name=detail_type_search]').attr('readonly', true) ;
+		    	$("#panel").find('.form-control').filter('[name=detail_type_cron]').attr('readonly', false) ;
 
 		    	$("#panel").find('.dataKey').not('[name=detail_type_search]').attr('readonly', false) ;
 		      

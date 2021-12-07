@@ -32,6 +32,7 @@ $(document).ready(function() {
 	createPageObj.setMainButtonList({
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
+		totalCount: true,
 		addBtn: btnFlag,
 	});
 	
@@ -170,12 +171,23 @@ $(document).ready(function() {
 			search : function() {
 				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 				
+				
 				$.ajax({
 					type : "GET",
 					url : "<c:url value='/common/user/clear.json' />",
 			        processData : false,
 			        success : function(result) {
-			        	vmList.makeGridObj.search(this);
+			        	vmList.makeGridObj.search(this, function() {
+			                $.ajax({
+			                    type : "GET",
+			                    url : "<c:url value='/common/user/rowCount.json' />",
+			                    data: JsonImngObj.serialize(this.object), 
+			                    processData : false,
+			                    success : function(result) {
+			                    	vmList.totalCount = result.object;
+			                    }
+			                });
+			            }.bind(this));
 			        }.bind(this),
 			        error : function(request, status, error) {
 
@@ -205,6 +217,7 @@ $(document).ready(function() {
         el: '#' + createPageObj.getElementId('ImngListObject'),
         data: {
         	makeGridObj: null,
+            totalCount: '0',
         	newTabPageUrl: "<c:url value='/common/user.html' />"
         },        
         methods : $.extend(true, {}, listMethodOption, {

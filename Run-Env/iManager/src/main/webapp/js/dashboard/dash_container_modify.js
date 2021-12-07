@@ -113,20 +113,15 @@ function DashContainerModify(dashContainerElement, dashContainerOptions) {
     			return false;
     		}
     		
+    		_this.containerInfo.monitorComponents = _this.componentList;
+    		
+    		_this.containerInfo._method = 'PUT';
+    		
         	$.ajax({
-				type: 'PUT',
+				type: 'POST',
 				url: contextPath + '/igate/monitoring/dashboard/container.json',
-		        contentType: 'application/json; charset=utf-8',
-		        data: JSON.stringify({
-	            	containerId: _this.containerInfo.containerId,
-	            	containerName: _this.containerInfo.containerName,
-	            	containerWidth: _this.containerInfo.containerWidth,
-	            	containerHeight: _this.containerInfo.containerHeight,
-	            	remarkYn: _this.containerInfo.remarkYn,
-	            	darkmodeYn: _this.containerInfo.darkmodeYn,
-	            	monitorComponents: _this.componentList,
-	            	monitorContainerUsers: _this.containerInfo.monitorContainerUsers
-		        }),
+				processData : false,
+				data: JsonImngObj.serialize(_this.containerInfo),
 		        dataType: "json",
 		        success: function(result) {
 		        	if('ok' != result.result) return;

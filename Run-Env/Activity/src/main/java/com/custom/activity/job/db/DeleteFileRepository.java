@@ -22,7 +22,7 @@ public class DeleteFileRepository extends AbstractActivity {
 
 	@Transactional
 	@Override
-	public int execute(Object... args) throws Throwable 
+	public int execute(Object... args) throws Exception 
 	{		
 
 		final String fileName = (String)args[0];

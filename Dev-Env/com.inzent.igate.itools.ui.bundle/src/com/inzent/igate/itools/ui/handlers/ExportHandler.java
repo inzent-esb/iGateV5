@@ -10,6 +10,7 @@ import java.util.TreeSet ;
 
 import org.apache.commons.lang3.StringUtils ;
 import org.eclipse.core.commands.ExecutionException ;
+import org.eclipse.osgi.util.NLS ;
 import org.eclipse.ui.PlatformUI ;
 
 import com.inzent.igate.itools.handlers.AbstractExportHandler ;
@@ -179,7 +180,11 @@ public class ExportHandler extends AbstractExportHandler
           }
           catch (IOException e)
           {
-            ;
+            LogHandler.openWarning(NLS.bind(UiMessage.ERROR_IMPORT_EXPORT_IO_MESSAGE11, exportPath)) ;
+          }
+          catch (IllegalArgumentException e)
+          {
+            LogHandler.openWarning(NLS.bind(UiMessage.ERROR_IMPORT_EXPORT_IO_MESSAGE11, exportPath)) ;
           }
         }
       }

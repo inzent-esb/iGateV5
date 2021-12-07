@@ -78,6 +78,11 @@
  		<put-attribute name="content" value="/WEB-INF/html/igate/interface.jsp"/>
  	</definition> 
  	
+ 	<definition name="igate/job" extends="menu-tiles">
+      	<put-attribute name="content_js" value="/WEB-INF/html/igate/job_js.jsp"/>
+       	<put-attribute name="content" value="/WEB-INF/html/igate/job.jsp"/>
+    </definition>
+ 	
  	<definition name="*/*" extends="menu-tiles">
 		<put-attribute name="content_js" value="/WEB-INF/html/{1}/{2}_js.jsp"/>
  		<put-attribute name="content" value="/WEB-INF/html/layout/content/content_default.jsp"/>

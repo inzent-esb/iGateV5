@@ -39,7 +39,7 @@ public class PushMessage extends AbstractActivity
   }
 
   @Override
-  public int execute(Object... args) throws Throwable
+  public int execute(Object... args) throws Exception
   {
     AdapterParameter adapterParameter = (AdapterParameter) args[0] ;
     RecordImpl response = (RecordImpl) args[1] ;

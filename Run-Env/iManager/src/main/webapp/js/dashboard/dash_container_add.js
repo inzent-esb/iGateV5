@@ -106,26 +106,15 @@ function DashContainerAdd(dashContainerElement, dashContainerOptions) {
     			return false;
     		}
     		
-    		_this.componentList.forEach(function(component) {
-    			component.monitorComponentTargets.forEach(function(monitorComponentTarget, index) {
-    				for(var key in monitorComponentTarget.pk) {
-    					component['monitorComponentTargets[' + index + '].pk.' + key] = monitorComponentTarget.pk[key];	
-    				}
-    			});
-    			
-    			delete component['monitorComponentTargets'];
-    		});
+    		_this.containerInfo.monitorComponents = _this.componentList;
     		
-    		_this.componentList.forEach(function(component, index) {
-    			for(var key in component){
-    				_this.containerInfo['monitorComponents[' + index + '].' + key] = component[key];	
-    			}
-    		});
+    		_this.containerInfo._method = 'POST';
     		
         	$.ajax({
 				type: 'POST',
 		        url: contextPath + '/igate/monitoring/dashboard/container.json',
-		        data: _this.containerInfo,
+		        processData : false,
+		        data: JsonImngObj.serialize(_this.containerInfo),
 		        dataType: "json",
 		        success: function(result) {
 		        	if('ok' != result.result) return;

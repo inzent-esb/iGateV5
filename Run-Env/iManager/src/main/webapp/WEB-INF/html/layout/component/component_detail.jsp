@@ -85,8 +85,10 @@
 <script type="text/javascript">
 var panelMethodOption = {
 	goPreviousPanel: function() {
-   		if (SearchImngObj.searchGrid.getFocusedCell().rowKey) {
-   			SearchImngObj.clicked(SearchImngObj.searchGrid.getRow(SearchImngObj.searchGrid.getFocusedCell().rowKey));
+		var rowKey = SearchImngObj.searchGrid.getFocusedCell().rowKey;
+		
+   		if ('number' === typeof rowKey && -1 < rowKey) {
+   			SearchImngObj.clicked(SearchImngObj.searchGrid.getRow(rowKey));
    		}else {
    			panelOpen('detail');
    		}

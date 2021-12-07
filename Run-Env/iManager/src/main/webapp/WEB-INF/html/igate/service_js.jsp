@@ -44,6 +44,7 @@
     createPageObj.setMainButtonList({
       searchInitBtn : true,
       downloadBtn : true,
+      totalCount: true,
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
     }) ;
 
@@ -153,7 +154,17 @@
       	methods : {
         	search : function() {
         		vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-          		vmList.makeGridObj.search(this) ;
+				vmList.makeGridObj.search(this, function() {
+	                $.ajax({
+	                    type : "GET",
+	                    url : "<c:url value='/igate/service/rowCount.json' />",
+	                    data: JsonImngObj.serialize(this.object),
+	                    processData : false,
+	                    success : function(result) {
+	                        vmList.totalCount = result.object;
+	                    }
+	                });
+	            }.bind(this));
         	},
         	initSearchArea : function(searchCondition) {
 	        	
@@ -190,7 +201,8 @@
       el : '#' + createPageObj.getElementId('ImngListObject'),
       data : {
         makeGridObj : null,
-        newTabPageUrl: "<c:url value='/igate/service.html' />"
+        newTabPageUrl: "<c:url value='/igate/service.html' />",
+        totalCount: '0',
       },
       methods : $.extend(true, {}, listMethodOption, {
         initSearchArea : function()

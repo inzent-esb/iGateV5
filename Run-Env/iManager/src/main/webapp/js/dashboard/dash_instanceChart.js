@@ -47,6 +47,34 @@ $.fn.instanceChart = function(createOptions) {
 			targetInfoList[findIndex].element.remove();
 			targetInfoList.splice(findIndex, 1);
 		};
+		
+		this.updateTarget = function(targetId, updateOption) {
+			var findIndex = targetInfoList.map(function(targetInfo) { return targetInfo.targetId; }).indexOf(targetId);
+
+			if(-1 == findIndex) return;
+			
+			var targetInfo = targetInfoList[findIndex];
+			
+			if (updateOption.isDataEmpty) {
+				targetInfo.element.find('[name=instanceCpuGraph]').height('0%');
+				targetInfo.element.find('[name=instanceCpuGraph]').attr('title','0%');
+				targetInfo.element.find('[name=instanceCpu]').text('0%');
+				targetInfo.element.find('[name=instanceMemoryGraph]').height('0%');
+				targetInfo.element.find('[name=instanceMemoryGraph]').attr('title','0%');
+				targetInfo.element.find('[name=instanceMemory]').text('0%');
+				targetInfo.element.find('[name=instanceDiskGraph1]').height('0%');
+				targetInfo.element.find('[name=instanceDiskGraph1]').attr('title','0%');
+				targetInfo.element.find('[name=instanceDisk1]').text('0%');
+				targetInfo.element.find('[name=instanceDiskGraph2]').height('0%');
+				targetInfo.element.find('[name=instanceDiskGraph2]').attr('title','0%');
+				targetInfo.element.find('[name=instanceDisk2]').text('0%');
+				
+				if ('Y' != updateOption.downStatus)	   targetInfo.element.find('.iconb-warn').show();
+				else							       targetInfo.element.find('.iconb-warn').hide();				
+			} else {
+				targetInfo.element.find('.iconb-warn').hide();
+			}
+		};
 				
 		this.addData = function(dataArr) {
 			dataArr.forEach(function(dataInfo) {
@@ -55,7 +83,7 @@ $.fn.instanceChart = function(createOptions) {
 				})[0];
 				
 				if(!targetInfo) return;
-				
+
 				targetInfo.element.find('[name=instanceCpuGraph]').height(Math.ceil(dataInfo.cpuUsage) + '%');
 				targetInfo.element.find('[name=instanceCpuGraph]').attr('title',Math.ceil(dataInfo.cpuUsage) + '%');
 				targetInfo.element.find('[name=instanceCpu]').text(Math.ceil(dataInfo.cpuUsage) + '%');
@@ -67,7 +95,7 @@ $.fn.instanceChart = function(createOptions) {
 				targetInfo.element.find('[name=instanceDisk1]').text(Math.ceil(dataInfo.fileMainUsage) + '%');
 				targetInfo.element.find('[name=instanceDiskGraph2]').height(Math.ceil(dataInfo.fileQueueUsage) + '%');
 				targetInfo.element.find('[name=instanceDiskGraph2]').attr('title',Math.ceil(dataInfo.fileQueueUsage) + '%');
-				targetInfo.element.find('[name=instanceDisk2]').text(Math.ceil(dataInfo.fileQueueUsage) + '%');
+				targetInfo.element.find('[name=instanceDisk2]').text(Math.ceil(dataInfo.fileQueueUsage) + '%');					
 			});
 		};
 		

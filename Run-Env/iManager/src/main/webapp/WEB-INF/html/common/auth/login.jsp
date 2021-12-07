@@ -7,6 +7,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/html/layout/header/head_vue.jsp"%>
+<%@ include file="/WEB-INF/html/layout/modal/footer_modal.jsp"%>
 <script type="text/javascript">
 $(document).ready(function() {
     initLoginArea();
@@ -24,7 +25,9 @@ $(document).ready(function() {
     </c:if>
 
     <c:if test="${(not empty error) and (not empty passwordUrl)}">
-      location.href = contextPath + unescapeHtml('<c:out value="${passwordUrl}" />');
+    	warnAlert({message : '<fmt:message>common.password.change.must</fmt:message>', isSpinnerMode: true, callBackFunc : function() {
+    		location.href = contextPath + unescapeHtml('<c:out value="${passwordUrl}" />');    		
+    	}});
     </c:if>
 
     initEventBind();

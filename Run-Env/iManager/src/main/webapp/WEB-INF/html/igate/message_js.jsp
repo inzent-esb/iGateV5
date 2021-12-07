@@ -7,25 +7,25 @@
 $(document).ready(function(){
 
 	var createPageObj = getCreatePageObj();
-	
+
 	createPageObj.setViewName('message');
 	createPageObj.setIsModal(false);
-	
+
 	createPageObj.setSearchList([
 		{
-			'type': "select", 
+			'type': "select",
   			'mappingDataInfo': {
   				'selectModel': "object.messageCategory",
   				'optionFor': 'option in messageCategories',
   				'optionValue': 'option.pk.propertyKey',
   				'optionText': 'option.propertyValue',
   				'id': 'messageCategories'
-  			},				
-			'name': "<fmt:message>igate.message.category</fmt:message>", 
+  			},
+			'name': "<fmt:message>igate.message.category</fmt:message>",
 			'placeholder': "<fmt:message>head.all</fmt:message>"
 		},
 		{
-			'type': "select", 
+			'type': "select",
   			'mappingDataInfo': {
   				'selectModel': "object.pk.messageLocale",
   				'optionFor': 'option in messageLocales',
@@ -38,17 +38,18 @@ $(document).ready(function(){
     	},
     	{'type': "text", 'mappingDataInfo': "object.pk.messageCode", 'name': "<fmt:message>igate.message.code</fmt:message>", 'placeholder': "<fmt:message>head.searchCode</fmt:message>"},
 	]);
-	
+
 	createPageObj.searchConstructor();
-	
+
 	createPageObj.setMainButtonList({
 		newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
 		searchInitBtn: true,
 		addBtn: hasMessageEditor,
+		totalCount: true,
 	});
-	
+
 	createPageObj.mainConstructor();
-	
+
 	createPageObj.setTabList([
 		{
 			'type': 'basic',
@@ -70,9 +71,9 @@ $(document).ready(function(){
 					]
 				},
 			]
-		}		
+		}
 	]);
-	
+
 	createPageObj.setPanelButtonList({
 		removeBtn: hasMessageEditor,
 		goModBtn: hasMessageEditor,
@@ -80,13 +81,13 @@ $(document).ready(function(){
 		updateBtn: hasMessageEditor,
 		goAddBtn: hasMessageEditor,
 	});
-	
+
 	createPageObj.panelConstructor();
-	
+
 	SaveImngObj.setConfig({
 		objectUri : "<c:url value='/igate/message/object.json' />",
-	});		
-	
+	});
+
     window.vmMain = new Vue({
     	el : '#MainBasic',
     	data : {
@@ -99,7 +100,7 @@ $(document).ready(function(){
     		panelMode : null
     	},
     	computed : {
-    		pk : function() { 
+    		pk : function() {
     			return{
     				"pk.messageCode" : this.object.pk.messageCode,
     				"pk.messageLocale" : this.object.pk.messageLocale
@@ -119,20 +120,20 @@ $(document).ready(function(){
     				this.object.messageFormat = null;
         			this.object.pk.messageLocale = null;
     				this.object.pk.messageCode = null;
-        		}	
+        		}
 			}
-        },    	
+        },
     }) ;
-    
+
 	new Vue({
 		el: '#panel-footer',
 		methods : $.extend(true, {}, panelMethodOption)
-	});    
-	
+	});
+
 	PropertyImngObj.getProperties('List.Message.MessageCategory', true, function(messageCategories) {
-		
+
 		$.getJSON("<c:url value='/igate/message/groups.json' />", function(data) {
-			
+
 			window.vmSearch = new Vue({
 				el : '#' + createPageObj.getElementId('ImngSearchObject'),
 				data : {
@@ -153,7 +154,17 @@ $(document).ready(function(){
 				methods : {
 					search : function() {
 						vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-						vmList.makeGridObj.search(this);
+						vmList.makeGridObj.search(this, function() {
+			                $.ajax({
+			                    type : "GET",
+			                    url : "<c:url value='/igate/message/rowCount.json' />",
+			                    data: JsonImngObj.serialize(this.object),
+			                    processData : false,
+			                    success : function(result) {
+			                    	vmList.totalCount = result.object;
+			                    }
+			                });
+			            }.bind(this));
 					},
 					initSearchArea: function(searchCondition) {
 						if(searchCondition) {
@@ -164,13 +175,13 @@ $(document).ready(function(){
 							this.pageSize = '10';
 					    	this.object.pk.messageCode = null;
 							this.object.messageCategory = ' ';
-					    	this.object.pk.messageLocale = ' ';							
+					    	this.object.pk.messageLocale = ' ';
 						}
-				    	
+
 						initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
 						initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#messageCategories'), this.object.messageCategory);
-						initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#messageLocales'),  this.object.pk.messageLocale);				    	
-					}					
+						initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#messageLocales'),  this.object.pk.messageLocale);
+					}
 				},
 				mounted: function(){
 					this.initSearchArea();
@@ -178,16 +189,17 @@ $(document).ready(function(){
 				created: function() {
 					this.messageCategories = messageCategories;
 					this.messageLocales = data.object;
-					
+
 					window.vmMain.messageCategories = messageCategories;
 					window.vmMain.messageLocales = data.object;
 				}
 			});
-			
+
 			var vmList = new Vue({
 		        el: '#' + createPageObj.getElementId('ImngListObject'),
 		        data: {
 		        	makeGridObj: null,
+		            totalCount: '0',
 		        	newTabPageUrl: "<c:url value='/igate/message.html' />"
 		        },
 		        methods : $.extend(true, {}, listMethodOption, {
@@ -196,9 +208,9 @@ $(document).ready(function(){
 		        	}
 		        }),
 		        mounted: function() {
-		        	
+
 		        	this.makeGridObj = getMakeGridObj();
-		        	
+
 		        	this.makeGridObj.setConfig({
 		        		elementId: createPageObj.getElementId('ImngSearchGrid'),
 		        		onClick: SearchImngObj.clicked,
@@ -231,14 +243,14 @@ $(document).ready(function(){
 		                  		align : "left",
 		                        width: "30%",
 		                	}
-		                ]		        	    
+		                ]
 		        	});
-		        	
+
 		        	SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
-		        	
+
 		        	this.newTabSearchGrid();
-		        }		        
-		    });			
+		        }
+		    });
 		});
 	});
 });

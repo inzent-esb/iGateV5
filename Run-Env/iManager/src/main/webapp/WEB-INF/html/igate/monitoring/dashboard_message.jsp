@@ -10,6 +10,7 @@ var dashboardLabel_copyDashboard = "<fmt:message>dashboard.head.copy.dashboard</
 
 var dashboardLabel_shareOff = "<fmt:message>dashboard.share.off</fmt:message>";
 var dashboardLabel_shareOn = "<fmt:message>dashboard.share.on</fmt:message>";
+var dashboardMsg_shareUserId = "<fmt:message>common.user.id</fmt:message>";
 
 var dashboardLabel_name = "<fmt:message>dashboard.head.name</fmt:message>";
 var dashboardLabel_resolution = "<fmt:message>dashboard.head.resolution</fmt:message>";
@@ -110,6 +111,7 @@ var dashboardMsg_xViewExportMaxCnt = '<fmt:message>dashboard.xview.export.maxCnt
 var dashboardMsg_fileSelectError = "<fmt:message>igate.migration.fileSelectError</fmt:message>";
 var dashboardMsg_migrationMake = "<fmt:message>igate.migration.make</fmt:message>";
 var dashboardMsg_jsonFileFormatOnly = "<fmt:message>dashboard.json.file.format.only</fmt:message>";
+var dashboardMsg_shareSearch = "<fmt:message>dashboard.share.search</fmt:message>";
 
 /* button */
 var dashboardBtn_share = "<fmt:message>head.share</fmt:message>";

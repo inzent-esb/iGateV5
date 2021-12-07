@@ -52,6 +52,7 @@
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       searchInitBtn : true,
       addBtn : hasInstanceEditor,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -121,12 +122,21 @@
         detailHtml += '<div class="form-table form-table-responsive">' ;
         detailHtml += '    <div class="form-table-wrap">' ;
         detailHtml += '        <div class="form-table-head">' ;
-        detailHtml += '            <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="propertyAdd();"><i class="icon-plus-circle"></i></button><label class="col"><fmt:message>common.property.key</fmt:message></label><label class="col"><fmt:message>common.property.value</fmt:message></label><label class="col"><fmt:message>head.description</fmt:message></label>' ;
+        detailHtml += '            <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="propertyAdd();"><i class="icon-plus-circle"></i></button>' ;
+        detailHtml += '			   <label class="col"><fmt:message>common.property.key</fmt:message></label>' ;
+        detailHtml += '			   <label class="col"><fmt:message>common.property.value</fmt:message></label>' ;
+        detailHtml += '			   <label class="col"><fmt:message>head.description</fmt:message></label>' ;
         detailHtml += '        </div>' ;
         detailHtml += '        <div class="form-table-body" v-for="(elm,index) in instanceProperties">' ;
         detailHtml += '        		<button type="button" class="btn-icon saveGroup updateGroup" v-if="elm.require == true"><i class="icon-star"></i></button>' ;
         detailHtml += '        		<button type="button" class="btn-icon saveGroup updateGroup" v-on:click="propertyRemove(index);" v-if="elm.require == false || elm.require == null"><i class="icon-minus-circle"></i></button>' ;
-        detailHtml += '        		<div class="col">' ;
+        detailHtml += '        		<div class="col" v-if="elm.require == true">' ;
+        detailHtml += '        			<input type="text" class="form-control view-disabled propertyKey" list="propertyKeys" v-model="elm.pk.propertyKey" readonly="readonly" disabled="disabled">' ;
+        detailHtml += '        			<datalist id="propertyKeys">' ;
+        detailHtml += '        				<option v-for="et in propertyKeys">{{et}}</option>' ;
+        detailHtml += '        			</datalist>' ;
+        detailHtml += '        		</div>' ;
+        detailHtml += '        		<div class="col" v-if="elm.require != true">' ;
         detailHtml += '        			<input type="text" class="form-control view-disabled" list="propertyKeys" v-model.trim="elm.pk.propertyKey" @change="searchPropertyKey(index);">' ;
         detailHtml += '        			<datalist id="propertyKeys">' ;
         detailHtml += '        				<option v-for="et in propertyKeys">{{et}}</option>' ;
@@ -135,11 +145,11 @@
         detailHtml += '        		<div class="col" v-if="elm.cipher == true">' ;
         detailHtml += '        			<input type="password" class="form-control view-disabled" v-model="elm.propertyValue">' ;
         detailHtml += '        		</div>' ;
-        detailHtml += '        		<div class="col">' ;
+        detailHtml += '        		<div class="col" v-if="elm.cipher == false || elm.cipher == null">' ;
         detailHtml += '        			<input type="text" class="form-control view-disabled" v-model="elm.propertyValue">' ;
         detailHtml += '        		</div>' ;
         detailHtml += '        		<div class="col">' ;
-        detailHtml += '        			<input type="text" class="form-control view-disabled" v-model="elm.propertyDesc" disabled="disabled">' ;
+        detailHtml += '        			<input type="text" class="form-control view-disabled propertyKey" v-model="elm.propertyDesc"  readonly="readonly" disabled="disabled">' ;
         detailHtml += '        		</div>' ;
         detailHtml += '        </div>' ;
         detailHtml += '    </div>' ;
@@ -307,7 +317,17 @@
           search : function()
           {
         	vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-            vmList.makeGridObj.search(this) ;
+        	vmList.makeGridObj.search(this, function() {
+                $.ajax({
+                    type : "GET",
+                    url : "<c:url value='/igate/instance/rowCount.json' />",
+                    data: JsonImngObj.serialize(this.object),
+                    processData : false,
+                    success : function(result) {
+                    	vmList.totalCount = result.object;
+                    }
+                });
+            }.bind(this));
           },
           initSearchArea : function(searchCondition)
           {
@@ -345,6 +365,7 @@
         el : '#' + createPageObj.getElementId('ImngListObject'),
         data : {
           makeGridObj : null,
+          totalCount: '0',
           newTabPageUrl: "<c:url value='/igate/instance.html' />"
         },
         methods : $.extend(true, {}, listMethodOption, {

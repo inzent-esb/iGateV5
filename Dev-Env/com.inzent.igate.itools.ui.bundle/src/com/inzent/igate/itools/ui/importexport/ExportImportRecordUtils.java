@@ -3,6 +3,7 @@ package com.inzent.igate.itools.ui.importexport ;
 import java.io.File ;
 import java.io.FileInputStream ;
 import java.io.FileOutputStream ;
+import java.io.IOException ;
 import java.io.InputStream ;
 import java.io.OutputStreamWriter ;
 import java.text.SimpleDateFormat ;
@@ -15,6 +16,7 @@ import java.util.Set ;
 import java.util.TreeSet ;
 
 import org.apache.commons.lang3.StringUtils ;
+import org.apache.poi.EncryptedDocumentException ;
 import org.apache.poi.ss.usermodel.BorderStyle ;
 import org.apache.poi.ss.usermodel.Cell ;
 import org.apache.poi.ss.usermodel.CellStyle ;
@@ -124,6 +126,30 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       {
         workbook.write(fileOutputStream) ;
       }
+      catch (IOException e) 
+      {
+        LogHandler.openError(UiActivator.PLUGIN_ID, e) ;
+        
+        resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_EXPORT_FAIL, record.getRecordId(), MetaConstants.FILE_EXTENDER_EXCEL, UiMessage.LABEL_FAIL, e.getMessage())) ;
+        resultMap.put(RESULT_COUNT, 0) ;
+        return resultMap ;
+      }
+    }
+    catch (EncryptedDocumentException e)
+    {
+      LogHandler.openError(UiActivator.PLUGIN_ID, e) ;
+      
+      resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_EXPORT_FAIL, record.getRecordId(), MetaConstants.FILE_EXTENDER_EXCEL, UiMessage.LABEL_FAIL, e.getMessage())) ;
+      resultMap.put(RESULT_COUNT, 0) ;
+      return resultMap ;
+    }
+    catch (IOException e)
+    {
+      LogHandler.openError(UiActivator.PLUGIN_ID, e) ;
+      
+      resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_EXPORT_FAIL, record.getRecordId(), MetaConstants.FILE_EXTENDER_EXCEL, UiMessage.LABEL_FAIL, e.getMessage())) ;
+      resultMap.put(RESULT_COUNT, 0) ;
+      return resultMap ;
     }
     catch (Throwable t)
     {
@@ -137,6 +163,12 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     try
     {
       encryption(fileName) ;
+    }
+    catch (IOException e)
+    {
+      resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_EXPORT_FAIL, record.getRecordId(), MetaConstants.FILE_EXTENDER_JSON, UiMessage.LABEL_FAIL, e.getMessage())) ;
+      resultMap.put(RESULT_COUNT, 0) ;
+      return resultMap ;
     }
     catch (Throwable t)
     {
@@ -549,7 +581,6 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     catch (Throwable t)
     {
       resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_IMPORT_FAIL, readFileName, UiMessage.LABEL_FAIL, t.getMessage())) ;
-
       return resultMap ;
     }
     finally
@@ -561,6 +592,8 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       catch (Throwable t)
       {
         // dummy
+        resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_IMPORT_FAIL, readFileName, UiMessage.LABEL_FAIL, t.getMessage())) ;
+        return resultMap ;
       }
     }
 
@@ -646,7 +679,8 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
         }
         catch (Throwable t)
         {
-          // dummy
+          resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_IMPORT_FAIL, readFileName, UiMessage.LABEL_FAIL, t.getMessage())) ;
+          return resultMap ;
         }
 
       try
@@ -655,7 +689,8 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       }
       catch (Throwable t)
       {
-        // dummy
+        resultMap.put(MESSAGE, String.format(MetaConstants.MESSAGE_IMPORT_FAIL, readFileName, UiMessage.LABEL_FAIL, t.getMessage())) ;
+        return resultMap ;
       }
     }
 

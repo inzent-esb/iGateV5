@@ -25,6 +25,14 @@
       selectedRowDashboard = localStorage.getItem('selectedRowDashboard') ;
       localStorage.removeItem('selectedRowDashboard') ;
     }
+    
+    var selectedTransactionInfo = null ;
+
+    if (localStorage.getItem('selectedTransactionInfo'))
+    {
+      selectedTransactionInfo = JSON.parse(localStorage.getItem('selectedTransactionInfo')) ;
+      localStorage.removeItem('selectedTransactionInfo') ;
+    }    
 
     var createPageObj = getCreatePageObj() ;
 
@@ -139,6 +147,7 @@
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       downloadBtn : true,
       searchInitBtn : true,
+      totalCount: true,
     }) ;
 
     createPageObj.mainConstructor() ;
@@ -212,7 +221,17 @@
             search : function()
             {
               vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-              vmList.makeGridObj.search(this) ;
+              vmList.makeGridObj.search(this, function() {
+	                $.ajax({
+	                    type : "GET",
+	                    url : "<c:url value='/igate/traceLog/rowCount.json' />",
+	                    data: JsonImngObj.serialize(this.object),
+	                    processData : false,
+	                    success : function(result) {
+	                        vmList.totalCount = result.object;
+	                    }
+	                });
+	            }.bind(this));
             },
             initSearchArea : function(searchCondition)
             {
@@ -300,7 +319,8 @@
           data : {
             makeGridObj : null,
             makebasicInfoGridObj : null,
-            newTabPageUrl: "<c:url value='/igate/traceLog.html' />"
+            newTabPageUrl: "<c:url value='/igate/traceLog.html' />",
+            totalCount: '0',
           },
           methods : $.extend(true, {}, listMethodOption, {
             initSearchArea : function()
@@ -517,7 +537,14 @@
 
             SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid() ;
             
-            this.newTabSearchGrid();
+            if(!this.newTabSearchGrid())
+            {
+              this.$nextTick(function() 
+              {
+            	window.vmSearch.object.transactionId = selectedTransactionInfo.transactionId ;            	  
+                window.vmSearch.search();  
+              });
+            }
           }
         }) ;
 
@@ -592,7 +619,7 @@
                     {
                       var S4 = function()
                       {
-                        return (Math.floor(Math.random() * 0x10000).toString(16)) ;
+                        return (Math.floor(mathRandom() * 0x10000).toString(16)) ;
                       }
 
                       return "GUID-" + (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4()) ;

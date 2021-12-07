@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <span id="tmpInstanceSummary" style="display: none;">
-	<div class="row no-gutters flex-1"></div>
+	<div class="row no-gutters flex-1" style="overflow-x: hidden;"></div>
 	
 	<div class="legend legend-square">
 		<span class="status"><i class="dot bg-cht-6"></i><fmt:message>dashboard.legend.square.cpu</fmt:message></span>
@@ -15,7 +15,10 @@
 
 <span id="tmpInstanceSummaryContent" style="display: none;">
 	<div class="gate-col">
-		<div class="graph-caption"><span name="instanceId"></span></div>
+		<div class="graph-caption">
+			<span name="instanceId"></span>
+			<i class="iconb-warn" style="display: none;" title="Down"></i>
+		</div>
 		<div class="graph-vs" style="width: 100%;">
 			<div class="progress progress-vertical" style="width: 25%;height:calc(100% - 1.0rem); padding-bottom: 1.0rem;">
 				<div name="instanceCpuGraph" class="progress-bar bg-cht-6" role="progressbar" data-toggle="tooltip" data-placement="top" title="0%" style="width: 100%;height: 0%" ></div>

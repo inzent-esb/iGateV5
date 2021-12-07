@@ -56,6 +56,7 @@
     createPageObj.setMainButtonList({
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       searchInitBtn : true,
+      totalCount: true,
       addBtn : hasConnectorEditor,
     }) ;
 
@@ -601,7 +602,17 @@
           search : function()
           {
         	vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-            vmList.makeGridObj.search(this) ;
+        	vmList.makeGridObj.search(this, function() {
+                $.ajax({
+                    type : "GET",
+                    url : "<c:url value='/igate/connector/rowCount.json' />",
+                    data: JsonImngObj.serialize(this.object),
+                    processData : false,
+                    success : function(result) {
+                        vmList.totalCount = result.object;
+                    }
+                });
+            }.bind(this));
           },
           initSearchArea : function(searchCondition)
           {
@@ -640,7 +651,8 @@
         el : '#' + createPageObj.getElementId('ImngListObject'),
         data : {
           makeGridObj : null,
-          newTabPageUrl: "<c:url value='/igate/connector.html' />"
+          newTabPageUrl: "<c:url value='/igate/connector.html' />",
+          totalCount: '0',
         },
         methods : $.extend(true, {}, listMethodOption, {
           initSearchArea : function()

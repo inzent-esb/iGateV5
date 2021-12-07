@@ -40,6 +40,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor ;
 import org.springframework.stereotype.Component ;
 
 import com.fasterxml.jackson.core.JsonEncoding ;
+import com.inzent.igate.imanager.CommonTools;
 import com.inzent.igate.repository.log.LogStats ;
 import com.inzent.imanager.message.MessageGenerator;
 
@@ -55,6 +56,7 @@ import com.inzent.imanager.message.MessageGenerator;
 public class LogStatsDownloadExcel implements LogStatsDownloadBean
 {
   protected final Log logger = LogFactory.getLog(getClass()) ; 
+  
 
   @Override
   public void downloadStats(HttpServletRequest request, HttpServletResponse response, String type, LogStats logStats, List<LogStats> logStatsList) throws Exception
@@ -199,32 +201,32 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       }
 
       // request
-      values = String.valueOf(logStats2.getRequestCount()) ;
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getRequestCount())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       // success
-      values = String.valueOf(logStats2.getSuccessCount()) ;
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getSuccessCount())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       // exception
-      values = String.valueOf(logStats2.getExceptionCount()) ;
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getExceptionCount())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       // timeout
-      values = String.valueOf(logStats2.getTimeoutCount()) ;
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getTimeoutCount())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       // 평균 처리 시간
-      values = String.valueOf(logStats2.getResponseTotal()) ;
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseTotal())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       // 최대 처리 시간
-      values = String.valueOf(logStats2.getResponseMax()) ;
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseMax())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
@@ -252,21 +254,25 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     i = typeFlag ? 3 : 2 ;
 
     // requestSum
+    values = CommonTools.numberWithComma(Long.toString(requestSum)) ;
     cell = row.createCell(i++) ;
     cell.setCellStyle(cellStyle_Base) ;
-    cell.setCellValue(requestSum) ;
+    cell.setCellValue(values) ;
     // successSum
+    values = CommonTools.numberWithComma(Long.toString(successSum)) ;
     cell = row.createCell(i++) ;
     cell.setCellStyle(cellStyle_Base) ;
-    cell.setCellValue(successSum) ;
+    cell.setCellValue(values) ;
     // exceptionSum
+    values = CommonTools.numberWithComma(Long.toString(exceptionSum)) ;
     cell = row.createCell(i++) ;
     cell.setCellStyle(cellStyle_Base) ;
-    cell.setCellValue(exceptionSum) ;
+    cell.setCellValue(values) ;
     // timeoutSum
+    values = CommonTools.numberWithComma(Long.toString(timeoutSum)) ;
     cell = row.createCell(i++) ;
     cell.setCellStyle(cellStyle_Base) ;
-    cell.setCellValue(timeoutSum) ;
+    cell.setCellValue(values) ;
 
     workbook.write(outputStream) ;
   }
