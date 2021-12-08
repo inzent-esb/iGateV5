@@ -1085,6 +1085,8 @@
        			
    				window.vmMain.object.cronExpression = objectResult;
    				
+   				window.vmMain.$forceUpdate() ;
+   				
    				$('#jobModalSearch').modal('hide');
        			
         	};
