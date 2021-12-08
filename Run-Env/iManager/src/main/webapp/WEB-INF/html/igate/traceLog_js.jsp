@@ -537,7 +537,7 @@
 
             SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid() ;
             
-            if(!this.newTabSearchGrid())
+            if(!this.newTabSearchGrid() && selectedTransactionInfo)
             {
               this.$nextTick(function() 
               {
