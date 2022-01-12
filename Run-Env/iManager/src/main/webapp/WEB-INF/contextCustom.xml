@@ -51,6 +51,7 @@
 		<security:intercept-url pattern="/common/role.*" access="hasRole('ROLE_RoleViewer')"/>
 		<security:intercept-url pattern="/common/role/**" access="hasRole('ROLE_RoleViewer')"/>
 		<security:intercept-url pattern="/common/user/password.html" access="permitAll()"/>
+		<security:intercept-url pattern="/common/user/password.json" access="permitAll()"/>
 		<security:intercept-url pattern="/common/user.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/common/user/**" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/igate/activity.*" access="hasRole('ROLE_ActivityViewer')"/>
