@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod ;
 
 import com.inzent.igate.imanager.interfacerecognize.InterfaceRecognizeService ;
 import com.inzent.igate.imanager.interfaces.InterfaceService ;
+import com.inzent.igate.imanager.mapping.MappingService ;
 import com.inzent.igate.imanager.record.RecordService ;
 import com.inzent.igate.imanager.service.ServiceService ;
 import com.inzent.igate.repository.meta.Interface ;
@@ -61,6 +62,9 @@ public abstract class AbstractEimsController
 
   @Autowired
   protected InterfaceService interfaceService ;
+  
+  @Autowired
+  protected MappingService mappingService ;
 
   @Autowired
   protected InterfaceRecognizeService interfaceRecognizeService ;
@@ -143,19 +147,25 @@ public abstract class AbstractEimsController
             for (Record record : records)
             {
               Record sourceRecord = recordService.get(record.getRecordId()) ;
-              if (null != sourceRecord)
-                recordService.update(record, sourceRecord) ;
-              else
-                recordService.insert(record) ;
-
+                if (null != sourceRecord)
+                {
+                  recordService.evict(sourceRecord) ;
+                  recordService.update(record, sourceRecord) ;
+                }
+                else
+                  recordService.insert(record) ;
               recordAfters.put(record.getRecordId(), sourceRecord) ;
+
             }
 
             for (Service service : services)
             {
               Service sourceService = serviceService.get(service.getServiceId()) ;
               if (null != sourceService)
+              {
+                serviceService.evict(sourceService) ;
                 runnables.add(serviceService.update(service, sourceService)) ;
+              }
               else
                 serviceService.insert(service) ;
 
@@ -169,7 +179,15 @@ public abstract class AbstractEimsController
 
               Interface sourceInterface = interfaceService.get(interfaceMeta.getInterfaceId()) ;
               if (null != sourceInterface)
+              {
+                interfaceService.evict(sourceInterface) ;
+                for(com.inzent.igate.repository.meta.InterfaceService is : sourceInterface.getInterfaceServices())
+                {
+                  mappingService.evict(is.getRequestMappingObject()) ;
+                  mappingService.evict(is.getResponseMappingObject()) ;
+                }
                 runnables.add(interfaceService.update(interfaceMeta, sourceInterface)) ;
+              }
               else
                 interfaceService.insert(interfaceMeta) ;
 

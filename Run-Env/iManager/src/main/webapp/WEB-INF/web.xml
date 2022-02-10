@@ -41,6 +41,7 @@
 		<url-pattern>*.json</url-pattern>
 		<url-pattern>*.html</url-pattern>
 		<url-pattern>/igate/eimsMarshaller</url-pattern>
+		<url-pattern>/igate/yellowEimsXml</url-pattern>
 		<url-pattern>/igate/eimsXml</url-pattern>
 	</servlet-mapping>
 
