@@ -81,8 +81,6 @@
 
 	<context:annotation-config />
 
-	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
-
 	<bean id="messageSource" class="com.inzent.igate.util.message.MessageSource">
 		<property name="bundleName" value="iManager" />
 		<property name="caching" value="false" />
@@ -91,5 +89,7 @@
 	<bean class="com.inzent.imanager.message.MessageGenerator" />
 
 	<bean id="iGateInstance" class="com.inzent.igate.context.IGateInstance" />	
+
+	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
 
 </beans>

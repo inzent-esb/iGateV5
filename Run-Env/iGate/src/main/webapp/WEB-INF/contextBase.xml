@@ -118,12 +118,11 @@
 		<property name="server" ref="mbeanServer" />
 	</bean>
 
-	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
-	
 	<bean id="messageSource" class="com.inzent.igate.util.message.MessageSource" />
 
 	<bean class="com.inzent.imanager.message.MessageGenerator" />
 
 	<bean id="iGateInstance" class="com.inzent.igate.context.IGateRuntimeInstance" />
 	
+	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
 </beans>
