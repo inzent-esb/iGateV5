@@ -221,7 +221,7 @@
                     data: JsonImngObj.serialize(this.object),
                     processData : false,
                     success : function(result) {
-                    	vmList.totalCount = result.object;
+                    	vmList.totalCount = numberWithComma(result.object);
                     }
                 });
             }.bind(this));
@@ -454,27 +454,18 @@
     	   	var hash = '#' ;
     	   	
     	   	var cron = null;
-        	var regexr = /^\s*($|#|\w+\s*=|(\?|\*|(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?(?:,(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?)*)\s+(\?|\*|(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?(?:,(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?)*)\s+(\?|\*|(?:[01]?\d|2[0-3])(?:(?:-|\/|\,)(?:[01]?\d|2[0-3]))?(?:,(?:[01]?\d|2[0-3])(?:(?:-|\/|\,)(?:[01]?\d|2[0-3]))?)*)\s+(\?|\*|(?:0?[1-9]|[12]\d|3[01])(?:(?:-|\/|\,)(?:0?[1-9]|[12]\d|3[01]))?(?:,(?:0?[1-9]|[12]\d|3[01])(?:(?:-|\/|\,)(?:0?[1-9]|[12]\d|3[01]))?)*)\s+(\?|\*|(?:[1-9]|1[012])(?:(?:-|\/|\,)(?:[1-9]|1[012]))?(?:L|W)?(?:,(?:[1-9]|1[012])(?:(?:-|\/|\,)(?:[1-9]|1[012]))?(?:L|W)?)*|\?|\*|(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(?:(?:-)(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC))?(?:,(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(?:(?:-)(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC))?)*)\s+(\?|\*|(?:[0-6])(?:(?:-|\/|\,|#)(?:[0-6]))?(?:,(?:[0-6])(?:(?:-|\/|\,|#)(?:[0-6]))?)*|\?|\*|(?:MON|TUE|WED|THU|FRI|SAT|SUN)(?:(?:-)(?:MON|TUE|WED|THU|FRI|SAT|SUN))?(?:,(?:MON|TUE|WED|THU|FRI|SAT|SUN)(?:(?:-)(?:MON|TUE|WED|THU|FRI|SAT|SUN))?)*)(|\s)+(\?|\*|(?:|\d{4})(?:(?:-|\/|\,)(?:|\d{4}))?(?:,(?:|\d{4})(?:(?:-|\/|\,)(?:|\d{4}))?)*))$$/i;
+        	var regexr = /^\s*($|#|\w+\s*=|(\?|\*|(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?(?:,(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?)*)\s(\?|\*|(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?(?:,(?:[0-5]?\d)(?:(?:-|\/|\,)(?:[0-5]?\d))?)*)\s(\?|\*|(?:[01]?\d|2[0-3])(?:(?:-|\/|\,)(?:[01]?\d|2[0-3]))?(?:,(?:[01]?\d|2[0-3])(?:(?:-|\/|\,)(?:[01]?\d|2[0-3]))?)*)\s(\?|\*|(?:0?[1-9]|[12]\d|3[01])(?:(?:-|\/|\,)(?:0?[1-9]|[12]\d|3[01]))?(?:,(?:0?[1-9]|[12]\d|3[01])(?:(?:-|\/|\,)(?:0?[1-9]|[12]\d|3[01]))?)*)\s(\?|\*|(?:[1-9]|1[012])(?:(?:-|\/|\,)(?:[1-9]|1[012]))?(?:L|W)?(?:,(?:[1-9]|1[012])(?:(?:-|\/|\,)(?:[1-9]|1[012]))?(?:L|W)?)*|\?|\*|(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(?:(?:-)(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC))?(?:,(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(?:(?:-)(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC))?)*)\s(\?|\*|(?:[0-6])(?:(?:-|\/|\,|#)(?:[0-6]))?(?:,(?:[0-6])(?:(?:-|\/|\,|#)(?:[0-6]))?)*|\?|\*|(?:MON|TUE|WED|THU|FRI|SAT|SUN)(?:(?:-)(?:MON|TUE|WED|THU|FRI|SAT|SUN))?(?:,(?:MON|TUE|WED|THU|FRI|SAT|SUN)(?:(?:-)(?:MON|TUE|WED|THU|FRI|SAT|SUN))?)*))$/i;
         	
         	if (this.object.cronExpression) {
         		cron = this.object.cronExpression.split(' ');
         		
-				var isEmpty = false;
-        		
-        		for (var i = 0; i < cron.length; i++) {
-        			if (0 === cron[i].length){
-        				isEmpty = true;
-        				break;
-        			}
-        		}
-        		
-        		if (!regexr.test(this.object.cronExpression) || cron[3] == cron[5] || isEmpty) {
+        		if (!regexr.test(this.object.cronExpression) || cron[3] == cron[5]) {
         			warnAlert({ message : cron_error });
         			return;
         		}
         		
         	} else {
-        		cron = "* * * * * ? *".split(' ');
+        		cron = "* * * * * ?".split(' ');
         	}
         	
         	startSpinner(modalInfo.spinnerMode);
@@ -633,45 +624,6 @@
       						else if (cron[5] === "5" || cron[5] === "FRI" || cron[5] === "fri" || cron[5] === "Fri") this.weekResult1 = "Fri"
    							else if (cron[5] === "6" || cron[5] === "SAT" || cron[5] === "sat" || cron[5] === "Sat") this.weekResult1 = "Sat"
                    		}
-                    	
-                    	if (cron[6] == null){
-                    		this.yearCheckValue = 1;
-                    		
-                    	} else if (cron[6].indexOf(comma) != -1) {
-                    		this.yearCheckValue = 4;
-                    		
-                    		this.yearResult5 = cron[6];
-                   		} else if (cron[6].indexOf(astro) != -1){
-                   			this.yearCheckValue = 1;
-                   			
-                   		} else if (cron[6].indexOf(slash) != -1) {
-                    		yearSelect = cron[6].split(slash);
-                    		
-                    		if (yearSelect[0] <= 2099 && yearSelect[1] <= 10){
-                    			this.yearCheckValue = 2;
-                        		this.yearResult1 = yearSelect[0];
-                        		this.yearResult2 = yearSelect[1];	
-                    		} else {
-                    			this.yearCheckValue = 4;
-                    			this.yearResult5 = cron[6];
-                    		}
-                    		
-                   		} else if (cron[6].indexOf(hyphen) != -1) {
-                    		yearSelect = cron[6].split(hyphen);
-                    		
-							if (yearSelect[0] <= 2099 && yearSelect[1] <= 2099){
-								this.yearCheckValue = 3;
-	                    		this.yearResult3 = yearSelect[0];
-	                    		this.yearResult4 = yearSelect[1];	
-							} else{
-								this.yearCheckValue = 4;
-								this.yearResult5 = cron[6];
-							}
-							
-                   		} else {
-                    		this.yearCheckValue = 4;
-                    		this.yearResult5 = cron[6];
-                   		}
                     },
                     data : {
                        items : [
@@ -698,10 +650,6 @@
                     	   {
                     		   id : "weekTabJob",
                     		   name : "<fmt:message>igate.job.dayOfWeek</fmt:message>"
-                    	   },
-                    	   {
-                    		   id : "yearTabJob",
-                    		   name : "<fmt:message>igate.job.year</fmt:message>"
                     	   }
                        ],
                        columns : [
@@ -734,11 +682,6 @@
             	   			   header : "<fmt:message>igate.job.dayOfWeek</fmt:message>",
 	         	   			   name : "dayOfWeek",
 	         	   			   align : "center"               	   			   
-            	   		   },
-            	   		   {
-            	   			   header : "<fmt:message>igate.job.year</fmt:message>",
-	         	   			   name : "year",
-	         	   			   align : "center"               	   			   
             	   		   }
                	   	   ],
                	   	   secondCheckValue : '',
@@ -747,7 +690,6 @@
                        dayCheckValue : '',
                        monthCheckValue : '',
                        weekCheckValue : '',
-                       yearCheckValue : '',
                        secondResult1 : '',
                        secondResult2 : '',
                        secondResult3 : '',
@@ -771,11 +713,6 @@
                        monthResult5 : '',
                        weekResult1 : '',
                        weekResult2 : '',
-                       yearResult1 : '', 
-                       yearResult2 : '', 
-                       yearResult3 : '', 
-                       yearResult4 : '',
-                       yearResult5 : '',
                        gridView : [],
                        hideIE : true,
                        resultData : null,
@@ -783,7 +720,6 @@
                        minuteSelect : null,
                        hourSelect : null,
                        monthSelect : null,
-                       yearSelect : null
         			},
         			mounted: function() {
 						this.gridView = new tui.Grid({
@@ -810,23 +746,11 @@
                         	   	var reg3 = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|.~!?@;:\#$\\\%<>^&\()\=+_\’`]/ ;
                         	   	var reg4 = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|.~!@;:\$\\\%<>^&\()\=+_\’`]/ ;
 
-                        	   	var isEmpty = false ;
                     			var gridColums = cronResults.gridView.getColumns();
                     			var rowInfo = cronResults.gridView.getRowAt(0);
-                    			var cronTabCheck = rowInfo.second + " " + rowInfo.minute + " " + rowInfo.hour + " " + rowInfo.dayOfMonth + " " + rowInfo.month + " " + rowInfo.dayOfWeek + ( '' === rowInfo.year ? '' : " " + rowInfo.year ) ;
+                    			var cronTabCheck = rowInfo.second + " " + rowInfo.minute + " " + rowInfo.hour + " " + rowInfo.dayOfMonth + " " + rowInfo.month + " " + rowInfo.dayOfWeek ;
                     			
-                    			for (var i = 0; i < gridColums.length; i++){
-                    				
-                    				if ('' == cronResults.gridView.getColumnValues(gridColums[i].name)){
-                    					isEmpty = true ;
-                    					
-                    					if (rowInfo.year == '') isEmpty = false ;
-                    					
-                    					break ;	
-                    				}
-                    			}
-                    			
-                    			if (reg1.test(rowInfo.second) || reg1.test(rowInfo.minute) || reg1.test(rowInfo.hour) || reg1.test(rowInfo.year)){
+                    			if (reg1.test(rowInfo.second) || reg1.test(rowInfo.minute) || reg1.test(rowInfo.hour)){
                     				warnAlert({ message : cron_validationBasic + "<br/>" + cron_validationEn + "<br/>" + cron_validationKo, isXSSMode: false });
                     				e.preventDefault();
                     			} else if (reg2.test(rowInfo.dayOfMonth)) {
@@ -838,11 +762,10 @@
                     			} else if (reg4.test(rowInfo.dayOfWeek)){
                     				warnAlert({ message : cron_validationHash + "<br/>" + cron_validationKo, isXSSMode: false });
                     				e.preventDefault();      
-                    			} else if (!regexr.test(cronTabCheck) || isEmpty){
+                    			} else if (!regexr.test(cronTabCheck)){
                     				warnAlert({ message : cron_error});
             		    			e.preventDefault();
                     			}
-                    			
                     		});
                    		},
                    		gridData : function(param) {
@@ -854,8 +777,7 @@
                     			hour : astro,
                     			dayOfMonth : astro,
                     			month : astro,
-                    			dayOfWeek : question,
-                    			year : astro
+                    			dayOfWeek : question
                     		};
 
                     		var rowInfo = this.gridView.getRowAt(0);
@@ -1032,29 +954,6 @@
                     	},
                     	weekResult2 : function() {
                     		this.gridData({dayOfWeek: this.weekResult2});
-                    	},
-						yearCheckValue : function() {
-							if (this.yearCheckValue == 1) this.resultData = astro;
-							else if (this.yearCheckValue == 2) this.resultData = this.yearResult1 + slash + this.yearResult2;
-							else if (this.yearCheckValue == 3) this.resultData = this.yearResult3 + hyphen + this.yearResult4;
-							else if (this.yearCheckValue == 4) this.resultData = this.yearResult5;
-							
-							this.gridData({year: this.resultData});
-                    	},
-                    	yearResult1 : function() {
-                			this.gridData({year: this.yearResult1 + slash + this.yearResult2});
-                    	},
-                    	yearResult2 : function() {
-                			this.gridData({year: this.yearResult1 + slash + this.yearResult2});
-                    	},
-                    	yearResult3 : function() {
-                    		this.gridData({year: this.yearResult3 + hyphen + this.yearResult4});
-                    	},
-                    	yearResult4 : function() {
-                    		this.gridData({year: this.yearResult3 + hyphen + this.yearResult4});
-                    	},
-                    	yearResult5 : function() {
-                    		this.gridData({year: this.yearResult5});
                     	}
 					}
                 })
@@ -1066,19 +965,9 @@
         		var isEmpty = false;
         		var gridColums = cronResults.gridView.getColumns();
         		var rowInfo = cronResults.gridView.getRowAt(0) ;
-        		var objectResult = rowInfo.second + " " + rowInfo.minute + " " + rowInfo.hour + " " + rowInfo.dayOfMonth + " " + rowInfo.month + " " + rowInfo.dayOfWeek + ( '' === rowInfo.year ? '' : " " + rowInfo.year ) ;
+        		var objectResult = rowInfo.second + " " + rowInfo.minute + " " + rowInfo.hour + " " + rowInfo.dayOfMonth + " " + rowInfo.month + " " + rowInfo.dayOfWeek ;
        			
-        		for (var i = 0; i < gridColums.length; i++){
-        			if ('' == cronResults.gridView.getColumnValues(gridColums[i].name)){
-    					isEmpty = true ;
-    					
-    					if (rowInfo.year == '') isEmpty = false ;
-    					
-    					break ;	
-    				}
-        		}
-        		
-       			if (!regexr.test(objectResult) || isEmpty){
+       			if (!regexr.test(objectResult)){
        				warnAlert({ message : cron_error });
        				return;
        			}

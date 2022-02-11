@@ -219,7 +219,7 @@
 	        {
 	          vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 	          vmList.makeGridObj.search(this, function() {
-	        	  vmList.totalCount = SearchImngObj.searchGrid.getRowCount();
+	        	  vmList.totalCount = numberWithComma(SearchImngObj.searchGrid.getRowCount());
 	            }.bind(this));
 	        },
 	        initSearchArea : function(searchCondition)

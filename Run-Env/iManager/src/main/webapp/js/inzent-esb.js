@@ -70,10 +70,11 @@ function getCreatePageObj()
 
     this.searchConstructor = function(isHidePageSize, callBackFunc)
     {
+      var searchRootSelector = $('#' + this.getElementId('ImngSearchObject')) ;
       var startSearchExpandCnt = 5 ;
       var isNeedExtension = startSearchExpandCnt < (searchList.length + (isHidePageSize? 0 : 1) + searchList.filter(function(searchInfo) { return 'daterange' == searchInfo.type && 1 < searchInfo.mappingDataInfo.daterangeInfo.length }).length) ;
       
-      var searchRootSelector = $('#' + this.getElementId('ImngSearchObject')) ;
+      if (0 == searchRootSelector.find('.toggleSearchExpandArea').length) isNeedExtension = false;
       
       if(isNeedExtension)
         searchRootSelector.find('.toggleSearchExpandBtn').show() ;
@@ -203,7 +204,7 @@ function getCreatePageObj()
           		  					 					           )
           		  					 			  )
           		  					 			  .append(
-          		  					 					  $('<input/>').addClass('form-control').attr({'v-model' : mappingDataInfo.vModel, 'placeholder' : placeholder, 'v-on:keyup.enter' : 'search'})
+          		  					 					  $('<input/>').addClass('form-control').attr({'v-model' : mappingDataInfo.vModel, 'placeholder' : placeholder, 'v-on:keyup.enter' : searchInfo.enterEvt ? searchInfo.enterEvt : 'search'})
           		  					 			  )
           		  					 			  .append(
           		  					 					  $('<i/>').addClass('icon-close').attr({'v-on:click.prevent': mappingDataInfo.vModel + ' = null' })

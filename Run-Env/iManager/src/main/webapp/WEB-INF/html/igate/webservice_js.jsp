@@ -23,7 +23,8 @@
 				  'vModel': 'address',
 			  },
 			  'name': "<fmt:message>igate.webService</fmt:message>",
-			  'placeholder': "<fmt:message>igate.webservice.searchWsdl</fmt:message>"
+			  'placeholder': "<fmt:message>igate.webservice.searchWsdl</fmt:message>",
+			  'enterEvt': 'getStruct'
 		  }, 
 		  {
 			  'type': "select",
@@ -141,7 +142,7 @@
     							{
     								'type': "select",
     								'mappingDataInfo': {
-    									'selectModel': 'object.serviceGroup',
+    									'selectModel': 'serviceGroupSelect',
     									'optionFor': 'option in serviceGroups',
     									'optionValue': 'option',
     									'optionText': 'option'
@@ -261,10 +262,10 @@
 		      $('#modalWSDL').modal('show');
 	        	
 	        },
-	        getStruct: function() {
+	        getStruct: function(evt) {
 	        	window.vmMain.initMainArea();
 	        	
-	        	this.address = $('#modalWSDL').find('input').val();
+	        	if('click' === evt.type) this.address = $('#modalWSDL').find('input').val();
 	        	
 	            startSpinner();
 
@@ -389,6 +390,7 @@
                 privilegeId: null,
                 adapterId: null
     		},
+    		serviceGroupSelect: null,
     		serviceGroupEdit: null,
     		executePrivilegeIds: [],
     		serviceGroups: [],
@@ -423,6 +425,7 @@
 					this.object[key] = null;
 				}
 				
+				this.serviceGroupSelect = null;
 				this.serviceGroupEdit = null;
 				
 				$('#accordionResult').children('.collapse-item').remove();
@@ -430,10 +433,13 @@
 			},
 			confirmRegist: function() {
 				
-				var backupData = this.object.serviceGroup;
-
-				this.object.serviceGroup = (this.object.serviceGroup && this.serviceGroupEdit)? this.object.serviceGroup + "." + this.serviceGroupEdit: this.serviceGroupEdit;
-
+				this.object.serviceGroup = this.serviceGroupSelect;
+				
+				if(this.serviceGroupEdit) {
+					if(this.object.serviceGroup) this.object.serviceGroup += "." + this.serviceGroupEdit;
+					else 						 this.object.serviceGroup = this.serviceGroupEdit;
+				}
+				
 				startSpinner();
 
 				$.ajax({
@@ -444,8 +450,7 @@
 					dataType: "json",
 					success: function(result) {
 						if ("ok" != result.result) {
-							ResultImngObj.resultErrorHandler(result);
-							this.object.serviceGroup = backupData;    		
+							ResultImngObj.resultErrorHandler(result);		
 							stopSpinner();
 							return;
 						}
@@ -455,6 +460,10 @@
 		                normalAlert({message : '<fmt:message>head.insert.notice</fmt:message>'});
 						
 						this.reset();
+						
+						window.vmSearch.whenServiceSelected();
+						window.vmSearch.whenEndPointSelected();
+						window.vmSearch.whenOperationSelected();
 						
 						$.getJSON("<c:url value='/igate/service/groups.json'/>", function(serviceGroupData) {
 							this.serviceGroups = serviceGroupData.object;

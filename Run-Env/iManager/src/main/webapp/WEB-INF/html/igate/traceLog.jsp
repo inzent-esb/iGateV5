@@ -33,10 +33,10 @@
 			<h3 class="sub-bar-text"><fmt:message>head.basic.info</fmt:message></h3>
 		</header>
 		<div class="row frm-row">
-			<div class="col-lg-6">
-				<div class="form-group">
+			<div class="col-lg-6" style="cursor : pointer;">
+				<div class="form-group" @click="clickExceptionInfo({transactionId : object.transactionId})">
 					<label class="control-label"><fmt:message>head.transaction</fmt:message> <fmt:message>head.id</fmt:message></label>
-					<input type="text" class="form-control view-disabled" v-model="object.transactionId" disabled>
+					<input id="transactionId" type="text" class="form-control view-disabled underlineTxt" v-model="object.transactionId" disabled>
 				</div>
 				<div class="form-group">
 					<label class="control-label"><fmt:message>igate.message</fmt:message> <fmt:message>head.id</fmt:message></label>

@@ -74,7 +74,7 @@ $(document).ready(function() {
 					'detailSubList': [
 						{'type': "select", 'mappingDataInfo': {'selectModel': 'object.userDisableYn', 'optionFor': 'option in disableYns', 'optionValue': 'option.pk.propertyKey', 'optionText': 'option.propertyValue'}, 'name': "<fmt:message>common.user.disable</fmt:message>", 'disabled' : isDisabled},
 						{'type': "text", 'mappingDataInfo': 'object.loginIp', 'name': "<fmt:message>common.user.loginIp</fmt:message>",'disabled' : true},
-						{'type': "password", 'mappingDataInfo': 'object.password', 'name': "<fmt:message>common.user.newPassword</fmt:message>", 'cryptType': 'cryptType','disabled' : isDisabled},
+						{'type': "password", 'warning' : "<fmt:message>common.user.validationPassCheck</fmt:message>", 'mappingDataInfo': 'object.password', 'name': "<fmt:message>common.user.newPassword</fmt:message>", 'cryptType': 'cryptType','disabled' : isDisabled},
 					]
 				},
 				{
@@ -96,6 +96,10 @@ $(document).ready(function() {
 				
 				var detailHtml = '';
 				
+				detailHtml += '<div id="allBtn" style="margin-bottom: 10px;">';
+				detailHtml += '    <a class="btn" v-on:click="allAdmin"><fmt:message>common.user.privilege.all</fmt:message> <fmt:message>common.user.privilege.admin</fmt:message></a>';
+				detailHtml += '    <a class="btn" v-on:click="allMember"><fmt:message>common.user.privilege.all</fmt:message> <fmt:message>common.user.privilege.member</fmt:message></a>';
+				detailHtml += '</div>';
 				detailHtml += '<table class="table">';
 				detailHtml += '    <colgroup>';
 				detailHtml += '        <col span="2" style="width: 1%">';
@@ -104,18 +108,7 @@ $(document).ready(function() {
 				detailHtml += '    </colgroup>';
 				detailHtml += '    <thead>';
 				detailHtml += '        <tr>';
-				detailHtml += '		       <th scope="col" style="text-align: center;"><fmt:message>head.admin</fmt:message>';
-				detailHtml += '	 		   		 <label class="custom-control custom-checkbox single view-disabled">';
-				detailHtml += '				     	<input type="checkbox" class="custom-control-input" v-on:click="allAdmin();" :disabled="${'ADM' == string}">';
-				detailHtml += '				     	<span class="custom-control-label"></span>';
-				detailHtml += '			    	 </label>';
-				detailHtml += '		       </th>'
-				detailHtml += '			   <th scope="col" style="text-align: center;"><fmt:message>common.user.privilege.member</fmt:message>'
-				detailHtml += '	 		   		 <label class="custom-control custom-checkbox single view-disabled">';
-				detailHtml += '				     	<input type="checkbox" class="custom-control-input" v-on:click="allMember();" :disabled="${'ADM' == string}">';
-				detailHtml += '				     	<span class="custom-control-label"></span>';
-				detailHtml += '			    	 </label>';
-				detailHtml += '		       </th>';
+				detailHtml += '			   <th scope="col"></th>';
 				detailHtml += '			   <th scope="col"><fmt:message>common.privilege</fmt:message> <fmt:message>head.type</fmt:message></th>';
 				detailHtml += '			   <th scope="col"><fmt:message>common.privilege</fmt:message></th>';
 				detailHtml += '		   </tr>';
@@ -123,16 +116,11 @@ $(document).ready(function() {
 				detailHtml += '	   <tbody>';
 				detailHtml += '	       <tr v-for="elm in totalUserPrivileges">';
 				detailHtml += '			 <td class="text-center view-disabled align-middle">';
-				detailHtml += '			     <label class="custom-control custom-checkbox single">';
-				detailHtml += '				     <input type="checkbox" class="custom-control-input" v-model="elm.admin" v-checked="elm.admin" :disabled="elm.readOnly">';
-				detailHtml += '				     <span class="custom-control-label"></span>';
-				detailHtml += '			     </label>';
-				detailHtml += '			 </td>';
-				detailHtml += '			 <td class="text-center view-disabled align-middle">';
-				detailHtml += '		         <label class="custom-control custom-checkbox single">';
-				detailHtml += '                  <input type="checkbox" class="custom-control-input" v-model="elm.member" v-checked="elm.member" :disabled="elm.readOnly">';
-				detailHtml += '					 <span class="custom-control-label"></span>';
-				detailHtml += '				 </label>';
+				detailHtml += '		         <select id="privilegeSelect" class="form-control view-disabled" :disabled="elm.readOnly" v-model="elm.privilegeName">';
+				detailHtml += '				 	<option value=" "><fmt:message>common.user.privilege.none</fmt:message></option>';
+				detailHtml += '				 	<option value="Admin"><fmt:message>common.user.privilege.admin</fmt:message></option>';
+				detailHtml += '				 	<option value="Member"><fmt:message>common.user.privilege.member</fmt:message></option>';
+				detailHtml += '				 </select>';
 				detailHtml += '			 </td>';
 				detailHtml += '			 <td class="px-1" v-if="elm.privilegeType===isSystem"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.privilege.type.system</fmt:message>></td>';
 				detailHtml += '			 <td class="px-1" v-if="elm.privilegeType===isBusiness"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.privilege.type.business</fmt:message>></td>';
@@ -171,7 +159,6 @@ $(document).ready(function() {
 			search : function() {
 				vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 				
-				
 				$.ajax({
 					type : "GET",
 					url : "<c:url value='/common/user/clear.json' />",
@@ -184,13 +171,12 @@ $(document).ready(function() {
 			                    data: JsonImngObj.serialize(this.object), 
 			                    processData : false,
 			                    success : function(result) {
-			                    	vmList.totalCount = result.object;
+			                    	vmList.totalCount = numberWithComma(result.object);
 			                    }
 			                });
 			            }.bind(this));
 			        }.bind(this),
 			        error : function(request, status, error) {
-
 			        }
 				});
 			},
@@ -229,7 +215,10 @@ $(document).ready(function() {
            		    	processData: false,
            		    	dataType: "json",
            		    	success: function(result) {
-           		    		window.vmTotalUserPrivileges.totalUserPrivileges = result.object.totalUserPrivileges;
+           	        		window.vmTotalUserPrivileges.totalUserPrivileges = result.object.totalUserPrivileges.map(function(info) {
+           	        			info.privilegeName = " ";
+           						return info;        			
+           	        		});           		    		
            		    	}
            		    });
            		});
@@ -301,6 +290,11 @@ $(document).ready(function() {
         	loaded : function() {
         		window.vmAuthentication.object = this.object;
         		window.vmTotalUserPrivileges.object = this.object;
+
+        		window.vmTotalUserPrivileges.totalUserPrivileges = window.vmTotalUserPrivileges.totalUserPrivileges.map(function(info) {
+        			info.privilegeName = (info.admin)? "Admin" : (info.member)? "Member" : " ";
+					return info;        			
+        		});
         	},
         	saving: function() {
         		for(var key in window.vmAuthentication.object) {
@@ -311,7 +305,6 @@ $(document).ready(function() {
         		window.vmAuthentication.object.password = null;
         	},
         	initDetailArea: function(object) {
-        		
         		if(object) {
         			this.object = object;
         		}else{
@@ -341,6 +334,7 @@ $(document).ready(function() {
 					window.vmAuthentication.object.loginTimestamp = null;
 					
     				window.vmTotalUserPrivileges.totalUserPrivileges = [];
+    				
         		}
         		
         		window.vmAuthentication.cryptType = 'password';
@@ -349,6 +343,12 @@ $(document).ready(function() {
         watch: {
         	panelMode: function() {
         		window.vmAuthentication.cryptType = 'password';
+        		
+        		if (this.panelMode == 'mod' || this.panelMode == 'add') {
+        			$('#allBtn').show();
+        		} else {
+        			$('#allBtn').hide();	
+        		}
         	}
         }
     });
@@ -434,46 +434,60 @@ $(document).ready(function() {
     		isBusiness : 'b'
     	},
     	methods : {
+    		saving: function() {
+    			this.totalUserPrivileges.forEach(function(obj){
+    				obj.admin = (obj.privilegeName == "Admin") ? true : false ;
+    				obj.member = (obj.privilegeName == "Member") ? true : false ;
+    			});
+    		},
     		allAdmin : function() {
-
     			var i = 0;
             
     			if (!this.defaultAdmin) {
               
     				while (this.totalUserPrivileges[i] != null) {
+    					this.totalUserPrivileges[i].privilegeName = "Admin";
     					this.totalUserPrivileges[i].admin = true;
     					i++;
     				}
     				
     				this.defaultAdmin = true;
+    				this.defaultMember = false;
     			}else{
               
     				while (this.totalUserPrivileges[i] != null) {
+    					this.totalUserPrivileges[i].privilegeName = " ";
     					this.totalUserPrivileges[i].admin = false;
     					i++;
     				}
     				this.defaultAdmin = false;
     			}
+    			
+    			this.$forceUpdate();
     		},
     		allMember : function() {
-            
     			var j = 0;
             
     			if (!this.defaultMember) {
     				while (this.totalUserPrivileges[j] != null) {
+    					this.totalUserPrivileges[j].privilegeName = "Member";
     					this.totalUserPrivileges[j].member = true;
     					j++;
     				}
 
+    				this.defaultAdmin = false;
     				this.defaultMember = true;
     			}else{
     				while (this.totalUserPrivileges[j] != null){
+    					this.totalUserPrivileges[j].privilegeName = " ";
     					this.totalUserPrivileges[j].member = false;
     					j++;
     				}
 
     				this.defaultMember = false;
     			}
+    			
+    			this.$forceUpdate();
     		},
     	}
     });
@@ -492,6 +506,7 @@ $(document).ready(function() {
 			    }
 
 			    vmMain.saving();
+			    vmTotalUserPrivileges.saving();
 			    
 			    object._method = _method;
 

@@ -46,7 +46,8 @@
 					<ul id="accordionResult" class="collapse-list collapse-list-result m-0" style="display: none">
 						<li class="collapse-item-origin" style="display: none">
 							<button class="collapse-link collapsed" type="button" data-toggle="collapse" data-target="#collapseResult">
-								<i class="iconb-compt mr-2"></i><span class="txt"></span>
+								<i class="iconb-compt mr-2"></i>
+								<span class="txt"></span>
 							</button>
 							<div id="collapseResult" class="collapse" data-parent="#accordionResult">
 								<div class="collapse-content"></div>

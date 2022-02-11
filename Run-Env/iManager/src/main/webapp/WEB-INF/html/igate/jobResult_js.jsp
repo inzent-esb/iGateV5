@@ -117,7 +117,7 @@ $(document).ready(function() {
 		                    data: JsonImngObj.serialize(this.object),
 		                    processData : false,
 		                    success : function(result) {
-		                    	vmList.totalCount = result.object;
+		                    	vmList.totalCount = numberWithComma(result.object);
 		                    }
 		                });
 		            }.bind(this));
@@ -259,7 +259,7 @@ $(document).ready(function() {
 	    				this.object.pk.instanceId = null;
 	        		}
 				},
-				clickExceptionInfo(exceptionInfo) {
+				clickExceptionInfo: function(exceptionInfo) {
 		        	if(!(exceptionInfo['pk.exceptionId'] && exceptionInfo['pk.exceptionDateTime'])) return ;
 		        	
 		        	localStorage.setItem('selectedExceptionInfo', JSON.stringify(exceptionInfo)) ;

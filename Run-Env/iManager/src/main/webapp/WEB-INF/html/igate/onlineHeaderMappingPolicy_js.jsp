@@ -154,7 +154,7 @@
                   data: JsonImngObj.serialize(this.object),
                   processData : false,
                   success : function(result) {
-                  	  vmList.totalCount = result.object;
+                	  vmList.totalCount = numberWithComma(result.object);
                   }
               });
           }.bind(this));

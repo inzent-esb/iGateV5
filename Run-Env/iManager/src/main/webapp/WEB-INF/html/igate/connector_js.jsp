@@ -609,7 +609,7 @@
                     data: JsonImngObj.serialize(this.object),
                     processData : false,
                     success : function(result) {
-                        vmList.totalCount = result.object;
+                    	vmList.totalCount = numberWithComma(result.object);
                     }
                 });
             }.bind(this));
@@ -830,7 +830,7 @@
 
     if (overlapElement)
     {
-	  warnAlert({alertMessage : '<fmt:message key="igate.connector.alert.overlap"><fmt:param value="' + overlapElement + '" /></fmt:message>'}) ;
+	  warnAlert({message : '<fmt:message>igate.connector.alert.overlap</fmt:message>'}) ;
       return false ;
     }
     return true ;
