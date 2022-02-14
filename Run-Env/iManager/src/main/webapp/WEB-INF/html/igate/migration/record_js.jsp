@@ -181,7 +181,7 @@
         {
           vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
           vmList.makeGridObj.search(this, function() {
-        	  vmList.totalCount = vmList.makeGridObj.getSearchGrid().getRowCount();
+        	  vmList.totalCount = numberWithComma(vmList.makeGridObj.getSearchGrid().getRowCount());
           }.bind(this));
         },
         initSearchArea : function(searchCondition)

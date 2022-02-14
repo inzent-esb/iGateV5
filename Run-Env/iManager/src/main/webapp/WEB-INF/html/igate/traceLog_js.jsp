@@ -212,7 +212,7 @@
             },
             timeoutYns : [],
             traceLogInstances : [],
-            rangeTime : 0,
+            rangeTime : 10,
             rangeTimeList : [1, 3, 5 ,10],
             isInitTraceLogInstances : false,
             uri : "<c:url value='/igate/instance/list.json' />",
@@ -228,13 +228,14 @@
 	                    data: JsonImngObj.serialize(this.object),
 	                    processData : false,
 	                    success : function(result) {
-	                        vmList.totalCount = result.object;
+	                        vmList.totalCount = numberWithComma(result.object);
 	                    }
 	                });
 	            }.bind(this));
             },
             initSearchArea : function(searchCondition)
-            {
+            {	
+             
               if(searchCondition)
               {
                 for(var key in searchCondition) 
@@ -256,9 +257,11 @@
                 this.object.logCode = null ;
                 this.object.instanceId = " " ;
                 this.object.timeoutYn = " " ;
-                this.rangeTime = '0';            	  
+                this.rangeTime = '10';    
+                
+                this.changeRangeTime('m');
               }	  
-
+              
               initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize) ;
               initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#timeoutYns'), this.object.timeoutYn) ;
               initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#traceLogInstances'), this.object.instanceId) ;
@@ -648,6 +651,17 @@
                   }
                 }) ;
               }.bind(this)) ;
+              
+              if(this.object.exceptionCode)
+              {
+                $("#transactionId").addClass('underlineTxt');
+                $("#transactionId").parent().css('cursor', 'pointer');
+              }
+              else
+              {
+            	$("#transactionId").removeClass('underlineTxt');
+                $("#transactionId").parent().css('cursor', '');
+              }
             },
             downloadFile : function()
             {
@@ -675,6 +689,12 @@
               var url = encodeURI("<c:url value='/igate/traceLog/body.json'/>" + makeData) ;
               var popup = window.open(url, "_parent", "width=0, height=0, top=0, statusbar=no, scrollbars=no, toolbar=no") ;
               popup.focus() ;
+            },
+            clickExceptionInfo: function(exceptionInfo) {
+            	if(!this.object.exceptionCode) return ;
+            	
+            	localStorage.setItem('selectedExceptionInfo', JSON.stringify(exceptionInfo));        	
+            	window.open("<c:url value='/igate/exceptionLog.html' />");
             }
           },
           created : function()

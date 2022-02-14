@@ -101,4 +101,10 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   {
     return StringUtils.stripEnd(StringCodec.decode((byte[]) adapterParameter.getResponseData(), SID_OFFSET, SID_LENGTH, adapterParameter.getAdapter().getCharset()), null) ;
   }
+
+@Override
+protected void analyze(AdapterParameter arg0, boolean arg1) throws IGateException {
+	// TODO Auto-generated method stub
+	
+}
 }

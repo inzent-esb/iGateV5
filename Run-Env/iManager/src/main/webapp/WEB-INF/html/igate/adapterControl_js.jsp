@@ -72,7 +72,7 @@ $(document).ready(function(){
     					if(dataCnt <= vmList.makeGridObj.getSearchGrid().getRowCount())
     						normalAlert({message: '<fmt:message>igate.add.search.criteria<fmt:param value="' + dataCnt + '" /></fmt:message>'});
     					
-    					vmList.totalCount = vmList.makeGridObj.getSearchGrid().getRowCount();
+    					vmList.totalCount = numberWithComma(vmList.makeGridObj.getSearchGrid().getRowCount());
 					});
 				},
 	            initSearchArea: function(searchCondition) {

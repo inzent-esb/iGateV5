@@ -20,7 +20,22 @@
 				</button></br>
 			</div>
 		</div>
-	</div>	
+		
+		<div class="toggleSearchExpandBtn collapsed" data-toggle="collapse" data-target=".toggleSearchExpandArea" style="display: none;">
+			<i class="icon-down"></i>
+		</div>		
+			
+		<div class="collapse toggleSearchExpandArea">
+			<div class="filter no-gutters">
+				<div class="col-auto">
+					<button type="button" class="btn btn-primary" v-on:click="getStruct" style="z-index: 1">
+						<i class="icon-srch"></i>
+						<fmt:message>head.search</fmt:message>
+					</button>
+				</div>			
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- sapInterface detailArea -->

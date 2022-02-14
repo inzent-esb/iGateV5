@@ -108,7 +108,7 @@ br{font-family: arial}
 
 /* Icon */
 [class^=iconb-]{display:inline-block;overflow:hidden;margin:0;padding:0;border:0;background-color:transparent;background-position:50% 50%;background-size: auto 100%;background-repeat:no-repeat;font-size:0;line-height:0;text-decoration:none;vertical-align: middle;text-indent:-1000em}
-.iconb-compt, .iconb-alert{width: 1rem;height: 1rem}
+.iconb-compt, .iconb-alert, .iconb-danger{width: 1rem;height: 1rem}
 .iconb-compt{background-image: url(../img/complete.svg)}
 .iconb-alert{background-image: url(../img/alert.svg)}
 .iconb-warn{background-image: url(../img/warn.svg)}

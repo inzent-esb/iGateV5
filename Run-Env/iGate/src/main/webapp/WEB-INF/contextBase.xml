@@ -66,6 +66,7 @@
 				<value>com.inzent.igate.repository.log</value>
 			</list>
 		</property>
+		<property name="jtaTransactionManager" ref="transactionManager" />
 	</bean>
 
 	<!-- Hibernate Template -->
@@ -118,12 +119,11 @@
 		<property name="server" ref="mbeanServer" />
 	</bean>
 
-	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
-	
 	<bean id="messageSource" class="com.inzent.igate.util.message.MessageSource" />
 
 	<bean class="com.inzent.imanager.message.MessageGenerator" />
 
 	<bean id="iGateInstance" class="com.inzent.igate.context.IGateRuntimeInstance" />
 	
+	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
 </beans>

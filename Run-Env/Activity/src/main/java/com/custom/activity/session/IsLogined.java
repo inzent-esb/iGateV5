@@ -4,7 +4,7 @@ import java.util.Objects ;
 
 import com.custom.activity.telegram.CustomHandlerConstants ;
 import com.inzent.igate.adapter.AdapterParameter ;
-import com.inzent.igate.cluster.ClusteredMap ;
+import com.inzent.igate.cache.ICache;
 import com.inzent.igate.context.Context ;
 import com.inzent.igate.exception.IGateException ;
 import com.inzent.igate.message.Record ;
@@ -16,14 +16,14 @@ public class IsLogined extends AbstractActivity
 {
   public static final String LOGIN_CHECK_PROPERTY_KEY = "LoginCheck" ;
 
-  protected final ClusteredMap<String, MciSession> sessionMap ;
+  protected final ICache<String, MciSession> sessionMap ;
 
   @SuppressWarnings("unchecked")
   public IsLogined(Activity activity)
   {
     super(activity) ;
 
-    sessionMap = (ClusteredMap<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
+    sessionMap = (ICache<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
   }
 
   @Override

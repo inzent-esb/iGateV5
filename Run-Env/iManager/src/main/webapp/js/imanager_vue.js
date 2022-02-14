@@ -25,6 +25,7 @@ var ResultImngObj =
       if (item.field)
         field = "Field(" + item.field + ") : " ;
 
+      object.children('button').children('i.iconb-compt.mr-2').removeClass().addClass('iconb-danger mr-2');
       object.children('button').children('span').text(field + item.message) ;
 
       if (item.stackTrace)
@@ -71,6 +72,7 @@ var ResultImngObj =
         }
         else
         {
+          object.children('button').children('i.iconb-compt.mr-2').removeClass().addClass('iconb-danger mr-2');
           object.children('button').children('span').text(item.instanceId + " was failed.") ;
         }
 
@@ -1183,6 +1185,10 @@ function getMakeGridObj()
       {
         searchGrid.resetData(JsonImngObj.planarize(result.object.page)) ;
       }
+      else if ('undefined' != typeof (result.object))
+      { 
+    	searchGrid.resetData(JsonImngObj.planarize(result.object)) ; 
+      }      
       else
       {
         searchGrid.resetData([]) ;
@@ -1265,6 +1271,8 @@ function getMakeGridObj()
           }
         }) ;
       }) ;
+      
+      $('#' + elementId).find('.tui-pagination').off('click').on('click', resizeSearchGrid);
     }
   }
 

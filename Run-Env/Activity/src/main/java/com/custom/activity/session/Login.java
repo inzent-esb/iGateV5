@@ -13,7 +13,7 @@ import org.springframework.transaction.support.TransactionTemplate ;
 
 import com.custom.activity.telegram.CustomHandlerConstants ;
 import com.inzent.igate.adapter.AdapterParameter ;
-import com.inzent.igate.cluster.ClusteredMap ;
+import com.inzent.igate.cache.ICache;
 import com.inzent.igate.context.Context ;
 import com.inzent.igate.context.IGateInstance ;
 import com.inzent.igate.exception.ExceptionManager ;
@@ -29,7 +29,7 @@ public class Login extends AbstractActivity
 {
   protected final ExtendedHibernateTemplate logTemplate ;
   protected final TransactionTemplate logTransactionTemplate ;
-  protected final ClusteredMap<String, MciSession> sessionMap ;
+  protected final ICache<String, MciSession> sessionMap ;
 
   @SuppressWarnings("unchecked")
   public Login(Activity activity)
@@ -38,7 +38,7 @@ public class Login extends AbstractActivity
 
     logTemplate = (ExtendedHibernateTemplate) Context.getApplicationContext().getBean("logTemplate") ;
     logTransactionTemplate = (TransactionTemplate) Context.getApplicationContext().getBean("logTransactionTemplate") ;
-    sessionMap = (ClusteredMap<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
+    sessionMap = (ICache<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
   }
 
   @Override
@@ -87,10 +87,10 @@ public class Login extends AbstractActivity
       }
       finally
       {
-        sessionMap.put2(mciSession.getMciSessionId(), mciSession) ;
+        sessionMap.put(mciSession.getMciSessionId(), mciSession) ;
 
         for (MciSession pre : previous)
-          sessionMap.remove2(pre.getMciSessionId()) ;
+          sessionMap.remove(pre.getMciSessionId()) ;
 
         applyMciSession(response, mciSession) ;
       }

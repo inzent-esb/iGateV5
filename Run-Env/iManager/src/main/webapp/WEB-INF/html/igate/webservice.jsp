@@ -17,7 +17,7 @@
 	
 	<!-- webservice modal -->
 	<div id="modalWSDL" class="modal fade" tabindex="-1" role="dialog">
-		<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+		<div class="modal-dialog modal-dialog-centered modal modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h2 class="modal-title"><fmt:message>igate.webService.wsdl</fmt:message></h2>

@@ -6,6 +6,14 @@
   $(document).ready(function()
   {
 
+	var selectedExceptionInfo = null ;
+	
+	if (localStorage.getItem('selectedExceptionInfo'))
+	{
+	  selectedExceptionInfo = JSON.parse(localStorage.getItem('selectedExceptionInfo')) ;
+	  localStorage.removeItem('selectedExceptionInfo') ;
+	}
+
     var createPageObj = getCreatePageObj() ;
 
     createPageObj.setViewName('exceptionLog') ;
@@ -220,7 +228,7 @@
                   data: JsonImngObj.serialize(this.object),
                   processData : false,
                   success : function(result) {
-                      vmList.totalCount = result.object;
+                	  vmList.totalCount = numberWithComma(result.object);
                   }
               });
           }.bind(this));
@@ -526,7 +534,14 @@
 
         SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid() ;
         
-        this.newTabSearchGrid();
+        if(!this.newTabSearchGrid() && selectedExceptionInfo)
+        {
+          this.$nextTick(function() 
+          {
+        	window.vmSearch.object.transactionId = selectedExceptionInfo.transactionId ;            	  
+            window.vmSearch.search();  
+          });
+        }
       }
     }) ;
 

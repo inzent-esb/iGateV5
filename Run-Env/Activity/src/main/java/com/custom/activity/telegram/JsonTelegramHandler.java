@@ -53,8 +53,6 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
   @Override
   protected void analyze(AdapterParameter adapterParameter, boolean request) throws IGateException
   {
-    super.analyze(adapterParameter, request) ;
-
     MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(adapterParameter.getAdapter(),
         request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()) ;
     Object object = messageConverter.getParseData() ;

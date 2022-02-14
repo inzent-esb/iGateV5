@@ -51,10 +51,14 @@
         	  {
         	    window.vmDetail.object = result.object ;
         	    window.vmCrtfcInfo.object = result.object ;
-        	    window.vmAuthorInfo.totalUserPrivileges = result.object.totalUserPrivileges ;
+        	    window.vmAuthorInfo.totalUserPrivileges = result.object.totalUserPrivileges.map(function(info){
+        	    	info.privilegeName = (info.admin)? "Admin" : (info.member)? "Member" : " ";
+        	    	return info;
+        	    });
+        	    
         	    stopSpinner() ;
         	  },
-          }) ;        	
+          }) ; 
         }
       }
     }) ;
@@ -104,6 +108,8 @@
         defaultAdmin : false,
         defaultMember : false,
         modifyMode : false,
+        isSystem : 'S',
+		isBusiness : 'b'
       }
     }) ;
 
@@ -113,7 +119,7 @@
         modifyModeChange : function()
         {
           window.vmAuthorInfo.modifyMode = true ;
-          $('#editUserModalModalSearch').find('.form-control').not('.readonlyField').not('.dataKey').attr('disabled', false) ;
+          $('#editUserModalModalSearch').find('.form-control').not('.readonlyField').not('.dataKey').attr('disabled', true) ;
           $('#editUserModalModalSearch').find('.custom-control').attr('disabled', false) ;
           $('#editUserModalModalSearch').find('#modifyBtn').hide() ;
           $('#editUserModalModalSearch').find('#okBtn').hide() ;

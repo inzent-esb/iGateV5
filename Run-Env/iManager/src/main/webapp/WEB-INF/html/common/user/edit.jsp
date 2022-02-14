@@ -114,19 +114,23 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th scope="col"><fmt:message>head.admin</fmt:message></th>
-						<th scope="col"><fmt:message>common.user.privilege.member</fmt:message></th>
+						<th scope="col"></th>
+						<th scope="col"><fmt:message>common.privilege</fmt:message> <fmt:message>head.type</fmt:message></th>
 						<th scope="col"><fmt:message>common.privilege</fmt:message></th>
 					</tr>
 				</thead>
 				<tbody>
 			    	<tr v-for="elm in totalUserPrivileges">	   	
-			    		<td class="text-center align-middle">
-			    			<input type="checkbox" v-model="elm.admin" v-checked="elm.admin" disabled >
+			    		<td>
+			    			<select class="form-control view-disabled" v-model="elm.privilegeName" disabled>
+			    				<option value=" "><fmt:message>common.user.privilege.none</fmt:message></option>
+			    				<option value="Admin"><fmt:message>common.user.privilege.admin</fmt:message></option>
+			    				<option value="Member"><fmt:message>common.user.privilege.member</fmt:message></option>
+			    			</select>
 						</td>
-						<td class="text-center align-middle">
-							<input type="checkbox" v-model="elm.member" v-checked="elm.member" disabled >
-						</td>
+						<td class="px-1" v-if="elm.privilegeType===isSystem"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.privilege.type.system</fmt:message>></td>
+						<td class="px-1" v-if="elm.privilegeType===isBusiness"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.privilege.type.business</fmt:message>></td>
+						<td class="px-1" v-if="elm.privilegeType!==isSystem && elm.privilegeType!==isBusiness"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.role</fmt:message>></td>
 					   	<td class="px-1"><input type="text" class="form-control readonlyField" v-model="elm.privilegeId" disabled="disabled"></td>
 			         </div>
 			    	</tr>

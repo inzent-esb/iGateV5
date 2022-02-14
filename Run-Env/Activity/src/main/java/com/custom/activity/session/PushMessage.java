@@ -6,7 +6,7 @@ import javax.jms.Message ;
 
 import com.inzent.igate.adapter.AdapterManagerBean ;
 import com.inzent.igate.adapter.AdapterParameter ;
-import com.inzent.igate.cluster.ClusteredMap ;
+import com.inzent.igate.cache.ICache;
 import com.inzent.igate.context.Context ;
 import com.inzent.igate.context.IGateInstance ;
 import com.inzent.igate.message.MessageBeans ;
@@ -21,7 +21,7 @@ import com.inzent.igate.rule.activity.AbstractActivity ;
 public class PushMessage extends AbstractActivity
 {
   protected final IGateInstance iGateInstance ;
-  protected final ClusteredMap<String, MciSession> sessionMap ;
+  protected final ICache<String, MciSession> sessionMap ;
 
   @SuppressWarnings("unchecked")
   public PushMessage(Activity activity)
@@ -29,7 +29,7 @@ public class PushMessage extends AbstractActivity
     super(activity) ;
 
     iGateInstance = IGateInstance.getInstance() ;
-    sessionMap = (ClusteredMap<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
+    sessionMap = (ICache<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
   }
 
   @Override
