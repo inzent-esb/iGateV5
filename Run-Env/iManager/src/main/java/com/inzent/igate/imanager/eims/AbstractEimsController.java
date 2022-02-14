@@ -78,7 +78,7 @@ public abstract class AbstractEimsController
    * @author beom, 2021. 2. 8.
    */
   @RequestMapping(method = RequestMethod.GET)
-  public void get(HttpServletRequest request, HttpServletResponse response)
+  public void get(HttpServletRequest request, HttpServletResponse response) throws Exception
   {
     try
     {
@@ -111,7 +111,7 @@ public abstract class AbstractEimsController
    * @author beom, 2021. 2. 7.
    */
   @RequestMapping(method = RequestMethod.POST)
-  public void save(HttpServletRequest request, HttpServletResponse response)
+  public void save(HttpServletRequest request, HttpServletResponse response) throws Exception
   {
     try
     {
@@ -147,15 +147,15 @@ public abstract class AbstractEimsController
             for (Record record : records)
             {
               Record sourceRecord = recordService.get(record.getRecordId()) ;
-                if (null != sourceRecord)
-                {
-                  recordService.evict(sourceRecord) ;
-                  recordService.update(record, sourceRecord) ;
-                }
-                else
-                  recordService.insert(record) ;
-              recordAfters.put(record.getRecordId(), sourceRecord) ;
+              if (null != sourceRecord)
+              {
+                recordService.evict(sourceRecord) ;
+                recordService.update(record, sourceRecord) ;
+              }
+              else
+                recordService.insert(record) ;
 
+              recordAfters.put(record.getRecordId(), sourceRecord) ;
             }
 
             for (Service service : services)
@@ -181,11 +181,15 @@ public abstract class AbstractEimsController
               if (null != sourceInterface)
               {
                 interfaceService.evict(sourceInterface) ;
-                for(com.inzent.igate.repository.meta.InterfaceService is : sourceInterface.getInterfaceServices())
+                for (com.inzent.igate.repository.meta.InterfaceService is : sourceInterface.getInterfaceServices())
                 {
-                  mappingService.evict(is.getRequestMappingObject()) ;
-                  mappingService.evict(is.getResponseMappingObject()) ;
+                  if (null != is.getRequestMappingObject())
+                    mappingService.evict(is.getRequestMappingObject()) ;
+
+                  if (null != is.getResponseMappingObject())
+                    mappingService.evict(is.getResponseMappingObject()) ;
                 }
+
                 runnables.add(interfaceService.update(interfaceMeta, sourceInterface)) ;
               }
               else
@@ -324,7 +328,7 @@ public abstract class AbstractEimsController
    * @author beom, 2021. 2. 7.
    */
   @RequestMapping(method = RequestMethod.DELETE)
-  public void delete(HttpServletRequest request, HttpServletResponse response)
+  public void delete(HttpServletRequest request, HttpServletResponse response) throws Exception
   {
     try
     {
@@ -421,7 +425,7 @@ public abstract class AbstractEimsController
     }
   }
 
-  protected abstract void makeErrorResponse(HttpServletResponse response, HttpServletRequest request, Throwable throwable) ;
+  protected abstract void makeErrorResponse(HttpServletResponse response, HttpServletRequest request, Throwable throwable) throws Exception ;
 
   protected abstract Collection<Object> parseGetRequest(HttpServletRequest request) throws Exception ;
   protected abstract void makeGetResponse(HttpServletResponse response, HttpServletRequest request, Collection<Record> records, Collection<Service> services, Collection<Interface> interfaces) throws Exception ;

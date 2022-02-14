@@ -8,11 +8,11 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
 	default-lazy-init="false">
 
+	<bean id="objectIdValidator" class="com.inzent.igate.imanager.ObjectIdValidatorImpl" />
+
 	<bean class="com.inzent.imanager.common.user.UserPasswordBean">
 		<property name="minLength" value="#{systemProperties['imanager.password.length']?:'8'}"/>
 	</bean>
-
-	<bean id="objectIdValidator" class="com.inzent.igate.imanager.ObjectIdValidatorImpl" />
 
 	<task:scheduler id="scheduler" pool-size="1" /> <!-- pool-size는 task 갯수에 맞추어야 함 -->
 	<task:scheduled-tasks scheduler="scheduler">
@@ -100,6 +100,8 @@
 		<security:intercept-url pattern="/igate/logStatistics/**" access="hasRole('ROLE_LogStatisticsViewer')"/>
 		<security:intercept-url pattern="/igate/mapping.*" access="hasRole('ROLE_MappingViewer')"/>
 		<security:intercept-url pattern="/igate/mapping/**" access="hasRole('ROLE_MappingViewer')"/>
+		<security:intercept-url pattern="/igate/mappingDictionary.*" access="hasRole('ROLE_MappingDictionaryViewer')"/>
+		<security:intercept-url pattern="/igate/mappingDictionary/**" access="hasRole('ROLE_MappingDictionaryViewer')"/>
 		<security:intercept-url pattern="/igate/message.*" access="hasRole('ROLE_MessageViewer')"/>
 		<security:intercept-url pattern="/igate/message/**" access="hasRole('ROLE_MessageViewer')"/>
 		<security:intercept-url pattern="/igate/migration/*/recv.json" access="permitAll()"/>
