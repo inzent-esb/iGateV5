@@ -164,11 +164,12 @@ public class YellowPageController extends AbstractEimsController
   protected Interface unmarshalInterface(Sender sender) throws Exception
   {
     Interface interfaceMeta = new Interface() ;
+
     interfaceMeta.setInterfaceId(sender.getId()) ;
     interfaceMeta.setInterfaceName(sender.getName()) ;
     interfaceMeta.setPrivilegeId(sender.getPrivilege()) ;
     interfaceMeta.setPrivateYn(sender.isPrivate() ? 'Y' : 'N') ;
-    interfaceMeta.setMetaDomain(sender.getMetaDomain() ) ;
+    interfaceMeta.setMetaDomain(sender.getMetaDomain()) ;
     interfaceMeta.setInterfaceDesc(sender.getDescription()) ;
     interfaceMeta.setUpdateVersion(sender.getVersion()) ;
     interfaceMeta.setUpdateUserId(sender.getLastUpdateUser()) ;
