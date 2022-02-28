@@ -197,14 +197,30 @@ public class YellowPageController extends AbstractEimsController
     // TODO InterfaceType 변환 및 검사 로직 필요
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
+    case "DB_MD" :
+      interfaceMeta.setInterfaceType("DB") ;
+      interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
+      break ;
+    case "DB_MM" :
+      interfaceMeta.setInterfaceType("DB") ;
+      interfaceMeta.setScheduleType(Interface.SCHEDULE_TRIGGERED) ;
+      break ;
+    case "FILE_DB" :
+      interfaceMeta.setInterfaceType("File") ;
+      interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
+      break ;
+    case "FILE_FILE" :
+      interfaceMeta.setInterfaceType("File") ;
+      interfaceMeta.setScheduleType(Interface.SCHEDULE_TRIGGERED) ;
+      break ;
     case "REQ_RES" :
       interfaceMeta.setInterfaceType("Online") ;
       interfaceMeta.setScheduleType(Interface.SCHEDULE_ONLINE) ;
       break ;
 
     default :
-      interfaceMeta.setInterfaceType("File") ;
-      interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
+      interfaceMeta.setInterfaceType("Online") ;
+      interfaceMeta.setScheduleType(Interface.SCHEDULE_ONLINE) ;
       // interfaceMeta.setCronExpression(cronExpression) ;
       // interfaceMeta.setCalendarId(calendarId) ;
       break ;
@@ -385,9 +401,25 @@ public class YellowPageController extends AbstractEimsController
     // TODO SeriveType 변환 및 검사 로직 필요
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
+    case "DB_MD" :
+      service.setServiceType("DB") ;
+//      service.setServiceActivity("CompositeReplyServiceActivity") ;
+      break ;
+    case "DB_MM" :
+      service.setServiceType("DB") ;
+//      service.setServiceActivity("CompositeReplyServiceActivity") ;
+      break ;
+    case "FILE_DB" :
+      service.setServiceType("File") ;
+//      service.setServiceActivity("NoReplyServiceActivity") ;
+      break ;
+    case "FILE_FILE" :
+      service.setServiceType("File") ;
+//      service.setServiceActivity("NoReplyServiceActivity") ;
+      break ;
     case "REQ_RES" :
       service.setServiceType("Online") ;
-      service.setServiceActivity("CompositeReplyServiceActivity") ;
+//      service.setServiceActivity("CompositeReplyServiceActivity") ;
       break ;
 
     default :
@@ -517,25 +549,34 @@ public class YellowPageController extends AbstractEimsController
 
     field.setFieldOptions(PropertyUtils.encode(properties)) ;
 
-    if (Field.TYPE_INDIVIDUAL == field.getFieldType())
-    {
-      field.setFieldType(Field.TYPE_RECORD) ;
-      field.setSubRecordId(childElement.getGroupName()) ;
-    }
-    else if (Field.TYPE_RECORD == field.getFieldType())
+    if (Field.TYPE_RECORD == field.getFieldType())
     {
       Record subRecord = new Record() ;
-      subRecord.setRecordId(field.getRecord().getRecordId() + "@" + field.getPk().getFieldId()) ;
 
       subRecord.setPrivilegeId(field.getRecord().getPrivilegeId()) ;
       subRecord.setPrivateYn(field.getRecord().getPrivateYn()) ;
-      subRecord.setRecordType(Record.TYPE_EMBED) ;
       subRecord.setMetaDomain(field.getRecord().getMetaDomain()) ;
       subRecord.setRecordGroup(field.getRecord().getRecordGroup()) ;
 
-      unmarshalGroup(subRecord, childElement.getSubFields()) ;
+      if (null != childElement.getGroupName())
+      {
+        subRecord.setRecordId(childElement.getGroupName()) ;
+        subRecord.setRecordType(Record.TYPE_HEADER) ;
 
-      field.setSubRecordId(subRecord.getRecordId()) ;
+        unmarshalGroup(subRecord, childElement.getSubFields()) ;
+
+        field.setFieldType(Field.TYPE_RECORD) ;
+        field.setSubRecordId(childElement.getGroupName()) ;
+      }
+      else
+      {
+        subRecord.setRecordId(field.getRecord().getRecordId() + "@" + field.getPk().getFieldId()) ;
+        subRecord.setRecordType(Record.TYPE_EMBED) ;
+
+        unmarshalGroup(subRecord, childElement.getSubFields()) ;
+
+        field.setSubRecordId(subRecord.getRecordId()) ;
+      }
       field.setRecordObject(subRecord) ;
     }
 
