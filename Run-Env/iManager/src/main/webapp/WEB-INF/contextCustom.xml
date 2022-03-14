@@ -60,8 +60,8 @@
 		<security:intercept-url pattern="/igate/adapter/**" access="hasRole('ROLE_AdapterViewer')"/>
 		<security:intercept-url pattern="/igate/adapterControl.*" access="hasRole('ROLE_AdapterControl')"/>
 		<security:intercept-url pattern="/igate/adapterControl/**" access="hasRole('ROLE_AdapterControl')"/>
-		<security:intercept-url pattern="/igate/batchLog.*" access="hasRole('ROLE_BatchLog')"/>
-		<security:intercept-url pattern="/igate/batchLog/**" access="hasRole('ROLE_BatchLog')"/>
+		<security:intercept-url pattern="/igate/batchLog.*" access="hasRole('ROLE_BatchLogViewer')"/>
+		<security:intercept-url pattern="/igate/batchLog/**" access="hasRole('ROLE_BatchLogViewer')"/>
 		<security:intercept-url pattern="/igate/calendar.*" access="hasRole('ROLE_CalendarViewer')"/>
 		<security:intercept-url pattern="/igate/calendar/**" access="hasRole('ROLE_CalendarViewer')"/>
 		<security:intercept-url pattern="/igate/connector.*" access="hasRole('ROLE_ConnectorViewer')"/>
