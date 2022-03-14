@@ -47,8 +47,8 @@
 <sec:authorize var="hasTraceLogEditor" access="hasRole('TraceLogEditor')"></sec:authorize>
 
 <%-- 파일로그, SAF 거래내역 --%>
-<sec:authorize var="hasFileLogViewer" access="hasRole('FileLogViewer')"></sec:authorize>
-<sec:authorize var="hasFileLogEditor" access="hasRole('FileLogEditor')"></sec:authorize>
+<sec:authorize var="hasBatchLogViewer" access="hasRole('BatchLogViewer')"></sec:authorize>
+<sec:authorize var="hasBatchLogEditor" access="hasRole('BatchLogEditor')"></sec:authorize>
 
 <%-- 예약된 배치 스케줄 --%>
 <sec:authorize var="hasReservedScheduleViewer" access="hasRole('ReservedScheduleViewer')"></sec:authorize>
@@ -218,8 +218,8 @@ var hasExceptionLogViewer = "true" == "${hasExceptionLogViewer}"
 var hasExceptionLogEditor = "true" == "${hasExceptionLogEditor}"
 
 <%-- 파일로그, 파일 송수신내역 --%>
-var hasFileLogViewer = "true" == "${hasFileLogViewer}"
-var hasFileLogEditor = "true" == "${hasFileLogEditor}"
+var hasBatchLogViewer = "true" == "${hasBatchLogViewer}"
+var hasBatchLogEditor = "true" == "${hasBatchLogEditor}"
 
 <%-- 예약된 배치 스케줄 --%>
 var hasReservedScheduleViewer = "true" == "${hasReservedScheduleViewer}"

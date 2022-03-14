@@ -899,6 +899,8 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	    				setLocalStorage();
 	    				
 	    				changeContainer('view');
+	    				
+	    				setDashContainer('view');
 	    			}
 	    		});
 	    	}});
@@ -2622,32 +2624,32 @@ function DashContainerView(dashContainerElement, dashContainerOptions) {
 	  
 		$('#dashModal').on('hidden.bs.modal', function() {
 			$('#dashModal').remove();
-			setDashContainer();
+			setDashContainer(mod, pDashContainerOption);
 		});
 		$('#dashModal').modal('hide');
 
 		$('#dashModalLarge').on('hidden.bs.modal', function() {
 			$('#dashModalLarge').remove();
-			setDashContainer();
+			setDashContainer(mod, pDashContainerOption);
 		});
 		$('#dashModalLarge').modal('hide');
 		
 		$("#noticeArea").remove();
-		
-		function setDashContainer() {
-			$('#dashModal, #dashModalLarge').remove();
-			
-			var dashContainerOption = {mod : mod};
-			  
-			if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
-	    
-			if (pDashContainerOption) {
-				dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
-			}
-		  
-			$(dashContainerElement).dashContainer(dashContainerOption);			
-		}
 	}
+	
+	function setDashContainer(mod, pDashContainerOption) {
+		$('#dashModal, #dashModalLarge').remove();
+		
+		var dashContainerOption = {mod : mod};
+		  
+		if('view' == mod) dashContainerOption.websocketUrl = websocketUrl;
+    
+		if (pDashContainerOption) {
+			dashContainerOption = $.extend(true, {}, dashContainerOption, pDashContainerOption);
+		}
+	  
+		$(dashContainerElement).dashContainer(dashContainerOption);			
+	}	
   
 	function unloadContainer() {
 	  

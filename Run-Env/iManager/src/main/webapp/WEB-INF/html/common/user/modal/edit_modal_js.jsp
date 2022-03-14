@@ -119,7 +119,7 @@
         modifyModeChange : function()
         {
           window.vmAuthorInfo.modifyMode = true ;
-          $('#editUserModalModalSearch').find('.form-control').not('.readonlyField').not('.dataKey').attr('disabled', true) ;
+          $('#editUserModalModalSearch').find('.form-control').not('.readonlyField').not('.dataKey').attr('disabled', false) ;
           $('#editUserModalModalSearch').find('.custom-control').attr('disabled', false) ;
           $('#editUserModalModalSearch').find('#modifyBtn').hide() ;
           $('#editUserModalModalSearch').find('#okBtn').hide() ;

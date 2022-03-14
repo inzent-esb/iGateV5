@@ -170,6 +170,7 @@
                 fileDate : null,
                 instanceId : " ",
                 safId : null,
+                createDateTime : null
               }
             },
             safStatusList : [],
@@ -207,6 +208,7 @@
                 this.pageSize = '10' ;
                 this.object.pk.adapterId = null ;
                 this.object.pk.safId = null ;
+                this.object.pk.createDateTime = null;
                 this.object.transactionId = null ;
                 this.object.serviceId = null ;
                 this.object.pk.instanceId = ' ' ;
@@ -420,9 +422,17 @@
             if(localStorage.getItem('selectedSafSearch')){
           	  this.selectedTraceSearch = JSON.parse(localStorage.getItem('selectedSafSearch'));
           	  localStorage.removeItem('selectedSafSearch');
-          	  window.vmSearch.object.fromCreateDateTime = this.selectedTraceSearch.fromLogDateTime;
-          	  window.vmSearch.object.toCreateDateTime = this.selectedTraceSearch.toLogDateTime;
-          	  window.vmSearch.object.pk.safId = this.selectedTraceSearch.safId;
+          	  
+          	  if(this.selectedTraceSearch.startTimestamp!=null){
+          		window.vmSearch.object.pk.createDateTime = moment(this.selectedTraceSearch.startTimestamp).format('YYYY-MM-DD HH:mm:ss.SSS');
+          		window.vmSearch.object.fromCreateDateTime = moment(this.selectedTraceSearch.startTimestamp).format('YYYY.MM.DD 00:00:00');
+          	  }
+          	  else{
+          	    window.vmSearch.object.pk.createDateTime = moment(this.selectedTraceSearch.endTimestamp).format('YYYY-MM-DD HH:mm:ss.SSS');
+          	    window.vmSearch.object.fromCreateDateTime = moment(this.selectedTraceSearch.endTimestamp).format('YYYY-MM-DD 00:00:00');
+          	  }
+          	  console.log(window.vmSearch.object);
+          	  window.vmSearch.object.transactionId = this.selectedTraceSearch.transactionId;
           	  window.vmSearch.search() ;
           	  initDatePicker(window.vmSearch, $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateFrom'), $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateTo')) ;
             }

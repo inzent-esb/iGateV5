@@ -122,15 +122,15 @@
 				<tbody>
 			    	<tr v-for="elm in totalUserPrivileges">	   	
 			    		<td>
-			    			<select class="form-control view-disabled" v-model="elm.privilegeName" disabled>
+			    			<select class="form-control view-disabled readonlyField" v-model="elm.privilegeName" disabled="disabled">
 			    				<option value=" "><fmt:message>common.user.privilege.none</fmt:message></option>
 			    				<option value="Admin"><fmt:message>common.user.privilege.admin</fmt:message></option>
 			    				<option value="Member"><fmt:message>common.user.privilege.member</fmt:message></option>
 			    			</select>
 						</td>
-						<td class="px-1" v-if="elm.privilegeType===isSystem"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.privilege.type.system</fmt:message>></td>
-						<td class="px-1" v-if="elm.privilegeType===isBusiness"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.privilege.type.business</fmt:message>></td>
-						<td class="px-1" v-if="elm.privilegeType!==isSystem && elm.privilegeType!==isBusiness"><input type="text" class="form-control view-disabled" disabled="disabled" value=<fmt:message>common.role</fmt:message>></td>
+						<td class="px-1" v-if="elm.privilegeType===isSystem"><input type="text" class="form-control view-disabled readonlyField" disabled="disabled" value=<fmt:message>common.privilege.type.system</fmt:message>></td>
+						<td class="px-1" v-if="elm.privilegeType===isBusiness"><input type="text" class="form-control view-disabled readonlyField" disabled="disabled" value=<fmt:message>common.privilege.type.business</fmt:message>></td>
+						<td class="px-1" v-if="elm.privilegeType!==isSystem && elm.privilegeType!==isBusiness"><input type="text" class="form-control view-disabled readonlyField" disabled="disabled" value=<fmt:message>common.role</fmt:message>></td>
 					   	<td class="px-1"><input type="text" class="form-control readonlyField" v-model="elm.privilegeId" disabled="disabled"></td>
 			         </div>
 			    	</tr>

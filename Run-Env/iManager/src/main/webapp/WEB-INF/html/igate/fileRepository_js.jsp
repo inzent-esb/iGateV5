@@ -73,8 +73,8 @@
     createPageObj.searchConstructor() ;
 
     createPageObj.setMainButtonList({
-      updateCancelBtn : hasFileLogEditor,
-      updateReadyBtn : hasFileLogEditor,
+      updateCancelBtn : hasBatchLogEditor,
+      updateReadyBtn : hasBatchLogEditor,
       newTabBtn: 'b' == '<c:out value="${_client_mode}" />',
       searchInitBtn : true,
       totalCount: true,

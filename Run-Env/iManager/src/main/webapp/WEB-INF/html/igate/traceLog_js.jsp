@@ -205,6 +205,8 @@
               serviceId : null,
               transactionId : null,
               remoteAddr : null,
+              requestTimestamp : null,
+              responseTimestamp: null,
               logCode : null,
               instanceId : " ",
               timeoutYn : " ",
@@ -254,6 +256,8 @@
                 this.object.interfaceId = null ;
                 this.object.serviceId = null ;
                 this.object.remoteAddr = null ;
+                this.object.requestTimestamp = null;
+                this.object.responseTimestamp = null;
                 this.object.logCode = null ;
                 this.object.instanceId = " " ;
                 this.object.timeoutYn = " " ;
@@ -711,6 +715,12 @@
             if(localStorage.getItem('selectedTraceSearch')){
         	  this.selectedTraceSearch = JSON.parse(localStorage.getItem('selectedTraceSearch'));
         	  localStorage.removeItem('selectedTraceSearch');
+        	  if(this.selectedTraceSearch.startTimestamp!=null){
+        	    window.vmSearch.object.requestTimestamp = this.selectedTraceSearch.startTimestamp;
+        	  }
+        	  else{
+        	    window.vmSearch.object.responseTimestamp = this.selectedTraceSearch.endTimestamp
+        	  }
         	  window.vmSearch.object.transactionId = this.selectedTraceSearch.transactionId;
         	  window.vmSearch.search() ;
           }
