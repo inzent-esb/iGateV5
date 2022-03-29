@@ -20,7 +20,7 @@ public class CustomDreamWizeSyncReplyServiceActivity extends SyncReplyServiceAct
   @Override
   protected AdapterParameter makeAdapterParameter(Service serviceMeta, Record request) throws IGateException
   {
-    request.setFieldValue(SYNC_MODE_PATH, "S") ;
+//    request.setFieldValue(SYNC_MODE_PATH, "S") ;
 
     AdapterParameter adapterParameter = super.makeAdapterParameter(serviceMeta, request) ;
 
