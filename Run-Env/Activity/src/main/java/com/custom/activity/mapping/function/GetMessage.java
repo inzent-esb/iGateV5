@@ -50,7 +50,7 @@ public class GetMessage extends AbstractExpressionFunction
 		if(resCd != null)	
 		{	
 			logger.debug("### MessageTranslator.getStandardMessage(resCd, adapterId, langCd) : [" + MessageTranslator.getStandardMessage(resCd, adapterId, langCd) +"]");
-			for (String message : MessageTranslator.getStandardMessage(resCd, adapterId, langCd))
+			for (String message : MessageTranslator.getStandardMessage(resCd.trim(), adapterId, langCd))
 			{
 				logger.debug("### message : [" + message +"]");
 				if (StringUtils.isBlank(message))
