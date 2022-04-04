@@ -11,6 +11,8 @@ import javax.persistence.Table ;
 
 import org.hibernate.annotations.Proxy ;
 
+import com.inzent.imanager.repository.FieldRestriction;
+
 @Entity
 @Table(name = "IGT_MCI_SESSION")
 @Proxy(lazy = false)
@@ -28,6 +30,7 @@ public class MciSession implements Serializable
 
   @Id
   @Column(name = "MCI_SESSION_ID")
+  @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.EQ)
   private String mciSessionId ;
 
   @Column(name = "MCI_INSTANCE_ID")
@@ -43,23 +46,28 @@ public class MciSession implements Serializable
   private String channelIp ;
 
   @Column(name = "MAC_ADDRESS")
+  @FieldRestriction(where = FieldRestriction.EQ)
   private String macAddress ;
 
   @Column(name = "BRNCD")
   private String brnCd ;
 
   @Column(name = "EMPID")
+  @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.ILIKE)
   private String empId ;
 
   @Column(name = "LOGON_YMS")
+  @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.ILIKE)
   private String logonYms ;
 
   @Column(name = "LOGOFF_YMS")
+  @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.ILIKE)
   private String logoffYms ;
 
   @Column(name = "SESSION_DEL_YN")
+  @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.EQ)
   private String sessionDelYn ;
-
+  
   public MciSession()
   {
   }
@@ -178,4 +186,6 @@ public class MciSession implements Serializable
   {
     this.sessionDelYn = sessionDelYn ;
   }
+
+  
 }
