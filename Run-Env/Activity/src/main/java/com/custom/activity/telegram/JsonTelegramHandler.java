@@ -60,6 +60,8 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
     adapterParameter.setConverted(object) ;
 
     header = ((JsonNode) (object instanceof ValueObject ? ((ValueObject) object).get(HttpConstants.BODY) : object)).path(HEADER_ID).path(STANDARD_HEADER_ID) ;
+    
+    transactionContextBean.setValue(LANG_CD, header.path(LANG_CD_FIELD).asText()) ;
   }
 
   @Override

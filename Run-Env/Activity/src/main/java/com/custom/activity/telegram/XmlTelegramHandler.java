@@ -61,6 +61,8 @@ public class XmlTelegramHandler extends AbstractTelegramHandler implements Custo
     adapterParameter.setConverted(object) ;
 
     header = ((Document) (object instanceof ValueObject ? ((ValueObject) object).get(HttpConstants.BODY) : object)).getRootElement().element(HEADER_ID).element(STANDARD_HEADER_ID) ;
+    
+    transactionContextBean.setValue(LANG_CD, header.elementText(LANG_CD_FIELD)) ;
   }
 
   @Override
@@ -82,6 +84,16 @@ public class XmlTelegramHandler extends AbstractTelegramHandler implements Custo
     }
   }
 
+
+  @Override
+  protected void initializeInterfaceRequest(AdapterParameter adapterParameter) throws IGateException
+  {
+    super.initializeInterfaceRequest(adapterParameter) ;
+
+    // 회기 테트스를 위한 코드
+    transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
+  }
+  
   @Override
   protected String getTransactionId(AdapterParameter adapterParameter, boolean request) throws IGateException
   {

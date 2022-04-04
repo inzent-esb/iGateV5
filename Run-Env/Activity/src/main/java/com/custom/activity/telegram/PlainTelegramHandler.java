@@ -80,6 +80,7 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   @Override
   protected String getMessageId(AdapterParameter adapterParameter, boolean request) throws IGateException
   {
+		  
     return new Numeric(StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()),
         MID_OFFSET, MID_LENGTH, adapterParameter.getAdapter().getCharset()), null, MID_LENGTH, 0).toString() ;
   }
@@ -102,9 +103,9 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
     return StringUtils.stripEnd(StringCodec.decode((byte[]) adapterParameter.getResponseData(), SID_OFFSET, SID_LENGTH, adapterParameter.getAdapter().getCharset()), null) ;
   }
 
-@Override
-protected void analyze(AdapterParameter arg0, boolean arg1) throws IGateException {
-	// TODO Auto-generated method stub
-	
-}
+  @Override
+  protected void analyze(AdapterParameter adapterParameter, boolean request) throws IGateException
+  {
+	  transactionContextBean.setValue(LANG_CD, StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()), LANG_CD_FIELD_OFFSET, LANG_CD_FIELD_LENGTH, adapterParameter.getAdapter().getCharset()) ) ;
+  }
 }

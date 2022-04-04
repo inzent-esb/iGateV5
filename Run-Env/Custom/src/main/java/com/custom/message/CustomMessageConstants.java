@@ -31,8 +31,11 @@ public interface CustomMessageConstants
   
   public static String MID_FIELD = "ProgressNo" ;
   
+  public static String LANG_CD = "LANGCD" ; // 언어코드
   public static String LANG_CD_FIELD = "LangCd" ; // 언어코드
   public static String LANG_CD_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + LANG_CD_FIELD ;
+  public static int LANG_CD_FIELD_OFFSET = 150 ;
+  public static int LANG_CD_FIELD_LENGTH = 2 ;
 
   public static final String BODY_ROOT = "Body" ;
 
