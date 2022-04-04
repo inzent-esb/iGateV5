@@ -81,7 +81,11 @@ public interface CustomHandlerConstants extends CustomMessageConstants
   public static String SID_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + SID_FIELD ;
   public static int SID_OFFSET = IID_OFFSET + IID_LENGTH ;
   public static int SID_LENGTH = 20 ;
-
+    
+  //채널 헤더 C_RESULT	응답코드
+  public static String CHL_RESPONSE_CODE_FIELD = "C_RESULT" ;
+  public static String CHL_RESPONSE_CODE_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_CHANNEL_HEADER_ID + Record.NAME_SEPARATOR_STRING + CHL_RESPONSE_CODE_FIELD ;
+   
   public default Record makeResponse(Log logger, AdapterParameter adapterParameter, Throwable throwable) throws IGateException
   {
     MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(adapterParameter.getAdapter(), adapterParameter.getRequestData()) ;
@@ -95,6 +99,10 @@ public interface CustomHandlerConstants extends CustomMessageConstants
     record.setFieldValue(MID_PATH, ((Number) record.getFieldValue(MID_PATH)).intValue() + 1) ;
     record.setFieldValue(TELEGRAM_TYPE_PATH, "R") ;
     record.setFieldValue(RESPONSE_CODE_PATH, "2") ;
+    
+    //채널 헤더 C_RESULT	응답코드
+    if(record.hasField(CHL_RESPONSE_CODE_PATH) )
+    	record.setFieldValue(RESPONSE_CODE_PATH, "99") ;	
 
     // 에러메세지부
     Record addRecord = ((RecordImpl) record).addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID) ;

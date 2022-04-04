@@ -16,6 +16,11 @@ public interface CustomMessageConstants
 
   public String STANDARD_HEADER_ID = "StandardHeader" ;
   public String STANDARD_HEADER_RECORD = "HDR_STANDARD" ; // 표준 헤더부
+  
+  
+  //채널 헤더
+  public String STANDARD_CHANNEL_HEADER_ID = "ChannelHeader" ;
+  
 
   public int STD_HEADER_LENGTH = 220 ; // 전문헤더 220 (길이 8 + GUID 36 + 전문헤더 정보 176 )
 
@@ -37,7 +42,7 @@ public interface CustomMessageConstants
 
   public String DATA_TYPE_FIELD = "DataType" ; // 메시지 종류
   public String DATA_TYPE_DATA = "IO" ; // 개별부
-  public String DATA_TYPE_MSG_NORMAL = "MN" ; // 정상메시지
+  public String DATA_TYPE_MSG_NORMAL = "NM" ; // 정상메시지
   public String DATA_TYPE_MSG_ERROR = "ER" ; // 에러 메시지
   public int DATA_TYPE_LENGTH = 2 ;
 
