@@ -102,7 +102,7 @@ public interface CustomHandlerConstants extends CustomMessageConstants
     
     //채널 헤더 C_RESULT	응답코드
     if(record.hasField(CHL_RESPONSE_CODE_PATH) )
-    	record.setFieldValue(RESPONSE_CODE_PATH, "99") ;	
+    	record.setFieldValue(CHL_RESPONSE_CODE_PATH, "99") ;	
 
     // 에러메세지부
     Record addRecord = ((RecordImpl) record).addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID) ;
