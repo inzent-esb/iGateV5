@@ -22,7 +22,14 @@ public class PushMessage extends AbstractActivity
 {
   protected final IGateInstance iGateInstance ;
   protected final ICache<String, MciSession> sessionMap ;
-
+  
+  protected final String PUSH_TYPE = "PUSH_TYPE" ;
+  protected final String PUSH_CNT = "PUSH_CNT" ;
+  protected final String PUSH_LIST = "PUSH_LIST" ;
+  protected final String PUSH_TARGET = "PUSH_TARGET" ;
+  protected final String PUSH_MESSAGE = "PUSH_MESSAGE" ;
+  
+  
   @SuppressWarnings("unchecked")
   public PushMessage(Activity activity)
   {
@@ -43,6 +50,28 @@ public class PushMessage extends AbstractActivity
   {
     AdapterParameter adapterParameter = (AdapterParameter) args[0] ;
     RecordImpl response = (RecordImpl) args[1] ;
+    RecordImpl bizRes = (RecordImpl) args[2] ;
+    
+    String pushType = null ;
+    int pushCnt = 0; 
+    
+    if(bizRes.hasField(PUSH_TYPE))
+    	pushType = (String)bizRes.getFieldValue(PUSH_TYPE);
+    
+	if(bizRes.hasField(PUSH_CNT))
+		pushCnt = Integer.parseInt((String)bizRes.getFieldValue(PUSH_CNT));
+	    
+	
+	logger.info(" pushType : " + pushType);
+	logger.info(" pushCnt : " + pushCnt);
+	
+	if(bizRes.hasField(PUSH_LIST))
+	{
+		bizRes.getField(PUSH_LIST).getFieldType();
+		logger.info(" PUSH_LIST type : " + pushType);
+	}
+    
+    
 
     MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(MessageBeans.SINGLETON.adapterManager.get(response.getAdapterId()), null) ;
     messageConverter.compose(response, logger) ;
