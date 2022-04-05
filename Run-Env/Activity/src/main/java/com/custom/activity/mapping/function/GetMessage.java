@@ -40,14 +40,19 @@ public class GetMessage extends AbstractExpressionFunction
 		String langCd 	= ( null!= args[0] ? (String) args[0] : "en" );
 		String resCd 	= ( null!= args[1] ? (String) args[1] : null );
 		String adapterId = ( null!= args[2] ? (String) args[2] : "I_MCA" );
+		logger.debug("### langCd : [" + langCd +"]");
+		logger.debug("### resCd : [" + resCd +"]");
+		logger.debug("### adapterId : [" + adapterId +"]");
 
 		int idx = 0;
 		String retMessage = "";
 
 		if(resCd != null)	
 		{	
-			for (String message : MessageTranslator.getStandardMessage(resCd, adapterId, langCd))
+			logger.debug("### MessageTranslator.getStandardMessage(resCd, adapterId, langCd) : [" + MessageTranslator.getStandardMessage(resCd, adapterId, langCd) +"]");
+			for (String message : MessageTranslator.getStandardMessage(resCd.trim(), adapterId, langCd))
 			{
+				logger.debug("### message : [" + message +"]");
 				if (StringUtils.isBlank(message))
 					break ;
 
@@ -58,6 +63,8 @@ public class GetMessage extends AbstractExpressionFunction
 				idx ++;
 			}
 		}
+		
+		logger.debug("### retMessage : [" + retMessage +"]");
 		return retMessage;
 	}
 }
