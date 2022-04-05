@@ -94,20 +94,20 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 		{
 			ArrayImpl list = (ArrayImpl)bizRes.getField(path);
 			
-//			int index = 0; 
+			int index = 0; 
+			
+			while(index < pushCnt )
+			{
+				logger.info(String.format( "[%d] %s", index,list.getField(index).getValue() ));
+				TargetList.add(((String)list.getField(index).getValue()).trim());
+				index ++;
+			}	
+			
+//			while(list.iterator().hasNext())
+//				TargetList.add(((String)list.iterator().next().getValue()).trim());
 //			
-//			while(index < pushCnt )
-//			{
-//				logger.info(String.format( "[%d] %s", index,list.getField(index).getValue() ));
-//				TargetList.add(((String)list.getField(index).getValue()).trim());
-//				index ++;
-//			}	
-			
-			while(list.iterator().hasNext())
-				TargetList.add(((String)list.iterator().next().getValue()).trim());
-			
-			while(TargetList.iterator().hasNext())
-				logger.info(TargetList.iterator().next());
+//			while(TargetList.iterator().hasNext())
+//				logger.info(TargetList.iterator().next());
 			
 			
 		}		
