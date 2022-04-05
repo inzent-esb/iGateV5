@@ -4,6 +4,7 @@ import java.util.Objects ;
 
 import javax.jms.Message ;
 
+import com.custom.activity.telegram.CustomHandlerConstants;
 import com.inzent.igate.adapter.AdapterManagerBean ;
 import com.inzent.igate.adapter.AdapterParameter ;
 import com.inzent.igate.cache.ICache;
@@ -18,16 +19,25 @@ import com.inzent.igate.repository.meta.Activity ;
 import com.inzent.igate.repository.meta.Adapter ;
 import com.inzent.igate.rule.activity.AbstractActivity ;
 
-public class PushMessage extends AbstractActivity
+public class PushMessage extends AbstractActivity  implements CustomHandlerConstants
 {
   protected final IGateInstance iGateInstance ;
   protected final ICache<String, MciSession> sessionMap ;
   
   protected final String PUSH_TYPE = "PUSH_TYPE" ;
+  protected final String PUSH_TYPE_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_TYPE ; 
+		  
+		  
   protected final String PUSH_CNT = "PUSH_CNT" ;
-  protected final String PUSH_LIST = "PUSH_LIST" ;
+  protected final String PUSH_CNT_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_CNT ;
+  
+  protected final String PUSH_LIST = "PUSH_LIST" ;  
+  protected final String PUSH_LIST_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_LIST ;
+  
   protected final String PUSH_TARGET = "PUSH_TARGET" ;
+  
   protected final String PUSH_MESSAGE = "PUSH_MESSAGE" ;
+  protected final String PUSH_MESSAGE_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_MESSAGE ;
   
   
   @SuppressWarnings("unchecked")
@@ -55,22 +65,28 @@ public class PushMessage extends AbstractActivity
     String pushType = null ;
     int pushCnt = 0; 
     
-    if(bizRes.hasField(PUSH_TYPE))
-    	pushType = (String)bizRes.getFieldValue(PUSH_TYPE);
+    String path = String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_TYPE_PATH);
+    logger.info(" path : " + path);
+    if(bizRes.hasField(path))
+    	pushType = (String)bizRes.getFieldValue(path);
     
-	if(bizRes.hasField(PUSH_CNT))
-		pushCnt = Integer.parseInt((String)bizRes.getFieldValue(PUSH_CNT));
+    path = String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_CNT_PATH);
+    logger.info(" path : " + path);
+	if(bizRes.hasField(path))
+		pushCnt = Integer.parseInt((String)bizRes.getFieldValue(path));
 	    
 	
 	logger.info(" pushType : " + pushType);
 	logger.info(" pushCnt : " + pushCnt);
 	
-	if(bizRes.hasField(PUSH_LIST))
+
+	path = String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_LIST_PATH);
+	logger.info(" path : " + path);
+	if(bizRes.hasField(path))
 	{
-		bizRes.getField(PUSH_LIST).getFieldType();
+		bizRes.getField(path).getFieldType();
 		logger.info(" PUSH_LIST type : " + pushType);
 	}
-    
     
 
     MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(MessageBeans.SINGLETON.adapterManager.get(response.getAdapterId()), null) ;
