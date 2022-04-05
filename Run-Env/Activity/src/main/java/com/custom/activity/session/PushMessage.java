@@ -18,6 +18,7 @@ import com.inzent.igate.repository.log.MciSession ;
 import com.inzent.igate.repository.meta.Activity ;
 import com.inzent.igate.repository.meta.Adapter ;
 import com.inzent.igate.rule.activity.AbstractActivity ;
+import com.inzent.igate.util.Numeric;
 
 public class PushMessage extends AbstractActivity  implements CustomHandlerConstants
 {
@@ -56,22 +57,27 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
     RecordImpl bizRes = (RecordImpl) args[2] ;
     logger.info(" bizRes : " + bizRes);
     String pushType = null ;
-    int pushCnt = 0; 
+    int pushCnt = 0;
 
+    //==============
     String path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_TYPE);
     logger.info(" pushType path : " + path);
     if(bizRes.hasField(path))
     	pushType = (String)bizRes.getFieldValue(path);
     logger.info(" pushType : " + pushType);
 
-    
+    //==============    
     path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_CNT);
     logger.info(" pushCnt path : " + path);
-	if(bizRes.hasField(path))
-		pushCnt = Integer.parseInt((String)bizRes.getFieldValue(path));
-	logger.info(" pushCnt : " + pushCnt);
+    
+	if(bizRes.hasField(path))		
+	{
+		Numeric Cnt =(Numeric)bizRes.getFieldValue(path);
+		pushCnt = Cnt.intValue();
+	}
+	logger.info(" pushCnt : " + pushCnt );
 	
-
+    //==============
 	path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_LIST);
 	logger.info(" PUSH_LIST path : " + path);
 	if(bizRes.hasField(path))
@@ -79,7 +85,7 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 		bizRes.getField(path).getFieldType();
 		logger.info(" PUSH_LIST type : " + pushType);
 	}
-    
+    //==============
 
     MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(MessageBeans.SINGLETON.adapterManager.get(response.getAdapterId()), null) ;
     messageConverter.compose(response, logger) ;
