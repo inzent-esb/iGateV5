@@ -23,124 +23,135 @@ import com.inzent.igate.util.Numeric;
 
 public class PushMessage extends AbstractActivity  implements CustomHandlerConstants
 {
-  protected final IGateInstance iGateInstance ;
-  protected final ICache<String, MciSession> sessionMap ;
-  
-  protected final String PUSH_PATH = Record.NAME_SEPARATOR_STRING + "%s" + Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING +"%s" ; 
-		  
-  protected final String PUSH_TYPE = "PUSH_TYPE" ;
-  protected final String PUSH_CNT = "PUSH_CNT" ;
-  protected final String PUSH_LIST = "PUSH_LIST" ;  
-  protected final String PUSH_TARGET = "PUSH_TARGET" ;
-  protected final String PUSH_TARGET_PATH = Record.NAME_SEPARATOR_STRING + "%s" + Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_LIST + "[%d]" + Record.NAME_SEPARATOR_STRING + PUSH_TARGET ;  
-  protected final String PUSH_MESSAGE = "PUSH_MESSAGE" ;
-  
-  
-  @SuppressWarnings("unchecked")
-  public PushMessage(Activity activity)
-  {
-    super(activity) ;
+	protected final IGateInstance iGateInstance ;
+	protected final ICache<String, MciSession> sessionMap ;
 
-    iGateInstance = IGateInstance.getInstance() ;
-    sessionMap = (ICache<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
-  }
+	protected final String PUSH_PATH = Record.NAME_SEPARATOR_STRING + "%s" + Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING +"%s" ; 
 
-  @Override
-  public boolean isSingleton()
-  {
-    return true ;
-  }
+	protected final String PUSH_TYPE = "PUSH_TYPE" ;
+	protected final String PUSH_TYPE_All = "A" ;
+	protected final String PUSH_TYPE_GROUP = "G" ;
+	protected final String PUSH_TYPE_TERLLER = "T" ;
 
-  @Override
-  public int execute(Object... args) throws Exception
-  {
-    AdapterParameter adapterParameter = (AdapterParameter) args[0] ;
-    RecordImpl response = (RecordImpl) args[1] ;
-    RecordImpl bizRes = (RecordImpl) args[2] ;
-    
-    
-    //=========================================================================================================
-    String pushType = null ;
-    int pushCnt = 0;
-    ArrayList<String> TargetList = new ArrayList<String>();
-    
-    //=========================================================================================================
-    String path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_TYPE);
-    logger.info(" pushType path : " + path);
-    if(bizRes.hasField(path))
-    	pushType = (String)bizRes.getFieldValue(path);
-    logger.info(" pushType : " + pushType);
+	protected final String PUSH_CNT = "PUSH_CNT" ;
+	protected final String PUSH_LIST = "PUSH_LIST" ;  
+	protected final String PUSH_TARGET = "PUSH_TARGET" ;
+	protected final String PUSH_TARGET_PATH = Record.NAME_SEPARATOR_STRING + "%s" + Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_LIST + "[%d]" + Record.NAME_SEPARATOR_STRING + PUSH_TARGET ;  
 
-    //=========================================================================================================
-    path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_CNT);
-    logger.info(" pushCnt path : " + path);
-    
-	if(bizRes.hasField(path))		
+	protected final String PUSH_MESSAGE = "PUSH_MESSAGE" ;
+
+
+	@SuppressWarnings("unchecked")
+	public PushMessage(Activity activity)
 	{
-		Numeric Cnt =(Numeric)bizRes.getFieldValue(path);
-		pushCnt = Cnt.intValue();
+		super(activity) ;
+
+		iGateInstance = IGateInstance.getInstance() ;
+		sessionMap = (ICache<String, MciSession>) Context.getApplicationContext().getBean("sessionMap") ;
 	}
-	logger.info(" pushCnt : " + pushCnt );
-	
-    //=========================================================================================================
-	path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_LIST);
-	logger.info(" PUSH_LIST path : " + path);
-	if(bizRes.hasField(path))
+
+	@Override
+	public boolean isSingleton()
 	{
-		bizRes.getField(path).getFieldType();
-		logger.info(" PUSH_LIST type : " + bizRes.getField(path).getFieldType());
-		
-		if(pushCnt>0)
+		return true ;
+	}
+
+	@Override
+	public int execute(Object... args) throws Exception
+	{
+		AdapterParameter adapterParameter = (AdapterParameter) args[0] ;
+		RecordImpl response = (RecordImpl) args[1] ;
+		RecordImpl bizRes = (RecordImpl) args[2] ;
+
+		//=========================================================================================================
+		ArrayList<String> pushTargetList = new ArrayList<String>();
+		String pushType = null ;
+		int pushCnt = 0;
+
+		//=========================================================================================================
+		String path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_TYPE);
+		if(bizRes.hasField(path))
+			pushType = (String)bizRes.getFieldValue(path);
+		//===============
+		path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_CNT);
+		if(bizRes.hasField(path))		
 		{
-			//ArrayImpl list = (ArrayImpl)bizRes.getField(path);
-			
-			int index = 0; 
-			
-			while(index < pushCnt )
+			Numeric Cnt =(Numeric)bizRes.getFieldValue(path);
+			pushCnt = Cnt.intValue();
+		}
+		//===============
+		path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_LIST);
+		if(bizRes.hasField(path))
+		{
+			bizRes.getField(path).getFieldType();
+
+			if(pushCnt > 0)
 			{
+				int index = 0; 
+				while(index < pushCnt )
+				{
+					path = String.format(PUSH_TARGET_PATH, adapterParameter.getService().getServiceId()+"_0", index);
+					pushTargetList.add(((String)bizRes.getFieldValue(path)).trim());
+					index ++;
+				}	
+			}		
+		}
+		//=========================================================================================================
 
-				path = String.format(PUSH_TARGET_PATH, adapterParameter.getService().getServiceId()+"_0", index);
-				logger.info(((String)bizRes.getFieldValue(path)).trim());
-				
-				TargetList.add(((String)bizRes.getFieldValue(path)).trim());
-				index ++;
-			}	
-			
-		}		
+		MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(MessageBeans.SINGLETON.adapterManager.get(response.getAdapterId()), null) ;
+		messageConverter.compose(response, logger) ;
+
+		for (String mciSessionId : sessionMap.keys())
+		{
+			MciSession mciSession = sessionMap.get(mciSessionId) ;
+			//if (isValid(adapterParameter, response, mciSession))
+			if (isValid(adapterParameter, response, pushType, pushTargetList, mciSession))
+			{
+				AdapterParameter adapterParameterPush = new AdapterParameter() ;
+				adapterParameterPush.setAdapterId(response.getAdapterId()) ;
+				adapterParameterPush.setAdapterEvent(Adapter.RESPONSE_WRITE) ;
+				adapterParameterPush.setRemoteAddr(mciSession.getChannelIp()) ;
+				adapterParameterPush.setResponseData(messageConverter.getComposeValue()) ;
+				adapterParameterPush.setResponseSync(false) ;
+
+				AdapterManagerBean.push(adapterParameterPush, Message.DEFAULT_PRIORITY) ;
+			}
+		}
+
+		return 0 ;
 	}
-    //=========================================================================================================
-	
-	
 
-    MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(MessageBeans.SINGLETON.adapterManager.get(response.getAdapterId()), null) ;
-    messageConverter.compose(response, logger) ;
 
-    for (String mciSessionId : sessionMap.keys())
-    {
-      MciSession mciSession = sessionMap.get(mciSessionId) ;
-      if (isValid(adapterParameter, response, mciSession))
-      {
-        AdapterParameter adapterParameterPush = new AdapterParameter() ;
-        adapterParameterPush.setAdapterId(response.getAdapterId()) ;
-        adapterParameterPush.setAdapterEvent(Adapter.RESPONSE_WRITE) ;
-        adapterParameterPush.setRemoteAddr(mciSession.getChannelIp()) ;
-        adapterParameterPush.setResponseData(messageConverter.getComposeValue()) ;
-        adapterParameterPush.setResponseSync(false) ;
+	protected boolean isValid(AdapterParameter adapterParameter, Record response, MciSession mciSession)
+	{
+		if (!Objects.equals(iGateInstance.getInstanceId(), mciSession.getMciInstanceId()))
+			return false ;
 
-        AdapterManagerBean.push(adapterParameterPush, Message.DEFAULT_PRIORITY) ;
-      }
-    }
+		// TODO 메시지 발송 조건 검사
+		return true ;
+	}
 
-    return 0 ;
-  }
+	protected boolean isValid(AdapterParameter adapterParameter, Record response, String pushType, ArrayList<String> pushTargetList,  MciSession mciSession)
+	{
+		if (!Objects.equals(iGateInstance.getInstanceId(), mciSession.getMciInstanceId()))
+		{			
+			return false ;
+		}
 
-  protected boolean isValid(AdapterParameter adapterParameter, Record response, MciSession mciSession)
-  {
-    if (!Objects.equals(iGateInstance.getInstanceId(), mciSession.getMciInstanceId()))
-      return false ;
-
-    // TODO 메시지 발송 조건 검사
-
-    return true ;
-  }
+		if(pushType.trim().equals(PUSH_TYPE_All))
+		{
+			return true ;	
+		}
+	    else if(pushType.trim().equals(PUSH_TYPE_GROUP))
+	    {
+	    	if(!mciSession.getBrnCd().trim().isEmpty())
+	    		return pushTargetList.contains(mciSession.getBrnCd().trim());
+	    }
+	    else if(pushType.trim().equals(PUSH_TYPE_TERLLER))
+	    {
+	    	if(!mciSession.getEmpId().trim().isEmpty())
+	    		return pushTargetList.contains(mciSession.getEmpId().trim());	
+	    }
+		return false ;
+	}
 }
