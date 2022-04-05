@@ -65,10 +65,23 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
     String pushType = null ;
     int pushCnt = 0; 
     
-    String path = String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_TYPE_PATH);
+    String path = Record.NAME_SEPARATOR_STRING + String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_TYPE_PATH);
     logger.info(" path : " + path);
     if(bizRes.hasField(path))
     	pushType = (String)bizRes.getFieldValue(path);
+    logger.info("0 pushType : " + pushType);
+
+    if(bizRes.hasField(PUSH_CNT_PATH))
+    	pushType = (String)bizRes.getFieldValue(PUSH_CNT_PATH);
+    logger.info("1 pushType : " + pushType);
+    
+    
+    if(bizRes.hasField(PUSH_TYPE))
+    	pushType = (String)bizRes.getFieldValue(PUSH_TYPE);
+    logger.info("2 pushType : " + pushType);
+    
+
+    
     
     path = String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_CNT_PATH);
     logger.info(" path : " + path);
