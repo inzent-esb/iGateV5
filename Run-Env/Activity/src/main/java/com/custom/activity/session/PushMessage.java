@@ -25,19 +25,19 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
   protected final ICache<String, MciSession> sessionMap ;
   
   protected final String PUSH_TYPE = "PUSH_TYPE" ;
-  protected final String PUSH_TYPE_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_TYPE ; 
+  protected final String PUSH_TYPE_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_TYPE ; 
 		  
 		  
   protected final String PUSH_CNT = "PUSH_CNT" ;
-  protected final String PUSH_CNT_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_CNT ;
+  protected final String PUSH_CNT_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_CNT ;
   
   protected final String PUSH_LIST = "PUSH_LIST" ;  
-  protected final String PUSH_LIST_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_LIST ;
+  protected final String PUSH_LIST_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_LIST ;
   
   protected final String PUSH_TARGET = "PUSH_TARGET" ;
   
   protected final String PUSH_MESSAGE = "PUSH_MESSAGE" ;
-  protected final String PUSH_MESSAGE_PATH = Record.NAME_SEPARATOR_STRING + DATA_TYPE_FIELD + Record.NAME_SEPARATOR_STRING + PUSH_MESSAGE ;
+  protected final String PUSH_MESSAGE_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_MESSAGE ;
   
   
   @SuppressWarnings("unchecked")
