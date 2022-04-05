@@ -104,6 +104,7 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 		for (String mciSessionId : sessionMap.keys())
 		{
 			MciSession mciSession = sessionMap.get(mciSessionId) ;
+			
 			//if (isValid(adapterParameter, response, mciSession))
 			if (isValid(adapterParameter, response, pushType, pushTargetList, mciSession))
 			{
@@ -133,25 +134,32 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 
 	protected boolean isValid(AdapterParameter adapterParameter, Record response, String pushType, ArrayList<String> pushTargetList,  MciSession mciSession)
 	{
-		if (!Objects.equals(iGateInstance.getInstanceId(), mciSession.getMciInstanceId()))
-		{			
+		//로그인 상태가 아니면 보내지 않음 
+		if (!(Objects.equals("N", mciSession.getSessionDelYn()) || null == mciSession.getLogoffYms()))
 			return false ;
-		}
+			
+		//인스턴스 다른 경우 
+		if (!Objects.equals(iGateInstance.getInstanceId(), mciSession.getMciInstanceId()))
+			return false ;
 
+		//전체 push
 		if(pushType.trim().equals(PUSH_TYPE_All))
 		{
-			return true ;	
+			return true ;
 		}
-	    else if(pushType.trim().equals(PUSH_TYPE_GROUP))
+		//그룹 push 지점번호 동일
+		else if(pushType.trim().equals(PUSH_TYPE_GROUP))
 	    {
 	    	if(!mciSession.getBrnCd().trim().isEmpty())
 	    		return pushTargetList.contains(mciSession.getBrnCd().trim());
 	    }
+		//개별 push 직원번호 동일
 	    else if(pushType.trim().equals(PUSH_TYPE_TERLLER))
 	    {
 	    	if(!mciSession.getEmpId().trim().isEmpty())
 	    		return pushTargetList.contains(mciSession.getEmpId().trim());	
 	    }
+		
 		return false ;
 	}
 }
