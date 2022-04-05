@@ -61,7 +61,7 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
     AdapterParameter adapterParameter = (AdapterParameter) args[0] ;
     RecordImpl response = (RecordImpl) args[1] ;
     RecordImpl bizRes = (RecordImpl) args[2] ;
-    
+    logger.info(" bizRes : " + bizRes);
     String pushType = null ;
     int pushCnt = 0; 
     
