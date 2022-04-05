@@ -24,20 +24,13 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
   protected final IGateInstance iGateInstance ;
   protected final ICache<String, MciSession> sessionMap ;
   
+  protected final String PUSH_PATH = Record.NAME_SEPARATOR_STRING + "%s" + Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING +"%s" ; 
+		  
   protected final String PUSH_TYPE = "PUSH_TYPE" ;
-  protected final String PUSH_TYPE_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_TYPE ; 
-		  
-		  
   protected final String PUSH_CNT = "PUSH_CNT" ;
-  protected final String PUSH_CNT_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_CNT ;
-  
   protected final String PUSH_LIST = "PUSH_LIST" ;  
-  protected final String PUSH_LIST_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_LIST ;
-  
   protected final String PUSH_TARGET = "PUSH_TARGET" ;
-  
   protected final String PUSH_MESSAGE = "PUSH_MESSAGE" ;
-  protected final String PUSH_MESSAGE_PATH = Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_MESSAGE ;
   
   
   @SuppressWarnings("unchecked")
@@ -65,40 +58,22 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
     String pushType = null ;
     int pushCnt = 0; 
 
-    String path = Record.NAME_SEPARATOR_STRING + String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_TYPE_PATH);
-    logger.info(" path : " + path);
+    String path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_TYPE);
+    logger.info(" pushType path : " + path);
     if(bizRes.hasField(path))
-    {
     	pushType = (String)bizRes.getFieldValue(path);
-    	logger.info("0 pushType : " + pushType);
-    }
-
-    if(bizRes.hasField(PUSH_CNT_PATH))
-    {pushType = (String)bizRes.getFieldValue(PUSH_CNT_PATH);
-    logger.info("1 pushType : " + pushType);
-    }
-
-
-    if(bizRes.hasField(PUSH_TYPE))
-    {pushType = (String)bizRes.getFieldValue(PUSH_TYPE);
-    logger.info("2 pushType : " + pushType);
-    }
-    
+    logger.info(" pushType : " + pushType);
 
     
-    
-    path = String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_CNT_PATH);
-    logger.info(" path : " + path);
+    path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_CNT);
+    logger.info(" pushCnt path : " + path);
 	if(bizRes.hasField(path))
 		pushCnt = Integer.parseInt((String)bizRes.getFieldValue(path));
-	    
-	
-	logger.info(" pushType : " + pushType);
 	logger.info(" pushCnt : " + pushCnt);
 	
 
-	path = String.format("%s_0%s", adapterParameter.getService().getServiceId(),PUSH_LIST_PATH);
-	logger.info(" path : " + path);
+	path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_LIST);
+	logger.info(" PUSH_LIST path : " + path);
 	if(bizRes.hasField(path))
 	{
 		bizRes.getField(path).getFieldType();
