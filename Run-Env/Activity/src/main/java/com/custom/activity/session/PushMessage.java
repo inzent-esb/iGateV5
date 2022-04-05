@@ -11,7 +11,6 @@ import com.inzent.igate.adapter.AdapterParameter ;
 import com.inzent.igate.cache.ICache;
 import com.inzent.igate.context.Context ;
 import com.inzent.igate.context.IGateInstance ;
-import com.inzent.igate.message.ArrayImpl;
 import com.inzent.igate.message.MessageBeans ;
 import com.inzent.igate.message.MessageConverter ;
 import com.inzent.igate.message.Record ;
@@ -33,6 +32,7 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
   protected final String PUSH_CNT = "PUSH_CNT" ;
   protected final String PUSH_LIST = "PUSH_LIST" ;  
   protected final String PUSH_TARGET = "PUSH_TARGET" ;
+  protected final String PUSH_TARGET_PATH = Record.NAME_SEPARATOR_STRING + "%s" + Record.NAME_SEPARATOR_STRING + DATA_BODY_ID + Record.NAME_SEPARATOR_STRING + PUSH_LIST + "[%d]" + Record.NAME_SEPARATOR_STRING + PUSH_TARGET ;  
   protected final String PUSH_MESSAGE = "PUSH_MESSAGE" ;
   
   
@@ -92,23 +92,19 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 		
 		if(pushCnt>0)
 		{
-			ArrayImpl list = (ArrayImpl)bizRes.getField(path);
+			//ArrayImpl list = (ArrayImpl)bizRes.getField(path);
 			
 			int index = 0; 
 			
 			while(index < pushCnt )
 			{
-				logger.info(String.format( "[%d] %s", index,list.getField(index).getValue() ));
-				TargetList.add(((String)list.getField(index).getValue()).trim());
+
+				path = String.format(PUSH_TARGET_PATH, adapterParameter.getService().getServiceId()+"_0", index);
+				logger.info(((String)bizRes.getFieldValue(path)).trim());
+				
+				TargetList.add(((String)bizRes.getFieldValue(path)).trim());
 				index ++;
 			}	
-			
-//			while(list.iterator().hasNext())
-//				TargetList.add(((String)list.iterator().next().getValue()).trim());
-//			
-//			while(TargetList.iterator().hasNext())
-//				logger.info(TargetList.iterator().next());
-			
 			
 		}		
 	}
