@@ -11,6 +11,7 @@ import com.inzent.igate.adapter.AdapterParameter ;
 import com.inzent.igate.cache.ICache;
 import com.inzent.igate.context.Context ;
 import com.inzent.igate.context.IGateInstance ;
+import com.inzent.igate.message.ArrayImpl;
 import com.inzent.igate.message.MessageBeans ;
 import com.inzent.igate.message.MessageConverter ;
 import com.inzent.igate.message.Record ;
@@ -91,14 +92,24 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 		
 		if(pushCnt>0)
 		{
-			RecordImpl list = (RecordImpl)bizRes.getField(path);
-			int index = 0; 
-			while(index < pushCnt )
-			{
-				logger.info(String.format( "[%d] %s", index,list.getField(index).getValue() ));
-				TargetList.add(((String)list.getField(index).getValue()).trim());
-				index ++;
-			}			
+			ArrayImpl list = (ArrayImpl)bizRes.getField(path);
+			
+//			int index = 0; 
+//			
+//			while(index < pushCnt )
+//			{
+//				logger.info(String.format( "[%d] %s", index,list.getField(index).getValue() ));
+//				TargetList.add(((String)list.getField(index).getValue()).trim());
+//				index ++;
+//			}	
+			
+			while(list.iterator().hasNext())
+				TargetList.add(((String)list.iterator().next().getValue()).trim());
+			
+			while(TargetList.iterator().hasNext())
+				logger.info(TargetList.iterator().next());
+			
+			
 		}		
 	}
     //=========================================================================================================
