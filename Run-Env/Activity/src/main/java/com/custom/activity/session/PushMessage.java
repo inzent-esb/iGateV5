@@ -1,5 +1,6 @@
 package com.custom.activity.session ;
 
+import java.util.ArrayList;
 import java.util.Objects ;
 
 import javax.jms.Message ;
@@ -55,18 +56,21 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
     AdapterParameter adapterParameter = (AdapterParameter) args[0] ;
     RecordImpl response = (RecordImpl) args[1] ;
     RecordImpl bizRes = (RecordImpl) args[2] ;
-    logger.info(" bizRes : " + bizRes);
+    
+    
+    //=========================================================================================================
     String pushType = null ;
     int pushCnt = 0;
-
-    //==============
+    ArrayList<String> TargetList = new ArrayList<String>();
+    
+    //=========================================================================================================
     String path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_TYPE);
     logger.info(" pushType path : " + path);
     if(bizRes.hasField(path))
     	pushType = (String)bizRes.getFieldValue(path);
     logger.info(" pushType : " + pushType);
 
-    //==============    
+    //=========================================================================================================
     path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_CNT);
     logger.info(" pushCnt path : " + path);
     
@@ -77,15 +81,29 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 	}
 	logger.info(" pushCnt : " + pushCnt );
 	
-    //==============
+    //=========================================================================================================
 	path = String.format(PUSH_PATH, adapterParameter.getService().getServiceId()+"_0", PUSH_LIST);
 	logger.info(" PUSH_LIST path : " + path);
 	if(bizRes.hasField(path))
 	{
 		bizRes.getField(path).getFieldType();
-		logger.info(" PUSH_LIST type : " + pushType);
+		logger.info(" PUSH_LIST type : " + bizRes.getField(path).getFieldType());
+		
+		if(pushCnt>0)
+		{
+			RecordImpl list = (RecordImpl)bizRes.getField(path);
+			int index = 0; 
+			while(index < pushCnt )
+			{
+				logger.info(String.format( "[%d] %s", index,list.getField(index).getValue() ));
+				TargetList.add(((String)list.getField(index).getValue()).trim());
+				index ++;
+			}			
+		}		
 	}
-    //==============
+    //=========================================================================================================
+	
+	
 
     MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(MessageBeans.SINGLETON.adapterManager.get(response.getAdapterId()), null) ;
     messageConverter.compose(response, logger) ;
