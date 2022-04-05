@@ -119,7 +119,7 @@
         {
           'type' : "text",
           'mappingDataInfo' : 'object.mciInstanceId',
-          'name' : "<fmt:message>igate.mciSession</fmt:message> <fmt:message>head.id</fmt:message>",
+          'name' : "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>",
         },
         {
           'type' : "text",
@@ -308,10 +308,10 @@
                 switch (value.row.sessionDelYn)
                 {
                 case 'Y' : {
-                  return "<fmt:message>head.logon</fmt:message>" ;
+                  return "<fmt:message>head.logoff</fmt:message>" ;
                 }
                 case 'N' : {
-                  return "<fmt:message>head.logoff</fmt:message>"; 
+                  return "<fmt:message>head.logon</fmt:message>"; 
                 }
                 }
               }
