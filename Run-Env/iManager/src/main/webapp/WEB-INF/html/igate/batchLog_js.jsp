@@ -352,7 +352,7 @@ $(document).ready(function() {
 		                	},
 		                	{
 		                  		name : "safMessage",
-		                  		header : "<fmt:message>igate.dataTransactionLog.retryInfo</fmt:message>",
+		                  		header : "<fmt:message>igate.batchLog.retryInfo</fmt:message>",
 		                  		align : "center",
 		                        width: "8%",
 		                        formatter : function(name){
@@ -363,7 +363,7 @@ $(document).ready(function() {
 		                        }
 		                	},{
 		                  		name : "traceLog",
-		                  		header : "<fmt:message>igate.dataTransactionLog.logInfo</fmt:message>",
+		                  		header : "<fmt:message>igate.batchLog.logInfo</fmt:message>",
 		                  		align : "center",
 		                        width: "8%",
 		                        formatter : function(name){
