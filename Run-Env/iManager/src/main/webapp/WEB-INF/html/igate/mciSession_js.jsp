@@ -197,14 +197,25 @@
         {
           search : function()
           {
+            var param = {
+                pageSize: this.pageSize,
+                object: {},
+            };
+            
+            for(var key in this.object)
+            {
+              if(!this.object[key]) continue;
+              param.object[key] = this.object[key];
+            }
+            
             vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject')) ;
-            vmList.makeGridObj.search(this, function()
+            vmList.makeGridObj.search(param, function()
             {
               $.ajax(
               {
                 type : "GET",
                 url : "<c:url value='/igate/mciSession/rowCount.json' />",
-                data : JsonImngObj.serialize(this.object),
+                data : JsonImngObj.serialize(param.object),
                 processData : false,
                 success : function(result)
                 {
@@ -308,10 +319,10 @@
                 switch (value.row.sessionDelYn)
                 {
                 case 'Y' : {
-                  return "<fmt:message>head.logoff</fmt:message>" ;
+                  return "<fmt:message>head.logon</fmt:message>" ;
                 }
                 case 'N' : {
-                  return "<fmt:message>head.logon</fmt:message>"; 
+                  return "<fmt:message>head.logoff</fmt:message>"; 
                 }
                 }
               }

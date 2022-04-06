@@ -8,6 +8,8 @@
  *******************************************************************************/
 package com.inzent.igate.imanager.mcisession ;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository ;
 
 import com.inzent.igate.repository.log.LogPK ;
@@ -20,5 +22,11 @@ public class MciSessionRepository extends LogRepository<LogPK, MciSession>
   protected MciSessionRepository()
   {
     super(MciSession.class) ;
+  }
+  
+  @Override
+  protected void setOrderAsc(DetachedCriteria criteria, MciSession entity)
+  {
+    criteria.addOrder(Order.desc("logonYms")) ;
   }
 }
