@@ -116,6 +116,11 @@
       {
         'className' : 'col-lg-4',
         'detailSubList' : [
+       	{
+          'type' : "text",
+          'mappingDataInfo' : 'object.macAddress',
+          'name' : "<fmt:message>igate.mciSession.macAddress</fmt:message>",
+         },
         {
           'type' : "text",
           'mappingDataInfo' : 'object.mciInstanceId',
@@ -319,10 +324,10 @@
                 switch (value.row.sessionDelYn)
                 {
                 case 'Y' : {
-                  return "<fmt:message>head.logon</fmt:message>" ;
+                  return "<fmt:message>head.logoff</fmt:message>" ;
                 }
                 case 'N' : {
-                  return "<fmt:message>head.logoff</fmt:message>"; 
+                  return "<fmt:message>head.logon</fmt:message>"; 
                 }
                 }
               }
