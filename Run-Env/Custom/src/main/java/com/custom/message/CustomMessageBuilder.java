@@ -121,6 +121,8 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
       Record addRecord = targetIndividualRoot.addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID + "_" + index) ;
       addRecord.addRecord(DATA_HEADER_RECORD, DATA_HEADER_ID) ;
       Record targetMessage = addRecord.addRecord(MESSAGE_RECORD, DATA_BODY_ID) ;
+      Field targetMessageCode = null;
+     
       ArrayImpl targetMessageContent = (ArrayImpl) targetMessage.getField(MESSAGE_CONTENT_FIELD) ;
 
       String targetPrefix = addRecord.getPath() + Field.NAME_SEPARATOR_STRING + DATA_HEADER_ID ;
@@ -135,7 +137,10 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
 
       //==============================
       Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
-      String messageCodeValue =((String)(messageCodeField.getValue())).trim();
+      String messageCodeValue = null;
+      if( messageCodeField !=null)
+        messageCodeValue = ((String)(messageCodeField.getValue())).trim();
+      
       log.info(">>> messageCodeValue :" + messageCodeValue);
       int idx1 = 0 ;
       for (String message : MessageTranslator.getStandardMessage(messageCodeValue,
@@ -147,9 +152,9 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
 
         if (0 == idx1)
         {
-          Object[] arguments = new Object[sourceMessageContent.getSize() - 1] ;
+          Object[] arguments = new Object[sourceMessageContent.getSize()] ;
           for (int idy = 0 ; arguments.length > idy ; idy++)
-            arguments[idy] = sourceMessageContent.getField(idy + 1).getValue() ;
+            arguments[idy] = sourceMessageContent.getField(idy).getValue() ;
 
           message = MessageFormat.format(message, arguments) ; 
         }
@@ -157,6 +162,11 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
         
       }
       //==============================
+      if(targetMessage.hasField(MESSAGE_CODE_FIELD))
+      {
+        targetMessageCode = (Field) targetMessage.getField(MESSAGE_CODE_FIELD) ;
+        targetMessageCode.setValue(messageCodeValue);
+      }
       
       log.info(">>> errorCode :" + errorCode);
       int idx = 0 ;
