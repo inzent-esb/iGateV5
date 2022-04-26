@@ -66,8 +66,10 @@ public interface CustomMessageConstants
   public String MESSAGE_ID = "Message" ; // 메시지 정보
   public String MESSAGE_RECORD = "HDR_MESSAGE" ; // 메시지부
 
-  public String MESSAGE_CONTENT_FIELD = "MessageContent" ;
-
+  public String MESSAGE_CODE_FIELD = "MessageCode" ; //메시지코드
+  public String MESSAGE_CONTENT_COUNT_FIELD = "MessageCount" ; // MessageContent 건수
+  public String MESSAGE_CONTENT_FIELD = "MessageContent" ; //MessageContent 필드
+  
   public static final String PRE_FIX_STD = "I_" ;
   public static final String PRE_FIX_NON = "E_" ;
 }
