@@ -48,7 +48,7 @@ public interface CustomMessageConstants
   public String DATA_TYPE_MSG_NORMAL = "MN" ; // 정상메시지
   public String DATA_TYPE_MSG_ERROR = "ER" ; // 에러 메시지
   public int DATA_TYPE_LENGTH = 2 ;
-
+  
   public int DATA_LEN_LENGTH = 8 ; // 길이부
 
   public String SERVICE_ID_FIELD = "ServiceID";
