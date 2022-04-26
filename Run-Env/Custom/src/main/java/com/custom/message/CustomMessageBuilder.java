@@ -129,20 +129,41 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
 
       MappingEngine.mapping(DATA_HEADER_MAPPING, log, target, targetPrefix, sources, sourcePrefix) ;
 
+      Array sourceMessageContent = (Array) ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CONTENT_FIELD) ;
+      String errorCode = ((String) sourceMessageContent.getField(0).getValue()).trim() ;
+    
+
+      //==============================
       Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
       String messageCodeValue =((String)(messageCodeField.getValue())).trim();
-      log.info("messageCodeValue :" + messageCodeValue);
-      log.info("¦¦ StandardMessage" + MessageTranslator.getStandardMessage(messageCodeValue, targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)));
-      
-      Array sourceMessageContent = (Array) ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CONTENT_FIELD) ;
-      String errorCode = (String) sourceMessageContent.getField(0).getValue() ;
-      log.info("errorCode :" + errorCode);
-      log.info("¦¦ StandardMessage" + MessageTranslator.getStandardMessage(errorCode, targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)));
+      log.info(">>> messageCodeValue :" + messageCodeValue);
+      int idx1 = 0 ;
+      for (String message : MessageTranslator.getStandardMessage(messageCodeValue,
+          targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
+      {
+        log.info(" ¦¦ StandardMessage" + message);
+        if (StringUtils.isBlank(message))
+          break ;
 
+        if (0 == idx1)
+        {
+          Object[] arguments = new Object[sourceMessageContent.getSize() - 1] ;
+          for (int idy = 0 ; arguments.length > idy ; idy++)
+            arguments[idy] = sourceMessageContent.getField(idy + 1).getValue() ;
+
+          message = MessageFormat.format(message, arguments) ; 
+        }
+        log.info(" ¦¦ message " + idx1 + " : " + message);
+        
+      }
+      //==============================
+      
+      log.info(">>> errorCode :" + errorCode);
       int idx = 0 ;
       for (String message : MessageTranslator.getStandardMessage(errorCode,
           targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
       {
+        log.info("¦¦ StandardMessage" + message);        
         if (StringUtils.isBlank(message))
           break ;
 
@@ -154,7 +175,7 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
 
           message = MessageFormat.format(message, arguments) ; 
         }
-        log.info("message " + idx + " : " + message);
+        log.info(" ¦¦ message " + idx + " : " + message);
 
         targetMessageContent.getField(idx++).setValue(message) ;
       }
