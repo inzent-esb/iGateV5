@@ -116,6 +116,11 @@
       {
         'className' : 'col-lg-4',
         'detailSubList' : [
+       	{
+          'type' : "text",
+          'mappingDataInfo' : 'object.macAddress',
+          'name' : "<fmt:message>igate.mciSession.macAddress</fmt:message>",
+         },
         {
           'type' : "text",
           'mappingDataInfo' : 'object.mciInstanceId',
@@ -197,14 +202,25 @@
         {
           search : function()
           {
+            var param = {
+                pageSize: this.pageSize,
+                object: {},
+            };
+            
+            for(var key in this.object)
+            {
+              if(!this.object[key]) continue;
+              param.object[key] = this.object[key];
+            }
+            
             vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject')) ;
-            vmList.makeGridObj.search(this, function()
+            vmList.makeGridObj.search(param, function()
             {
               $.ajax(
               {
                 type : "GET",
                 url : "<c:url value='/igate/mciSession/rowCount.json' />",
-                data : JsonImngObj.serialize(this.object),
+                data : JsonImngObj.serialize(param.object),
                 processData : false,
                 success : function(result)
                 {
