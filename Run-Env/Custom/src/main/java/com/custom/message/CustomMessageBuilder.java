@@ -134,63 +134,70 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
       Array sourceMessageContent = (Array) ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CONTENT_FIELD) ;
       String errorCode = ((String) sourceMessageContent.getField(0).getValue()).trim() ;
     
-
       //==============================
       Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
       String messageCodeValue = null;
       if( messageCodeField !=null)
         messageCodeValue = ((String)(messageCodeField.getValue())).trim();
       
-      log.info(">>> messageCodeValue :" + messageCodeValue);
-      int idx1 = 0 ;
-      for (String message : MessageTranslator.getStandardMessage(messageCodeValue,
-          targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
+      if( !StringUtils.isEmpty(messageCodeValue))
       {
-        log.info(" ¦¦ StandardMessage" + message);
-        if (StringUtils.isBlank(message))
-          break ;
-
-        if (0 == idx1)
+        if(targetMessage.hasField(MESSAGE_CODE_FIELD))
         {
-          Object[] arguments = new Object[sourceMessageContent.getSize()] ;
-          for (int idy = 0 ; arguments.length > idy ; idy++)
-            arguments[idy] = sourceMessageContent.getField(idy).getValue() ;
-
-          message = MessageFormat.format(message, arguments) ; 
+          targetMessageCode = (Field) targetMessage.getField(MESSAGE_CODE_FIELD) ;
+          targetMessageCode.setValue(messageCodeValue);
         }
-        log.info(" ¦¦ message " + idx1 + " : " + message);
+
+        log.info(">>> messageCodeValue :" + messageCodeValue);
+        int idx = 0 ;
+        for (String message : MessageTranslator.getStandardMessage(messageCodeValue,
+            targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
+        {
+          log.info(" ¦¦ StandardMessage" + message);
+          if (StringUtils.isBlank(message))
+            break ;
+
+          if (0 == idx)
+          {
+            Object[] arguments = new Object[sourceMessageContent.getSize()] ;
+            for (int idy = 0 ; arguments.length > idy ; idy++)
+              arguments[idy] = sourceMessageContent.getField(idy).getValue() ;
+
+            message = MessageFormat.format(message, arguments) ; 
+          }
+          log.info(" ¦¦ message " + idx + " : " + message);
+          targetMessageContent.getField(idx++).setValue(message) ;
+        }
         
+        targetMessageContent.offAddMode() ;
       }
       //==============================
-      if(targetMessage.hasField(MESSAGE_CODE_FIELD))
+      else
       {
-        targetMessageCode = (Field) targetMessage.getField(MESSAGE_CODE_FIELD) ;
-        targetMessageCode.setValue(messageCodeValue);
-      }
-      
-      log.info(">>> errorCode :" + errorCode);
-      int idx = 0 ;
-      for (String message : MessageTranslator.getStandardMessage(errorCode,
-          targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
-      {
-        log.info("¦¦ StandardMessage" + message);        
-        if (StringUtils.isBlank(message))
-          break ;
-
-        if (0 == idx)
+        log.info(">>> errorCode :" + errorCode);
+        int idx = 0 ;
+        for (String message : MessageTranslator.getStandardMessage(errorCode,
+            targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
         {
-          Object[] arguments = new Object[sourceMessageContent.getSize() - 1] ;
-          for (int idy = 0 ; arguments.length > idy ; idy++)
-            arguments[idy] = sourceMessageContent.getField(idy + 1).getValue() ;
+          log.info("¦¦ StandardMessage" + message);        
+          if (StringUtils.isBlank(message))
+            break ;
 
-          message = MessageFormat.format(message, arguments) ; 
+          if (0 == idx)
+          {
+            Object[] arguments = new Object[sourceMessageContent.getSize() - 1] ;
+            for (int idy = 0 ; arguments.length > idy ; idy++)
+              arguments[idy] = sourceMessageContent.getField(idy + 1).getValue() ;
+
+            message = MessageFormat.format(message, arguments) ; 
+          }
+          log.info(" ¦¦ message " + idx + " : " + message);
+
+          targetMessageContent.getField(idx++).setValue(message) ;
         }
-        log.info(" ¦¦ message " + idx + " : " + message);
 
-        targetMessageContent.getField(idx++).setValue(message) ;
+        targetMessageContent.offAddMode() ;
       }
-
-      targetMessageContent.offAddMode() ;
     }
 
     return target ;
