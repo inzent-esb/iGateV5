@@ -45,7 +45,7 @@ public interface CustomMessageConstants
 
   public String DATA_TYPE_FIELD = "DataType" ; // 메시지 종류
   public String DATA_TYPE_DATA = "IO" ; // 개별부
-  public String DATA_TYPE_MSG_NORMAL = "NM" ; // 정상메시지
+  public String DATA_TYPE_MSG_NORMAL = "MN" ; // 정상메시지
   public String DATA_TYPE_MSG_ERROR = "ER" ; // 에러 메시지
   public int DATA_TYPE_LENGTH = 2 ;
 
