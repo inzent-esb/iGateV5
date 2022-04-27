@@ -121,7 +121,6 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
       Record addRecord = targetIndividualRoot.addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID + "_" + index) ;
       addRecord.addRecord(DATA_HEADER_RECORD, DATA_HEADER_ID) ;
       Record targetMessage = addRecord.addRecord(MESSAGE_RECORD, DATA_BODY_ID) ;
-      Field targetMessageCode = null;
      
       ArrayImpl targetMessageContent = (ArrayImpl) targetMessage.getField(MESSAGE_CONTENT_FIELD) ;
 
@@ -135,6 +134,7 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
       String errorCode = ((String) sourceMessageContent.getField(0).getValue()).trim() ;
     
       //messageCode 필드 처리 추가
+      Field targetMessageCode = null;
       Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
       String messageCodeValue = null;
       if( messageCodeField !=null)
