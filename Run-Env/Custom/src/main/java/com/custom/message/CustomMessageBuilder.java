@@ -138,7 +138,7 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
       Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
       String messageCodeValue = null;
       if( messageCodeField !=null)
-        messageCodeValue = ((String)(messageCodeField.getValue())).trim();
+        messageCodeValue = messageCodeField.getValue()==null ? StringUtils.EMPTY :((String)(messageCodeField.getValue())).trim();
       
       if( !StringUtils.isEmpty(messageCodeValue))
       {
