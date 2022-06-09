@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div id="panel" class="panel panel-bottom" data-backdrop="false">
 	<div class="panel-dialog">
@@ -17,7 +18,7 @@
 					<a class="nav-link" href="#bass-info" data-toggle="tab"></a>
 				</li>
 				<li class="nav-item" id="item-result-parent">
-					<a class="nav-link" href="#process-result" data-toggle="tab" id="item-result" ><fmt:message>head.process.result</fmt:message></a>
+					<a class="nav-link" href="#process-result" data-toggle="tab" id="item-result" ><fmt:message>head.executionResult</fmt:message></a>
 				</li>
 			</ul>
 			
@@ -59,18 +60,9 @@
 			
 			<footer id="panel-footer" class="panel-footer sub-bar">
 				<div class="ml-auto">
-					<a href="javascript:void(0);" id="restoreMetaBtn"  class="btn btn-primary"							style="display: none;"    v-on:click="restoreMeta"><fmt:message>common.metaHistory.restore</fmt:message></a>
-					<a href="javascript:void(0);" id="downloadBtn" 	   class="btn detail"							    style="display: none;"    v-on:click="downloadFile"><fmt:message>head.download</fmt:message></a>	
-					<a href="javascript:void(0);" id="migrationBtn"    class="btn detail btn-primary" 					style="display: none;"    v-on:click="migration"><fmt:message>head.migration</fmt:message></a>				
-					<a href="javascript:void(0);" id="guideBtn"    	   class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="guide"><fmt:message>igate.connector.guide</fmt:message></a>
-					<a href="javascript:void(0);" id="startBtn"    	   class="btn viewGroup" 	    				   	style="display: none;"    v-on:click="start"><i class="icon-play"></i><fmt:message>head.execute</fmt:message></a>
 					<a href="javascript:void(0);" id="stopBtn"    	   class="btn viewGroup" 	    		           	style="display: none;"    v-on:click="stop"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
 					<a href="javascript:void(0);" id="stopForceBtn"    class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="stopForce"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>
-					<a href="javascript:void(0);" id="interruptBtn"    class="btn viewGroup"    			           	style="display: none;"    v-on:click="interrupt"><fmt:message>head.interrupt</fmt:message></a>
-					<a href="javascript:void(0);" id="blockBtn"    	   class="btn viewGroup"    			           	style="display: none;"    v-on:click="block"><fmt:message>head.block</fmt:message></a>
-					<a href="javascript:void(0);" id="unblockBtn"      class="btn viewGroup"    				       	style="display: none;"    v-on:click="unblock"><fmt:message>head.unblock</fmt:message></a>
-					<a href="javascript:void(0);" id="loadBtn"    	   class="btn detail loadBtn" 				       	style="display: none;"    v-on:click="loadInfo"><fmt:message>head.load</fmt:message></a>
-					<a href="javascript:void(0);" id="dumpBtn"         class="btn viewGroup dumpBtn" 				   	style="display: none;"    v-on:click="dumpInfo"><fmt:message>head.dump</fmt:message></a>	
+					<a href="javascript:void(0);" id="dumpBtn"   	   class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="dump"><fmt:message>head.dump</fmt:message></a>
 					<a href="javascript:void(0);" id="removeBtn"       class="btn viewGroup removeBtn" 		  		   	style="display: none;"    v-on:click="removeInfo"><i class="icon-delete"></i><fmt:message>head.delete</fmt:message></a>
 					<a href="javascript:void(0);" id="goModBtn"        class="btn viewGroup goModBtn" 		  		   	style="display: none;"    v-on:click="goModifyPanel"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>						
 					<a href="javascript:void(0);" id="saveBtn"         class="btn btn-primary saveGroup saveBtn" 	   	style="display: none;"    v-on:click="saveInfo"><fmt:message>head.insert</fmt:message></a>
@@ -98,36 +90,30 @@ var panelMethodOption = {
    		panelOpen('detail');
    	},
    	goModifyPanel: function() {
-   		panelOpen('mod');
+   		panelOpen('modify');
    	},
    	goAddInfo: function() {
-   		panelOpen('add',window.vmMain.object);
+   		panelOpen('add', window.vmMain.object);
    	},
    	togglePanel: function() {
-   		windowResizeSearchGrid();
+   		$('#panel').toggleClass('expand');
    		
-   		if(customResizeFunc)
-   			customResizeFunc();
+   		windowResizeSearchGrid();
    	},
    	closePanel: function() {
    		panelClose('panel');
    	}, 	
-   	dumpInfo: function() {
-   		ControlImngObj.dump();
-   	},
    	removeInfo: function() {
-   		SaveImngObj.remove('<fmt:message>head.delete.conform</fmt:message>', '<fmt:message>head.delete.notice</fmt:message>');
+   		SaveImngObj.remove('<fmt:message>dashboard.delete.warn</fmt:message>', '<fmt:message>dashboard.delete.success</fmt:message>');
    	},
    	updateInfo: function() {
    		SaveImngObj.update('<fmt:message>head.update.notice</fmt:message>');
    	},
    	saveInfo: function() {
    		SaveImngObj.insert('<fmt:message>head.insert.notice</fmt:message>');
+   	},
+   	dump: function() {
+   		ControlImngObj.dump();
    	}
 };
-
-new Vue({
-	el: '#panel-header',
-	methods : $.extend(true, {}, panelMethodOption)
-});
 </script>

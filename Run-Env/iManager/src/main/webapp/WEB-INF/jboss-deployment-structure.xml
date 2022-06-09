@@ -18,7 +18,6 @@
 			<module name="org.apache.commons.logging" />
 			<module name="org.apache.httpcomponent" />
 			<module name="org.apache.httpcomponent.core" />
-			<module name="org.apache.log4j" /
 			<module name="org.apache.neethi" />
 			<module name="org.apache.ws.xmlschema" />
 			<module name="org.codehaus.woodstox" />
@@ -27,8 +26,8 @@
 			<module name="org.javassist" />
 			<module name="org.jaxen" />
 			<module name="org.jboss.logging.commons.logging" />
-			<module name="org.jgroups"/>
 			<module name="org.slf4j" />
+			<module name="org.slf4j.ext" />
 			<module name="org.slf4j.impl" />
 		</exclusions>
 

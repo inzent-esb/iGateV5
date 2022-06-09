@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<div id="ImngListObject" class="ct-content">
+<div id="ImngListObject" class="ct-content" style="display: none;">
 	<div class="sub-bar">
         <div id="totalCount" class="form-inline m-full" showLater="true" style="display: none;">
         	<fmt:message key="head.totalCount"><fmt:param value="{{ totalCount }}" /></fmt:message>
@@ -38,13 +38,12 @@
 			<a id="updateCancelBtn"	href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="updateCancel" style="display: none;"><fmt:message>head.cancel</fmt:message></a>
 			<a id="searchInitBtn" 	href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="initSearchArea" style="display: none;"><i class="icon-reset"></i><span class="hide"><fmt:message>head.initialize</fmt:message></span></a>
 			<a id="addBtn"		    href="javascript:void(0);" class="btn btn-m btn-primary"  				v-on:click="goSavePanel" style="display: none;"><i class="icon-plus"></i><span class="hide"><fmt:message>head.insert</fmt:message></span></a>
-			<a id="reorderBtn"		href="javascript:void(0);" class="btn btn-m"  							v-on:click="reorder" style="display: none;"><fmt:message>igate.transactionRestriction.reOrder</fmt:message></span></a>
 		</div>
 	</div>
 
 	<div class="empty">
 		<p><fmt:message>layout.component.conditions</fmt:message></p>
-		<img src="<c:url value='/img/empty.svg' />" class="center-block" alt="">
+		<img src="${prefixFileUrl}/img/empty.svg" class="center-block" alt="">
 	</div>
 		
 	<div class="table-responsive" style="display: none;">
@@ -59,7 +58,7 @@ var listMethodOption = {
    	},
     goNewTab: function() {
     	localStorage.setItem(this.$el.id + '-newTabSearchCondition', JSON.stringify(window.vmSearch.$data));
-    	window.open(this.newTabPageUrl) ;
+    	window.open(window.location.href) ;
     },
     newTabSearchGrid: function() {
     	if(!localStorage.getItem(this.$el.id + '-newTabSearchCondition')) return false;

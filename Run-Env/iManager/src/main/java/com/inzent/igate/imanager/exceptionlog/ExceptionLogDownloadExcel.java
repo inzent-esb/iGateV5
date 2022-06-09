@@ -1,7 +1,6 @@
 package com.inzent.igate.imanager.exceptionlog;
 
 import java.io.FileInputStream;
-import java.io.IOException ;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.poi.EncryptedDocumentException ;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -37,211 +35,198 @@ import com.inzent.imanager.message.MessageGenerator;
 public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<ExceptionLog> {
 
 	@Override
-	public void downloadFile(HttpServletRequest request, HttpServletResponse response, ExceptionLog entity,
-			List<ExceptionLog> entityList) throws Exception {
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response, ExceptionLog entity, List<ExceptionLog> entityList) throws Exception {
 		
 		String fileName = "ExceptionLog_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx";
 
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''"
-				+ URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
 		response.setContentType("application/octet-stream");
 
-		generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/List_ExceptionLog.xlsx"), entity, entityList);
+		generateDownload(response, request.getServletContext().getRealPath("/template/List_ExceptionLog.xlsx"), entity, entityList);
 
 		response.flushBuffer();
 	}
 	
-	public void generateDownload(OutputStream outputStream, String templateFile, ExceptionLog entity,
-			List<ExceptionLog> entityList) throws Exception {
+	public void generateDownload(HttpServletResponse response  , String templateFile, ExceptionLog entity, List<ExceptionLog> entityList) throws Exception {
 		
-        Workbook workbook ;
-        Sheet writeSheet ;
-        Row row = null ;
-        Cell cell = null ;
-        String values = null ;
-        Object[] objects = null ;
-		
-		try {
-			FileInputStream fileInputStream = new FileInputStream(templateFile);
-			workbook = WorkbookFactory.create(fileInputStream);
-			writeSheet = workbook.getSheetAt(0);
-		}
-        catch (EncryptedDocumentException | IOException e)
-        {
-          objects = generateTemplete() ;
-          workbook = (Workbook)objects[0] ;
-          writeSheet = (Sheet)objects[1] ;
-          row = (Row)objects[2] ;
-          cell = (Cell)objects[3] ;
-        }
-		
-		// Cell 스타일 지정.
-		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
-		CellStyle cellStyle_Info = getInfoCellStyle(workbook);
-		
-		// From
-		values = entity.getFromExceptionDateTime().toString();
-		row = writeSheet.getRow(3);
-		cell = row.createCell(1);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// To
-		values = entity.getToExceptionDateTime().toString();
-		cell = row.createCell(3);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 인스턴스 ID
-		values = entity.getInstanceId();
-		cell = row.createCell(5);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 거래 ID
-		values = entity.getTransactionId();
-		cell = row.createCell(7);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
+		try (OutputStream outputStream = response.getOutputStream();
+			 FileInputStream fileInputStream = new FileInputStream(templateFile);
+			 Workbook workbook = WorkbookFactory.create(fileInputStream);)
+		{
+			Sheet writeSheet = workbook.getSheetAt(0);
+	        Row row = null ;
+	        Cell cell = null ;
+	        String values = null ;
+	        Object[] objects = null ;
+			
+			// Cell 스타일 지정.
+			CellStyle cellStyle_Base = getBaseCellStyle(workbook);
+			CellStyle cellStyle_Info = getInfoCellStyle(workbook);
+			
+			// From
+			values = entity.getFromExceptionDateTime().toString();
+			row = writeSheet.getRow(3);
+			cell = row.createCell(1);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// To
+			values = entity.getToExceptionDateTime().toString();
+			row = writeSheet.getRow(3);
+			cell = row.createCell(3);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 거래 ID
+			values = entity.getTransactionId();
+			row = writeSheet.getRow(3);
+			cell = row.createCell(5);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 어댑터 ID
+			values = entity.getAdapterId();
+			row = writeSheet.getRow(3);
+			cell = row.createCell(7);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 
-		// 에러 코드
-		values = entity.getExceptionCode();
-		cell = row.createCell(9);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 인터페이스 ID
-		values = entity.getInterfaceId();
-		row = writeSheet.getRow(4);
-		cell = row.createCell(1);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 서비스 ID
-		values = entity.getServiceId();
-		cell = row.createCell(3);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 어댑터 ID
-		values = entity.getAdapterId();
-		cell = row.createCell(5);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 커넥터 ID
-		values = entity.getConnectorId();
-		cell = row.createCell(7);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 에러로그 ID		
-		values = (null != entity.getPk())? entity.getPk().getExceptionId() : null;
-		cell = row.createCell(9);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 조회리스트 입력
-		long sum = 0;
-		int i = 7;
-		for(ExceptionLog data : entityList) {
+			// 에러 코드
+			values = entity.getExceptionCode();
+			row = writeSheet.getRow(3);
+			cell = row.createCell(9);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 인터페이스 ID
+			values = entity.getInterfaceId();
+			row = writeSheet.getRow(4);
+			cell = row.createCell(1);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 서비스 ID
+			values = entity.getServiceId();
+			row = writeSheet.getRow(4);
+			cell = row.createCell(3);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 인스턴스 ID
+			values = entity.getInstanceId();
+			row = writeSheet.getRow(4);
+			cell = row.createCell(5);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 커넥터 ID
+			values = entity.getConnectorId();
+			row = writeSheet.getRow(4);
+			cell = row.createCell(7);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 액티비티 ID
+			values = entity.getActivityId();
+			row = writeSheet.getRow(4);
+			cell = row.createCell(9);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 조회리스트 입력
+			long sum = 0;
+			int i = 7;
+			for(ExceptionLog data : entityList) {
+				row = writeSheet.createRow(i);
+				int c = 0;
+				
+				//날짜/시간
+				values = data.getPk().getExceptionDateTime().toString();
+				cell = row.createCell(c);
+				cell.setCellValue(values);
+
+				//거래 ID
+				values = data.getTransactionId();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+				
+				//어댑터 ID
+				values = data.getAdapterId();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+
+				//에러 코드
+				values = data.getExceptionCode();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+
+				//인터페이스 ID
+				values = data.getInterfaceId();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+				
+				//서비스 ID
+				values = data.getServiceId();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+				
+				//인스턴스 ID
+				values = data.getInstanceId();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+				
+				//커넥터 ID
+				values = data.getConnectorId();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);				
+				
+				//액티비티 ID
+				values = data.getActivityId();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+				
+				//Exception Text
+				values = data.getExceptionText();
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+				
+				//Exception Stack
+				values = data.getExceptionStack();
+				
+				/* ===Excel의 한 field에 들어갈 수 있는 글자수는 32,767이므로 이가 넘어가는 값이 있다면 사용=== */
+				//뒤에서 32000자 자르기 (Caused by 보기 용)
+				if(values.length() > 32000) values = values.substring(values.length()-32000, values.length());
+				// 앞에서 32000자 자르기
+				//if(values.length() > 32000) values = values.substring(0, 32000);
+				/* ====================================================================== */
+				
+				cell = row.createCell(++c);
+				cell.setCellValue(values);
+				
+				sum++;
+				i++;
+			}
+			
+			// 합계
 			row = writeSheet.createRow(i);
-			int c = 0;
-			
-			//날짜/시간
-			values = data.getPk().getExceptionDateTime().toString();
-			cell = row.createCell(c);
+
+			values = MessageGenerator.getMessage("head.total", "Total");
+			cell = row.createCell(0);
+			cell.setCellStyle(cellStyle_Info);
 			cell.setCellValue(values);
 
-			//에러로그 ID
-			values = data.getPk().getExceptionId();
-			cell = row.createCell(c += 1);
+			// sum
+			values = CommonTools.numberWithComma(Long.toString(sum));
+			cell = row.createCell(1);
+			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			//에러 코드
-			values = data.getExceptionCode();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//거래 ID
-			values = data.getTransactionId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//메시지 ID
-			values = data.getMessageId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//인터페이스 ID
-			values = data.getInterfaceId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//서비스 ID
-			values = data.getServiceId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//인스턴스 ID
-			values = data.getInstanceId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//어댑터 ID
-			values = data.getAdapterId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//커넥터 ID
-			values = data.getConnectorId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//액티비티 ID
-			values = data.getActivityId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//Exception Text
-			values = data.getExceptionText();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//Exception Stack
-			values = data.getExceptionStack();
-			
-			/* ===Excel의 한 field에 들어갈 수 있는 글자수는 32,767이므로 이가 넘어가는 값이 있다면 사용=== */
-			//뒤에서 32000자 자르기 (Caused by 보기 용)
-			if(values.length() > 32000) values = values.substring(values.length()-32000, values.length());
-			// 앞에서 32000자 자르기
-			//if(values.length() > 32000) values = values.substring(0, 32000);
-			/* ====================================================================== */
-			
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			sum++;
-			i++;
+			entityList = null ;
+			workbook.write(outputStream);			
+		} catch (Exception e) {
+			throw e;
 		}
-		
-		// 합계
-		row = writeSheet.createRow(i);
-
-		values = MessageGenerator.getMessage("head.total", "Total");
-		cell = row.createCell(0);
-		cell.setCellStyle(cellStyle_Info);
-		cell.setCellValue(values);
-
-		// sum
-		values = CommonTools.numberWithComma(Long.toString(sum));
-		cell = row.createCell(1);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		entityList = null ;
-		workbook.write(outputStream);
 	}
 
     public Object[] generateTemplete()

@@ -1,5 +1,0 @@
-.tui-grid-tree-button-expand .tui-grid-tree-icon i, .tui-grid-tree-button-collapse .tui-grid-tree-icon i{background: url(../img/folder.svg); background-position: 0 0;}
-.tui-grid-tree-icon i{background: url(../img/file.svg);}
-.tui-grid-tree-depth i{background: url(../img/select.svg);}
-.tui-grid-tree-button-expand .tui-grid-btn-tree i, .tui-grid-tree-button-collapse .tui-grid-btn-tree i{width : 14px; height : 14px; margin-top : 0px;}
-.tui-grid-tree-button-collapse .tui-grid-btn-tree i{background: url(../img/normal.png);}

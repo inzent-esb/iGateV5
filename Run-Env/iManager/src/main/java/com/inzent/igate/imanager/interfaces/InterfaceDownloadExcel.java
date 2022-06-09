@@ -1,7 +1,6 @@
 package com.inzent.igate.imanager.interfaces;
 
 import java.io.FileInputStream;
-import java.io.IOException ;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.poi.EncryptedDocumentException ;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -38,43 +36,29 @@ import com.inzent.imanager.message.MessageGenerator;
 public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 
 	@Override
-	public void downloadFile(HttpServletRequest request, HttpServletResponse response, Interface entity,
-			List<Interface> entityList) throws Exception {
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response, Interface entity, List<Interface> entityList) throws Exception 
+	{
+	  String fileName = "Interfaces_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx" ;
 
-		String fileName = "Interfaces_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx";
+	  response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate") ;
+	  response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20")) ;
+	  response.setContentType("application/octet-stream") ;
 
-		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''"
-				+ URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
-		response.setContentType("application/octet-stream");
+	  generateDownload(response, request.getServletContext().getRealPath("/template/List_Interface.xlsx"), entity, entityList) ;
 
-		generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/List_Interface.xlsx"), entity, entityList);
-
-		response.flushBuffer();
+	  response.flushBuffer() ;
 	}
 
-	public void generateDownload(OutputStream outputStream, String templateFile, Interface entity,
-			List<Interface> entityList) throws Exception {
-		Workbook workbook = null ;
-		Sheet writeSheet = null ;
+	public void generateDownload(HttpServletResponse response, String templateFile, Interface entity, List<Interface> entityList) throws Exception 
+	{
+	  try (OutputStream outputStream = response.getOutputStream();
+		   FileInputStream fileInputStream = new FileInputStream(templateFile);
+		   Workbook workbook = WorkbookFactory.create(fileInputStream);) 
+	  {
+	    Sheet writeSheet = workbook.getSheetAt(0);
 		Row row = null ;
 		Cell cell = null ;
 		String values = null ;
-		Object[] objects = null ;
-        try
-        {
-          FileInputStream fileInputStream = new FileInputStream(templateFile) ;
-          workbook = WorkbookFactory.create(fileInputStream);
-          writeSheet = workbook.getSheetAt(0);
-        }
-        catch (EncryptedDocumentException | IOException e)
-        {
-          objects = generateTemplete() ;
-          workbook = (Workbook)objects[0] ;
-          writeSheet = (Sheet)objects[1] ;
-          row = (Row)objects[2] ;
-          cell = (Cell)objects[3] ;
-        }
 
 		// Cell 스타일 지정.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
@@ -93,7 +77,7 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
-
+		
 		// 어댑터 ID
 		values = entity.getAdapterId();
 		row = writeSheet.getRow(3);
@@ -101,69 +85,171 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
-		// 그룹
-		values = entity.getInterfaceGroup();
+		// 인터페이스 종류
+		switch (String.valueOf(entity.getInterfaceType()).trim()) {
+	      case "DB" :
+	    	  values = MessageGenerator.getMessage("DB", "DB");
+	    	  break ;
+	      case "File" :
+		      values = MessageGenerator.getMessage("head.file", "File");
+		      break ;
+	      case "Online" :
+	    	  values = MessageGenerator.getMessage("head.online", "Online");
+	    	  break ;
+	      default: 
+	    	  values = "";
+	    }
+		
 		row = writeSheet.getRow(3);
 		cell = row.createCell(7);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
-
-		// 사용여부
-		values = Character.toString(entity.getUsedYn());
+		
+		// 스케줄 종류
+		switch (String.valueOf(entity.getScheduleType()).trim()) {
+	      case "B" :
+	    	  values = "Batched";
+	    	  break ;
+	      case "D" :
+	    	  values = "Deferred";
+		      break ;
+	      case "O" :
+	    	  values = "Online";
+		      break ;
+	      case "T" :
+		      values = "Triggered";
+		      break ;
+	      default: 
+	    	  values = "";
+	    }
+		
 		row = writeSheet.getRow(3);
 		cell = row.createCell(9);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+		
+		// 인터페이스 사용여부
+		switch (String.valueOf(entity.getUsedYn()).trim()) {
+	      case "Y" :
+	    	  values = MessageGenerator.getMessage("head.yes", "Yes");
+	    	  break ;
+	      case "N" :
+		      values = MessageGenerator.getMessage("head.no", "No");
+		      break ;
+	      default: 
+	    	  values = "";
+	    }
+
+		row = writeSheet.getRow(4);
+		cell = row.createCell(1);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+		
+		// 그룹
+		values = entity.getInterfaceGroup();
+		row = writeSheet.getRow(4);
+		cell = row.createCell(3);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+
+		// 권한
+		values = entity.getPrivilegeId();
+		row = writeSheet.getRow(4);
+		cell = row.createCell(5);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+		
+		// 비고
+		values = entity.getInterfaceDesc();
+		row = writeSheet.getRow(4);
+		cell = row.createCell(7);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
 		// 조회리스트 입력
 		long sum = 0;
-		int i = 5;
-		for (Interface interface2 : entityList) {
+		int i = 7;
+		for (Interface interfaceInfo : entityList) {
 			row = writeSheet.createRow(i);
 			int c = 0;
 
 			// 인터페이스 ID
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 0, 1));
-			values = interface2.getInterfaceId();
+			values = interfaceInfo.getInterfaceId();
 			cell = row.createCell(c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
 			// 인터페이스 이름
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 2, 3));
-			values = interface2.getInterfaceName();
-			cell = row.createCell(c += 2);
+			values = interfaceInfo.getInterfaceName();
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
 			// 어댑터 ID
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 4, 5));
-			values = interface2.getAdapterId();
-			cell = row.createCell(c += 2);
+			values = interfaceInfo.getAdapterId();
+			cell = row.createCell(++c);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 인터페이스 종류
+			switch (String.valueOf(interfaceInfo.getInterfaceType())) {
+		      case "DB" :
+		    	  values = MessageGenerator.getMessage("DB", "DB");
+		    	  break ;
+		      case "File" :
+			      values = MessageGenerator.getMessage("head.file", "File");
+			      break ;
+		      case "Online" :
+		    	  values = MessageGenerator.getMessage("head.online", "Online");
+		    	  break ;
+		      default: 
+		    	  values = "";
+		    }
+			
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
+			// 휴일			
+			switch (String.valueOf(interfaceInfo.getScheduleType())) {
+		      case "B" :
+		    	  values = "Batched";
+		    	  break ;
+		      case "D" :
+		    	  values = "Deferred";
+			      break ;
+		      case "O" :
+		    	  values = "Online";
+			      break ;
+		      case "T" :
+			      values = "Triggered";
+			      break ;
+		      default: 
+		    	  values = "";
+		    }
+			
+			cell = row.createCell(++c);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
 			// 그룹
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 6, 7));
-			values = interface2.getInterfaceGroup();
-			cell = row.createCell(c += 2);
+			values = interfaceInfo.getInterfaceGroup();
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// 최종수정시간
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 8, 9));
-			values = interface2.getUpdateTimestamp() == null ? "" : interface2.getUpdateTimestamp().toString();
-			cell = row.createCell(c += 2);
+			// 권한
+			values = interfaceInfo.getPrivilegeId();
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// 최종사용시간
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 10, 11));
-			values = interface2.getUsedTimestamp() == null ? "" : interface2.getUsedTimestamp().toString();
-			cell = row.createCell(c += 2);
+			// 설명
+			values = interfaceInfo.getInterfaceDesc();
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
-
+			
 			sum++;
 			i++;
 		}
@@ -182,8 +268,12 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		cell.setCellValue(values);
 		
 		entityList = null ;
-		workbook.write(outputStream);
-
+		workbook.write(outputStream);		
+	  }
+	  catch (Exception e) 
+	  {
+	    throw e ;
+	  }
 	}
 	
     public Object[] generateTemplete()
@@ -200,31 +290,42 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
       cell = row.createCell(2);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
       cell = row.createCell(4);
-      cell.setCellValue(MessageGenerator.getMessage("igate.interface.adapter", "Adapter ID"));
+      cell.setCellValue(MessageGenerator.getMessage("common.privilege", "Privilege"));
       cell = row.createCell(6);
-      cell.setCellValue(MessageGenerator.getMessage("igate.interface.group", "Interface Group"));
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("common.type", "Type"));
       cell = row.createCell(8);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface.usedYn", "Interface Usage Status"));
       
       row = writeSheet.createRow(4);
-      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
-      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
-      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 4, 5));
-      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 6, 7));
-      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 8, 9));
-      writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 10, 11));
+      cell = row.createCell(0);
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface.adapter", "Adapter ID"));
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("igate.calendar", "Calendar"));
+      cell = row.createCell(4);
+      cell.setCellValue(MessageGenerator.getMessage("head.group", "Group"));
+      cell = row.createCell(6);
+      cell.setCellValue(MessageGenerator.getMessage("head.description", "Interface Description"));
       
+      row = writeSheet.createRow(7);      
       cell = row.createCell(0);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
-      cell = row.createCell(2);
+      cell = row.createCell(1);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("common.privilege", "Privilege"));
+      cell = row.createCell(3);
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("common.type", "Type"));
       cell = row.createCell(4);
+      cell.setCellValue(MessageGenerator.getMessage("igate.interface.usedYn", "Interface Usage Status"));
+      cell = row.createCell(5);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface.adapter", "Adapter ID"));
-      cell = row.createCell(6);
+      cell = row.createCell(5);
+      cell.setCellValue(MessageGenerator.getMessage("igate.calendar", "Calendar"));
+      cell = row.createCell(7);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface.group", "Interface Group"));
       cell = row.createCell(8);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface.usedTimestamp", "Used Timestamp"));
-      cell = row.createCell(10);
+      cell = row.createCell(9);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface.updateTimestamp", "Update Timestamp"));
       /* Create Base Excel Template */
       

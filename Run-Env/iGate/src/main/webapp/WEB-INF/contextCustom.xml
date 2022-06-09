@@ -7,23 +7,13 @@
 		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd"
 	default-lazy-init="false">
 
-	<bean class="com.custom.exception.ExceptionManagerBean">
-		<property name="queueSize" value="#{systemProperties['igate.exception.queueSize']?:'5000'}" />
-		<property name="threadPool" value="#{systemProperties['igate.exception.threadPool']}" />
-		<property name="waitDb" value="#{systemProperties['igate.exception.waitDb']?:'3000'}" />
-		<property name="exceptionDeleteCron" value="#{systemProperties['igate.exception.delete.cron']?:'0 30 0 * * ?'}" />
-		<property name="exceptionSaveDuration" value="#{systemProperties['igate.exception.save.duration']?:'190'}" />
-	</bean>
+	<bean class="com.custom.exception.ExceptionManagerBean" />
 
 	<bean id="messageBuilder" class="com.custom.message.CustomMessageBuilder" />
 
-	<bean id="replyEmulater" class="com.inzent.igate.replyemulating.ReplyEmulater">
-		<property name="packagesToScan">
-			<array>
-				<value>com.custom.replyemulating</value>
-			</array>
-		</property>
-	</bean>
+	<bean class="com.inzent.igate.message.ValueCaster" />
+
+	<bean id="queueExceptionHandler" class="com.inzent.igate.queue.QueueExceptionHandler" />
 
 	<bean id="activityInitializer" class ="com.inzent.igate.rule.activity.ActivityInitializer" lazy-init="true">
 		<property name="activities">
@@ -32,8 +22,6 @@
 			</array>
 		</property>
 	</bean>
-
-	<bean class="com.inzent.igate.message.ValueCaster" />
 
 	<bean id="sessionMap" class="com.inzent.igate.cluster.ClusteredMapBean">
 		<property name="timeToLiveSeconds" value="86400" />
@@ -48,5 +36,13 @@
 		<websocket:mapping handler="webSocketHandler" path="/TER" />
 		<websocket:handshake-handler ref="handshakeHandler" />
 	</websocket:handlers>
+
+	<bean id="replyEmulater" class="com.inzent.igate.replyemulating.ReplyEmulater">
+		<property name="packagesToScan">
+			<array>
+				<value>com.custom.replyemulating</value>
+			</array>
+		</property>
+	</bean>
 
 </beans>

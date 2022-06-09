@@ -73,15 +73,7 @@
 
 	<bean id="connector" class="com.inzent.igate.context.ConnectorManagerBean" />
 
-	<bean id="adapter" class="com.inzent.igate.adapter.AdapterManagerBean">
-		<property name="safDeleteCron" value="#{systemProperties['igate.queue.saf.delete.cron']?:'0 0 2 * * ?'}" />
-		<property name="safSaveDuration" value="#{systemProperties['igate.queue.saf.save.duration']?:'100'}" />
-		<property name="fileProcess" value="#{systemProperties['igate.file.process']?:'true'}" />
-		<property name="fileProcessDuration" value="#{systemProperties['igate.file.process.duration']?:'50'}" />
-		<property name="fileDeleteCron" value="#{systemProperties['igate.file.delete.cron']?:'0 0 3 * * ?'}" />
-		<property name="fileSaveDuration" value="#{systemProperties['igate.file.save.duration']?:'100'}" />
-		<property name="fileLogSaveDuration" value="#{systemProperties['igate.fileLog.save.duration']?:'200'}" />
-	</bean>
+	<bean id="adapter" class="com.inzent.igate.adapter.AdapterManagerBean" />
 
 	<bean id="clusterChannel" class="com.inzent.igate.cluster.ClusterChannel" />
 
@@ -96,7 +88,5 @@
 
 	<bean id="job" class="com.inzent.igate.job.JobManager" lazy-init="true" />
 
-	<bean id="monitoringManager" class="com.inzent.igate.monitoring.MonitoringManager" lazy-init="true">
-		<property name="socketTimeout" value="#{systemProperties['igate.monitoring.socketTimeout']?:'5000'}" />
-	</bean>
+	<bean id="monitoringManager" class="com.inzent.igate.monitoring.MonitoringManager" lazy-init="true" />
 </beans>

@@ -5,14 +5,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.6.xsd"
 	default-lazy-init="false">
 
 	<bean id="objectIdValidator" class="com.inzent.igate.imanager.ObjectIdValidatorImpl" />
 
-	<bean class="com.inzent.imanager.common.user.UserPasswordBean">
-		<property name="minLength" value="#{systemProperties['imanager.password.length']?:'8'}"/>
-	</bean>
+	<bean class="com.inzent.imanager.common.user.UserPasswordBean" />
 
 	<task:scheduler id="scheduler" pool-size="1" /> <!-- pool-size는 task 갯수에 맞추어야 함 -->
 	<task:scheduled-tasks scheduler="scheduler">
@@ -33,10 +31,41 @@
 		</property>
 	</bean>
 
+	<bean id="corsSource" class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
+		<property name="corsConfigurations">
+			<map>
+				<entry key="/**">
+					<bean class="org.springframework.web.cors.CorsConfiguration">
+						<property name="allowCredentials" value="true" />
+						<property name="allowedHeaders" value="*" />
+						<property name="allowedMethods" value="*" />
+						<property name="allowedOrigins" value="http://localhost:1112" />
+						<property name="maxAge" value="86400" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>	
+
+	<security:http pattern="/igate/yellowPage" security="none"/>
+	<security:http pattern="/igate/eimsXml" security="none"/>
+	<security:http pattern="/igate/eimsMarshaller" security="none"/>
+
 	<security:http auto-config="true" entry-point-ref="clientAuthenticationEntryPoint">
+		<security:intercept-url pattern="/*/*/rowCount.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/fieldMeta/groups.*" access="isAuthenticated()"  />
+		<security:intercept-url pattern="/common/privilege/list.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/instance/list.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/calendar/list.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/activity/list.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/*/*/popup.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/*/*/*/popup.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/*/*/searchPopup.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/mapping/**" access="hasAnyRole('ROLE_MappingViewer', 'ROLE_MappingDictionaryViewer')"/>		
+		<security:intercept-url pattern="/igate/record/**" access="hasAnyRole('ROLE_RecordViewer', 'ROLE_MappingViewer')"/>		
+		<security:intercept-url pattern="/igate/operation/**" access="hasAnyRole('ROLE_OperationViewer', 'ROLE_ServiceEditor', 'ROLE_InterfaceViewer')" />
+		<security:intercept-url pattern="/igate/service/**" access="hasAnyRole('ROLE_ServiceViewer', 'ROLE_InterfaceViewer')"/>
+		<security:intercept-url pattern="/app/**" access="permitAll()" />
 		<security:intercept-url pattern="/common/generateId*/**" access="isAuthenticated()"/>	
 		<security:intercept-url pattern="/common/menu/**" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/common/metaHistory.*" access="hasRole('ROLE_MetaHistoryViewer')"/>
@@ -48,10 +77,10 @@
 		<security:intercept-url pattern="/common/property.*" access="hasRole('ROLE_PropertyViewer')"/>
 		<security:intercept-url pattern="/common/property/propertyIds.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/common/property/properties.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/common/property/**" access="hasRole('ROLE_PropertyViewer')"/>
 		<security:intercept-url pattern="/common/role.*" access="hasRole('ROLE_RoleViewer')"/>
 		<security:intercept-url pattern="/common/role/**" access="hasRole('ROLE_RoleViewer')"/>
-		<security:intercept-url pattern="/common/user/password.html" access="permitAll()"/>
-		<security:intercept-url pattern="/common/user/password.json" access="permitAll()"/>
+		<security:intercept-url pattern="/common/user/password.*" access="permitAll()"/>
 		<security:intercept-url pattern="/common/user.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/common/user/**" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/igate/activity.*" access="hasRole('ROLE_ActivityViewer')"/>
@@ -81,7 +110,6 @@
 		<security:intercept-url pattern="/igate/fileRepository.*" access="hasRole('ROLE_FileRepositoryViewer')"/>
 		<security:intercept-url pattern="/igate/fileRepository/**" access="hasRole('ROLE_FileRepositoryViewer')"/>
 		<security:intercept-url pattern="/igate/instance.*" access="hasRole('ROLE_InstanceViewer')"/>
-		<security:intercept-url pattern="/igate/instance/list.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/igate/instance/**" access="hasRole('ROLE_InstanceViewer')"/>
 		<security:intercept-url pattern="/igate/interface.*" access="hasRole('ROLE_InterfaceViewer')"/>
 		<security:intercept-url pattern="/igate/interface/**" access="hasRole('ROLE_InterfaceViewer')"/>
@@ -99,7 +127,6 @@
 		<security:intercept-url pattern="/igate/jobResult/**" access="hasRole('ROLE_JobResultViewer')"/>
 		<security:intercept-url pattern="/igate/logStatistics/**" access="hasRole('ROLE_LogStatisticsViewer')"/>
 		<security:intercept-url pattern="/igate/mapping.*" access="hasRole('ROLE_MappingViewer')"/>
-		<security:intercept-url pattern="/igate/mapping/**" access="hasRole('ROLE_MappingViewer')"/>
 		<security:intercept-url pattern="/igate/mappingDictionary.*" access="hasRole('ROLE_MappingDictionaryViewer')"/>
 		<security:intercept-url pattern="/igate/mappingDictionary/**" access="hasRole('ROLE_MappingDictionaryViewer')"/>
 		<security:intercept-url pattern="/igate/message.*" access="hasRole('ROLE_MessageViewer')"/>
@@ -122,15 +149,15 @@
 		<security:intercept-url pattern="/igate/onlineHeaderMappingPolicy.*" access="hasRole('ROLE_OnlineHeaderMappingPolicyViewer')"/>
 		<security:intercept-url pattern="/igate/onlineHeaderMappingPolicy/**" access="hasRole('ROLE_OnlineHeaderMappingPolicyViewer')"/>
 		<security:intercept-url pattern="/igate/operation.*" access="hasRole('ROLE_OperationViewer')"/>
-		<security:intercept-url pattern="/igate/operation/**" access="hasRole('ROLE_OperationViewer')" />
+		<security:intercept-url pattern="/igate/page/common/title.*" access="permitAll()"/>
+		<security:intercept-url pattern="/igate/page/common.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/page/common/**" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/igate/query.*" access="hasRole('ROLE_QueryViewer')"/>
 		<security:intercept-url pattern="/igate/query/**" access="hasRole('ROLE_QueryViewer')"/>
 		<security:intercept-url pattern="/igate/record.*" access="hasRole('ROLE_RecordViewer')"/>
-		<security:intercept-url pattern="/igate/record/**" access="hasRole('ROLE_RecordViewer')"/>
 		<security:intercept-url pattern="/igate/reservedSchedule.*" access="hasRole('ROLE_ReservedScheduleViewer')"/>
 		<security:intercept-url pattern="/igate/reservedSchedule/**" access="hasRole('ROLE_ReservedScheduleViewer')"/>
 		<security:intercept-url pattern="/igate/service.*" access="hasRole('ROLE_ServiceViewer')" />
-		<security:intercept-url pattern="/igate/service/**" access="hasRole('ROLE_ServiceViewer')"/>
 		<security:intercept-url pattern="/igate/safMessage.*" access="hasRole('ROLE_SafMessageViewer')" />
 		<security:intercept-url pattern="/igate/safMessage/**" access="hasRole('ROLE_SafMessageViewer')"/>
 		<security:intercept-url pattern="/igate/sapInterface.*" access="hasRole('ROLE_InterfaceEditor')" />
@@ -152,7 +179,8 @@
 		<security:intercept-url pattern="/igate/transactionContext.*" access="hasRole('ROLE_TransactionContextViewer')" />
 		<security:intercept-url pattern="/igate/transactionContext/**" access="hasRole('ROLE_TransactionContextViewer')"/>
 		<security:intercept-url pattern="/igate/webservice.*" access="hasRole('ROLE_ServiceEditor')" />
-		<security:intercept-url pattern="/igate/webservice/**" access="hasRole('ROLE_ServiceEditor')"/>				
+		<security:intercept-url pattern="/igate/webservice/**" access="hasRole('ROLE_ServiceEditor')"/>
+
 		<security:access-denied-handler ref="accessDeniedHandler" />
 		<security:form-login login-processing-url="/common/auth/login.*" login-page="/common/auth/login.html"
 			username-parameter="userId" password-parameter="password"
@@ -164,5 +192,6 @@
 			<security:frame-options disabled="true" />
 		</security:headers>
 		<security:csrf request-matcher-ref="csrfRequestMatcher" />
+		<security:cors configuration-source-ref="corsSource" />
 	</security:http>
 </beans>

@@ -1,39 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"
 	default-lazy-init="false">
 
-	<bean id="messageBuilder" class="com.custom.message.CustomMessageBuilder"/>
+	<bean id="messageBuilder" class="com.custom.message.CustomMessageBuilder" />
 
-	<bean id="jsonConverter" class="com.custom.tracelog.CustomJsonConverterBean"/>
+	<bean id="jsonConverter" class="com.custom.tracelog.CustomJsonConverterBean" />
 
-	<bean class="com.inzent.igate.message.ValueCaster"/>
+	<bean class="com.inzent.igate.message.ValueCaster" />
 
 	<bean class="com.inzent.igate.tracelog.TraceLogRecordBean" />
 
-	<bean class="com.inzent.igate.tracelog.CryptoDataSerializer"/>
+	<bean class="com.inzent.igate.tracelog.CryptoDataSerializer" />
 
-	<bean class="com.custom.tracelog.CustomTraceLogStatisticsBean">
-		<property name="updateUsedTimestamp" value="#{systemProperties['igate.logger.updateUsedTimestamp']?:'false'}" />
-	</bean>
+	<bean class="com.custom.tracelog.CustomTraceLogStatisticsBean" />
 
-	<bean class="com.custom.tracelog.CustomTraceLogDbFile">
-		<!-- <constructor-arg value="com.inzent.igate.repository.log.TraceLog" /> -->
-		<property name="socketTimeout" value="#{systemProperties['igate.monitoring.socketTimeout']?:'5000'}" />
-		<property name="receiverThreadPool" value="#{systemProperties['igate.logger.threadPool.receiver']?:'connector'}" />
-		<property name="queueSize" value="#{systemProperties['igate.logger.queueSize']?:'5000'}" />
-		<property name="saveQueueFullException" value="#{systemProperties['igate.logger.saveQueueFullException']?:'true'}" />
-		<property name="saverThreadPool" value="#{systemProperties['igate.logger.threadPool.saver']?:'job'}" />
-		<property name="waitDb" value="#{systemProperties['igate.logger.waitDb']?:'3000'}" />
-		<property name="saveMessage" value="#{systemProperties['igate.logger.saveMessage']?:'false'}" />
-		<property name="deleteDb" value="#{systemProperties['igate.logger.deleteDb']?:'true'}" />
-		<property name="logPath" value="#{systemProperties['igate.logger.logPath']}" />
-		<property name="queuePath" value="#{systemProperties['igate.logger.queuePath']}" />
-		<property name="bufferSize" value="#{systemProperties['igate.logger.bufferSize']?:'8192'}" />
-		<property name="logFileCount" value="#{systemProperties['igate.logger.logFileCount']?:'1'}" />
-		<property name="logDuration" value="#{systemProperties['igate.logger.saveDuration']?:'7'}" />
-	</bean>
+	<bean class="com.custom.tracelog.CustomTraceLogDbFile" />
 
 </beans>

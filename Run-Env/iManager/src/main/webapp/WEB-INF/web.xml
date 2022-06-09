@@ -36,9 +36,10 @@
 		<servlet-name>Dispatcher</servlet-name>
 		<url-pattern>*.json</url-pattern>
 		<url-pattern>*.html</url-pattern>
-		<url-pattern>/igate/eimsMarshaller</url-pattern>
+		<url-pattern>/common/auth/login</url-pattern>
 		<url-pattern>/igate/yellowPage</url-pattern>
 		<url-pattern>/igate/eimsXml</url-pattern>
+		<url-pattern>/igate/eimsMarshaller</url-pattern>
 	</servlet-mapping>
 
 	<filter>
@@ -64,6 +65,16 @@
 	</filter-mapping>
 
 	<filter>
+		<filter-name>suffixRequestFilter</filter-name>
+		<filter-class>com.inzent.imanager.filter.SuffixRequestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>suffixRequestFilter</filter-name>
+		<url-pattern>*.json</url-pattern>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+
+	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 		<init-param>
@@ -73,9 +84,9 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>*.json</url-pattern>
-		<url-pattern>*.html</url-pattern>
-		<url-pattern>/common/auth/*</url-pattern>
+		<url-pattern>/common/*</url-pattern>
+		<url-pattern>/igate/*</url-pattern>
+		<url-pattern>/custom/*</url-pattern>
 	</filter-mapping>
 
 	<error-page>

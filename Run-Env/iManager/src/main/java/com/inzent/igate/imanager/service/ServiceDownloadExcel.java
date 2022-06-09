@@ -1,7 +1,6 @@
 package com.inzent.igate.imanager.service;
 
 import java.io.FileInputStream;
-import java.io.IOException ;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.poi.EncryptedDocumentException ;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -30,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.inzent.igate.imanager.CommonTools;
+import com.inzent.igate.imanager.logstats.LogStatsRepository;
 import com.inzent.igate.repository.meta.Service;
 import com.inzent.imanager.message.MessageGenerator;
 
@@ -37,44 +36,30 @@ import com.inzent.imanager.message.MessageGenerator;
 public class ServiceDownloadExcel implements ServiceDownloadBean {
 
 	@Override
-	public void downloadFile(HttpServletRequest request, HttpServletResponse response, Service entity,
-			List<Service> entityList) throws Exception {
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response, Service entity, List<Service> entityList) throws Exception 
+	{
+	  String fileName = "Services_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx" ;
 
-		String fileName = "Services_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx";
+	  response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate") ;
+	  response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20")) ;
+	  response.setContentType("application/octet-stream") ;
 
-		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''"
-				+ URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
-		response.setContentType("application/octet-stream");
+	  generateDownload(response, request.getServletContext().getRealPath("/template/List_Service.xlsx"), entity, entityList) ;
 
-		generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/List_Service.xlsx"), entity, entityList);
-
-		response.flushBuffer();
+	  response.flushBuffer() ;
 	}
 
-	protected void generateDownload(OutputStream outputStream, String templateFile, Service entity,
-			List<Service> entityList) throws Exception {
-		Workbook workbook ;
-		Sheet writeSheet ;
-		Row row = null ;
-		Cell cell = null ;
-		String values = null ;
-        Object[] objects = null ;
-        try
-        {
-          FileInputStream fileInputStream = new FileInputStream(templateFile) ;
-          workbook = WorkbookFactory.create(fileInputStream) ;
-          writeSheet = workbook.getSheetAt(0) ;
-        }
-        catch (EncryptedDocumentException | IOException e)
-        {
-          objects = generateTemplete() ;
-          workbook = (Workbook)objects[0] ;
-          writeSheet = (Sheet)objects[1] ;
-          row = (Row)objects[2] ;
-          cell = (Cell)objects[3] ;
-        }
-
+	protected void generateDownload(HttpServletResponse response, String templateFile, Service entity, List<Service> entityList) throws Exception 
+	{
+	  try(OutputStream outputStream = response.getOutputStream();
+		  FileInputStream fileInputStream = new FileInputStream(templateFile);
+		  Workbook workbook = WorkbookFactory.create(fileInputStream);)
+	  {
+	    Sheet writeSheet = workbook.getSheetAt(0) ;
+	    Row row = null ;
+	    Cell cell = null ;
+	    String values = null ;
+	    
 		// Cell 스타일 지정.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
 		CellStyle cellStyle_Info = getInfoCellStyle(workbook);
@@ -92,53 +77,113 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
-
-		// 어댑터 ID
-		values = entity.getAdapterId();
+		
+		// 서비스 종류
+		switch (String.valueOf(entity.getServiceType()).trim()) {
+	      case "DB" :
+	    	  values = MessageGenerator.getMessage("DB", "DB");
+	    	  break ;
+	      case "File" :
+		      values = MessageGenerator.getMessage("head.file", "File");
+		      break ;
+	      case "Online" :
+	    	  values = MessageGenerator.getMessage("head.online", "Online");
+	    	  break ;
+	      default: 
+	    	  values = "";
+	    }
+		
 		row = writeSheet.getRow(3);
 		cell = row.createCell(5);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
-
-		// 그룹
+		
+		// 어댑터 ID
 		values = entity.getServiceGroup();
 		row = writeSheet.getRow(3);
 		cell = row.createCell(7);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
+		
+		// 그룹
+		values = entity.getServiceGroup();
+		row = writeSheet.getRow(4);
+		cell = row.createCell(1);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+		
+		// 권한
+		values = entity.getPrivilegeId();
+		row = writeSheet.getRow(4);
+		cell = row.createCell(3);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
+		
+		// 비고
+		values = entity.getServiceDesc();
+		row = writeSheet.getRow(4);
+		cell = row.createCell(5);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);
 
 		// 조회리스트 입력
 		long sum = 0;
-		int i = 5;
-		for (Service service2 : entityList) {
+		int i = 7;
+		for (Service serviceInfo : entityList) {
 			row = writeSheet.createRow(i);
 			int c = 0;
 
 			// 서비스 ID
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 0, 1));
-			values = service2.getServiceId();
+			values = serviceInfo.getServiceId();
 			cell = row.createCell(c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
 			// 서비스 이름
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 2, 3));
-			values = service2.getServiceName();
-			cell = row.createCell(c += 2);
+			values = serviceInfo.getServiceName();
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
-
+			
+			// 서비스 종류			
+			switch (serviceInfo.getServiceType()) {
+		      case "DB" :
+		    	  values = MessageGenerator.getMessage("DB", "DB");
+		    	  break ;
+		      case "File" :
+			      values = MessageGenerator.getMessage("head.file", "File");
+			      break ;
+		      case "Online" :
+		    	  values = MessageGenerator.getMessage("head.online", "Online");
+		    	  break ;
+		    }
+			
+			cell = row.createCell(++c);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
 			// 어댑터 ID
-			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 4, 5));
-			values = service2.getAdapterId();
-			cell = row.createCell(c += 2);
+			values = serviceInfo.getAdapterId();
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
 			// 그룹
+			values = serviceInfo.getServiceGroup();
+			cell = row.createCell(++c);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 권한
+			values = serviceInfo.getPrivilegeId();
+			cell = row.createCell(++c);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+
+			// 비고
 			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 6, 7));
-			values = service2.getServiceGroup();
-			cell = row.createCell(c += 2);
+			values = serviceInfo.getServiceDesc();
+			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
@@ -161,6 +206,11 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 
 		entityList = null ;
 		workbook.write(outputStream);
+	  }
+	  catch (Exception e) 
+	  {
+	    throw e ;
+	  }
 	}
 
     public Object[] generateTemplete()
@@ -177,11 +227,19 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
       cell = row.createCell(2);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
       cell = row.createCell(4);
-      cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+      cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("common.type", "Type"));
       cell = row.createCell(6);
-      cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
+      cell.setCellValue(MessageGenerator.getMessage("igate.adapter", "Adapter") + " " + MessageGenerator.getMessage("head.id", "ID"));
       
-      row = writeSheet.createRow(4);
+      row = writeSheet.createRow(4);      
+      cell = row.createCell(0);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("common.privilege", "Privilege"));
+      cell = row.createCell(4);
+      cell.setCellValue(MessageGenerator.getMessage("head.description", "Service Description"));
+      
+      row = writeSheet.createRow(7);
       writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
       writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
       writeSheet.addMergedRegion(new CellRangeAddress(4, 4, 4, 5));
@@ -189,12 +247,18 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
       
       cell = row.createCell(0);
       cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
-      cell = row.createCell(2);
+      cell = row.createCell(1);
       cell.setCellValue(MessageGenerator.getMessage("igate.interface", "Interface") + " " + MessageGenerator.getMessage("head.name", "Name") );
+      cell = row.createCell(2);
+      cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("common.type", "Type"));
+      cell = row.createCell(3);
+      cell.setCellValue(MessageGenerator.getMessage("igate.adapter", "Adapter") + " " + MessageGenerator.getMessage("head.id", "ID"));
       cell = row.createCell(4);
-      cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
-      cell = row.createCell(6);
       cell.setCellValue(MessageGenerator.getMessage("igate.service.group", "Service Group"));
+      cell = row.createCell(5);
+      cell.setCellValue(MessageGenerator.getMessage("common.privilege", "Privilege"));
+      cell = row.createCell(6);
+      cell.setCellValue(MessageGenerator.getMessage("head.description", "service Description"));
       /* Create Base Excel Template */
       
       return new Object[] {

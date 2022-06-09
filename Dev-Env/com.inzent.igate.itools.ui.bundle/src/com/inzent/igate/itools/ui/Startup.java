@@ -24,11 +24,11 @@ import com.inzent.igate.itools.interfaces.dialogs.TestSuiteFilterDialog ;
 import com.inzent.igate.itools.interfaces.editors.InterfaceEditor ;
 import com.inzent.igate.itools.interfaces.editors.TestCaseEditor ;
 import com.inzent.igate.itools.interfaces.editors.TestSuiteEditor ;
-import com.inzent.igate.itools.mapping.AutoMappingStandard ;
 import com.inzent.igate.itools.mapping.MappingActivator ;
 import com.inzent.igate.itools.mapping.ValidationMappingStandard ;
 import com.inzent.igate.itools.mapping.dialogs.MappingFilterDialog ;
 import com.inzent.igate.itools.mapping.editors.MappingEditor ;
+import com.inzent.igate.itools.mapping.utils.AutoMappingImpl ;
 import com.inzent.igate.itools.mapping.utils.MappingUtils ;
 import com.inzent.igate.itools.operation.OperationActivator ;
 import com.inzent.igate.itools.operation.dialogs.OperationFilterDialog ;
@@ -105,9 +105,9 @@ public class Startup implements IStartup
     
     MappingUtils.classLoader = this.getClass().getClassLoader() ;
 
-    MappingUtils.autoMappingInstance = new AutoMappingStandard() ;
-
     MappingUtils.validationMappingInstance = new ValidationMappingStandard() ;
+    
+    MappingUtils.autoMapping = new AutoMappingImpl();
 
     RecordUtils.exportHandler = new RecordExportHandlerImpl() ;
 

@@ -52,19 +52,19 @@
         <Column label="반복타입" align="left" width="80" name="arrayType" editType="select" availableValue="N=Not,F=Fixed,V=Variable" availableDefaultValue="N" />
         <Column label="반복횟수" align="left" width="70" name="referenceFieldId" editType="edit" />
       </GroupHeader>
-      <GroupHeader label="속성정보" expanded="true">
+      <GroupHeader label="기본속성정보" expanded="true">
         <Column label="기본값" align="left" width="70" name="fieldDefaultValue" editType="edit" />
         <Column label="마스킹" align="center" width="80" name="fieldHiddenYn" editType="checkbox" availableValue="Y=true,N=false" availableDefaultValue="N" />
         <Column label="필수" align="center" width="60" name="fieldRequireYn" editType="checkbox" availableValue="Y=true,N=false" availableDefaultValue="N" />
         <Column label="유효값" align="left" width="100" name="fieldValidValue" editType="edit" />
         <Column label="변환" align="left" width="100" name="codecId" editType="codec" />
       </GroupHeader>
-      <GroupHeader label="확장정보" expanded="false">
+      <GroupHeader label="확장속성정보" expanded="false">
         <Column label="FieldTrim" align="left" width="100" name="FieldTrim" editType="checkbox" extened="true"/>
-        <Column label="FieldFullWidth" align="left" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
-        <Column label="확장1" align="left" width="100" name="ext1" editType="edit" extened="true"/>
-        <Column label="FieldHttp" align="left" width="100" name="FieldHttp" editType="select" availableValue="header=header,query=query,body=body" extened="true"/> 
-        <Column label="기타속성" align="left" width="220" name="fieldOptions" editType="edit" />
+        <Column label="CheckSample" align="left" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
+        <Column label="EditSample" align="left" width="100" name="ext1" editType="edit" extened="true"/>
+        <Column label="ComboSample" align="left" width="100" name="FieldHttp" editType="select" availableValue="header=header,query=query,body=body" extened="true"/> 
+        <Column label="전체확장속성" align="left" width="220" name="fieldOptions" editType="edit" />
       </GroupHeader>
     </GroupHeaders>
     <FieldMetas>

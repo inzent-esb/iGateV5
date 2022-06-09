@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<div class="ct-header" id="ImngSearchObject">
+<div class="ct-header" id="ImngSearchObject" style="display: none;">
 	<button type="button" class="btn-filter collapsed d-md-none" data-toggle="collapse" data-target="#collapse-filter">
 		<fmt:message>head.searchFilter</fmt:message>
 		<i class="icon-down"></i>

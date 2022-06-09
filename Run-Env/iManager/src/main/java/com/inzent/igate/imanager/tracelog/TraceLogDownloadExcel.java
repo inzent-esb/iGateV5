@@ -52,242 +52,273 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 	
 	public void generateDownload(OutputStream outputStream, String templateFile, TraceLog entity,
 			List<TraceLog> entityList) throws Exception {
-		Workbook workbook;
 		Row row = null;
 		Cell cell = null;
 		String values = null;
 		Sheet writeSheet;
 		
-		try {
-			FileInputStream fileInputStream = new FileInputStream(templateFile);
-			workbook = WorkbookFactory.create(fileInputStream);
+		try(FileInputStream fileInputStream = new FileInputStream(templateFile);
+			Workbook workbook = WorkbookFactory.create(fileInputStream);)
+		{
 			writeSheet = workbook.getSheetAt(0);
-		}catch (Exception e){
-			/* Template Load Error */
-			/* Create Base Excel Template */			
-			workbook = new XSSFWorkbook();
-			writeSheet = workbook.createSheet();
 			
-			row = writeSheet.createRow(3);
-			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("head.from", "From"));
+			// Cell 스타일 지정.
+			CellStyle cellStyle_Base = getBaseCellStyle(workbook);
+			CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 			
-			cell = row.createCell(2);
-			cell.setCellValue(MessageGenerator.getMessage("head.to", "To"));
+			// From
+			values = entity.getFromLogDateTime().toString();
+			row = writeSheet.getRow(3);
+			cell = row.createCell(1);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 			
-			cell = row.createCell(4);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
+			// To
+			values = entity.getToLogDateTime().toString();
+			cell = row.createCell(3);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 			
-			cell = row.createCell(6);
-			cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
+			// 거래 ID
+			values = entity.getTransactionId();
+			cell = row.createCell(5);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 로그 분류
+			values = entity.getLogCode();
+			cell = row.createCell(7);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 어댑터 ID
+			values = entity.getAdapterId();
+			cell = row.createCell(9);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 인터페이스 ID
+			values = entity.getInterfaceId();
+			row = writeSheet.getRow(4);
+			cell = row.createCell(1);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 
-			cell = row.createCell(8);
-			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+			// 서비스 ID
+			values = entity.getServiceId();
+			cell = row.createCell(3);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 			
-			row = writeSheet.createRow(4);
-			cell = row.createCell(0);
-			cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID") );
-
-			cell = row.createCell(2);
-			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
-						
-			cell = row.createCell(4);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+			// 커넥터 ID
+			values = entity.getConnectorId();
+			cell = row.createCell(5);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 			
-			cell = row.createCell(6);
-			cell.setCellValue(MessageGenerator.getMessage("head.ip", "IP"));
+			// 인스턴스 ID
+			values = entity.getInstanceId();
+			cell = row.createCell(7);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+
+			// 대외 거래
+			values = entity.getExternalTransaction();
+			cell = row.createCell(9);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 			
-			cell = row.createCell(8);
-			cell.setCellValue(MessageGenerator.getMessage("head.timeoutYn", "TimeoutYN"));
+			// 대외 메세지
+			values = entity.getExternalMessage();
+			row = writeSheet.getRow(5);
+			cell = row.createCell(1);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 응답 코드
+			values = entity.getResponseCode();
+			cell = row.createCell(3);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 
-			row = writeSheet.createRow(5);
-			cell = row.createCell(2);
-			cell.setCellValue(MessageGenerator.getMessage("head.log", "Log") + " " + MessageGenerator.getMessage("head.classification", "Classification"));
+			// IP
+			values = entity.getRemoteAddr();
+			cell = row.createCell(5);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 세션 ID
+			values = entity.getSessionId();
+			cell = row.createCell(7);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
 
-			int rc = 0;
-			row = writeSheet.createRow(7);
-			cell = row.createCell(rc);
-			cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("apim.requestmngr.requestMessage", "Message") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("head.log", "Log") + " " + MessageGenerator.getMessage("head.classification", "Classification"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.externalTransaction", "External Transaction"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.externalMessage", "External Message"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.traceLog.requestTimestamp", "RequestTimestamp"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.traceLog.responseTimestamp", "ResponseTimestamp"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
-			cell = row.createCell(rc+=1);
-			cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID") );
-		}
-		// Cell 스타일 지정.
-		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
-		CellStyle cellStyle_Info = getInfoCellStyle(workbook);
-		
-		// From
-		values = entity.getFromLogDateTime().toString();
-		row = writeSheet.getRow(3);
-		cell = row.createCell(1);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// To
-		values = entity.getToLogDateTime().toString();
-		cell = row.createCell(3);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 거래 ID
-		values = entity.getTransactionId();
-		cell = row.createCell(5);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 인스턴스 ID
-		values = entity.getInstanceId();
-		cell = row.createCell(7);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-
-		// 어댑터 ID
-		values = entity.getAdapterId();
-		cell = row.createCell(9);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 커넥터 ID
-		values = entity.getConnectorId();
-		row = writeSheet.getRow(4);
-		cell = row.createCell(1);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
+			// 타임아웃 여부
+			values = null;
+			if(entity.getTimeoutYn() != 0){
+				values = Character.toString(entity.getTimeoutYn());			
+			}
+			cell = row.createCell(9);
+			cell.setCellStyle(cellStyle_Base);
+			cell.setCellValue(values);
+			
+			// 조회리스트 입력
+			long sum = 0;
+			int i = 9;
+			for(TraceLog data : entityList) {
+				row = writeSheet.createRow(i);
+				int c = 0;
 				
-		// 인터페이스 ID
-		values = entity.getInterfaceId();
-		cell = row.createCell(3);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 서비스 ID
-		values = entity.getServiceId();
-		cell = row.createCell(5);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// IP
-		values = entity.getRemoteAddr();
-		cell = row.createCell(7);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 타임아웃 여부
-		values = null;
-		if(entity.getTimeoutYn() != 0){
-			values = Character.toString(entity.getTimeoutYn());			
-		}
-		cell = row.createCell(9);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
-		
-		// 로그 분류
-		values = entity.getLogCode();
-		row = writeSheet.getRow(5);
-		cell = row.createCell(1);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(values);
+				//요청시간
+				values = "";
+				if(data.getRequestTimestamp() != null) {
+					values = data.getRequestTimestamp().toString();				
+				}
+				
+				cell = row.createCell(c);
+				cell.setCellValue(values);
 
-		// 조회리스트 입력
-		long sum = 0;
-		int i = 8;
-		for(TraceLog data : entityList) {
-			row = writeSheet.createRow(i);
-			int c = 0;
+				//거래 ID
+				values = data.getTransactionId();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
+				
+				//로그 분류
+				values = data.getLogCode();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
+				
+				//어댑터 ID
+				values = data.getAdapterId();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
+				
+				//인터페이스 ID
+				values = data.getInterfaceId();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
 
-			//거래 ID
-			values = data.getTransactionId();
-			cell = row.createCell(c);
-			cell.setCellValue(values);
+				//서비스 ID
+				values = data.getServiceId();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
+				
+				//인스턴스 ID
+				values = data.getInstanceId();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
+								
+				//대외거래
+				values = data.getExternalTransaction();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
 
-			//메시지 ID
-			values = data.getMessageId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//로그 분류
-			values = data.getLogCode();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//어댑터 ID
-			values = data.getAdapterId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			//인터페이스 ID
-			values = data.getInterfaceId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//서비스 ID
-			values = data.getServiceId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			
-			//대외거래
-			values = data.getExternalTransaction();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//대외메시지
-			values = data.getExternalMessage();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//요청시간
-			values = "";
-			if(data.getRequestTimestamp() != null) {
-				values = data.getRequestTimestamp().toString();				
+				//대외메시지
+				values = data.getExternalMessage();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
+				
+				//응답코드
+				values = data.getResponseCode();
+				cell = row.createCell(c += 1);
+				cell.setCellValue(values);
+				
+				sum++;
+				i++;
 			}
 			
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//응답시간
-			values = "";
-			if(data.getResponseTimestamp() != null) {
-				values = data.getResponseTimestamp().toString();
-			}
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);			
+			workbook.write(outputStream);
 			
-			//인스턴스 ID
-			values = data.getInstanceId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-
-			//커넥터 ID
-			values = data.getConnectorId();
-			cell = row.createCell(c += 1);
-			cell.setCellValue(values);
-			
-			sum++;
-			i++;
-		}
-		
-		workbook.write(outputStream);
+		}catch (Exception e){
+			throw e ;
+		}	
 	}
+	
+	public Object[] generateTemplete()
+    {
+		/* Template Load Error */
+		/* Create Base Excel Template */	
+		Workbook workbook = new XSSFWorkbook();
+      	Sheet writeSheet = workbook.createSheet();
+      	Row row = writeSheet.createRow(3);
+       	Cell cell ;
+       	
+		row = writeSheet.createRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue(MessageGenerator.getMessage("head.from", "From"));
+		
+		cell = row.createCell(2);
+		cell.setCellValue(MessageGenerator.getMessage("head.to", "To"));
+		
+		cell = row.createCell(4);
+		cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
+		
+		cell = row.createCell(6);
+		cell.setCellValue(MessageGenerator.getMessage("head.log", "Log") + " " + MessageGenerator.getMessage("head.classification", "Classification"));
+
+		cell = row.createCell(8);
+		cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+		
+		row = writeSheet.createRow(4);
+		cell = row.createCell(0);
+		cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
+
+		cell = row.createCell(2);
+		cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+					
+		cell = row.createCell(4);
+		cell.setCellValue(MessageGenerator.getMessage("igate.connector", "Connector") + " " + MessageGenerator.getMessage("head.id", "ID") );
+		
+		cell = row.createCell(6);
+		cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
+		
+		cell = row.createCell(8);
+		cell.setCellValue(MessageGenerator.getMessage("igate.externalTransaction", "External Transaction"));
+
+
+		row = writeSheet.createRow(5);
+		cell = row.createCell(0);
+		cell.setCellValue(MessageGenerator.getMessage("igate.externalMessage", "External Message"));
+		
+		cell = row.createCell(2);
+		cell.setCellValue(MessageGenerator.getMessage("igate.traceLog.responseCode", "Response Code"));
+
+		cell = row.createCell(4);
+		cell.setCellValue(MessageGenerator.getMessage("head.ip", "IP"));
+
+		cell = row.createCell(6);
+		cell.setCellValue(MessageGenerator.getMessage("igate.connectorControl.session", "Session") + " " + MessageGenerator.getMessage("head.id", "ID") );
+		
+		cell = row.createCell(8);
+		cell.setCellValue(MessageGenerator.getMessage("head.timeoutYn", "TimeoutYN"));
+		
+		int rc = 0;
+		row = writeSheet.createRow(9);
+		cell = row.createCell(rc);
+		cell.setCellValue(MessageGenerator.getMessage("igate.traceLog.requestTimestamp", "RequestTimestamp"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.exceptionLog.transactionId", "Transaction ID"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("head.log", "Log") + " " + MessageGenerator.getMessage("head.classification", "Classification"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.adapter.id", "Adapter ID"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.interface.id", "Interface ID"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.service", "Service") + " " + MessageGenerator.getMessage("head.id", "ID"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.instance.id", "Instance ID"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.externalTransaction", "External Transaction"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.externalMessage", "External Message"));
+		cell = row.createCell(rc+=1);
+		cell.setCellValue(MessageGenerator.getMessage("igate.traceLog.responseCode", "Response Code") );
+
+		return new Object[] {
+			workbook, writeSheet, row, cell
+		} ;
+    }
 	
 	public XSSFCellStyle getBaseCellStyle(Workbook workbook) {
 		// Cell 스타일 지정.
