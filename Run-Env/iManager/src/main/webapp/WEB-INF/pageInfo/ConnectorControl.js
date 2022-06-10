@@ -300,6 +300,7 @@ const info = {
 				vModel: 'socketPort',
 				label: 'Socket Port',
 				placeholder: this.$t('head.searchData'),
+				regExpType: 'num',
 			},			
 			{
 				type: 'text',

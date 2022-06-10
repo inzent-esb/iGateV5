@@ -60,14 +60,14 @@
 			
 			<footer id="panel-footer" class="panel-footer sub-bar">
 				<div class="ml-auto">
-					<a href="javascript:void(0);" id="stopBtn"    	   class="btn viewGroup" 	    		           	style="display: none;"    v-on:click="stop"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
-					<a href="javascript:void(0);" id="stopForceBtn"    class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="stopForce"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>
-					<a href="javascript:void(0);" id="dumpBtn"   	   class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="dump"><fmt:message>head.dump</fmt:message></a>
-					<a href="javascript:void(0);" id="removeBtn"       class="btn viewGroup removeBtn" 		  		   	style="display: none;"    v-on:click="removeInfo"><i class="icon-delete"></i><fmt:message>head.delete</fmt:message></a>
-					<a href="javascript:void(0);" id="goModBtn"        class="btn viewGroup goModBtn" 		  		   	style="display: none;"    v-on:click="goModifyPanel"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>						
-					<a href="javascript:void(0);" id="saveBtn"         class="btn btn-primary saveGroup saveBtn" 	   	style="display: none;"    v-on:click="saveInfo"><fmt:message>head.insert</fmt:message></a>
-					<a href="javascript:void(0);" id="updateBtn"       class="btn btn-primary updateGroup updateBtn"   	style="display: none;"    v-on:click="updateInfo"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>
-					<a href="javascript:void(0);" id="goAddBtn"        class="btn btn-primary viewGroup goAddBtn" 	 	style="display: none;"    v-on:click="goAddInfo" ><i class="icon-plus"></i><fmt:message>head.insert</fmt:message>(<fmt:message>head.copy</fmt:message>)</a>		
+					<a href="javascript:void(0);" id="stopBtn"    	   class="btn viewGroup" 	    		           	style="display: none;"    v-on:click="stop"		 	title="<fmt:message>head.stop</fmt:message>"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
+					<a href="javascript:void(0);" id="stopForceBtn"    class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="stopForce" 	title="<fmt:message>head.stop.force</fmt:message>"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>
+					<a href="javascript:void(0);" id="dumpBtn"   	   class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="dump"		 	title="<fmt:message>head.dump</fmt:message>"><fmt:message>head.dump</fmt:message></a>
+					<a href="javascript:void(0);" id="removeBtn"       class="btn viewGroup removeBtn" 		  		   	style="display: none;"    v-on:click="removeInfo"	title="<fmt:message>head.delete</fmt:message>"><i class="icon-delete"></i><fmt:message>head.delete</fmt:message></a>
+					<a href="javascript:void(0);" id="goModBtn"        class="btn viewGroup goModBtn" 		  		   	style="display: none;"    v-on:click="goModifyPanel"title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>						
+					<a href="javascript:void(0);" id="saveBtn"         class="btn btn-primary saveGroup saveBtn" 	   	style="display: none;"    v-on:click="saveInfo"		title="<fmt:message>head.insert</fmt:message>"><fmt:message>head.insert</fmt:message></a>
+					<a href="javascript:void(0);" id="updateBtn"       class="btn btn-primary updateGroup updateBtn"   	style="display: none;"    v-on:click="updateInfo"	title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>
+					<a href="javascript:void(0);" id="goAddBtn"        class="btn btn-primary viewGroup goAddBtn" 	 	style="display: none;"    v-on:click="goAddInfo" 	title="<fmt:message>head.insert</fmt:message>"><i class="icon-plus"></i><fmt:message>head.insert</fmt:message>(<fmt:message>head.copy</fmt:message>)</a>		
 				</div>
 			</footer>
 			

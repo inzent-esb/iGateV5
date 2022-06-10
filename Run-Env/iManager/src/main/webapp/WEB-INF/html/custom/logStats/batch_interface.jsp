@@ -318,7 +318,22 @@
 				                pageOptions: {
 				                	useClient: true,
 				                	perPage: 10
-				                },		              	
+				                },
+				        		header : {
+				        			height : 60,
+				        			complexColumns : [
+				        				{
+				        					name : "messageinfo",
+				        					header : '<fmt:message>igate.message</fmt:message>' + ' ' + '<fmt:message>head.info</fmt:message>',
+				        					childNames : ["count01", "count02"]
+				        				}, 
+				        				{
+				        					name : "dbinfo",
+				        					header : '<fmt:message>head.type.2.db</fmt:message>' + ' ' + '<fmt:message>head.info</fmt:message>',
+				        					childNames : ["count03", "count04", "count05"]
+				        				}
+				        			]
+				        		},
 				              	columns: [		              		
 									{
 										name: 'pk.logDateTime',
@@ -362,12 +377,10 @@
 										formatter: function(info) {
 											return numberWithComma(info.row.exceptionCount);
 										}								
-									},
-									//추가됨
-									
+									},									
 									{
 										name: 'count01',
-										header: '<fmt:message>igate.logStatistics.msgSuccessCount</fmt:message>', //메시지 단위 성공 개수
+										header: '<fmt:message>igate.logStatistics.successCount</fmt:message>',
 										align: 'right',
 										width: '10%',
 										sortable: true,
@@ -377,7 +390,7 @@
 									},
 									{
 										name: 'count02',
-										header: '<fmt:message>igate.logStatistics.msgExceptionCount</fmt:message>', //메시지 단위 실패 개수
+										header: '<fmt:message>igate.logStatistics.exceptionCount</fmt:message>',
 										align: 'right',
 										width: '10%',
 										sortable: true,
@@ -387,7 +400,7 @@
 									},
 									{
 										name: 'count03',
-										header: '<fmt:message>igate.logStatistics.dbRequestCount</fmt:message>', //DB 요청 건수
+										header: '<fmt:message>igate.logStatistics.requestCount</fmt:message>',
 										align: 'right',
 										width: '10%',
 										sortable: true,
@@ -397,7 +410,7 @@
 									},
 									{
 										name: 'count04',
-										header: '<fmt:message>igate.logStatistics.dbSuccessCount</fmt:message>', //DB 처리성공 건수
+										header: '<fmt:message>igate.logStatistics.successCount</fmt:message>',
 										align: 'right',
 										width: '10%',
 										sortable: true,
@@ -407,7 +420,7 @@
 									},
 									{
 										name: 'count05',
-										header: '<fmt:message>igate.logStatistics.dbExceptionCount</fmt:message>', //DB 처리성공 건수
+										header: '<fmt:message>igate.logStatistics.exceptionCount</fmt:message>', 
 										align: 'right',
 										width: '10%',
 										sortable: true,
@@ -415,18 +428,6 @@
 											return numberWithComma(info.row.count05);
 										}								
 									},
-									{
-										name: 'responseCount',
-										header: '<fmt:message>igate.logStatistics.responseCount</fmt:message>',// 통계 응답 처리 건수
-										align: 'right',
-										width: '10%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(info.row.responseCount);
-										}								
-									},
-									
-									//추가됨
 									{
 										name: 'responseTotal',
 										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>',

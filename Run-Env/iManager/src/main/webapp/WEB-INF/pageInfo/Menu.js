@@ -6,7 +6,7 @@ const info = {
 		list: [
 			{ type: 'text', vModel: 'menuId', 		label: this.$t('head.id'), 	placeholder: this.$t('head.searchId'), regExpType: 'searchId' },
 			{ type: 'text', vModel: 'menuName', 	label: this.$t('head.name'), 	placeholder: this.$t('head.searchName') },
-			{ type: 'text', vModel: 'menuUrl', 		label: this.$t('common.menu.url'),						placeholder: this.$t('head.searchData'), regExptype: 'url'},
+			{ type: 'text', vModel: 'menuUrl', 		label: this.$t('common.menu.url'),						placeholder: this.$t('head.searchData'), regExpType: 'url'},
 			{ type: 'text', vModel: 'menuEditor', 	label: this.$t('common.menu.editor'),					placeholder: this.$t('head.searchData')},			
 			{
 				type: 'modal',
