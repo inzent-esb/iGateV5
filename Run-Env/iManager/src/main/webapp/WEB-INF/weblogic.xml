@@ -9,6 +9,7 @@
 
 	<container-descriptor>
 		<prefer-web-inf-classes>true</prefer-web-inf-classes>
+		<show-archived-real-path-enabled>true</show-archived-real-path-enabled>
 	</container-descriptor>
 
 	<charset-params>
