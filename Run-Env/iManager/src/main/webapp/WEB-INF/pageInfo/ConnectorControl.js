@@ -297,7 +297,7 @@ const info = {
 			},
 			{
 				type: 'text',
-				vModel: 'socketPort',
+				vModel: 'socketPortSnapshot',
 				label: 'Socket Port',
 				placeholder: this.$t('head.searchData'),
 				regExpType: 'num',

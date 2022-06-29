@@ -118,12 +118,10 @@
 			
 			createPageObj.mainConstructor();
 			
-			$('.empty').after($('#summaryTemplate'));
-			$('#summaryTemplate').removeAttr('id').show();
-			
+			$('.empty').after($('#summaryTemplate'));			
 			
 			(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.SearchType', orderByKey: true }, function(searchTypeResult) {
-				(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.statsDataTypes', orderByKey: true }, function(statsDataTypesResult) {
+				(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.online.statsDataTypes', orderByKey: true }, function(statsDataTypesResult) {
 					window.vmSearch = new Vue({
 						el: '#' + createPageObj.getElementId('ImngSearchObject'),
 				    	data: {
@@ -141,6 +139,8 @@
 				    	},
 				    	methods: {
 							search: function() {
+								$('#summaryTemplate').removeAttr('id').show();
+								
 								vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 								
 								vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
@@ -255,7 +255,7 @@
 
 		                        var req = new XMLHttpRequest();
 		                        
-		                        req.open("POST", "${prefixUrl}/igate/logStatistics/generateExcelDaily.json", true);
+		                        req.open("POST", "${prefixUrl}/igate/logStatistics/generateExcelOnlineDaily.json", true);
 
 		        				var csrfToken = JSON.parse(localStorage.getItem('csrfToken'));
 		        				req.setRequestHeader(csrfToken.headerName, csrfToken.token);
@@ -294,7 +294,7 @@
 				        	
 				        	this.makeGridObj.setConfig({
 				        		elementId: createPageObj.getElementId('ImngSearchGrid'),
-				        		searchUri: "/igate/logStatistics/dailyList.json",
+				        		searchUri: "/igate/logStatistics/onlineDailyList.json",
 				        		viewMode: "${viewMode}",
 				              	popupResponse: "${popupResponse}",
 				              	popupResponsePosition: "${popupResponsePosition}",
@@ -364,7 +364,7 @@
 									},
 									{
 										name: 'responseTotal',
-										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>',
+										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>' + " (ms)",
 										align: 'right',
 										width: '15%',
 										sortable: true,
@@ -374,7 +374,7 @@
 									},
 									{
 										name: 'responseMax',
-										header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>',
+										header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>' + " (ms)",
 										align: 'right',
 										width: '15%',
 										sortable: true,

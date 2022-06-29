@@ -740,7 +740,8 @@
 			              	isModal : true,
 			              	onClick : function(loadParam) {
 			              		if (!loadParam) return;
-			              		
+				
+			              		localStorage.setItem('searchObj', JSON.stringify({transactionId: loadParam.transactionId}));
 			              		localStorage.setItem('selectedRowTraceLog', JSON.stringify(loadParam));
 			              		
 			              		window.open(location.href);
@@ -802,7 +803,6 @@
 			            });
 			            
 			            if (selectedRowTraceLog) {
-			            	window.vmSearch.search();
 			              	SearchImngObj.load($.param(selectedRowTraceLog));
 			            }
 	

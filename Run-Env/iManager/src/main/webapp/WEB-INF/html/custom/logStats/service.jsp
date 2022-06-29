@@ -92,6 +92,7 @@
 							]							
 						}
 					},	
+					/* 구분 검색조건 제거 - 파일검색 기능 추가시 원복
 					{
 						type: 'select',
 						name: '<fmt:message>igate.logStatistics.classification</fmt:message>',
@@ -104,6 +105,7 @@
 							optionText: 'option.propertyValue',
 						}
 					},
+					*/
 					{
 						type: "modal",
 						mappingDataInfo: {
@@ -130,9 +132,7 @@
 			
 			createPageObj.mainConstructor();
 			
-			$('.empty').after($('#summaryTemplate'));
-			$('#summaryTemplate').removeAttr('id').show();
-			
+			$('.empty').after($('#summaryTemplate'));			
 			
 			(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.SearchType', orderByKey: true }, function(searchTypeResult) {
 				(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.service.statsDataTypes', orderByKey: true }, function(statsDataTypesResult) {
@@ -162,6 +162,8 @@
 				    			setLengthCnt.call(this, info);
 				    		},				    		
 							search: function() {
+								$('#summaryTemplate').removeAttr('id').show();
+								
 								vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 								
 								vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
@@ -285,7 +287,7 @@
 
 		                        var req = new XMLHttpRequest();
 		                        
-		                        req.open("POST", "${prefixUrl}/igate/logStatistics/generateExcelService.json", true);
+		                        req.open("POST", "${prefixUrl}/igate/logStatistics/generateExcelOnlineService.json", true);
 
 		        				var csrfToken = JSON.parse(localStorage.getItem('csrfToken'));
 		        				req.setRequestHeader(csrfToken.headerName, csrfToken.token);
@@ -324,7 +326,7 @@
 				        	
 				        	this.makeGridObj.setConfig({
 				        		elementId: createPageObj.getElementId('ImngSearchGrid'),
-				        		searchUri: "/igate/logStatistics/serviceList.json",
+				        		searchUri: "/igate/logStatistics/onlineServiceList.json",
 				        		viewMode: "${viewMode}",
 				              	popupResponse: "${popupResponse}",
 				              	popupResponsePosition: "${popupResponsePosition}",
@@ -340,18 +342,6 @@
 										width: '20%',
 										sortable: true,
 									},
-									{
-										name: 'pk.statsType',
-										header: '<fmt:message>igate.logStatistics.classification</fmt:message>',
-										align: 'center',
-										width: '20%',
-										formatter: function(info) {
-											if ('I' === info.value) return '<fmt:message>igate.logStatistics.statsType.1.onlineInterface</fmt:message>';
-											else if ('O' === info.value) return '<fmt:message>igate.logStatistics.statsType.2.onlineService</fmt:message>';
-											else if ('R' === info.value) return '<fmt:message>igate.logStatistics.statsType.4.fileInterface</fmt:message>';
-											else if ('S' === info.value) return '<fmt:message>igate.logStatistics.statsType.5.fileService</fmt:message>';
-										},
-									},	
 									{
 										name: 'pk.interfaceServiceId',
 										header: '<fmt:message>igate.service</fmt:message>' + ' ' + '<fmt:message>head.id</fmt:message>',
@@ -400,7 +390,7 @@
 									},
 									{
 										name: 'responseTotal',
-										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>',
+										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>' + " (ms)",
 										align: 'right',
 										width: '15%',
 										sortable: true,
@@ -410,7 +400,7 @@
 									},
 									{
 										name: 'responseMax',
-										header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>',
+										header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>' + " (ms)",
 										align: 'right',
 										width: '15%',
 										sortable: true,

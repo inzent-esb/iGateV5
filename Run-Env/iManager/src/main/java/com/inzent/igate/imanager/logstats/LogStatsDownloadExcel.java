@@ -61,18 +61,25 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   @Override
   public void downloadStats(HttpServletRequest request, HttpServletResponse response, String type, LogStats logStats, List<LogStats> logStatsList) throws Exception
   {
-    StringBuffer sb = new StringBuffer().append(WordUtils.capitalize(type)).append('_').append(getStatsTypeName(logStats)).append("_TranStats_") ;
-
+    StringBuffer sb = new StringBuffer().append(WordUtils.capitalize(type)).append('_').append(getStatsTypeName(type, logStats)).append("_TranStats_") ;
+    boolean isDB = false;
+    
     switch (type)
     {
-    case LogStatsRepository.ADAPTER :
+    case LogStatsRepository.ONLINE_ADAPTER :
+    case LogStatsRepository.DB_ADAPTER :
+    case LogStatsRepository.FILE_ADAPTER :	
       if (!StringUtils.isBlank(logStats.getPk().getAdapterId()))
         sb.append('_').append(logStats.getPk().getAdapterId()) ;
       break ;
 
-    case LogStatsRepository.INTERFACE :
-    case LogStatsRepository.SERVICE :
-      if (!StringUtils.isBlank(logStats.getPk().getInterfaceServiceId()))
+    case LogStatsRepository.ONLINE_INTERFACE :
+    case LogStatsRepository.ONLINE_SERVICE :
+    case LogStatsRepository.DB_INTERFACE :
+    case LogStatsRepository.DB_SERVICE :
+    case LogStatsRepository.FILE_INTERFACE :
+    case LogStatsRepository.FILE_SERVICE :
+    	if (!StringUtils.isBlank(logStats.getPk().getInterfaceServiceId()))
         sb.append('_').append(logStats.getPk().getInterfaceServiceId()) ;
       break ;
     }
@@ -85,8 +92,21 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate") ;
     response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20")) ;
     response.setContentType("application/octet-stream") ;
+    
+    switch(type)
+    {
+    	case LogStatsRepository.DB_DAILY :
+    	case LogStatsRepository.DB_ADAPTER :
+    	case LogStatsRepository.DB_INTERFACE :
+    	case LogStatsRepository.DB_SERVICE :
+    		generateDownloadDB(response.getOutputStream(), type, request.getServletContext().getRealPath("/template/LogsStats" + WordUtils.capitalize(type) + ".xlsx"), logStats, logStatsList) ;    	    	
+        
+        break ;
+        default:
+        	generateDownload(response.getOutputStream(), type, request.getServletContext().getRealPath("/template/LogsStats" + WordUtils.capitalize(type) + ".xlsx"), logStats, logStatsList) ;    	
+        break;
+    }
 
-    generateDownload(response.getOutputStream(), type, request.getServletContext().getRealPath("/template/LogsStats" + WordUtils.capitalize(type) + ".xlsx"), logStats, logStatsList) ;
 
     response.flushBuffer() ;
   }
@@ -108,7 +128,14 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       workbook = WorkbookFactory.create(fileInputStream) ;
     }
 
-    boolean typeFlag = !Objects.equals(type, LogStatsRepository.DAILY) ;
+    boolean typeFlag = false;
+    switch(type)
+    {
+    	case LogStatsRepository.ONLINE_ADAPTER:
+    	case LogStatsRepository.FILE_ADAPTER:
+    		typeFlag = true;
+    		break;
+    }
     Row row = null ;
     Cell cell = null ;
     String values = null ;
@@ -134,32 +161,46 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     cell.setCellStyle(cellStyle_Base) ;
     cell.setCellValue(values) ;
 
-    // 구분
-    values = getStatsTypeName(logStats) ;
-    row = writeSheet.getRow(4) ;
-    cell = row.createCell(1) ;
-    cell.setCellStyle(cellStyle_Base) ;
-    cell.setCellValue(values) ;
-
+    int nextCell = 1;
+    switch (type)
+    {
+    case LogStatsRepository.ONLINE_DAILY:
+    case LogStatsRepository.ONLINE_ADAPTER :
+    case LogStatsRepository.FILE_DAILY:
+    case LogStatsRepository.FILE_ADAPTER :
+      // 구분
+      values = getStatsTypeName(type, logStats) ;
+      row = writeSheet.getRow(4) ;
+      cell = row.createCell(nextCell) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      nextCell += 2;
+      break ;
+    }
+    
     // 조회타입
     values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
     row = writeSheet.getRow(4) ;
-    cell = row.createCell(3) ;
+    cell = row.createCell(nextCell) ;
     cell.setCellStyle(cellStyle_Base) ;
     cell.setCellValue(values) ;
-
+    nextCell+=2;
+    
     switch (type)
     {
-    case LogStatsRepository.ADAPTER :
+    case LogStatsRepository.ONLINE_ADAPTER :
+    case LogStatsRepository.FILE_ADAPTER :
       values = logStats.getPk().getAdapterId() ;
-      cell = row.createCell(5) ;
+      cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       break ;
-    case LogStatsRepository.INTERFACE :
-    case LogStatsRepository.SERVICE :
+    case LogStatsRepository.ONLINE_INTERFACE :
+    case LogStatsRepository.ONLINE_SERVICE :
+    case LogStatsRepository.FILE_INTERFACE :
+    case LogStatsRepository.FILE_SERVICE :
       values = logStats.getPk().getInterfaceServiceId() ;
-      cell = row.createCell(5) ;
+      cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       break ;
@@ -177,22 +218,33 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
-      // statsType
-      values = getStatsTypeName(logStats2) ;
-      cell = row.createCell(c++) ;
-      cell.setCellStyle(cellStyle_Base) ;
-      cell.setCellValue(values) ;
 
       switch (type)
       {
-      case LogStatsRepository.ADAPTER :
+      case LogStatsRepository.ONLINE_DAILY :
+      case LogStatsRepository.FILE_DAILY :
+        values = getStatsTypeName(type, logStats2) ;
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+    	
+    	break;  
+      case LogStatsRepository.ONLINE_ADAPTER :
+      case LogStatsRepository.FILE_ADAPTER :
+        values = getStatsTypeName(type, logStats2) ;
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+
         values = logStats2.getPk().getAdapterId() ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
         break ;
-      case LogStatsRepository.INTERFACE :
-      case LogStatsRepository.SERVICE :
+      case LogStatsRepository.ONLINE_INTERFACE :
+      case LogStatsRepository.ONLINE_SERVICE :
+      case LogStatsRepository.FILE_INTERFACE :
+      case LogStatsRepository.FILE_SERVICE :
         values = logStats2.getPk().getInterfaceServiceId() ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
@@ -220,7 +272,8 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
-      // 평균 처리 시간
+
+  	  // 평균 처리 시간
       values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseTotal())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
@@ -230,7 +283,27 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
+		
+      switch (type)
+      {
+        case LogStatsRepository.FILE_DAILY : 
+        case LogStatsRepository.FILE_ADAPTER :
+        case LogStatsRepository.FILE_INTERFACE :
+        case LogStatsRepository.FILE_SERVICE :
+          // 평균 파일 크기
+          values = CommonTools.numberWithComma(String.valueOf(getFileSize(logStats2.getFileSizeTotal()))) ;
+          cell = row.createCell(c++) ;
+          cell.setCellStyle(cellStyle_Base) ;
+          cell.setCellValue(values) ;
+          // 최대 파일 크기
+          values = CommonTools.numberWithComma(String.valueOf(getFileSize(logStats2.getFileSizeMax()))) ;
+          cell = row.createCell(c++) ;
+          cell.setCellStyle(cellStyle_Base) ;
+          cell.setCellValue(values) ;
+    	 break;
 
+      }
+      
       requestSum += logStats2.getRequestCount() ;
       successSum += logStats2.getSuccessCount() ;
       exceptionSum += logStats2.getExceptionCount() ;
@@ -276,6 +349,254 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
 
     workbook.write(outputStream) ;
   }
+  
+  /**
+   * DB Excel 파일 생성
+   * @param request
+   * @param logStats
+   * @param logStatsList
+   * @return
+   * @author myj, 2022. 6. 14.
+   * @throws Exception 
+   */
+  protected void generateDownloadDB(OutputStream outputStream, String type, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
+  {
+    Workbook workbook ;
+    try (FileInputStream fileInputStream = new FileInputStream(templateFile))
+    {
+      workbook = WorkbookFactory.create(fileInputStream) ;
+    }
+
+    boolean typeFlag = Objects.equals(type, LogStatsRepository.DB_ADAPTER) ;
+    Row row = null ;
+    Cell cell = null ;
+    String values = null ;
+    String[] valuseList = null ;
+
+    Sheet writeSheet = workbook.getSheetAt(0) ;
+
+    // Cell 스타일 지정.
+    CellStyle cellStyle_Base = getBaseCellStyle(workbook) ;
+    CellStyle cellStyle_Info = getInfoCellStyle(workbook) ;
+
+    // 조회 일자 from
+    valuseList = getDateTimeFormat(logStats) ;
+    values = valuseList[0] ;
+    row = writeSheet.getRow(3) ;
+    cell = row.createCell(1) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    // 조회 일자 to
+    values = valuseList[1] ;
+    row = writeSheet.getRow(3) ;
+    cell = row.createCell(3) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+
+    int nextCell = 1;
+    switch (type)
+    {
+    case LogStatsRepository.DB_DAILY:
+    case LogStatsRepository.DB_ADAPTER :
+      // 구분
+      values = getStatsTypeName(type, logStats) ;
+      row = writeSheet.getRow(4) ;
+      cell = row.createCell(1) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      nextCell += 2;
+      break ;
+    }
+
+    // 조회타입
+    values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
+    row = writeSheet.getRow(4) ;
+    cell = row.createCell(nextCell) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    nextCell += 2;
+
+    switch (type)
+    {
+    case LogStatsRepository.DB_ADAPTER :
+      values = logStats.getPk().getAdapterId() ;
+      cell = row.createCell(nextCell) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      break ;
+    case LogStatsRepository.DB_INTERFACE :
+    case LogStatsRepository.DB_SERVICE :
+      values = logStats.getPk().getInterfaceServiceId() ;
+      cell = row.createCell(nextCell) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      break ;
+    }
+
+	// 조회리스트 입력
+    long requestSum = 0, successSum = 0, exceptionSum = 0, msgSuccessSum = 0, msgExceptionSum = 0, dbRequestSum = 0, dbSuccessSum = 0, dbExceptionSum = 0 ;
+    int i = 7 ;
+    for (LogStats logStats2 : logStatsList)
+    {
+      row = writeSheet.createRow(i) ;
+      int c = 0 ;
+      // logDateTime
+      values = logStats2.getPk().getLogDateTime() ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+
+      switch (type)
+      {
+      case LogStatsRepository.DB_DAILY:
+        values = getStatsTypeName(type, logStats2) ;
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+        
+        break;
+      case LogStatsRepository.DB_ADAPTER :
+        values = getStatsTypeName(type, logStats2) ;
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+          
+    	values = logStats2.getPk().getAdapterId() ;
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+        break ;
+      case LogStatsRepository.DB_INTERFACE :
+      case LogStatsRepository.DB_SERVICE :
+        values = logStats2.getPk().getInterfaceServiceId() ;
+        cell = row.createCell(c++) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+        break ;
+      }
+
+      // request
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getRequestCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      // success
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getSuccessCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      // exception
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getExceptionCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      
+      // message
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getMessageSuccessCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getMessageExceptionCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      
+      // data row
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getDbRequestRowCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getDbSuccessRowCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getDbExceptionRowCount())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      
+      // 평균 처리 시간
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseTotal())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+      // 최대 처리 시간
+      values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseMax())) ;
+      cell = row.createCell(c++) ;
+      cell.setCellStyle(cellStyle_Base) ;
+      cell.setCellValue(values) ;
+
+      requestSum += logStats2.getRequestCount() ;
+      successSum += logStats2.getSuccessCount() ;
+      exceptionSum += logStats2.getExceptionCount() ;
+      msgSuccessSum += logStats2.getMessageSuccessCount();
+      msgExceptionSum += logStats2.getMessageExceptionCount();
+      dbRequestSum += logStats2.getDbRequestRowCount();
+      dbSuccessSum += logStats2.getDbSuccessRowCount();
+      dbExceptionSum += logStats2.getDbExceptionRowCount();
+      
+      i++ ;
+    }
+    // 합계
+    row = writeSheet.createRow(i) ;
+    writeSheet.addMergedRegion(new CellRangeAddress(i, i, 0, typeFlag ? 2 : 1)) ;
+
+    values = MessageGenerator.getMessage("head.total", "Total") ;
+    cell = row.createCell(0) ;
+    cell.setCellStyle(cellStyle_Info) ;
+    cell.setCellValue(values) ;
+    cell = row.createCell(1) ;
+    cell.setCellStyle(cellStyle_Info) ;
+    cell = row.createCell(2) ;
+    cell.setCellStyle(cellStyle_Info) ;
+
+    i = typeFlag ? 3 : 2 ;
+
+    // requestSum
+    values = CommonTools.numberWithComma(Long.toString(requestSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    // successSum
+    values = CommonTools.numberWithComma(Long.toString(successSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    // exceptionSum
+    values = CommonTools.numberWithComma(Long.toString(exceptionSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    
+    //msg sum
+    values = CommonTools.numberWithComma(Long.toString(msgSuccessSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    values = CommonTools.numberWithComma(Long.toString(msgExceptionSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+
+    //db sum
+    values = CommonTools.numberWithComma(Long.toString(dbRequestSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    values = CommonTools.numberWithComma(Long.toString(dbSuccessSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    values = CommonTools.numberWithComma(Long.toString(dbExceptionSum)) ;
+    cell = row.createCell(i++) ;
+    cell.setCellStyle(cellStyle_Base) ;
+    cell.setCellValue(values) ;
+    
+    workbook.write(outputStream) ;
+  }
 
   public String[] getDateTimeFormat(LogStats entity)
   {
@@ -292,20 +613,14 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     }
   }
 
-  public String getStatsTypeName(LogStats entity)
+  public String getStatsTypeName(String type, LogStats entity)
   {
     switch (entity.getPk().getStatsType())
     {
-    case LogStatsRepository.STATSDATATYPE_ONLINE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.0.online", "Online") ;
-
-    case LogStatsRepository.STATSDATATYPE_FILE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.3.file", "File") ;
-
-    case LogStatsRepository.STATSDATATYPE_ONLINEINTERFACE :
+    case LogStatsRepository.STATSDATATYPE_ONLINE_INTERFACE :
       return MessageGenerator.getMessage("igate.logStatistics.statsType.1.onlineInterface", "Online Interface") ;
 
-    case LogStatsRepository.STATSDATATYPE_ONLINESERVICE :
+    case LogStatsRepository.STATSDATATYPE_ONLINE_SERVICE :
       return MessageGenerator.getMessage("igate.logStatistics.statsType.2.onlineService", "Online Service") ;
 
     case LogStatsRepository.STATSDATATYPE_FILE_INTERFACE :
@@ -314,7 +629,34 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     case LogStatsRepository.STATSDATATYPE_FILE_SERVICE :
       return MessageGenerator.getMessage("igate.logStatistics.statsType.5.fileService", "File Service") ;
 
+    case LogStatsRepository.STATSDATATYPE_DB_INTERFACE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.7.dbInterface", "DB Interface") ;
+
+    case LogStatsRepository.STATSDATATYPE_DB_SERVICE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.8.dbService", "DB Service") ;
+
     default :
+      switch (type)
+      {
+      case LogStatsRepository.ONLINE_DAILY :
+      case LogStatsRepository.ONLINE_ADAPTER :
+      case LogStatsRepository.ONLINE_INTERFACE :
+      case LogStatsRepository.ONLINE_SERVICE :
+        return MessageGenerator.getMessage("igate.logStatistics.statsType.0.online", "Online") ;
+
+      case LogStatsRepository.FILE_DAILY :
+      case LogStatsRepository.FILE_ADAPTER :
+      case LogStatsRepository.FILE_INTERFACE :
+      case LogStatsRepository.FILE_SERVICE :
+        return MessageGenerator.getMessage("igate.logStatistics.statsType.3.file", "File") ;
+
+      case LogStatsRepository.DB_DAILY :
+      case LogStatsRepository.DB_ADAPTER :
+      case LogStatsRepository.DB_INTERFACE :
+      case LogStatsRepository.DB_SERVICE :
+        return MessageGenerator.getMessage("igate.logStatistics.statsType.6.db", "DB") ;
+      }
+
       return MessageGenerator.getMessage("head.all", "All") ;
     }
   }
@@ -395,5 +737,17 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     cellStyle.setFillForegroundColor(new XSSFColor(new byte[] { (byte) 242, (byte) 242, (byte) 242 }, null)) ;
     cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND) ;
     return cellStyle ;
+  }
+  
+  public long getFileSize(long fileSize)
+  {
+	  long rtn = 0;
+	  
+	  if(fileSize > 0) {
+		  rtn = Math.round(fileSize / 1024.0);
+		  if(rtn <= 0) rtn = 1;
+	  }
+	  
+	  return rtn;
   }
 }

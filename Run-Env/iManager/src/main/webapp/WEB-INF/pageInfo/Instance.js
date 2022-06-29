@@ -148,7 +148,7 @@ const info = {
 									url: '/common/property/properties.json',
 									params: {
 										propertyId: 'List.LogLevel',
-										orderByKey: true
+										orderByKey: false
 									},
 									optionListName: 'instanceLoglevels',
 									optionFor: 'option in instanceLoglevels',

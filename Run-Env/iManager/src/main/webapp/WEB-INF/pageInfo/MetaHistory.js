@@ -7,7 +7,7 @@ const info = {
 			{ type: 'singleDaterange', 	vModel: 'modifyDateTimeFrom',		label: this.$t('head.from'), 	dateRangeType : 'from'},
 			{ type: 'singleDaterange', 	vModel: 'modifyDateTimeTo',			label: this.$t('head.to'), 	dateRangeType : 'to'},
 			{ type: 'text', 			vModel: 'entityName',				label: this.$t('common.metaHistory.entityName'),		placeholder: this.$t('head.searchName'), regExpType: 'name' },
-			{ type: 'text', 			vModel: 'entityId',					label: this.$t('common.metaHistory.entityId'),			placeholder: this.$t('head.searchName'), regExpType: 'searchId' },
+			{ type: 'text', 			vModel: 'entityId',					label: this.$t('common.metaHistory.entityId'),			placeholder: this.$t('head.searchId'), regExpType: 'searchId' },
 			{
 				type: 'select',
 				vModel: 'modifyType',
@@ -156,28 +156,9 @@ const info = {
 				],
 			},
 			{
-				type: 'basic',
+				type: 'bundle',
 				label: 'Modified Contents',
-				content: [
-					[
-						[
-							{
-								type: 'textarea',
-								vModel: 'beforeDataString',
-								label: this.$t('common.metaHistory.before'),
-								height: '300px',
-							},
-						],
-						[
-							{
-								type: 'textarea',
-								vModel: 'afterDataString',
-								label: this.$t('common.metaHistory.after'),
-								height: '300px',
-							},
-						],
-					],
-				],
+				url: '/metaHistory/Modifed',
 			},
 		],
 	},

@@ -130,12 +130,10 @@
 			
 			createPageObj.mainConstructor();
 			
-			$('.empty').after($('#summaryTemplate'));
-			$('#summaryTemplate').removeAttr('id').show();
-			
+			$('.empty').after($('#summaryTemplate'));			
 			
 			(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.SearchType', orderByKey: true }, function(searchTypeResult) {
-				(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.statsDataTypes', orderByKey: true }, function(statsDataTypesResult) {
+				(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.online.statsDataTypes', orderByKey: true }, function(statsDataTypesResult) {
 					window.vmSearch = new Vue({
 						el: '#' + createPageObj.getElementId('ImngSearchObject'),
 				    	data: {
@@ -162,6 +160,8 @@
 				    			setLengthCnt.call(this, info);
 				    		},				    		
 							search: function() {
+								$('#summaryTemplate').removeAttr('id').show();
+								
 								vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 								
 								vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
@@ -285,7 +285,7 @@
 
 		                        var req = new XMLHttpRequest();
 		                        
-		                        req.open("POST", "${prefixUrl}/igate/logStatistics/generateExcelAdapter.json", true);
+		                        req.open("POST", "${prefixUrl}/igate/logStatistics/generateExcelOnlineAdapter.json", true);
 
 		        				var csrfToken = JSON.parse(localStorage.getItem('csrfToken'));
 		        				req.setRequestHeader(csrfToken.headerName, csrfToken.token);
@@ -299,7 +299,7 @@
 		                        	window.$stopSpinner();
 		                        	
 		                        	var blob = req.response;
-		                        	var file_name = "<fmt:message>igate.logStatistics.dailyStatistics</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
+		                        	var file_name = "<fmt:message>igate.logStatistics.adapterStatistics</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
 
 		                        	if (blob.size <= 0){
 		                        		window._alert({type: 'warn', message: "<fmt:message>head.fail.notice</fmt:message>"});
@@ -324,7 +324,7 @@
 				        	
 				        	this.makeGridObj.setConfig({
 				        		elementId: createPageObj.getElementId('ImngSearchGrid'),
-				        		searchUri: "/igate/logStatistics/adapterList.json",
+				        		searchUri: "/igate/logStatistics/onlineAdapterList.json",
 				        		viewMode: "${viewMode}",
 				              	popupResponse: "${popupResponse}",
 				              	popupResponsePosition: "${popupResponsePosition}",
@@ -400,7 +400,7 @@
 									},
 									{
 										name: 'responseTotal',
-										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>',
+										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>' + " (ms)",
 										align: 'right',
 										width: '15%',
 										sortable: true,
@@ -410,7 +410,7 @@
 									},
 									{
 										name: 'responseMax',
-										header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>',
+										header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>' + " (ms)",
 										align: 'right',
 										width: '15%',
 										sortable: true,

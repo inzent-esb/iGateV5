@@ -10,6 +10,6 @@ var constants = {
 		ip: { maxLength: 30, regExp: '[^0-9.]' },
 		className: { maxLength: 200, regExp: '' },
 		cron: { maxLength: 30, regExp: '[^A-Za-z0-9*,#-? ]'},
-		default: { maxLength: 30, regExp: '' },
+		default: { maxLength: 100, regExp: '' },
 	}
 };

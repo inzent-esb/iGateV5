@@ -7,6 +7,7 @@ import java.io.IOException ;
 import java.io.InputStream ;
 import java.io.OutputStreamWriter ;
 import java.text.SimpleDateFormat ;
+import java.util.Date;
 import java.util.HashMap ;
 import java.util.LinkedList ;
 import java.util.List ;
@@ -354,7 +355,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     // ÀÛ¼ºÀÏ
     cell = row.getCell(17) ;
     cell.setCellStyle(cellStyle) ;
-    cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:MM:ss").format(record.getUpdateTimestamp())) ;
+    cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(null != record.getUpdateTimestamp() ? record.getUpdateTimestamp() : new Date(System.currentTimeMillis()) )) ;
 
     exportExcelSheetRows(workbook, writeSheet, record, 4, 0) ;
   }

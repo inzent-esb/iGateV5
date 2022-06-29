@@ -307,7 +307,7 @@ td.invisible *{visibility: hidden;pointer-events: none}
 .modal-footer>*{margin: 0 0 0 .5rem}
 .modal-dialog-alert .modal-body{margin: 1rem 0;text-align: center}
 .modal-dialog-alert .modal-body>[class*=iconb]{width: 4rem;height: 4rem;display: block;margin: 0 auto 1rem}
-.panel{display: none;position: fixed;left: 0;right: 0;background: #fff;z-index: 49;transition: all .2s;pointer-events: none}
+.panel{display: none;position: fixed;left: 0;right: 0;background: #fff;z-index: 100;transition: all .2s;pointer-events: none}
 .panel-dialog{height: 100vh}
 .panel-bottom{bottom: 0;transform: translate(0,20vh);opacity: 0;background: none;box-shadow: none}
 .panel-bottom .panel-dialog{display: flex;width: 100%;align-items: flex-end}

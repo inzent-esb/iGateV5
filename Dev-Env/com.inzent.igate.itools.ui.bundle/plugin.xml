@@ -444,22 +444,8 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="com.inzent.igate.itools.newWizards.category"
-            name="iGate">
+            name="[iGate]">
       </category>
-      <wizard
-            category="com.inzent.igate.itools.newWizards.category"
-            class="com.inzent.igate.itools.interfaces.wizards.InterfaceNewWizard"
-            icon="platform:/plugin/com.inzent.igate.itools.interface/icons/obj16/interface.png"
-            id="com.inzent.igate.itools.interfaces.wizards.InterfaceNewWizard"
-            name="Interface">
-      </wizard>
-      <wizard
-            category="com.inzent.igate.itools.newWizards.category"
-            class="com.inzent.igate.itools.activity.wizards.ActivityNewWizard"
-            icon="platform:/plugin/com.inzent.igate.itools.activity/icons/obj16/activity.png"
-            id="com.inzent.igate.itools.activity.wizards.ActivityNewWizard"
-            name="Activity">
-      </wizard>
       <wizard
             category="com.inzent.igate.itools.newWizards.category"
             class="com.inzent.igate.itools.record.wizards.RecordNewWizard"
@@ -476,17 +462,38 @@
       </wizard>
       <wizard
             category="com.inzent.igate.itools.newWizards.category"
-            class="com.inzent.igate.itools.operation.wizards.OperationNewWizard"
-            icon="platform:/plugin/com.inzent.igate.itools.operation/icons/obj16/operation.png"
-            id="com.inzent.igate.itools.operation.wizards.OperationNewWizard"
-            name="Operation">
-      </wizard>
-      <wizard
-            category="com.inzent.igate.itools.newWizards.category"
             class="com.inzent.igate.itools.service.wizards.ServiceNewWizard"
             icon="platform:/plugin/com.inzent.igate.itools.service/icons/obj16/service.png"
             id="com.inzent.igate.itools.service.wizards.ServiceNewWizard"
             name="Service">
+      </wizard>
+      <wizard
+            category="com.inzent.igate.itools.newWizards.category"
+            class="com.inzent.igate.itools.interfaces.wizards.InterfaceNewWizard"
+            icon="platform:/plugin/com.inzent.igate.itools.interface/icons/obj16/interface.png"
+            id="com.inzent.igate.itools.interfaces.wizards.InterfaceNewWizard"
+            name="Interface">
+      </wizard>
+      <wizard
+            category="com.inzent.igate.itools.newWizards.category"
+            class="com.inzent.igate.itools.query.wizards.QueryNewWizard"
+            icon="platform:/plugin/com.inzent.igate.itools.query/icons/obj16/query.png"
+            id="com.inzent.igate.itools.query.wizards.QueryNewWizard"
+            name="Query">
+      </wizard>
+      <wizard
+            category="com.inzent.igate.itools.newWizards.category"
+            class="com.inzent.igate.itools.activity.wizards.ActivityNewWizard"
+            icon="platform:/plugin/com.inzent.igate.itools.activity/icons/obj16/activity.png"
+            id="com.inzent.igate.itools.activity.wizards.ActivityNewWizard"
+            name="Activity">
+      </wizard>
+      <wizard
+            category="com.inzent.igate.itools.newWizards.category"
+            class="com.inzent.igate.itools.operation.wizards.OperationNewWizard"
+            icon="platform:/plugin/com.inzent.igate.itools.operation/icons/obj16/operation.png"
+            id="com.inzent.igate.itools.operation.wizards.OperationNewWizard"
+            name="Operation">
       </wizard>
       <wizard
             category="com.inzent.igate.itools.newWizards.category"
@@ -508,13 +515,6 @@
             icon="platform:/plugin/com.inzent.igate.itools.interface/icons/obj16/testSuite.png"
             id="com.inzent.igate.itools.interfaces.wizards.TestSuiteNewWizard"
             name="TestSuite">
-      </wizard>
-      <wizard
-            category="com.inzent.igate.itools.newWizards.category"
-            class="com.inzent.igate.itools.query.wizards.QueryNewWizard"
-            icon="platform:/plugin/com.inzent.igate.itools.query/icons/obj16/query.png"
-            id="com.inzent.igate.itools.query.wizards.QueryNewWizard"
-            name="Query">
       </wizard>
    </extension>
    <extension
