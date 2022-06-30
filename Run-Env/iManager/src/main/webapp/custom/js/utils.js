@@ -101,3 +101,14 @@ function removeStorage() {
 	sessionStorage.removeItem('selectedMenuPathIdList');
 	sessionStorage.removeItem('X-IMANAGER-WINDOW');
 }
+
+function getFileSize(fileSize){
+	var rtn = 0;
+	  
+	if(fileSize > 0) {
+		rtn = Math.round( fileSize / 1024 );
+		if(rtn <= 0) rtn = 1;
+	}
+	  
+	return rtn;
+}
