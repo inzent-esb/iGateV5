@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Operation name="Multi-Row Table Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.table"> 
+  <Variables> 
+    <Variable type="com.inzent.igate.repository.meta.InterfaceService" name="interfaceService" desc="" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.adapter.AdapterParameter" name="TargetAdapterParameter" desc="" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="java.lang.Object" name="row" desc="" isParameter="false"> 
+      <Value><![CDATA[]]></Value>  
+      <ConstantExpression><![CDATA[]]></ConstantExpression> 
+    </Variable>  
+    <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="Adapter Parameter" isParameter="true"/> 
+  </Variables>  
+  <Activities> 
+    <Start uniqueKey="0000" index="0" desc="Start" xPos="188" yPos="45"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="Adapter Parameter" from="Variable" dynamic="false"> 
+        <Value><![CDATA[adapterParameter]]></Value> 
+      </Parameter> 
+    </Start>  
+    <End uniqueKey="0001" index="1" desc="End" xPos="378" yPos="575"/>  
+    <ForEach width="282" height="201" uniqueKey="000g" index="8" desc="ForEach" xPos="81" yPos="114"> 
+      <Activities> 
+        <Activity uniqueKey="0004" index="1" desc="Mapping TableToTable" id="MappingTableToTable" xPos="60" yPos="50"> 
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="Target AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[TargetAdapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="Source AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[adapterParameter]]></Value>
+          </Parameter>
+          <Parameter type="com.inzent.igate.repository.meta.InterfaceService" desc="Interface-Service Information" from="Variable" dynamic="false">
+            <Value><![CDATA[interfaceService]]></Value>
+          </Parameter>
+          <Parameter type="java.lang.Object" desc="Source Object" from="Method" dynamic="false">
+            <Value><![CDATA[adapterParameter.getRequestData()]]></Value>
+            <MethodExpression variableName="adapterParameter">
+              <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="getRequestData" argumentTypes="" argumentType="java.lang.Object"/>
+            </MethodExpression>
+          </Parameter>
+        </Activity>  
+        <Activity uniqueKey="0006" index="2" desc="Execute Batch" id="ExecuteBatch" xPos="83" yPos="113"> 
+          <Parameter type="java.lang.String" desc="Service ID" from="Method" dynamic="false">
+            <Value><![CDATA[interfaceService.getPk().getServiceId()]]></Value>
+            <MethodExpression variableName="interfaceService">
+              <FunctionExpression className="com.inzent.igate.repository.meta.InterfaceService" methodName="getPk" argumentTypes="" argumentType="com.inzent.igate.repository.meta.InterfaceServicePK"/>
+              <FunctionExpression className="com.inzent.igate.repository.meta.InterfaceServicePK" methodName="getServiceId" argumentTypes="" argumentType="java.lang.String"/>
+            </MethodExpression>
+          </Parameter>
+          <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+            <Value><![CDATA[TargetAdapterParameter]]></Value>
+          </Parameter>
+        </Activity> 
+      </Activities>  
+      <Transitions> 
+        <Transition from="start" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="1" to="2" order="0" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="2" to="end" order="0" fromTerminal="bottom" toTerminal="bottom"> 
+          <bendPoints/> 
+        </Transition> 
+      </Transitions>  
+      <Condition/>  
+      <Parameter type="java.lang.Iterable" desc="Collection Varable" from="Method" dynamic="false"> 
+        <Value><![CDATA[adapterParameter.getInterface().getInterfaceServices()]]></Value>  
+        <MethodExpression variableName="adapterParameter"> 
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="getInterface" argumentTypes="" argumentType="com.inzent.igate.repository.meta.Interface"/>  
+          <FunctionExpression className="com.inzent.igate.repository.meta.Interface" methodName="getInterfaceServices" argumentTypes="" argumentType="java.util.List"/> 
+        </MethodExpression> 
+      </Parameter>  
+      <Parameter type="java.lang.Object" desc="item Variable" from="Variable" dynamic="false"> 
+        <Value><![CDATA[interfaceService]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="Index Variable" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="Start" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="End" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter>  
+      <Parameter type="java.lang.Number" desc="Step" from="Variable" dynamic="false"> 
+        <Value><![CDATA[null]]></Value> 
+      </Parameter> 
+    </ForEach>  
+    <Activity uniqueKey="000h" index="9" desc="Has a result column" id="HasResult" xPos="78" yPos="441"/>  
+    <Activity uniqueKey="0008" index="10" desc="Update Result" id="UpdateResult" xPos="91" yPos="520"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Object" desc="Response Object" from="Method" dynamic="false">
+        <Value><![CDATA[adapterParameter.getRequestData()]]></Value>
+        <MethodExpression variableName="adapterParameter">
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="getRequestData" argumentTypes="" argumentType="java.lang.Object"/>
+        </MethodExpression>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Exception" from="Variable" dynamic="false">
+        <Value><![CDATA[null]]></Value>
+      </Parameter>
+    </Activity>  
+    <Activity uniqueKey="000i" index="11" desc="Has a result column" id="HasResult" xPos="468" yPos="173"/>  
+    <Activity uniqueKey="000c" index="12" desc="Update Result" id="UpdateResult" xPos="485" yPos="245"> 
+      <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
+        <Value><![CDATA[adapterParameter]]></Value>
+      </Parameter>
+      <Parameter type="java.lang.Object" desc="Response Object" from="Method" dynamic="false">
+        <Value><![CDATA[adapterParameter.getRequestData()]]></Value>
+        <MethodExpression variableName="adapterParameter">
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="getRequestData" argumentTypes="" argumentType="java.lang.Object"/>
+        </MethodExpression>
+      </Parameter>
+      <Parameter type="java.lang.Throwable" desc="Exception" from="Variable" dynamic="false">
+        <Value><![CDATA[throwed]]></Value>
+      </Parameter>
+    </Activity>  
+    <ReThrow uniqueKey="000k" index="13" desc="ReThrow" xPos="669" yPos="241"/>  
+    <FaultHandlers uniqueKey="000l" index="faultHandlers" desc="FaultHandler" xPos="619" yPos="45"> 
+      <CatchAll target="16" desc=""/> 
+    </FaultHandlers>  
+    <Condition uniqueKey="000n" index="15" desc="Condition" xPos="171" yPos="362"> 
+      <When target="1" desc="No Data"> 
+        <JavaExpression><![CDATA[0 == ((com.inzent.igate.message.ValueArray) adapterParameter.getRequestData()).size()]]></JavaExpression> 
+      </When>  
+      <Others target="9" desc="Has Data"/>  
+      <Value><![CDATA[
+// No Data
+if ( 0 == ((com.inzent.igate.message.ValueArray) adapterParameter.getRequestData()).size() ) 
+   return 0;
+// Has Data
+else 
+   return 1;]]></Value> 
+    </Condition>  
+    <Condition uniqueKey="000o" index="16" desc="Condition" xPos="614" yPos="109"> 
+      <When target="13" desc="No Data"> 
+        <JavaExpression><![CDATA[0 == ((com.inzent.igate.message.ValueArray) adapterParameter.getRequestData()).size()]]></JavaExpression> 
+      </When>  
+      <Others target="11" desc="Has Data"/>  
+      <Value><![CDATA[
+// No Data
+if ( 0 == ((com.inzent.igate.message.ValueArray) adapterParameter.getRequestData()).size() ) 
+   return 0;
+// Has Data
+else 
+   return 1;]]></Value> 
+    </Condition>  
+    <Activity uniqueKey="000p" index="17" desc="Save The Exception" id="SaveException" xPos="470" yPos="318"> 
+      <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
+        <Value><![CDATA[throwed]]></Value>
+      </Parameter>
+    </Activity> 
+  </Activities>  
+  <Transitions> 
+    <Transition from="0" to="8" order="1" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="11" to="12" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="11" to="13" order="1" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="9" to="10" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="9" to="1" order="1" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="10" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="8" to="15" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="15" to="1" order="0" desc="No Data" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="15" to="9" order="1" desc="Has Data" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="16" to="13" order="0" desc="No Data" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="16" to="11" order="1" desc="Has Data" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="faultHandlers" to="16" order="0" desc="" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="12" to="17" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="17" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition> 
+  </Transitions> 
+</Operation>

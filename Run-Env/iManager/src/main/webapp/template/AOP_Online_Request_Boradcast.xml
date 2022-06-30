@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Operation name="Broadcast Online-Request" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online">
+<Operation name="Broadcast Online-Request" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online" desc="Broadcast Online-Request">
   <Variables>
     <Variable type="com.inzent.igate.adapter.AdapterParameter" name="adapterParameter" desc="Adapter Parameter" isParameter="true"/>
   </Variables>

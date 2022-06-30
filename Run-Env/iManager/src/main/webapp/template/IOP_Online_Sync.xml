@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Operation name="Synchronous Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online"> 
+<Operation name="Synchronous Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online" desc="Synchronous Interface"> 
   <Variables> 
     <Variable type="com.inzent.igate.message.Record" name="chlReq" desc="interface request" isParameter="false"> 
       <Value><![CDATA[]]></Value>  
