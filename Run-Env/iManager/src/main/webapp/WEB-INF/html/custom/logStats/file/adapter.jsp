@@ -130,9 +130,7 @@
 			
 			createPageObj.mainConstructor();
 			
-			$('.empty').after($('#summaryTemplate'));
-			$('#summaryTemplate').removeAttr('id').show();
-			
+			$('.empty').after($('#summaryTemplate'));			
 			
 			(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.SearchType', orderByKey: true }, function(searchTypeResult) {
 				(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.file.statsDataTypes', orderByKey: true }, function(statsDataTypesResult) {
@@ -162,6 +160,8 @@
 				    			setLengthCnt.call(this, info);
 				    		},				    		
 							search: function() {
+								$('#summaryTemplate').removeAttr('id').show();
+								
 								vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 								
 								vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
