@@ -22,9 +22,9 @@ public class CheckThinHttpServerSession extends ThinHttpServerSession {
 	public boolean isClosing() {
 		
 		if(0 >= keepAliveMax)
-			logger.error("keepAliveMax Closer");
+			logger.error("keepAliveMax isCloser");
 		else
-			logger.error("keepAliveMax Cnt[" + this.keepAliveMax + "]");
+			logger.error("keepAliveMax SessionId[" + this.getId() + " Cnt[" + this.keepAliveMax + "]");
 		
 		return super.isClosing();
 	}
