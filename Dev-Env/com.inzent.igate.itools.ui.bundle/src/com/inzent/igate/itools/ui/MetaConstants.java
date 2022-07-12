@@ -9,21 +9,21 @@ import com.inzent.igate.repository.meta.Field ;
 
 public class MetaConstants
 {
-  public static String MESSAGE_SUMMARYINFO          = "\n\n   ¢Â Total : %d , Success : %d , Fail : %s"; //    ¢Â Total : 10 , Success : 7 , Fail : 3
-  public static String MESSAGE_ENTITY_TYPE          = "\n\n¡¼ %s ¡½";                 //¡¼ Å¸ÀÔ ¡½
+  public static String MESSAGE_SUMMARYINFO          = "\n\n   â—ˆ Total : %d , Success : %d , Fail : %s"; //    â—ˆ Total : 10 , Success : 7 , Fail : 3
+  public static String MESSAGE_ENTITY_TYPE          = "\n\nã€ %s ã€‘";                 //ã€ íƒ€ì… ã€‘
 
   //export
-  public static String MESSAGE_EXPORT_PATH          = "\n ¦¦ Export Path : %s";      // ¦¦ Export Path : °æ·Î
-  public static String MESSAGE_EXPORT_SUCCESS       = "\n   ¢¹ %s.%s : %s";           //   ¢¹id.È®ÀåÀÚ : ¼º°ø
-  public static String MESSAGE_EXPORT_FAIL          = "\n   ¢º %s.%s : %s [ %s ]";    //   ¢ºid.È®ÀåÀÚ : ½ÇÆĞ [¿À·ù³»¿ë]
+  public static String MESSAGE_EXPORT_PATH          = "\n â”” Export Path : %s";      // â”” Export Path : ê²½ë¡œ
+  public static String MESSAGE_EXPORT_SUCCESS       = "\n   â–· %s.%s : %s";           //   â–·id.í™•ì¥ì : ì„±ê³µ
+  public static String MESSAGE_EXPORT_FAIL          = "\n   â–¶ %s.%s : %s [ %s ]";    //   â–¶id.í™•ì¥ì : ì‹¤íŒ¨ [ì˜¤ë¥˜ë‚´ìš©]
   public static String FILE_EXTENDER_EXCEL          = "xlsx";
   public static String FILE_EXTENDER_JSON           = "json";
   public static String FILE_EXTENDER_XML            = "xml";
 
   //import
-  public static String MESSAGE_IMPORT_SUCCESS           = "\n   ¢¹ %s : %s";             //   ¢¹ ÆÄÀÏ¸í : ¼º°ø
-  public static String MESSAGE_IMPORT_FAIL              = "\n   ¢º %s : %s [ %s ]";      //   ¢º ÆÄÀÏ¸í : ½ÇÆĞ [¿À·ù³»¿ë]
-  public static String MESSAGE_IMPORT_FAIL_ENCRYPTION   = "\n   ¢º %s : %s";             //   ¢º ÆÄÀÏ¸í : ¾Ïº¹È£È­ ½ÇÆĞ¸Ş½ÃÁö
+  public static String MESSAGE_IMPORT_SUCCESS           = "\n   â–· %s : %s";             //   â–· íŒŒì¼ëª… : ì„±ê³µ
+  public static String MESSAGE_IMPORT_FAIL              = "\n   â–¶ %s : %s [ %s ]";      //   â–¶ íŒŒì¼ëª… : ì‹¤íŒ¨ [ì˜¤ë¥˜ë‚´ìš©]
+  public static String MESSAGE_IMPORT_FAIL_ENCRYPTION   = "\n   â–¶ %s : %s";             //   â–¶ íŒŒì¼ëª… : ì•”ë³µí˜¸í™” ì‹¤íŒ¨ë©”ì‹œì§€
   public static String MESSAGE_OPEN_EDITOR_INFO         = "\n# %d [ %s ] %s";           //# 1 [ Operation ] AOP_TEST
   public static String FILTER_FILE_EXTENDER_EXCEL1      = "*.xlsx";
   public static String FILTER_FILE_EXTENDER_EXCEL2      = "*.xls";

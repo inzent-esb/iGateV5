@@ -49,13 +49,13 @@ public class RecordExportHandlerImpl implements RecordExportHandler
   @Override
   public void exportRecord(Record record)
   {
-    // ======= ³»º¸³»±â Ã³¸® °¡´É Å¸ÀÔ º°·Î Ã³¸® =======
+    // ======= ë‚´ë³´ë‚´ê¸° ì²˜ë¦¬ ê°€ëŠ¥ íƒ€ì… ë³„ë¡œ ì²˜ë¦¬ =======
     BatchExportDialog dialog = new BatchExportDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()) ;
 
-    // entity Å¸ÀÔ Á¤º¸ ³Ñ±è
+    // entity íƒ€ì… ì •ë³´ ë„˜ê¹€
     dialog.setEntityType(Record.class.getSimpleName()) ;
 
-    // °æ·Î¸¦ ÁöÁ¤ÇÏÁö ¾ÊÀº °æ¿ì Á¾·á
+    // ê²½ë¡œë¥¼ ì§€ì •í•˜ì§€ ì•Šì€ ê²½ìš° ì¢…ë£Œ
     if (BatchExportDialog.OK != dialog.open() || null == dialog.getDirectoryPath())
       return ;
 
@@ -78,13 +78,13 @@ public class RecordExportHandlerImpl implements RecordExportHandler
 
     if (null != resultMap)
     {
-      // °á°ú ¸Ş½ÃÁö Á¶¸³
+      // ê²°ê³¼ ë©”ì‹œì§€ ì¡°ë¦½
       String resulRecordtMessage = String.format(MetaConstants.MESSAGE_ENTITY_TYPE, Record.class.getSimpleName()) ;
       resulRecordtMessage += String.format(MetaConstants.MESSAGE_EXPORT_PATH, selectedPath) ;
       resulRecordtMessage += resultMap.get(ExportImportRecordUtils.MESSAGE) ;
       resulRecordtMessage += String.format(MetaConstants.MESSAGE_SUMMARYINFO, 1, (int) resultMap.get(ExportImportRecordUtils.RESULT_COUNT), 1 - (int) resultMap.get(ExportImportRecordUtils.RESULT_COUNT)) ;
 
-      // ³»º¸³»±â °á°ú ¸ñ·Ï & ³»º¸³»±â·Î ÀúÀåÇÑ ÆÄÀÏÀÇ »óÀ§ Æú´õ¸¦ ¿­°Ú½À´Ï±î? È®ÀÎ ¸Ş½ÃÁö Ã¢
+      // ë‚´ë³´ë‚´ê¸° ê²°ê³¼ ëª©ë¡ & ë‚´ë³´ë‚´ê¸°ë¡œ ì €ì¥í•œ íŒŒì¼ì˜ ìƒìœ„ í´ë”ë¥¼ ì—´ê² ìŠµë‹ˆê¹Œ? í™•ì¸ ë©”ì‹œì§€ ì°½
       if (LogHandler.openConfirm(UiMessage.INFORMATION_IO_MESSAGE1 + resulRecordtMessage + "\n\n" + UiMessage.INFORMATION_IO_MESSAGE8))
       {
         try

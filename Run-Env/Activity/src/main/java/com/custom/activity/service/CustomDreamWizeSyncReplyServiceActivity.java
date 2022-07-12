@@ -24,15 +24,15 @@ public class CustomDreamWizeSyncReplyServiceActivity extends SyncReplyServiceAct
 
     AdapterParameter adapterParameter = super.makeAdapterParameter(serviceMeta, request) ;
 
-    //HTTP Header¿¡ ¿øÇÏ´Â Header¸¦ ³Ö±â À§ÇÑ Custom ÀÛ¾÷
+    //HTTP Headerì— ì›í•˜ëŠ” Headerë¥¼ ë„£ê¸° ìœ„í•œ Custom ì‘ì—…
 
-    ValueObject valueObject = new ValueObject() ; // RequestData¸¦ header¸¦ Æ÷ÇÔÇÏ±â À§ÇÑ ValueObject·Î º¯°æ 
+    ValueObject valueObject = new ValueObject() ; // RequestDataë¥¼ headerë¥¼ í¬í•¨í•˜ê¸° ìœ„í•œ ValueObjectë¡œ ë³€ê²½ 
     
     byte[] bodyValueArr = (byte[]) adapterParameter.getRequestData() ;
 
-    valueObject.put(HttpConstants.BODY, bodyValueArr) ; // ±âÁ¸ RequestData¸¦ Body¿¡ ³Ö¾îÁÜ
+    valueObject.put(HttpConstants.BODY, bodyValueArr) ; // ê¸°ì¡´ RequestDataë¥¼ Bodyì— ë„£ì–´ì¤Œ
 
-    ValueObject header = new ValueObject(false, true) ; // HTTP Header¸¦ Setting 
+    ValueObject header = new ValueObject(false, true) ; // HTTP Headerë¥¼ Setting 
     
     //Appian-API-Key Setting
     header.put("Appian-API-Key", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ZjAyOGE3MS0xOWU5LTQ5N2YtYWQzOC0zNzFhNTE2NzRhZmIifQ.CAZ5Br769oDFh2jUrI2aScplgfu1DayjL383YqjUL18") ;

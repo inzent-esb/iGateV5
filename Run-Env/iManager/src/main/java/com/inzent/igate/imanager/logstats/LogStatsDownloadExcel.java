@@ -112,7 +112,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   }
 
   /**
-   * Excel ÆÄÀÏ »ı¼º
+   * Excel íŒŒì¼ ìƒì„±
    * @param request
    * @param logStats
    * @param logStatsList
@@ -143,18 +143,18 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
 
     Sheet writeSheet = workbook.getSheetAt(0) ;
 
-    // Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+    // Cell ìŠ¤íƒ€ì¼ ì§€ì •.
     CellStyle cellStyle_Base = getBaseCellStyle(workbook) ;
     CellStyle cellStyle_Info = getInfoCellStyle(workbook) ;
 
-    // Á¶È¸ ÀÏÀÚ from
+    // ì¡°íšŒ ì¼ì from
     valuseList = getDateTimeFormat(logStats) ;
     values = valuseList[0] ;
     row = writeSheet.getRow(3) ;
     cell = row.createCell(1) ;
     cell.setCellStyle(cellStyle_Base) ;
     cell.setCellValue(values) ;
-    // Á¶È¸ ÀÏÀÚ to
+    // ì¡°íšŒ ì¼ì to
     values = valuseList[1] ;
     row = writeSheet.getRow(3) ;
     cell = row.createCell(3) ;
@@ -168,7 +168,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     case LogStatsRepository.ONLINE_ADAPTER :
     case LogStatsRepository.FILE_DAILY:
     case LogStatsRepository.FILE_ADAPTER :
-      // ±¸ºĞ
+      // êµ¬ë¶„
       values = getStatsTypeName(type, logStats) ;
       row = writeSheet.getRow(4) ;
       cell = row.createCell(nextCell) ;
@@ -178,7 +178,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       break ;
     }
     
-    // Á¶È¸Å¸ÀÔ
+    // ì¡°íšŒíƒ€ì…
     values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
     row = writeSheet.getRow(4) ;
     cell = row.createCell(nextCell) ;
@@ -206,7 +206,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       break ;
     }
 
-    // Á¶È¸¸®½ºÆ® ÀÔ·Â
+    // ì¡°íšŒë¦¬ìŠ¤íŠ¸ ì…ë ¥
     long requestSum = 0, successSum = 0, exceptionSum = 0, timeoutSum = 0 ;
     int i = 6 ;
     for (LogStats logStats2 : logStatsList)
@@ -273,12 +273,12 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
 
-  	  // Æò±Õ Ã³¸® ½Ã°£
+  	  // í‰ê·  ì²˜ë¦¬ ì‹œê°„
       values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseTotal())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
-      // ÃÖ´ë Ã³¸® ½Ã°£
+      // ìµœëŒ€ ì²˜ë¦¬ ì‹œê°„
       values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseMax())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
@@ -290,12 +290,12 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
         case LogStatsRepository.FILE_ADAPTER :
         case LogStatsRepository.FILE_INTERFACE :
         case LogStatsRepository.FILE_SERVICE :
-          // Æò±Õ ÆÄÀÏ Å©±â
+          // í‰ê·  íŒŒì¼ í¬ê¸°
           values = CommonTools.numberWithComma(String.valueOf(getFileSize(logStats2.getFileSizeTotal()))) ;
           cell = row.createCell(c++) ;
           cell.setCellStyle(cellStyle_Base) ;
           cell.setCellValue(values) ;
-          // ÃÖ´ë ÆÄÀÏ Å©±â
+          // ìµœëŒ€ íŒŒì¼ í¬ê¸°
           values = CommonTools.numberWithComma(String.valueOf(getFileSize(logStats2.getFileSizeMax()))) ;
           cell = row.createCell(c++) ;
           cell.setCellStyle(cellStyle_Base) ;
@@ -311,7 +311,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
 
       i++ ;
     }
-    // ÇÕ°è
+    // í•©ê³„
     row = writeSheet.createRow(i) ;
     writeSheet.addMergedRegion(new CellRangeAddress(i, i, 0, typeFlag ? 2 : 1)) ;
 
@@ -351,7 +351,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   }
   
   /**
-   * DB Excel ÆÄÀÏ »ı¼º
+   * DB Excel íŒŒì¼ ìƒì„±
    * @param request
    * @param logStats
    * @param logStatsList
@@ -375,18 +375,18 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
 
     Sheet writeSheet = workbook.getSheetAt(0) ;
 
-    // Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+    // Cell ìŠ¤íƒ€ì¼ ì§€ì •.
     CellStyle cellStyle_Base = getBaseCellStyle(workbook) ;
     CellStyle cellStyle_Info = getInfoCellStyle(workbook) ;
 
-    // Á¶È¸ ÀÏÀÚ from
+    // ì¡°íšŒ ì¼ì from
     valuseList = getDateTimeFormat(logStats) ;
     values = valuseList[0] ;
     row = writeSheet.getRow(3) ;
     cell = row.createCell(1) ;
     cell.setCellStyle(cellStyle_Base) ;
     cell.setCellValue(values) ;
-    // Á¶È¸ ÀÏÀÚ to
+    // ì¡°íšŒ ì¼ì to
     values = valuseList[1] ;
     row = writeSheet.getRow(3) ;
     cell = row.createCell(3) ;
@@ -398,7 +398,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     {
     case LogStatsRepository.DB_DAILY:
     case LogStatsRepository.DB_ADAPTER :
-      // ±¸ºĞ
+      // êµ¬ë¶„
       values = getStatsTypeName(type, logStats) ;
       row = writeSheet.getRow(4) ;
       cell = row.createCell(1) ;
@@ -408,7 +408,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       break ;
     }
 
-    // Á¶È¸Å¸ÀÔ
+    // ì¡°íšŒíƒ€ì…
     values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
     row = writeSheet.getRow(4) ;
     cell = row.createCell(nextCell) ;
@@ -433,7 +433,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       break ;
     }
 
-	// Á¶È¸¸®½ºÆ® ÀÔ·Â
+	// ì¡°íšŒë¦¬ìŠ¤íŠ¸ ì…ë ¥
     long requestSum = 0, successSum = 0, exceptionSum = 0, msgSuccessSum = 0, msgExceptionSum = 0, dbRequestSum = 0, dbSuccessSum = 0, dbExceptionSum = 0 ;
     int i = 7 ;
     for (LogStats logStats2 : logStatsList)
@@ -518,12 +518,12 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       
-      // Æò±Õ Ã³¸® ½Ã°£
+      // í‰ê·  ì²˜ë¦¬ ì‹œê°„
       values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseTotal())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
-      // ÃÖ´ë Ã³¸® ½Ã°£
+      // ìµœëŒ€ ì²˜ë¦¬ ì‹œê°„
       values = CommonTools.numberWithComma(String.valueOf(logStats2.getResponseMax())) ;
       cell = row.createCell(c++) ;
       cell.setCellStyle(cellStyle_Base) ;
@@ -540,7 +540,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       
       i++ ;
     }
-    // ÇÕ°è
+    // í•©ê³„
     row = writeSheet.createRow(i) ;
     writeSheet.addMergedRegion(new CellRangeAddress(i, i, 0, typeFlag ? 2 : 1)) ;
 
@@ -664,7 +664,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   /**
    * getBaseFont
    * 
-   * ±âº» ÆùÆ® 
+   * ê¸°ë³¸ í°íŠ¸ 
    * @param workbook
    * @param size
    * @param color
@@ -673,10 +673,10 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
    */
   public Font getBaseFont(Workbook workbook, int size, short color)
   {
-    // ÆùÆ®
+    // í°íŠ¸
     Font font = workbook.createFont() ;
     font.setFontHeight((short) (20 * size)) ;
-    font.setFontName("±¼¸²") ;
+    font.setFontName("êµ´ë¦¼") ;
     font.setColor(color);
     return font;
   }
@@ -684,32 +684,32 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   /**
    * getBaseCellStyle
    * 
-   * ±âº» Cell ½ºÅ¸ÀÏ
+   * ê¸°ë³¸ Cell ìŠ¤íƒ€ì¼
    * @param workbook
    * @return
    * @author kjm, 2020. 4. 23.
    */
   public XSSFCellStyle getBaseCellStyle(Workbook workbook)
   {
-    // Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+    // Cell ìŠ¤íƒ€ì¼ ì§€ì •.
     XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle() ;
-    // ÅØ½ºÆ® ¸ÂÃã(¼¼·Î°¡¿îµ¥)
+    // í…ìŠ¤íŠ¸ ë§ì¶¤(ì„¸ë¡œê°€ìš´ë°)
     cellStyle.setVerticalAlignment(VerticalAlignment.CENTER) ;
-    // ÅØ½ºÆ® ¸ÂÃã (°¡·Î °¡¿îµ¥)
+    // í…ìŠ¤íŠ¸ ë§ì¶¤ (ê°€ë¡œ ê°€ìš´ë°)
     cellStyle.setAlignment(HorizontalAlignment.CENTER) ;
 
-    // ÆùÆ® ÁöÁ¤ »çÀÌÁî 10
+    // í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10
     cellStyle.setFont(getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex())) ;
 
-    // Cell Å×µÎ¸® (Á¡¼±)
+    // Cell í…Œë‘ë¦¬ (ì ì„ )
     cellStyle.setBorderTop(BorderStyle.HAIR) ;
     cellStyle.setBorderBottom(BorderStyle.HAIR) ;
     cellStyle.setBorderLeft(BorderStyle.HAIR) ;
     cellStyle.setBorderRight(BorderStyle.HAIR) ;
 
-    // Cell Àá±İ
+    // Cell ì ê¸ˆ
     cellStyle.setLocked(true) ;
-    // Cell ¿¡¼­ Text ÁÙ¹Ù²Ş È°¼ºÈ­
+    // Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
     cellStyle.setWrapText(true) ;
 
     return cellStyle ;
@@ -718,8 +718,8 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   /**
    * getInfoCellStyle
    * 
-   * Ç×¸ñ Cell ½ºÅ¸ÀÏ
-   * (getBaseCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í•­ëª© Cell ìŠ¤íƒ€ì¼
+   * (getBaseCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * @param workbook
    * @return
    * @author kjm, 2020. 4. 23.
@@ -729,7 +729,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     XSSFCellStyle cellStyle = getBaseCellStyle(workbook) ;
     cellStyle.setAlignment(HorizontalAlignment.CENTER) ;
 
-    // ÆùÆ® ÁöÁ¤ »çÀÌÁî (±½°Ô)
+    // í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ (êµµê²Œ)
     Font font = getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex()) ;
     font.setBold(true) ;
     cellStyle.setFont(font) ;

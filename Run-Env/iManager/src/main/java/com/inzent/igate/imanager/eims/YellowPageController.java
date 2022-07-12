@@ -62,8 +62,8 @@ public class YellowPageController extends AbstractEimsController
   public static final String PROPERTY_SERVER = "Server" ;
   public static final String PROPERTY_INTERFACECLASS = "InterfaceClass" ;
 
-  protected static final Map<String, Character> NAME_TYPE_MAP ;     // Field ÀÇ type ¸Ê
-  protected static final Map<String, Character> NAME_ARRYTYPE_MAP ; // Field ÀÇ array Type ¸Ê
+  protected static final Map<String, Character> NAME_TYPE_MAP ;     // Field ì˜ type ë§µ
+  protected static final Map<String, Character> NAME_ARRYTYPE_MAP ; // Field ì˜ array Type ë§µ
 
   static
   {
@@ -188,13 +188,13 @@ public class YellowPageController extends AbstractEimsController
 
     Properties properties = unmarshalOption(sender) ;
 
-    // TODO InterfaceGroup º¯È¯ ·ÎÁ÷ ÇÊ¿ä
+    // TODO InterfaceGroup ë³€í™˜ ë¡œì§ í•„ìš”
     interfaceMeta.setInterfaceGroup((String) properties.remove(PROPERTY_BIZ)) ;
 
-    // TODO AdapterID º¯È¯ ¹× °Ë»ç ·ÎÁ÷ ÇÊ¿ä
+    // TODO AdapterID ë³€í™˜ ë° ê²€ì‚¬ ë¡œì§ í•„ìš”
     interfaceMeta.setAdapterId((String) properties.remove(PROPERTY_SYSTEM)) ;
 
-    // TODO InterfaceType º¯È¯ ¹× °Ë»ç ·ÎÁ÷ ÇÊ¿ä
+    // TODO InterfaceType ë³€í™˜ ë° ê²€ì‚¬ ë¡œì§ í•„ìš”
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
     case "DB_MD" :
@@ -226,11 +226,11 @@ public class YellowPageController extends AbstractEimsController
       break ;
     }
 
-    // TODO InterfaceOperation º¯È¯ ¹× °Ë»ç ·ÎÁ÷ ÇÊ¿ä
+    // TODO InterfaceOperation ë³€í™˜ ë° ê²€ì‚¬ ë¡œì§ í•„ìš”
     properties.remove(PROPERTY_INTERFACECLASS) ;
     // interfaceMeta.setInterfaceOperation(interfaceOperation) ;
 
-    // TODO È®Àå ¼Ó¼º Ã³¸®
+    // TODO í™•ì¥ ì†ì„± ì²˜ë¦¬
     properties.remove(PROPERTY_SERVER) ;
 
     for (Map.Entry<Object, Object> entry : properties.entrySet())
@@ -392,13 +392,13 @@ public class YellowPageController extends AbstractEimsController
 
     Properties properties = unmarshalOption(receiver) ;
 
-    // TODO SeriveGroup º¯È¯ ·ÎÁ÷ ÇÊ¿ä
+    // TODO SeriveGroup ë³€í™˜ ë¡œì§ í•„ìš”
     service.setServiceGroup((String) properties.remove(PROPERTY_BIZ)) ;
 
-    // TODO AdapterID º¯È¯ ¹× °Ë»ç ·ÎÁ÷ ÇÊ¿ä
+    // TODO AdapterID ë³€í™˜ ë° ê²€ì‚¬ ë¡œì§ í•„ìš”
     service.setAdapterId((String) properties.remove(PROPERTY_SYSTEM)) ;
 
-    // TODO SeriveType º¯È¯ ¹× °Ë»ç ·ÎÁ÷ ÇÊ¿ä
+    // TODO SeriveType ë³€í™˜ ë° ê²€ì‚¬ ë¡œì§ í•„ìš”
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
     case "DB_MD" :
@@ -427,7 +427,7 @@ public class YellowPageController extends AbstractEimsController
       break ;
     }
 
-    // TODO È®Àå ¼Ó¼º Ã³¸®
+    // TODO í™•ì¥ ì†ì„± ì²˜ë¦¬
     properties.remove(PROPERTY_SERVER) ;
 
     for (Map.Entry<Object, Object> entry : properties.entrySet())
@@ -497,12 +497,12 @@ public class YellowPageController extends AbstractEimsController
     {
       record.setRecordType(Record.TYPE_HEADER) ;
 
-      // TODO Record Group ÁöÁ¤
+      // TODO Record Group ì§€ì •
       record.setRecordGroup(format.getPrivilege()) ;
     }
 
     Properties properties = unmarshalOption(format) ;
-    // TODO È®Àå ¼Ó¼º Ã³¸®
+    // TODO í™•ì¥ ì†ì„± ì²˜ë¦¬
 
     record.setRecordOptions(PropertyUtils.encode(properties)) ;
 
@@ -531,11 +531,11 @@ public class YellowPageController extends AbstractEimsController
     field.setFieldOrder(childElement.getSeq()) ;
     field.setFieldIndex(childElement.getIndex()) ;
 
-    // ³í¸®À¯Çü¸í : "CHAR" - ¹®ÀÚÇü, "NUMBER" - ¼ıÀÚÇü, "BINARY" - ¹ÙÀÌ³Ê¸®Çü
+    // ë…¼ë¦¬ìœ í˜•ëª… : "CHAR" - ë¬¸ìí˜•, "NUMBER" - ìˆ«ìí˜•, "BINARY" - ë°”ì´ë„ˆë¦¬í˜•
     field.setFieldType(NAME_TYPE_MAP.get(childElement.getType())) ;
     // Not, Fixed, Variable
     field.setArrayType(NAME_ARRYTYPE_MAP.get(childElement.getArrayType())) ;
-    // ÇÊµå ±æÀÌ ¹× Á¤¹Ğµµ
+    // í•„ë“œ ê¸¸ì´ ë° ì •ë°€ë„
     field.setFieldLength(childElement.getLength()) ;
     field.setFieldScale(childElement.getScale()) ;
 
@@ -545,7 +545,7 @@ public class YellowPageController extends AbstractEimsController
     field.setFieldDefaultValue(childElement.getDefaultValue()) ;
 
     Properties properties = unmarshalOption(childElement) ;
-    // TODO È®Àå ¼Ó¼º Ã³¸®
+    // TODO í™•ì¥ ì†ì„± ì²˜ë¦¬
 
     field.setFieldOptions(PropertyUtils.encode(properties)) ;
 

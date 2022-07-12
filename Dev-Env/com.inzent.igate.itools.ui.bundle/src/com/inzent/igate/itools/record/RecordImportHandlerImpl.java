@@ -48,7 +48,7 @@ public class RecordImportHandlerImpl implements RecordImportHandler
   @SuppressWarnings("unchecked")
   public void importRecord(Record record)
   {
-    // °¡Á®¿À±â ´ÙÀÌ¾ó·Î±× (ÇÑ°³¸¸ ¼±ÅÃ°¡´É)
+    // ê°€ì ¸ì˜¤ê¸° ë‹¤ì´ì–¼ë¡œê·¸ (í•œê°œë§Œ ì„ íƒê°€ëŠ¥)
     FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.SINGLE) ;
     fileDialog.setText(String.format("%s %s", Record.class.getSimpleName(), UiMessage.LABEL_IMPORT)) ;
     fileDialog.setFilterExtensions(new String[] { MetaConstants.FILTER_FILE_EXTENDER_EXCEL1, MetaConstants.FILTER_FILE_EXTENDER_EXCEL2, MetaConstants.FILTER_FILE_EXTENDER_JSON }) ;
@@ -83,7 +83,7 @@ public class RecordImportHandlerImpl implements RecordImportHandler
       resultMessage += resultMap.get(ExportImportRecordUtils.MESSAGE) ;
       resultMessage += String.format(MetaConstants.MESSAGE_SUMMARYINFO, fileDialog.getFileNames().length, importSuccessList.size(), fileDialog.getFileNames().length - importSuccessList.size()) ;
 
-      // °¡Á®³»±â °á°ú ¸ñ·Ï È®ÀÎ Ã¢
+      // ê°€ì ¸ë‚´ê¸° ê²°ê³¼ ëª©ë¡ í™•ì¸ ì°½
       LogHandler.openInformation(UiMessage.INFORMATION_IO_MESSAGE2 + resultMessage) ;
     }
   }

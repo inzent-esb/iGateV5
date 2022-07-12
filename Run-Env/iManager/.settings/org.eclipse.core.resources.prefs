@@ -1,6 +1,2 @@
 eclipse.preferences.version=1
-encoding//src/main/java=MS949
-encoding//src/main/resources=MS949
-encoding//src/main/webapp/WEB-INF/html/layout/detail_panel.jsp=UTF-8
-encoding//src/test/java=MS949
-encoding//src/test/resources=MS949
+encoding/<project>=UTF-8

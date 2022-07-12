@@ -26,7 +26,7 @@ import com.inzent.igate.repository.meta.Service ;
 import com.inzent.imanager.marshaller.JsonMarshaller ;
 
 /**
- * <code>MarshallerEimsController</code> eims Àü¹® ¹Þ¾Æ update, insert, delete ¼öÇàÇÏ´Â controller
+ * <code>MarshallerEimsController</code> eims ì „ë¬¸ ë°›ì•„ update, insert, delete ìˆ˜í–‰í•˜ëŠ” controller
  *
  * @since 2021. 2. 7.
  * @version 5.0

@@ -60,32 +60,32 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		Cell cell = null ;
 		String values = null ;
 
-		// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+		// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
 		CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 
-		// ÀÎÅÍÆäÀÌ½º ID
+		// ì¸í„°í˜ì´ìŠ¤ ID
 		values = entity.getInterfaceId();
 		row = writeSheet.getRow(3);
 		cell = row.createCell(1);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
-		// ÀÎÅÍÆäÀÌ½º ÀÌ¸§
+		// ì¸í„°í˜ì´ìŠ¤ ì´ë¦„
 		values = entity.getInterfaceName();
 		row = writeSheet.getRow(3);
 		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ¾î´ğÅÍ ID
+		// ì–´ëŒ‘í„° ID
 		values = entity.getAdapterId();
 		row = writeSheet.getRow(3);
 		cell = row.createCell(5);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
-		// ÀÎÅÍÆäÀÌ½º Á¾·ù
+		// ì¸í„°í˜ì´ìŠ¤ ì¢…ë¥˜
 		switch (String.valueOf(entity.getInterfaceType()).trim()) {
 	      case "DB" :
 	    	  values = MessageGenerator.getMessage("DB", "DB");
@@ -105,7 +105,7 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ½ºÄÉÁÙ Á¾·ù
+		// ìŠ¤ì¼€ì¤„ ì¢…ë¥˜
 		switch (String.valueOf(entity.getScheduleType()).trim()) {
 	      case "B" :
 	    	  values = "Batched";
@@ -128,7 +128,7 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ÀÎÅÍÆäÀÌ½º »ç¿ë¿©ºÎ
+		// ì¸í„°í˜ì´ìŠ¤ ì‚¬ìš©ì—¬ë¶€
 		switch (String.valueOf(entity.getUsedYn()).trim()) {
 	      case "Y" :
 	    	  values = MessageGenerator.getMessage("head.yes", "Yes");
@@ -145,53 +145,53 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ±×·ì
+		// ê·¸ë£¹
 		values = entity.getInterfaceGroup();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
-		// ±ÇÇÑ
+		// ê¶Œí•œ
 		values = entity.getPrivilegeId();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(5);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ºñ°í
+		// ë¹„ê³ 
 		values = entity.getInterfaceDesc();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(7);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
-		// Á¶È¸¸®½ºÆ® ÀÔ·Â
+		// ì¡°íšŒë¦¬ìŠ¤íŠ¸ ì…ë ¥
 		long sum = 0;
 		int i = 7;
 		for (Interface interfaceInfo : entityList) {
 			row = writeSheet.createRow(i);
 			int c = 0;
 
-			// ÀÎÅÍÆäÀÌ½º ID
+			// ì¸í„°í˜ì´ìŠ¤ ID
 			values = interfaceInfo.getInterfaceId();
 			cell = row.createCell(c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ÀÎÅÍÆäÀÌ½º ÀÌ¸§
+			// ì¸í„°í˜ì´ìŠ¤ ì´ë¦„
 			values = interfaceInfo.getInterfaceName();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ¾î´ğÅÍ ID
+			// ì–´ëŒ‘í„° ID
 			values = interfaceInfo.getAdapterId();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ÀÎÅÍÆäÀÌ½º Á¾·ù
+			// ì¸í„°í˜ì´ìŠ¤ ì¢…ë¥˜
 			switch (String.valueOf(interfaceInfo.getInterfaceType())) {
 		      case "DB" :
 		    	  values = MessageGenerator.getMessage("DB", "DB");
@@ -210,7 +210,7 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ÈŞÀÏ			
+			// íœ´ì¼			
 			switch (String.valueOf(interfaceInfo.getScheduleType())) {
 		      case "B" :
 		    	  values = "Batched";
@@ -232,19 +232,19 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ±×·ì
+			// ê·¸ë£¹
 			values = interfaceInfo.getInterfaceGroup();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ±ÇÇÑ
+			// ê¶Œí•œ
 			values = interfaceInfo.getPrivilegeId();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¼³¸í
+			// ì„¤ëª…
 			values = interfaceInfo.getInterfaceDesc();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
@@ -253,7 +253,7 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 			sum++;
 			i++;
 		}
-		// ÇÕ°è
+		// í•©ê³„
 		row = writeSheet.createRow(i);
 
 		values = MessageGenerator.getMessage("head.total", "Total");
@@ -335,19 +335,19 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
     }
 
 	public XSSFCellStyle getBaseCellStyle(Workbook workbook) {
-		// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+		// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 		XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
-		// ÅØ½ºÆ® ¸ÂÃã(¼¼·Î°¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§ì¶¤(ì„¸ë¡œê°€ìš´ë°)
 		cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		// ÅØ½ºÆ® ¸ÂÃã (°¡·Î °¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§ì¶¤ (ê°€ë¡œ ê°€ìš´ë°)
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî 10
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10
 		cellStyle.setFont(getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex()));
 
-		// Cell Àá±İ
+		// Cell ì ê¸ˆ
 		cellStyle.setLocked(true);
-		// Cell ¿¡¼­ Text ÁÙ¹Ù²Ş È°¼ºÈ­
+		// Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
 		cellStyle.setWrapText(true);
 
 		return cellStyle;
@@ -357,7 +357,7 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		XSSFCellStyle cellStyle = getBaseCellStyle(workbook);
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî (±½°Ô)
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ (êµµê²Œ)
 		Font font = getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex());
 		font.setBold(true);
 		cellStyle.setFont(font);
@@ -368,10 +368,10 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 	}
 
 	public Font getBaseFont(Workbook workbook, int size, short color) {
-		// ÆùÆ®
+		// í°íŠ¸
 		Font font = workbook.createFont();
 		font.setFontHeight((short) (20 * size));
-		font.setFontName("±¼¸²");
+		font.setFontName("êµ´ë¦¼");
 		font.setColor(color);
 		return font;
 	}

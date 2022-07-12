@@ -60,7 +60,7 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 	        String values = null ;
 	        Object[] objects = null ;
 			
-			// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+			// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 			CellStyle cellStyle_Base = getBaseCellStyle(workbook);
 			CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 			
@@ -78,110 +78,110 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// °Å·¡ ID
+			// ê±°ëž˜ ID
 			values = entity.getTransactionId();
 			row = writeSheet.getRow(3);
 			cell = row.createCell(5);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¾î´ðÅÍ ID
+			// ì–´ëŒ‘í„° ID
 			values = entity.getAdapterId();
 			row = writeSheet.getRow(3);
 			cell = row.createCell(7);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ¿¡·¯ ÄÚµå
+			// ì—ëŸ¬ ì½”ë“œ
 			values = entity.getExceptionCode();
 			row = writeSheet.getRow(3);
 			cell = row.createCell(9);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ÀÎÅÍÆäÀÌ½º ID
+			// ì¸í„°íŽ˜ì´ìŠ¤ ID
 			values = entity.getInterfaceId();
 			row = writeSheet.getRow(4);
 			cell = row.createCell(1);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¼­ºñ½º ID
+			// ì„œë¹„ìŠ¤ ID
 			values = entity.getServiceId();
 			row = writeSheet.getRow(4);
 			cell = row.createCell(3);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ÀÎ½ºÅÏ½º ID
+			// ì¸ìŠ¤í„´ìŠ¤ ID
 			values = entity.getInstanceId();
 			row = writeSheet.getRow(4);
 			cell = row.createCell(5);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// Ä¿³ØÅÍ ID
+			// ì»¤ë„¥í„° ID
 			values = entity.getConnectorId();
 			row = writeSheet.getRow(4);
 			cell = row.createCell(7);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¾×Æ¼ºñÆ¼ ID
+			// ì•¡í‹°ë¹„í‹° ID
 			values = entity.getActivityId();
 			row = writeSheet.getRow(4);
 			cell = row.createCell(9);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// Á¶È¸¸®½ºÆ® ÀÔ·Â
+			// ì¡°íšŒë¦¬ìŠ¤íŠ¸ ìž…ë ¥
 			long sum = 0;
 			int i = 7;
 			for(ExceptionLog data : entityList) {
 				row = writeSheet.createRow(i);
 				int c = 0;
 				
-				//³¯Â¥/½Ã°£
+				//ë‚ ì§œ/ì‹œê°„
 				values = data.getPk().getExceptionDateTime().toString();
 				cell = row.createCell(c);
 				cell.setCellValue(values);
 
-				//°Å·¡ ID
+				//ê±°ëž˜ ID
 				values = data.getTransactionId();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);
 				
-				//¾î´ðÅÍ ID
+				//ì–´ëŒ‘í„° ID
 				values = data.getAdapterId();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);
 
-				//¿¡·¯ ÄÚµå
+				//ì—ëŸ¬ ì½”ë“œ
 				values = data.getExceptionCode();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);
 
-				//ÀÎÅÍÆäÀÌ½º ID
+				//ì¸í„°íŽ˜ì´ìŠ¤ ID
 				values = data.getInterfaceId();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);
 				
-				//¼­ºñ½º ID
+				//ì„œë¹„ìŠ¤ ID
 				values = data.getServiceId();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);
 				
-				//ÀÎ½ºÅÏ½º ID
+				//ì¸ìŠ¤í„´ìŠ¤ ID
 				values = data.getInstanceId();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);
 				
-				//Ä¿³ØÅÍ ID
+				//ì»¤ë„¥í„° ID
 				values = data.getConnectorId();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);				
 				
-				//¾×Æ¼ºñÆ¼ ID
+				//ì•¡í‹°ë¹„í‹° ID
 				values = data.getActivityId();
 				cell = row.createCell(++c);
 				cell.setCellValue(values);
@@ -194,10 +194,10 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 				//Exception Stack
 				values = data.getExceptionStack();
 				
-				/* ===ExcelÀÇ ÇÑ field¿¡ µé¾î°¥ ¼ö ÀÖ´Â ±ÛÀÚ¼ö´Â 32,767ÀÌ¹Ç·Î ÀÌ°¡ ³Ñ¾î°¡´Â °ªÀÌ ÀÖ´Ù¸é »ç¿ë=== */
-				//µÚ¿¡¼­ 32000ÀÚ ÀÚ¸£±â (Caused by º¸±â ¿ë)
+				/* ===Excelì˜ í•œ fieldì— ë“¤ì–´ê°ˆ ìˆ˜ ìžˆëŠ” ê¸€ìžìˆ˜ëŠ” 32,767ì´ë¯€ë¡œ ì´ê°€ ë„˜ì–´ê°€ëŠ” ê°’ì´ ìžˆë‹¤ë©´ ì‚¬ìš©=== */
+				//ë’¤ì—ì„œ 32000ìž ìžë¥´ê¸° (Caused by ë³´ê¸° ìš©)
 				if(values.length() > 32000) values = values.substring(values.length()-32000, values.length());
-				// ¾Õ¿¡¼­ 32000ÀÚ ÀÚ¸£±â
+				// ì•žì—ì„œ 32000ìž ìžë¥´ê¸°
 				//if(values.length() > 32000) values = values.substring(0, 32000);
 				/* ====================================================================== */
 				
@@ -208,7 +208,7 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 				i++;
 			}
 			
-			// ÇÕ°è
+			// í•©ê³„
 			row = writeSheet.createRow(i);
 
 			values = MessageGenerator.getMessage("head.total", "Total");
@@ -303,19 +303,19 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
     }
 
 	public XSSFCellStyle getBaseCellStyle(Workbook workbook) {
-		// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+		// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 		XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
-		// ÅØ½ºÆ® ¸ÂÃã(¼¼·Î°¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§žì¶¤(ì„¸ë¡œê°€ìš´ë°)
 		cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		// ÅØ½ºÆ® ¸ÂÃã (°¡·Î °¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§žì¶¤ (ê°€ë¡œ ê°€ìš´ë°)
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî 10
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10
 		cellStyle.setFont(getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex()));
 
-		// Cell Àá±Ý
+		// Cell ìž ê¸ˆ
 		cellStyle.setLocked(true);
-		// Cell ¿¡¼­ Text ÁÙ¹Ù²Þ È°¼ºÈ­
+		// Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
 		cellStyle.setWrapText(true);
 
 		return cellStyle;
@@ -325,7 +325,7 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 		XSSFCellStyle cellStyle = getBaseCellStyle(workbook);
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî (±½°Ô)
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ (êµµê²Œ)
 		Font font = getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex());
 		font.setBold(true);
 		cellStyle.setFont(font);
@@ -336,10 +336,10 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 	}
 
 	public Font getBaseFont(Workbook workbook, int size, short color) {
-		// ÆùÆ®
+		// í°íŠ¸
 		Font font = workbook.createFont();
 		font.setFontHeight((short) (20 * size));
-		font.setFontName("±¼¸²");
+		font.setFontName("êµ´ë¦¼");
 		font.setColor(color);
 		return font;
 	}

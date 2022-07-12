@@ -62,7 +62,7 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 		{
 			writeSheet = workbook.getSheetAt(0);
 			
-			// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+			// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 			CellStyle cellStyle_Base = getBaseCellStyle(workbook);
 			CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 			
@@ -79,63 +79,63 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// °Å·¡ ID
+			// ê±°ë˜ ID
 			values = entity.getTransactionId();
 			cell = row.createCell(5);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ·Î±× ºĞ·ù
+			// ë¡œê·¸ ë¶„ë¥˜
 			values = entity.getLogCode();
 			cell = row.createCell(7);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¾î´ğÅÍ ID
+			// ì–´ëŒ‘í„° ID
 			values = entity.getAdapterId();
 			cell = row.createCell(9);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ÀÎÅÍÆäÀÌ½º ID
+			// ì¸í„°í˜ì´ìŠ¤ ID
 			values = entity.getInterfaceId();
 			row = writeSheet.getRow(4);
 			cell = row.createCell(1);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ¼­ºñ½º ID
+			// ì„œë¹„ìŠ¤ ID
 			values = entity.getServiceId();
 			cell = row.createCell(3);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// Ä¿³ØÅÍ ID
+			// ì»¤ë„¥í„° ID
 			values = entity.getConnectorId();
 			cell = row.createCell(5);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ÀÎ½ºÅÏ½º ID
+			// ì¸ìŠ¤í„´ìŠ¤ ID
 			values = entity.getInstanceId();
 			cell = row.createCell(7);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ´ë¿Ü °Å·¡
+			// ëŒ€ì™¸ ê±°ë˜
 			values = entity.getExternalTransaction();
 			cell = row.createCell(9);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ´ë¿Ü ¸Ş¼¼Áö
+			// ëŒ€ì™¸ ë©”ì„¸ì§€
 			values = entity.getExternalMessage();
 			row = writeSheet.getRow(5);
 			cell = row.createCell(1);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ÀÀ´ä ÄÚµå
+			// ì‘ë‹µ ì½”ë“œ
 			values = entity.getResponseCode();
 			cell = row.createCell(3);
 			cell.setCellStyle(cellStyle_Base);
@@ -147,13 +147,13 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¼¼¼Ç ID
+			// ì„¸ì…˜ ID
 			values = entity.getSessionId();
 			cell = row.createCell(7);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// Å¸ÀÓ¾Æ¿ô ¿©ºÎ
+			// íƒ€ì„ì•„ì›ƒ ì—¬ë¶€
 			values = null;
 			if(entity.getTimeoutYn() != 0){
 				values = Character.toString(entity.getTimeoutYn());			
@@ -162,14 +162,14 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// Á¶È¸¸®½ºÆ® ÀÔ·Â
+			// ì¡°íšŒë¦¬ìŠ¤íŠ¸ ì…ë ¥
 			long sum = 0;
 			int i = 9;
 			for(TraceLog data : entityList) {
 				row = writeSheet.createRow(i);
 				int c = 0;
 				
-				//¿äÃ»½Ã°£
+				//ìš”ì²­ì‹œê°„
 				values = "";
 				if(data.getRequestTimestamp() != null) {
 					values = data.getRequestTimestamp().toString();				
@@ -178,47 +178,47 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 				cell = row.createCell(c);
 				cell.setCellValue(values);
 
-				//°Å·¡ ID
+				//ê±°ë˜ ID
 				values = data.getTransactionId();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 				
-				//·Î±× ºĞ·ù
+				//ë¡œê·¸ ë¶„ë¥˜
 				values = data.getLogCode();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 				
-				//¾î´ğÅÍ ID
+				//ì–´ëŒ‘í„° ID
 				values = data.getAdapterId();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 				
-				//ÀÎÅÍÆäÀÌ½º ID
+				//ì¸í„°í˜ì´ìŠ¤ ID
 				values = data.getInterfaceId();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 
-				//¼­ºñ½º ID
+				//ì„œë¹„ìŠ¤ ID
 				values = data.getServiceId();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 				
-				//ÀÎ½ºÅÏ½º ID
+				//ì¸ìŠ¤í„´ìŠ¤ ID
 				values = data.getInstanceId();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 								
-				//´ë¿Ü°Å·¡
+				//ëŒ€ì™¸ê±°ë˜
 				values = data.getExternalTransaction();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 
-				//´ë¿Ü¸Ş½ÃÁö
+				//ëŒ€ì™¸ë©”ì‹œì§€
 				values = data.getExternalMessage();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 				
-				//ÀÀ´äÄÚµå
+				//ì‘ë‹µì½”ë“œ
 				values = data.getResponseCode();
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
@@ -321,19 +321,19 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
     }
 	
 	public XSSFCellStyle getBaseCellStyle(Workbook workbook) {
-		// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+		// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 		XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
-		// ÅØ½ºÆ® ¸ÂÃã(¼¼·Î°¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§ì¶¤(ì„¸ë¡œê°€ìš´ë°)
 		cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		// ÅØ½ºÆ® ¸ÂÃã (°¡·Î °¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§ì¶¤ (ê°€ë¡œ ê°€ìš´ë°)
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî 10
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10
 		cellStyle.setFont(getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex()));
 
-		// Cell Àá±İ
+		// Cell ì ê¸ˆ
 		cellStyle.setLocked(true);
-		// Cell ¿¡¼­ Text ÁÙ¹Ù²Ş È°¼ºÈ­
+		// Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
 		cellStyle.setWrapText(true);
 
 		return cellStyle;
@@ -343,7 +343,7 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 		XSSFCellStyle cellStyle = getBaseCellStyle(workbook);
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî (±½°Ô)
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ (êµµê²Œ)
 		Font font = getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex());
 		font.setBold(true);
 		cellStyle.setFont(font);
@@ -354,10 +354,10 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 	}
 
 	public Font getBaseFont(Workbook workbook, int size, short color) {
-		// ÆùÆ®
+		// í°íŠ¸
 		Font font = workbook.createFont();
 		font.setFontHeight((short) (20 * size));
-		font.setFontName("±¼¸²");
+		font.setFontName("êµ´ë¦¼");
 		font.setColor(color);
 		return font;
 	}

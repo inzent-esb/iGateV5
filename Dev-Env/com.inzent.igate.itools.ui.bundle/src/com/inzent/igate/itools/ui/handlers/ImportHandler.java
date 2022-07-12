@@ -62,7 +62,7 @@ public class ImportHandler extends AbstractImportHandler
     resultMessage = StringUtils.EMPTY ;
     importTotalCount = 0 ;
     
-    // °¡Á®¿À±â Dialog ¿¡¼­ view¿¡¼­ÀÇ ´ÜÃàÅ° Ctrl + c, Ctrl + vÀÇ µ¿ÀÛÀ» È¸ÇÇÇÏ±â À§ÇÔ
+    // ê°€ì ¸ì˜¤ê¸° Dialog ì—ì„œ viewì—ì„œì˜ ë‹¨ì¶•í‚¤ Ctrl + c, Ctrl + vì˜ ë™ì‘ì„ íšŒí”¼í•˜ê¸° ìœ„í•¨
     ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection() ;
     ((AbstractMenuViewPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MenuViewPart.ID)).refresh(((IStructuredSelection) selection).iterator()) ;
 
@@ -80,7 +80,7 @@ public class ImportHandler extends AbstractImportHandler
         }
       }
 
-    // ======= °¡Á®¿À±â °¡´É ¿©ºÎ Ã¼Å© =======
+    // ======= ê°€ì ¸ì˜¤ê¸° ê°€ëŠ¥ ì—¬ë¶€ ì²´í¬ =======
     String impossibleType ;
     if (null == menuContentEntity)
       impossibleType = StringUtils.EMPTY ;
@@ -95,9 +95,9 @@ public class ImportHandler extends AbstractImportHandler
 
       return ;
     }
-    // ======= °¡Á®¿À±â °¡´É ¿©ºÎ Ã¼Å© =======
+    // ======= ê°€ì ¸ì˜¤ê¸° ê°€ëŠ¥ ì—¬ë¶€ ì²´í¬ =======
 
-    // ======= °¡Á®¿À±â ÁøÇà =======
+    // ======= ê°€ì ¸ì˜¤ê¸° ì§„í–‰ =======
     Map<String, Object> resultMap = null ;
 
     if (isRecord(menuContentEntity.getValue()))
@@ -111,7 +111,7 @@ public class ImportHandler extends AbstractImportHandler
 
       List<Object> importSuccessList ;
 
-      // import °¹¼ö
+      // import ê°¯ìˆ˜
       if (importTotalCount > 0)
       {
         importSuccessList = (List<Object>) resultMap.get(ExportImportRecordUtils.RESULT_List) ;
@@ -120,10 +120,10 @@ public class ImportHandler extends AbstractImportHandler
       else
         importSuccessList = Collections.emptyList() ;
 
-      // °¡Á®³»±â °á°ú ¸ñ·Ï È®ÀÎ Ã¢
+      // ê°€ì ¸ë‚´ê¸° ê²°ê³¼ ëª©ë¡ í™•ì¸ ì°½
       LogHandler.openInformation(UiMessage.INFORMATION_IO_MESSAGE2 + resultMessage) ;
 
-      // °¡Á®¿À±â ÇÑ Ç×¸ñµé Áß ÀÌ¹Ì Editor ¿ÀÇÂ ÁßÀÎ °ÍÀÌ ÀÖ´ÂÁö È®ÀÎ
+      // ê°€ì ¸ì˜¤ê¸° í•œ í•­ëª©ë“¤ ì¤‘ ì´ë¯¸ Editor ì˜¤í”ˆ ì¤‘ì¸ ê²ƒì´ ìˆëŠ”ì§€ í™•ì¸
       int nAlreadyOpen = 0 ;
       String strEditorInfo = "\n" ;
       for (Object item : importSuccessList)
@@ -135,7 +135,7 @@ public class ImportHandler extends AbstractImportHandler
         }
       }
 
-      // ÀÌ¹Ì ¿ÀÇÂµÈ °ÍÀÌ ÀÖÀ¸¸é Editor ´Ù½Ã ¿­Áö È®ÀÎ ÇÏ°í ´Ù½Ã ¿ÀÇÂ Ã³¸® ¼öÇà
+      // ì´ë¯¸ ì˜¤í”ˆëœ ê²ƒì´ ìˆìœ¼ë©´ Editor ë‹¤ì‹œ ì—´ì§€ í™•ì¸ í•˜ê³  ë‹¤ì‹œ ì˜¤í”ˆ ì²˜ë¦¬ ìˆ˜í–‰
       if (nAlreadyOpen > 0)
       {
         strEditorInfo += "\n\n" ;
@@ -143,7 +143,7 @@ public class ImportHandler extends AbstractImportHandler
         if (LogHandler.openConfirm(NLS.bind(UiMessage.INFORMATION_IO_MESSAGE9, nAlreadyOpen) + strEditorInfo + UiMessage.INFORMATION_IO_MESSAGE10))
         {
           for (Object item : importSuccessList)
-            reOpenEditor(item) ; // Editor ´Ù½Ã ¿ÀÇÂ
+            reOpenEditor(item) ; // Editor ë‹¤ì‹œ ì˜¤í”ˆ
         }
       }
 
@@ -172,7 +172,7 @@ public class ImportHandler extends AbstractImportHandler
 
     resultMessage += String.format(MetaConstants.MESSAGE_ENTITY_TYPE, entityType) ;
 
-    // °¡Á®¿À±â ´ÙÀÌ¾ó·Î±× (¿©·¯Ç×¸ñ ¼±ÅÃ°¡´É)
+    // ê°€ì ¸ì˜¤ê¸° ë‹¤ì´ì–¼ë¡œê·¸ (ì—¬ëŸ¬í•­ëª© ì„ íƒê°€ëŠ¥)
     FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.MULTI) ;
 
     fileDialog.setText(String.format("%s %s", entityType, UiMessage.LABEL_IMPORT)) ;
@@ -203,7 +203,7 @@ public class ImportHandler extends AbstractImportHandler
 
     resultMessage += String.format(MetaConstants.MESSAGE_ENTITY_TYPE, entityType) ;
 
-    // °¡Á®¿À±â ´ÙÀÌ¾ó·Î±× (¿©·¯Ç×¸ñ ¼±ÅÃ°¡´É)
+    // ê°€ì ¸ì˜¤ê¸° ë‹¤ì´ì–¼ë¡œê·¸ (ì—¬ëŸ¬í•­ëª© ì„ íƒê°€ëŠ¥)
     FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.MULTI) ;
 
     fileDialog.setText(String.format("%s %s", entityType, UiMessage.LABEL_IMPORT)) ;
@@ -225,7 +225,7 @@ public class ImportHandler extends AbstractImportHandler
   }
 
   /**
-   * Editor ¿ÀÇÂ ÁßÀÎÁö ÆÇ´Ü
+   * Editor ì˜¤í”ˆ ì¤‘ì¸ì§€ íŒë‹¨
    * 
    * @param object
    * @return
@@ -242,7 +242,7 @@ public class ImportHandler extends AbstractImportHandler
   }
 
   /**
-   * Editor Àç ¿ÀÇÂ
+   * Editor ì¬ ì˜¤í”ˆ
    * 
    * @param object
    * @author kjm, 2020. 7. 3.
@@ -255,7 +255,7 @@ public class ImportHandler extends AbstractImportHandler
   }
 
   /**
-   * Editor ¿ÀÇÂ ÁßÀÎÁö ÆÇ´ÜÇÏ±â À§ÇØ¼­ Ç×¸ñº° MenuContentItem ÃßÃâ
+   * Editor ì˜¤í”ˆ ì¤‘ì¸ì§€ íŒë‹¨í•˜ê¸° ìœ„í•´ì„œ í•­ëª©ë³„ MenuContentItem ì¶”ì¶œ
    * 
    * @param object
    * @return

@@ -52,11 +52,11 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
     case "R" :
       return RESPONSE_NORMAL ;
 
-    case "B" : // ¿øÀÎ¾ø´Â BID (PUSH) ¼¼ÆÃ
+    case "B" : // ì›ì¸ì—†ëŠ” BID (PUSH) ì„¸íŒ…
       return PUSH_NORMAL ;
 
     default :
-      // RestrictInterface ¾×Æ¼ºñÆ¼¿¡¼­ Á¦¾îÇÒ ÁöÁ¡
+      // RestrictInterface ì•¡í‹°ë¹„í‹°ì—ì„œ ì œì–´í•  ì§€ì 
       adapterParameter.setBranch(StringCodec.decode(buffer, BRANCH_OFFSET, BRANCH_LENGTH, adapterParameter.getAdapter().getCharset())) ;
       return REQUEST_NORMAL ;
     }
@@ -67,7 +67,7 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   {
     super.initializeInterfaceRequest(adapterParameter) ;
 
-    // È¸±â Å×Æ®½º¸¦ À§ÇÑ ÄÚµå
+    // íšŒê¸° í…ŒíŠ¸ìŠ¤ë¥¼ ìœ„í•œ ì½”ë“œ
     transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
   }
 

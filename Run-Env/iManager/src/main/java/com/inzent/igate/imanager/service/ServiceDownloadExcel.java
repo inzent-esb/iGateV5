@@ -60,25 +60,25 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 	    Cell cell = null ;
 	    String values = null ;
 	    
-		// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+		// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
 		CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 
-		// ¼­ºñ½º ID
+		// ì„œë¹„ìŠ¤ ID
 		values = entity.getServiceId();
 		row = writeSheet.getRow(3);
 		cell = row.createCell(1);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
-		// ¼­ºñ½º ÀÌ¸§
+		// ì„œë¹„ìŠ¤ ì´ë¦„
 		values = entity.getServiceName();
 		row = writeSheet.getRow(3);
 		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ¼­ºñ½º Á¾·ù
+		// ì„œë¹„ìŠ¤ ì¢…ë¥˜
 		switch (String.valueOf(entity.getServiceType()).trim()) {
 	      case "DB" :
 	    	  values = MessageGenerator.getMessage("DB", "DB");
@@ -98,54 +98,54 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ¾î´ğÅÍ ID
+		// ì–´ëŒ‘í„° ID
 		values = entity.getServiceGroup();
 		row = writeSheet.getRow(3);
 		cell = row.createCell(7);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ±×·ì
+		// ê·¸ë£¹
 		values = entity.getServiceGroup();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(1);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ±ÇÇÑ
+		// ê¶Œí•œ
 		values = entity.getPrivilegeId();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
-		// ºñ°í
+		// ë¹„ê³ 
 		values = entity.getServiceDesc();
 		row = writeSheet.getRow(4);
 		cell = row.createCell(5);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
-		// Á¶È¸¸®½ºÆ® ÀÔ·Â
+		// ì¡°íšŒë¦¬ìŠ¤íŠ¸ ì…ë ¥
 		long sum = 0;
 		int i = 7;
 		for (Service serviceInfo : entityList) {
 			row = writeSheet.createRow(i);
 			int c = 0;
 
-			// ¼­ºñ½º ID
+			// ì„œë¹„ìŠ¤ ID
 			values = serviceInfo.getServiceId();
 			cell = row.createCell(c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ¼­ºñ½º ÀÌ¸§
+			// ì„œë¹„ìŠ¤ ì´ë¦„
 			values = serviceInfo.getServiceName();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¼­ºñ½º Á¾·ù			
+			// ì„œë¹„ìŠ¤ ì¢…ë¥˜			
 			switch (serviceInfo.getServiceType()) {
 		      case "DB" :
 		    	  values = MessageGenerator.getMessage("DB", "DB");
@@ -162,25 +162,25 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ¾î´ğÅÍ ID
+			// ì–´ëŒ‘í„° ID
 			values = serviceInfo.getAdapterId();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ±×·ì
+			// ê·¸ë£¹
 			values = serviceInfo.getServiceGroup();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
-			// ±ÇÇÑ
+			// ê¶Œí•œ
 			values = serviceInfo.getPrivilegeId();
 			cell = row.createCell(++c);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 
-			// ºñ°í
+			// ë¹„ê³ 
 			writeSheet.addMergedRegion(new CellRangeAddress(i, i, 6, 7));
 			values = serviceInfo.getServiceDesc();
 			cell = row.createCell(++c);
@@ -190,7 +190,7 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 			sum++;
 			i++;
 		}
-		// ÇÕ°è
+		// í•©ê³„
 		row = writeSheet.createRow(i);
 
 		values = MessageGenerator.getMessage("head.total", "Total");
@@ -267,19 +267,19 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
     }
 
 	public XSSFCellStyle getBaseCellStyle(Workbook workbook) {
-		// Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+		// Cell ìŠ¤íƒ€ì¼ ì§€ì •.
 		XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
-		// ÅØ½ºÆ® ¸ÂÃã(¼¼·Î°¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§ì¶¤(ì„¸ë¡œê°€ìš´ë°)
 		cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		// ÅØ½ºÆ® ¸ÂÃã (°¡·Î °¡¿îµ¥)
+		// í…ìŠ¤íŠ¸ ë§ì¶¤ (ê°€ë¡œ ê°€ìš´ë°)
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî 10
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10
 		cellStyle.setFont(getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex()));
 
-		// Cell Àá±İ
+		// Cell ì ê¸ˆ
 		cellStyle.setLocked(true);
-		// Cell ¿¡¼­ Text ÁÙ¹Ù²Ş È°¼ºÈ­
+		// Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
 		cellStyle.setWrapText(true);
 
 		return cellStyle;
@@ -289,7 +289,7 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 		XSSFCellStyle cellStyle = getBaseCellStyle(workbook);
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-		// ÆùÆ® ÁöÁ¤ »çÀÌÁî (±½°Ô)
+		// í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ (êµµê²Œ)
 		Font font = getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex());
 		font.setBold(true);
 		cellStyle.setFont(font);
@@ -300,10 +300,10 @@ public class ServiceDownloadExcel implements ServiceDownloadBean {
 	}
 
 	public Font getBaseFont(Workbook workbook, int size, short color) {
-		// ÆùÆ®
+		// í°íŠ¸
 		Font font = workbook.createFont();
 		font.setFontHeight((short) (20 * size));
-		font.setFontName("±¼¸²");
+		font.setFontName("êµ´ë¦¼");
 		font.setColor(color);
 		return font;
 	}

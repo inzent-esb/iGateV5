@@ -30,14 +30,14 @@ public class BatchExportDialog extends Dialog
   {
     super(parentShell) ;
   }
-  // ÆÄÀÏÇü½Ä
+  // íŒŒì¼í˜•ì‹
   public String EntityType = null;
   private int fileType = 1 ;
   private static Group group1 ;
   private Button btnType1 ;
   private Button btnType2 ;
   
-  // °æ·Î
+  // ê²½ë¡œ
   private String directoryPath ;
   private static Group group_2 ;
   private static Text txtDir ;
@@ -101,13 +101,13 @@ public class BatchExportDialog extends Dialog
     
     btnBrowse.addSelectionListener(buttonBrowseMouseSelectionListener) ;
     
-    //entity Å¸ÀÔº° ÃÊ±â ¼³Á¤ Ã³¸® 
+    //entity íƒ€ì…ë³„ ì´ˆê¸° ì„¤ì • ì²˜ë¦¬ 
     init() ;
     
     return container ;
   }
 
-  // ³»º¸³»±â entity type ¸í
+  // ë‚´ë³´ë‚´ê¸° entity type ëª…
   public String getEntityType()
   {
     return EntityType ;
@@ -118,7 +118,7 @@ public class BatchExportDialog extends Dialog
     EntityType = entityType ;
   }
 
-  // Browse(ÀúÀå°æ·Î)
+  // Browse(ì €ì¥ê²½ë¡œ)
   private class ButtonBrowseMouseSelectionListener extends SelectionAdapter
   {
     @Override
@@ -133,7 +133,7 @@ public class BatchExportDialog extends Dialog
     }
   }
 
-  // ok ¹öÆ° ´­·¶À» ¶§ÀÇ ÆÄÀÏ °æ·Î¸¦ ³Ñ°ÜÁÖ±â À§ÇØ, º¯¼ö (directoryPath)¿¡ ´ãÀ½ 
+  // ok ë²„íŠ¼ ëˆŒë €ì„ ë•Œì˜ íŒŒì¼ ê²½ë¡œë¥¼ ë„˜ê²¨ì£¼ê¸° ìœ„í•´, ë³€ìˆ˜ (directoryPath)ì— ë‹´ìŒ 
   @Override
   protected void okPressed() {
     if (txtDir.getText() != "")
@@ -147,7 +147,7 @@ public class BatchExportDialog extends Dialog
       LogHandler.openInformation(UiMessage.ERROR_IMPORT_EXPORT_IO_MESSAGE6) ;
   }
   
-  // µğ·ºÅä¸® Á¸Àç¿©ºÎ È®ÀÎ (¾ø´Â µğ·ºÅä¸®ÀÇ °æ¿ì »ı¼º)
+  // ë””ë ‰í† ë¦¬ ì¡´ì¬ì—¬ë¶€ í™•ì¸ (ì—†ëŠ” ë””ë ‰í† ë¦¬ì˜ ê²½ìš° ìƒì„±)
   private void dircetoryPathCheck() 
   {
     File directory = new File(txtDir.getText());
@@ -177,7 +177,7 @@ public class BatchExportDialog extends Dialog
   }
 
   /**
-   * entity Å¸ÀÔº° ÃÊ±â ¼³Á¤ Ã³¸®
+   * entity íƒ€ì…ë³„ ì´ˆê¸° ì„¤ì • ì²˜ë¦¬
    * @author kjm, 2020. 6. 23.
    */
   public void init()
@@ -193,11 +193,11 @@ public class BatchExportDialog extends Dialog
     {
       btnType1.setText(UiMessage.LABEL_XML) ; //[1]xml
       
-      btnType2.setText(StringUtils.EMPTY) ;   //[2]¾øÀ½
+      btnType2.setText(StringUtils.EMPTY) ;   //[2]ì—†ìŒ
       btnType2.setVisible(false);
     }
     
-    //Á£¹øÂ° Ç×¸ñ ¼±ÅÃ
+    //ì “ë²ˆì§¸ í•­ëª© ì„ íƒ
     
     btnType1.setSelection(true);
     btnType2.setSelection(false);

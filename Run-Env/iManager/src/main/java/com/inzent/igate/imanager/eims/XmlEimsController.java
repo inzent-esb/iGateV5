@@ -239,10 +239,10 @@ public class XmlEimsController extends AbstractEimsController
     Element regist = itf.element(ELEMENT_REGIST) ;
     Element define = itf.element(ELEMENT_DEFINE) ;
 
-    // ÀÎÅÍÆäÀÌ½º REPLY¿©ºÎ(Y) (ÀÎÅÍÆäÀÌ½º REPLY¿©ºÎ : Y, N)
+    // ì¸í„°í˜ì´ìŠ¤ REPLYì—¬ë¶€(Y) (ì¸í„°í˜ì´ìŠ¤ REPLYì—¬ë¶€ : Y, N)
     boolean replyYn = Objects.equals("Y", regist.attributeValue(ATTRIBUTE_ITF_REL_F)) ;
 
-    // °Å·¡Å¸ÀÔ µ¿±â(S), ºñµ¿±â(A), ¹«ÀÀ´ä (N)
+    // ê±°ë˜íƒ€ì… ë™ê¸°(S), ë¹„ë™ê¸°(A), ë¬´ì‘ë‹µ (N)
     String tranType = replyYn ? regist.attributeValue(ATTRIBUTE_TS_TCD) : "N" ;
     interfaceMeta.setInterfaceType(Objects.equals("N", tranType) ? "OnlineNoReply" : "OnlineReply") ;
 
@@ -260,21 +260,21 @@ public class XmlEimsController extends AbstractEimsController
       }
 
     if (null == interfaceAdapterId)
-      throw new Exception("¾î´ğÅÍ Á¤º¸¸¦ °¡Á®¿À´Âµ¥ ½ÇÆĞÇß½À´Ï´Ù. INTERFACE.REGIST.BASE CP_CCD = CONSUMER's SYS_CD") ;
+      throw new Exception("ì–´ëŒ‘í„° ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ”ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. INTERFACE.REGIST.BASE CP_CCD = CONSUMER's SYS_CD") ;
     if (null == adpaterService.get(interfaceAdapterId))
-      throw new Exception("MCI½Ã½ºÅÛ¿¡ Á¸ÀçÇÏÁö ¾Ê´Â ½Ã½ºÅÛÄÚµåÀÔ´Ï´Ù. ½Ã½ºÅÛÄÚµå :[" + interfaceAdapterId + "]") ;
+      throw new Exception("MCIì‹œìŠ¤í…œì— ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ì‹œìŠ¤í…œì½”ë“œì…ë‹ˆë‹¤. ì‹œìŠ¤í…œì½”ë“œ :[" + interfaceAdapterId + "]") ;
 
     interfaceMeta.setAdapterId(interfaceAdapterId) ;
     interfaceMeta.setInterfaceGroup(interfaceAdapterId + "." + serviceAdapterId) ;
 
     if (null == serviceAdapterId)
-      throw new Exception("¾î´ğÅÍ Á¤º¸¸¦ °¡Á®¿À´Âµ¥ ½ÇÆĞÇß½À´Ï´Ù. INTERFACE.REGIST.BASE CP_CCD = PROVIDER's SYS_CD") ;
+      throw new Exception("ì–´ëŒ‘í„° ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ”ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. INTERFACE.REGIST.BASE CP_CCD = PROVIDER's SYS_CD") ;
     if (null == adpaterService.get(serviceAdapterId))
-      throw new Exception("MCI½Ã½ºÅÛ¿¡ Á¸ÀçÇÏÁö ¾Ê´Â ½Ã½ºÅÛÄÚµåÀÔ´Ï´Ù. ½Ã½ºÅÛÄÚµå :[" + serviceAdapterId + "]") ;
+      throw new Exception("MCIì‹œìŠ¤í…œì— ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ì‹œìŠ¤í…œì½”ë“œì…ë‹ˆë‹¤. ì‹œìŠ¤í…œì½”ë“œ :[" + serviceAdapterId + "]") ;
 
     String serviceId = define.attributeValue(ATTRIBUTE_PRVD_SV_CD) ;
     if (StringUtils.isBlank(serviceId))
-      throw new Exception("ÀÎÅÍÆäÀÌ½º¿¡ ¸ÅÇÎµÉ ¼­ºñ½ºIDÀº ÇÊ¼ö °ªÀÔ´Ï´Ù. Service Id : [" + serviceId + "]") ;
+      throw new Exception("ì¸í„°í˜ì´ìŠ¤ì— ë§¤í•‘ë  ì„œë¹„ìŠ¤IDì€ í•„ìˆ˜ ê°’ì…ë‹ˆë‹¤. Service Id : [" + serviceId + "]") ;
 
     if (!StringUtils.isBlank(define.attributeValue(ATTRIBUTE_EAI_ITF_ID)))
       addInterfaceProperty(interfaceMeta, ATTRIBUTE_EAI_ITF_ID, define.attributeValue(ATTRIBUTE_EAI_ITF_ID)) ;
@@ -292,7 +292,7 @@ public class XmlEimsController extends AbstractEimsController
 
     interfaceMeta.getInterfaceServices().add(interfaceService) ;
 
-    // ¸ÊÇÎ¿©ºÎ¿¡ µû¸¥ BYPASSÃ³¸® -> ¸ğµ¨À» µî·ÏÇÏÁö ¾ÊÀ½
+    // ë§µí•‘ì—¬ë¶€ì— ë”°ë¥¸ BYPASSì²˜ë¦¬ -> ëª¨ë¸ì„ ë“±ë¡í•˜ì§€ ì•ŠìŒ
     if (Objects.equals("Y", regist.attributeValue(ATTRIBUTE_ITF_MPG_F)))
     {
       for (Element modelElement : define.elements(ELEMENT_ITEMS))
@@ -375,10 +375,10 @@ public class XmlEimsController extends AbstractEimsController
 
     service.setServiceId(define.attributeValue(ATTRIBUTE_PRVD_SV_CD)) ;
 
-    // ÀÎÅÍÆäÀÌ½º REPLY¿©ºÎ(Y) (ÀÎÅÍÆäÀÌ½º REPLY¿©ºÎ : Y, N)
+    // ì¸í„°í˜ì´ìŠ¤ REPLYì—¬ë¶€(Y) (ì¸í„°í˜ì´ìŠ¤ REPLYì—¬ë¶€ : Y, N)
     boolean replyYn = Objects.equals("Y", regist.attributeValue(ATTRIBUTE_ITF_REL_F)) ;
 
-    // °Å·¡Å¸ÀÔ µ¿±â(S), ºñµ¿±â(A), ¹«ÀÀ´ä (N)
+    // ê±°ë˜íƒ€ì… ë™ê¸°(S), ë¹„ë™ê¸°(A), ë¬´ì‘ë‹µ (N)
     String tranType = replyYn ? regist.attributeValue(ATTRIBUTE_TS_TCD) : "N" ;
     switch (tranType)
     {
@@ -404,22 +404,22 @@ public class XmlEimsController extends AbstractEimsController
 
     addServiceProperty(service, ATTRIBUTE_TS_TCD, tranType) ;
 
-    // Àü¼Ûº¸Àå¿©ºÎ(N) (I/F Àü¼Ûº¸Àå ¿©ºÎ : - Ã³¸®À¯ÇüÀÌ Real Time ÀÌ°í °Å·¡À¯ÇüÀÌ Async ÀÎ °æ¿ì¿¡¸¸ Y/N, -
-    // Ã³¸®À¯ÇüÀÌ DeferredÀÎ °æ¿ì¿¡¸¸ Y/N : "Y" - YES, "N" - NO)
+    // ì „ì†¡ë³´ì¥ì—¬ë¶€(N) (I/F ì „ì†¡ë³´ì¥ ì—¬ë¶€ : - ì²˜ë¦¬ìœ í˜•ì´ Real Time ì´ê³  ê±°ë˜ìœ í˜•ì´ Async ì¸ ê²½ìš°ì—ë§Œ Y/N, -
+    // ì²˜ë¦¬ìœ í˜•ì´ Deferredì¸ ê²½ìš°ì—ë§Œ Y/N : "Y" - YES, "N" - NO)
     addServiceProperty(service, ATTRIBUTE_TI_AUE_F, StringUtils.defaultString(regist.attributeValue(ATTRIBUTE_TI_AUE_F), "N")) ;
 
-    // TIO_F Å¸ÀÓ¾Æ¿ô¿©ºÎ() (Å¸ÀÓ¾Æ¿ô¿©ºÎ : Ã³¸®À¯ÇüÀÌ Real TimeNÀÎ°æ¿ì, "Y" - YES, "N" - NO)
+    // TIO_F íƒ€ì„ì•„ì›ƒì—¬ë¶€() (íƒ€ì„ì•„ì›ƒì—¬ë¶€ : ì²˜ë¦¬ìœ í˜•ì´ Real TimeNì¸ê²½ìš°, "Y" - YES, "N" - NO)
     if (Objects.equals("Y", define.attributeValue(ATTRIBUTE_TIO_F)))
     {
-      // TIO_TM Å¸ÀÓ¾Æ¿ô½Ã°£(60) (Å¸ÀÓ¾Æ¿ô½Ã°£ : Å¸ÀÓ¾Æ¿ô¿©ºÎ°¡ "Y"ÀÎ °æ¿ì 1~60ÃÊ »çÀÌ°ª)
+      // TIO_TM íƒ€ì„ì•„ì›ƒì‹œê°„(60) (íƒ€ì„ì•„ì›ƒì‹œê°„ : íƒ€ì„ì•„ì›ƒì—¬ë¶€ê°€ "Y"ì¸ ê²½ìš° 1~60ì´ˆ ì‚¬ì´ê°’)
       int tmout = Integer.parseInt(StringUtils.defaultString(define.attributeValue(ATTRIBUTE_TIO_TM), "0")) ;
       addServiceProperty(service, "response.timeout", Integer.toString(tmout * 1000)) ;
     }
 
-    // ÀÎÅÍÆäÀÌ½º¸ÅÇÎ¿©ºÎ(Y) (EAI ¶Ç´Â MCI¿¡¼­ ¸ÅÇÎÀ» ÇØ¾ßÇÏ´Â ¿ä°ÇÀÌ ÀÖ´ÂÁö À¯¹« : "Y" - YES, "N" - NO)
+    // ì¸í„°í˜ì´ìŠ¤ë§¤í•‘ì—¬ë¶€(Y) (EAI ë˜ëŠ” MCIì—ì„œ ë§¤í•‘ì„ í•´ì•¼í•˜ëŠ” ìš”ê±´ì´ ìˆëŠ”ì§€ ìœ ë¬´ : "Y" - YES, "N" - NO)
     if (Objects.equals("Y", regist.attributeValue(ATTRIBUTE_ITF_MPG_F)))
     {
-      // Á¤»ó ¸ÊÇÎÃ³¸®
+      // ì •ìƒ ë§µí•‘ì²˜ë¦¬
       for (Element modelElement : define.elements(ELEMENT_ITEMS))
         if (Objects.equals(VALUE_PROVIDER, modelElement.attributeValue(ATTRIBUTE_CP_CCD)) && Objects.equals(VALUE_INBOUND, modelElement.attributeValue(ATTRIBUTE_IO_CCD)))
         {
@@ -441,9 +441,9 @@ public class XmlEimsController extends AbstractEimsController
     else
     {
       // BYPASS
-      // ¿äÃ»¸ğµ¨ ÁöÁ¤
+      // ìš”ì²­ëª¨ë¸ ì§€ì •
       service.setRequestRecordId("BYPASS") ;
-      // ÀÀ´ä¸ğµ¨ ÁöÁ¤
+      // ì‘ë‹µëª¨ë¸ ì§€ì •
       service.setResponseRecordId("BYPASS") ;
     }
 
@@ -473,12 +473,12 @@ public class XmlEimsController extends AbstractEimsController
       if (isRequest)
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_REQ_RECORD_ID, "SFD_{0}_I"), service.getServiceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_REQ_RECORD_NAME, "{0} ¿äÃ»"), service.getServiceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_REQ_RECORD_NAME, "{0} ìš”ì²­"), service.getServiceName())) ;
       }
       else
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_RES_RECORD_ID, "SFD_{0}_O"), service.getServiceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_RES_RECORD_NAME, "{0} ÀÀ´ä"), service.getServiceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, SERVICE_RES_RECORD_NAME, "{0} ì‘ë‹µ"), service.getServiceName())) ;
       }
 
       record.setPrivilegeId(service.getPrivilegeId()) ;
@@ -494,12 +494,12 @@ public class XmlEimsController extends AbstractEimsController
       if (isRequest)
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_RECORD_ID, "IFD_{0}_I"), interfaceMeta.getInterfaceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_RECORD_NAME, "{0} ¿äÃ»"), interfaceMeta.getInterfaceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_RECORD_NAME, "{0} ìš”ì²­"), interfaceMeta.getInterfaceName())) ;
       }
       else
       {
         record.setRecordId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_RECORD_ID, "IFD_{0}_O"), interfaceMeta.getInterfaceId())) ;
-        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_RECORD_NAME, "{0} ÀÀ´ä"), interfaceMeta.getInterfaceName())) ;
+        record.setRecordName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_RECORD_NAME, "{0} ì‘ë‹µ"), interfaceMeta.getInterfaceName())) ;
       }
 
       record.setPrivilegeId(interfaceMeta.getPrivilegeId()) ;
@@ -563,8 +563,8 @@ public class XmlEimsController extends AbstractEimsController
     field.getPk().setFieldId(childElement.attributeValue(ATTRIBUTE_TER_ENG_NM)) ;
     field.setFieldName(childElement.attributeValue(ATTRIBUTE_TER_NM)) ;
     field.setFieldOrder(order) ;
-    // ³í¸®À¯Çü¸í : "CHAR" - ¹®ÀÚÇü, "NUMBER" - ¼ıÀÚÇü, "BINARY" - ¹ÙÀÌ³Ê¸®Çü, ¡Ø ±¸ºĞ¹®ÀÚ°¡ ÀÖ´Â °æ¿ì¿¡´Â
-    // »ı·«(ÃÖ´ëÀÚ¸®¼ö, ¼Ò¼öÁ¡ÀÚ¸®¼öµµ µ¿ÀÏ Àû¿ë)
+    // ë…¼ë¦¬ìœ í˜•ëª… : "CHAR" - ë¬¸ìí˜•, "NUMBER" - ìˆ«ìí˜•, "BINARY" - ë°”ì´ë„ˆë¦¬í˜•, â€» êµ¬ë¶„ë¬¸ìê°€ ìˆëŠ” ê²½ìš°ì—ëŠ”
+    // ìƒëµ(ìµœëŒ€ìë¦¬ìˆ˜, ì†Œìˆ˜ì ìë¦¬ìˆ˜ë„ ë™ì¼ ì ìš©)
     field.setFieldType(NAME_TYPE_MAP.get(childElement.attributeValue(ATTRIBUTE_LCL_TP_NM))) ;
     // Not, Fixed, Variable
     field.setArrayType(NAME_ARRYTYPE_MAP.get("Not")) ;
@@ -619,13 +619,13 @@ public class XmlEimsController extends AbstractEimsController
     if (isRequest)
     {
       mapping.setMappingId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_MAPPING_ID, "IMP_{0}_{1}_I"), interfaceMeta.getInterfaceId(), service.getServiceId())) ;
-      mapping.setMappingName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_MAPPING_NAME, "{0}-{1} ¿äÃ» ¸ÊÇÎ"), interfaceMeta.getInterfaceId(), service.getServiceName())) ;
+      mapping.setMappingName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_REQ_MAPPING_NAME, "{0}-{1} ìš”ì²­ ë§µí•‘"), interfaceMeta.getInterfaceId(), service.getServiceName())) ;
       recordId = service.getRequestRecordId() ;
     }
     else
     {
       mapping.setMappingId(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_MAPPING_ID, "IMP_{0}_{1}_O"), interfaceMeta.getInterfaceId(), service.getServiceId())) ;
-      mapping.setMappingName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_MAPPING_NAME, "{0}-{1} ÀÀ´ä ¸ÊÇÎ"), interfaceMeta.getInterfaceId(), service.getServiceName())) ;
+      mapping.setMappingName(MessageFormat.format(propertyService.getProperty(NAMING_RULE, INTERFACE_RES_MAPPING_NAME, "{0}-{1} ì‘ë‹µ ë§µí•‘"), interfaceMeta.getInterfaceId(), service.getServiceName())) ;
       recordId = interfaceMeta.getInterfaceResponses().get(0).getPk().getRecordId() ;
     }
 

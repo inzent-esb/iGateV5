@@ -13,6 +13,6 @@ public class ExceptionManagerBean extends AbstractExceptionManager<ExceptionLog>
   @Override
   protected void handledException(ExceptionLog exceptionLog, Throwable th) throws Exception
   {
-    // ¿¹¿Ü Ã³¸® ·ÎÁ÷ Ãß°¡
+    // ì˜ˆì™¸ ì²˜ë¦¬ ë¡œì§ ì¶”ê°€
   }
 }

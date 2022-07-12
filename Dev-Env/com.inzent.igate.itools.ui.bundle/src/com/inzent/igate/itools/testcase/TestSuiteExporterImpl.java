@@ -44,7 +44,7 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getTestCaseListByScenario
    * 
-   * TestSuiteScenario list --> TestCase list ÃßÃâ
+   * TestSuiteScenario list --> TestCase list ì¶”ì¶œ
    *  
    * @param scenarioList
    * @return
@@ -85,7 +85,7 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getTestCaseListByResult
    * 
-   * TestSuiteResult list --> TestCase Result list ÃßÃâ
+   * TestSuiteResult list --> TestCase Result list ì¶”ì¶œ
    *  
    * @param testCaseList
    * @param scenarioList
@@ -174,8 +174,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
       String value = null ;         
       CellStyle cellStyle_info = getInfoCellStyle(workbook);
 
-      //===== ¿¢¼¿ 2¹øÂ° ÁÙ °ª ¼³Á¤ =====
-      // Á¦¸ñ 
+      //===== ì—‘ì…€ 2ë²ˆì§¸ ì¤„ ê°’ ì„¤ì • =====
+      // ì œëª© 
       CellStyle cellStyle_title = getTitileCellStyle(workbook);
       value = String.format("%s( %s )", testSuite.getTestSuiteId(), testSuite.getTestSuiteDesc());
       row = writeSheet.getRow(1) ;
@@ -187,8 +187,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
           cell.setCellValue(value) ;
       }
 
-      //===== ¿¢¼¿ 4¹øÂ° ÁÙ °ª ¼³Á¤ =====
-      // Å×½ºÆ® °á°ú
+      //===== ì—‘ì…€ 4ë²ˆì§¸ ì¤„ ê°’ ì„¤ì • =====
+      // í…ŒìŠ¤íŠ¸ ê²°ê³¼
       if (TestCaseValidateConstants.TEST_SUITE_RESULTS.containsKey(testSuite.getTestSuiteStatus()))
         value = StringUtils.trimToEmpty((String) TestCaseValidateConstants.TEST_SUITE_RESULTS.get(testSuite.getTestSuiteStatus()).getValue());
       else
@@ -199,33 +199,33 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
       cell.setCellStyle(cellStyle_info) ;
       cell.setCellValue(value) ;
 
-      // Å×½ºÆ® ¼öÇàÀÚ
+      // í…ŒìŠ¤íŠ¸ ìˆ˜í–‰ì
       value = testSuite.getTestUserId();
       cell = row.getCell(3) ;
       cell.setCellStyle(cellStyle_info) ;
       cell.setCellValue(value) ;
 
-      // Å×½ºÆ® ÀÏ½Ã
+      // í…ŒìŠ¤íŠ¸ ì¼ì‹œ
       value = testSuite.getTestDateTime();
       cell = row.getCell(5) ;
       cell.setCellStyle(cellStyle_info) ;
       cell.setCellValue(value) ;
 
-      //===== ¿¢¼¿ 5¹øÂ° ÁÙ °ª ¼³Á¤ =====
-      // ÃÑ °Ç¼ö
+      //===== ì—‘ì…€ 5ë²ˆì§¸ ì¤„ ê°’ ì„¤ì • =====
+      // ì´ ê±´ìˆ˜
       value =  Integer.toString(nTotal);
       row = writeSheet.getRow(4) ;
       cell = row.getCell(1) ;
       cell.setCellStyle(cellStyle_info) ;
       cell.setCellValue(value) ;
 
-      // ¼º°ø °Ç¼ö
+      // ì„±ê³µ ê±´ìˆ˜
       value =  Integer.toString(nSucess);
       cell = row.getCell(3) ;
       cell.setCellStyle(cellStyle_info) ;
       cell.setCellValue(value) ;
 
-      // ½ÇÆĞ °Ç¼ö
+      // ì‹¤íŒ¨ ê±´ìˆ˜
       value =  Integer.toString(nFail);
       cell = row.getCell(5) ;
       cell.setCellStyle(cellStyle_info) ;
@@ -244,17 +244,17 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   }
 
   /**
-   * Å×½ºÆ® °á°ú¸®½ºÆ®¸¦ »ı¼º 
-   * @param workbook ³»º¸³»±â ÇÒ ¿¢¼¿  workbook
-   * @param writeSheet ³»º¸³»±â ÇÒ ¿¢¼¿  Sheet
-   * @param result ³»º¸³»±â ÇÒ Á¤º¸
-   * @param rowindex Å×½ºÆ® °á°ú¸®½ºÆ® Á¤º¸°¡ ÀÔ·ÂµÉ ¿¢¼¿ÀÇ ½ÃÀÛ row ¹øÈ£ (6)
+   * í…ŒìŠ¤íŠ¸ ê²°ê³¼ë¦¬ìŠ¤íŠ¸ë¥¼ ìƒì„± 
+   * @param workbook ë‚´ë³´ë‚´ê¸° í•  ì—‘ì…€  workbook
+   * @param writeSheet ë‚´ë³´ë‚´ê¸° í•  ì—‘ì…€  Sheet
+   * @param result ë‚´ë³´ë‚´ê¸° í•  ì •ë³´
+   * @param rowindex í…ŒìŠ¤íŠ¸ ê²°ê³¼ë¦¬ìŠ¤íŠ¸ ì •ë³´ê°€ ì…ë ¥ë  ì—‘ì…€ì˜ ì‹œì‘ row ë²ˆí˜¸ (6)
    * @author kjm, 2020. 5. 19.
    */
   public void exportExcelTestResults(Workbook workbook, Sheet writeSheet, List<TestCase> testCaseResultList, int rowindex)
   {
     CellStyle cellStyle = getDataCellStyle(workbook);   
-    CellStyle cellStyleIndention = getIndentionDataCellStyle(workbook);  //µé¿©¾²±â
+    CellStyle cellStyleIndention = getIndentionDataCellStyle(workbook);  //ë“¤ì—¬ì“°ê¸°
     Row row = null ;
     Cell cell = null ;
     String value = null ;
@@ -266,13 +266,13 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
       //row         
       row = writeSheet.createRow(rowindex) ;
       
-      //Á¦¸ñ  
+      //ì œëª©  
       value = String.format("%s (%s)", testCase.getPk().toString(), testCase.getTestCaseDesc());
       cell = row.createCell(0) ;
       cell.setCellStyle(cellStyle) ;
       cell.setCellValue(value);
       
-      // Å×½ºÆ® °á°ú  
+      // í…ŒìŠ¤íŠ¸ ê²°ê³¼  
       value = String.valueOf(TestCaseValidateConstants.TEST_CASE_STATUS_NONE_DESC);
       if (TestCaseValidateConstants.TEST_CASE_RESULTS.containsKey(testCase.getTestCaseStatus()))
         value = StringUtils.trimToEmpty((String) TestCaseValidateConstants.TEST_CASE_RESULTS.get(testCase.getTestCaseStatus()).getValue());
@@ -293,31 +293,31 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
             if( !Boolean.valueOf((testCaseResult.getTestResult()=='Y')))
             {
               cellStyle = getErrorDataCellStyle(workbook);
-              cellStyleIndention = getIndentionErrorDataCellStyle(workbook);  //µé¿©¾²±â
+              cellStyleIndention = getIndentionErrorDataCellStyle(workbook);  //ë“¤ì—¬ì“°ê¸°
             }
             else
             {
               cellStyle = getDataCellStyle(workbook);
-              cellStyleIndention = getIndentionDataCellStyle(workbook);  //µé¿©¾²±â
+              cellStyleIndention = getIndentionDataCellStyle(workbook);  //ë“¤ì—¬ì“°ê¸°
             }
 
             //row         
             row = writeSheet.createRow(rowindex) ;
 
-            //Á¦¸ñ
+            //ì œëª©
                
             value = String.format("\t%s",testCaseResult.getPk().getTestCaseValidateId());
             cell = row.createCell(0) ;
             cell.setCellStyle(cellStyleIndention);
             cell.setCellValue(value);
 
-            //ÇÊµå
+            //í•„ë“œ
             value = testCaseValidate.getFieldPath();
             cell = row.createCell(1) ;
             cell.setCellStyle(cellStyle) ;
             cell.setCellValue(value) ;
 
-            //°ËÁõ¹æ¹ı  
+            //ê²€ì¦ë°©ë²•  
             if (TestCaseValidateConstants.VALIDATE_TYPES.containsKey(testCaseValidate.getValidateMethod()))
               value = StringUtils.trimToEmpty((String) TestCaseValidateConstants.VALIDATE_TYPES.get(testCaseValidate.getValidateMethod()).getValue());
             else
@@ -326,25 +326,25 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
             cell.setCellStyle(cellStyle) ;
             cell.setCellValue(value) ;
 
-            //±â´ë°ª
+            //ê¸°ëŒ€ê°’
             value = testCaseValidate.getExpectedValue();
             cell = row.createCell(3) ;
             cell.setCellStyle(cellStyle) ;
             cell.setCellValue(value) ;
 
-            // Å×½ºÆ®°ª    
+            // í…ŒìŠ¤íŠ¸ê°’    
             value = testCaseResult.getTestValue();
             cell = row.createCell(4) ;
             cell.setCellStyle(cellStyle) ;
             cell.setCellValue(value) ;
 
-            // Å×½ºÆ® °á°ú  
+            // í…ŒìŠ¤íŠ¸ ê²°ê³¼  
             value = String.valueOf(testCaseResult.getTestResult()=='Y');
             cell = row.createCell(5) ;
             cell.setCellStyle(cellStyle) ;
             cell.setCellValue(value) ;
 
-            // ¿À·ù ¸Ş¼¼Áö
+            // ì˜¤ë¥˜ ë©”ì„¸ì§€
             value = testCaseResult.getTestMessage();
             cell = row.createCell(6) ;
             cell.setCellStyle(cellStyle) ;
@@ -362,7 +362,7 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getBaseFont
    * 
-   * ±âº» ÆùÆ® 
+   * ê¸°ë³¸ í°íŠ¸ 
    * @param workbook
    * @param size
    * @param color
@@ -371,10 +371,10 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
    */
   public Font getBaseFont(Workbook workbook, int size, short color)
   {
-    // ÆùÆ®
+    // í°íŠ¸
     Font font = workbook.createFont() ;
     font.setFontHeight((short) (20 * size)) ;
-    font.setFontName("±¼¸²") ;
+    font.setFontName("êµ´ë¦¼") ;
     font.setColor(color);
     return font;
   }
@@ -382,32 +382,32 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getBaseCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º ±âº» Cell ½ºÅ¸ÀÏ
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê¸°ë³¸ Cell ìŠ¤íƒ€ì¼
    * @param workbook
    * @return
    * @author kjm, 2020. 4. 23.
    */
   public CellStyle getBaseCellStyle(Workbook workbook)
   {
-    // Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+    // Cell ìŠ¤íƒ€ì¼ ì§€ì •.
     CellStyle cellStyle = workbook.createCellStyle() ;
-    // ÅØ½ºÆ® ¸ÂÃã(¼¼·Î°¡¿îµ¥)
+    // í…ìŠ¤íŠ¸ ë§ì¶¤(ì„¸ë¡œê°€ìš´ë°)
     cellStyle.setVerticalAlignment(VerticalAlignment.CENTER) ;
-    // ÅØ½ºÆ® ¸ÂÃã (°¡·Î °¡¿îµ¥)
+    // í…ìŠ¤íŠ¸ ë§ì¶¤ (ê°€ë¡œ ê°€ìš´ë°)
     cellStyle.setAlignment(HorizontalAlignment.CENTER) ;
 
-    //ÆùÆ® ÁöÁ¤ »çÀÌÁî 10
+    //í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10
     cellStyle.setFont(getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex())) ; 
 
-    // Cell Å×µÎ¸® (Á¡¼±)
+    // Cell í…Œë‘ë¦¬ (ì ì„ )
     cellStyle.setBorderTop(BorderStyle.HAIR) ;
     cellStyle.setBorderBottom(BorderStyle.HAIR) ;
     cellStyle.setBorderLeft(BorderStyle.HAIR) ;
     cellStyle.setBorderRight(BorderStyle.HAIR) ;
 
-    // Cell Àá±İ
+    // Cell ì ê¸ˆ
     cellStyle.setLocked(true) ; 
-    // Cell ¿¡¼­ Text ÁÙ¹Ù²Ş È°¼ºÈ­
+    // Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
     cellStyle.setWrapText(true) ; 
 
     return cellStyle;
@@ -416,8 +416,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getTitileCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º °á°ú title Cell ½ºÅ¸ÀÏ
-   * (getBaseCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê²°ê³¼ title Cell ìŠ¤íƒ€ì¼
+   * (getBaseCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * @param workbook
    * @return
    * @author kjm, 2020. 4. 23.
@@ -427,19 +427,19 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
     CellStyle cellStyle = getBaseCellStyle(workbook);
     cellStyle.setAlignment(HorizontalAlignment.CENTER) ;
     
-    //ÆùÆ® ÁöÁ¤ »çÀÌÁî 18
+    //í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 18
     Font font = getBaseFont(workbook, 18, IndexedColors.BLACK.getIndex());
     font.setBold(true);
     cellStyle.setFont(font);
 
-    // Cell Å×µÎ¸® (µÎ²¨¿î)
+    // Cell í…Œë‘ë¦¬ (ë‘êº¼ìš´)
     cellStyle.setBorderTop(BorderStyle.THICK) ;
     cellStyle.setBorderBottom(BorderStyle.THICK) ;
-    // Cell Å×µÎ¸® (¾ø´Â)
+    // Cell í…Œë‘ë¦¬ (ì—†ëŠ”)
     cellStyle.setBorderLeft(BorderStyle.NONE) ;
     cellStyle.setBorderRight(BorderStyle.NONE) ;
 
-    // Cell ¿¡¼­ Text ÁÙ¹Ù²Ş È°¼ºÈ­
+    // Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
     cellStyle.setWrapText(false) ;
 
     return cellStyle;
@@ -448,8 +448,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getInfoCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º °á°ú Á¤º¸ Cell ½ºÅ¸ÀÏ
-   * (getBaseCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê²°ê³¼ ì •ë³´ Cell ìŠ¤íƒ€ì¼
+   * (getBaseCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * @param workbook
    * @return
    * @author kjm, 2020. 4. 23.
@@ -466,8 +466,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getDataCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º °á°ú ¸ñ·Ï Á¤»ó Cell ½ºÅ¸ÀÏ
-   * (getBaseCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê²°ê³¼ ëª©ë¡ ì •ìƒ Cell ìŠ¤íƒ€ì¼
+   * (getBaseCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * @param workbook
    * @return
    * @author kjm, 2020. 4. 23.
@@ -484,8 +484,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getBoldDataCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º °á°ú ¸ñ·Ï Á¤»ó Cell ½ºÅ¸ÀÏ
-   * (getBaseCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê²°ê³¼ ëª©ë¡ ì •ìƒ Cell ìŠ¤íƒ€ì¼
+   * (getBaseCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * 
    * @param workbook
    * @return
@@ -495,12 +495,12 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   {
     CellStyle cellStyle = getDataCellStyle(workbook);
     
-    //ÆùÆ® ÁöÁ¤ »çÀÌÁî 10  / bold
+    //í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10  / bold
     Font font = getBaseFont(workbook, 10, IndexedColors.BLACK.getIndex());
     font.setBold(true);
     cellStyle.setFont(font);
     
-    // Cell ¿¡¼­ Text ÁÙ¹Ù²Ş ºñÈ°¼ºÈ­
+    // Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ ë¹„í™œì„±í™”
     cellStyle.setWrapText(false) ; 
     
     return cellStyle;
@@ -511,8 +511,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getIndentionDataCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º °á°ú ¸ñ·Ï Á¤»ó Cell ½ºÅ¸ÀÏ
-   * (getBaseCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê²°ê³¼ ëª©ë¡ ì •ìƒ Cell ìŠ¤íƒ€ì¼
+   * (getBaseCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * 
    * @param workbook
    * @return
@@ -522,7 +522,7 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   {
     CellStyle cellStyle = getDataCellStyle(workbook);
     
-    // Cell¿¡¼­ µé¿©¾²±â °ø¹é¼ö ÁöÁ¤
+    // Cellì—ì„œ ë“¤ì—¬ì“°ê¸° ê³µë°±ìˆ˜ ì§€ì •
     cellStyle.setIndention((short) 2); 
     
     return cellStyle;
@@ -532,8 +532,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getErrorDataCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º °á°ú ¸ñ·Ï ¿À·ù Cell ½ºÅ¸ÀÏ
-   * (getDataCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê²°ê³¼ ëª©ë¡ ì˜¤ë¥˜ Cell ìŠ¤íƒ€ì¼
+   * (getDataCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * @param workbook
    * @return
    * @author kjm, 2020. 4. 23.
@@ -542,7 +542,7 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   {
     CellStyle cellStyle = getDataCellStyle(workbook);
 
-    //ÆùÆ® ÁöÁ¤ »çÀÌÁî 10 red
+    //í°íŠ¸ ì§€ì • ì‚¬ì´ì¦ˆ 10 red
     cellStyle.setFont(getBaseFont(workbook, 10, IndexedColors.RED.getIndex())) ; 
       
     return cellStyle;
@@ -551,8 +551,8 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   /**
    * getIndentionErrorDataCellStyle
    * 
-   * Å×½ºÆ® ÄÉÀÌ½º °á°ú ¸ñ·Ï Á¤»ó Cell ½ºÅ¸ÀÏ
-   * (getBaseCellStyle)À» ±âº»À¸·Î º¯°æ °Ç¸¸ ¼³Á¤ 
+   * í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ê²°ê³¼ ëª©ë¡ ì •ìƒ Cell ìŠ¤íƒ€ì¼
+   * (getBaseCellStyle)ì„ ê¸°ë³¸ìœ¼ë¡œ ë³€ê²½ ê±´ë§Œ ì„¤ì • 
    * 
    * @param workbook
    * @return
@@ -562,7 +562,7 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
   {
     CellStyle cellStyle = getErrorDataCellStyle(workbook);
     
-    // Cell¿¡¼­ µé¿©¾²±â °ø¹é¼ö ÁöÁ¤
+    // Cellì—ì„œ ë“¤ì—¬ì“°ê¸° ê³µë°±ìˆ˜ ì§€ì •
     cellStyle.setIndention((short) 2); 
     
     return cellStyle;

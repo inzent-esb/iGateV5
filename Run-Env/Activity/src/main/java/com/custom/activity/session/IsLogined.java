@@ -39,7 +39,7 @@ public class IsLogined extends AbstractActivity
     Record request = (Record) args[1] ;
 
     if (Boolean.parseBoolean(adapterParameter.getInterface().getProperty(LOGIN_CHECK_PROPERTY_KEY, "true")) && !isValid(adapterParameter, request))
-      throw new IGateException("ELOG0001", "·Î±×ÀÎ µÇÁö ¾ÊÀº ¼¼¼Ç ÀÔ´Ï´Ù.") ;
+      throw new IGateException("ELOG0001", "ë¡œê·¸ì¸ ë˜ì§€ ì•Šì€ ì„¸ì…˜ ì…ë‹ˆë‹¤.") ;
 
     return 0 ;
   }
