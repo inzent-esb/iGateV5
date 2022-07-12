@@ -35,7 +35,10 @@ public class AppianClientSession extends HttpComponentsSession
 
     ValueObject headers = (ValueObject) valueObject.get(HttpConstants.HEADER) ;
     if (null == headers)
+    {
       headers = new ValueObject(false, true) ; // HTTP Header를 Setting
+      valueObject.put(HttpConstants.HEADER, headers) ;
+    }
     else
       headers.remove("Appian-API-Key") ;
 
