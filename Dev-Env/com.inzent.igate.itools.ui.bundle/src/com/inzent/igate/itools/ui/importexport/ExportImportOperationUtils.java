@@ -54,9 +54,9 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
    * Export exportXml
    * 
    * @param String
-   *          path ÀúÀå À§Ä¡
+   *          path ì €ì¥ ìœ„ì¹˜
    * @param Operation
-   *          operation view ¿¡¼­ ¼±ÅÃÇÑ Operation
+   *          operation view ì—ì„œ ì„ íƒí•œ Operation
    * @return
    */
   public Map<String, Object> exportXml(String path, Operation operation)
@@ -260,7 +260,7 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
       }
 
       // ======================================================================================================
-      // 21.05.27 »ç¿ëÀÚ°¡ ¼ÒÀ¯ÇÑ ±ÇÇÑ Á¤º¸ Ã¼Å© ÇÏ¿© Àç¼³Á¤
+      // 21.05.27 ì‚¬ìš©ìê°€ ì†Œìœ í•œ ê¶Œí•œ ì •ë³´ ì²´í¬ í•˜ì—¬ ì¬ì„¤ì •
       Collection<String> userBusinessPrivileges ;
       try
       {
@@ -274,7 +274,7 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
       if (!userBusinessPrivileges.isEmpty() && !userBusinessPrivileges.contains(operation.getPrivilegeId()))
         operation.setPrivilegeId(userBusinessPrivileges.iterator().next()) ;
 
-      // ¸ğµ¨ Á¸Àç À¯¹«¿¡ µû¶ó update / insert ·Î ³ª´²¼­ Ã³¸®
+      // ëª¨ë¸ ì¡´ì¬ ìœ ë¬´ì— ë”°ë¼ update / insert ë¡œ ë‚˜ëˆ ì„œ ì²˜ë¦¬
       ResponseObject<Operation> responseObject ;
       try
       {

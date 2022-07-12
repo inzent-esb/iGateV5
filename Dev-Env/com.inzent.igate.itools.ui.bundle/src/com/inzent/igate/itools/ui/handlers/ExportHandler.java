@@ -31,12 +31,12 @@ import com.inzent.itools.views.MenuContentItem ;
 public class ExportHandler extends AbstractExportHandler
 {
   protected String resulRecordtMessage ;
-  protected int exportTotalRecordCount ; // ÃÑ ¸ğµ¨ °¹¼ö
-  protected int exportSuccessRecordCount ; // ¼º°øÇÑ ¸ğµ¨ °¹¼ö
+  protected int exportTotalRecordCount ; // ì´ ëª¨ë¸ ê°¯ìˆ˜
+  protected int exportSuccessRecordCount ; // ì„±ê³µí•œ ëª¨ë¸ ê°¯ìˆ˜
 
   protected String resulOperationtMessage ;
-  protected int exportTotalOperationCount ; // ÃÑ ¿ÀÆÛ·¹ÀÌ¼Ç °¹¼ö
-  protected int exportSuccessOperationCount ; // ¼º°øÇÑ ¿ÀÆÛ·¹ÀÌ¼Ç °¹¼ö
+  protected int exportTotalOperationCount ; // ì´ ì˜¤í¼ë ˆì´ì…˜ ê°¯ìˆ˜
+  protected int exportSuccessOperationCount ; // ì„±ê³µí•œ ì˜¤í¼ë ˆì´ì…˜ ê°¯ìˆ˜
 
   protected final Exporter<Operation> operationExporter ;
   protected final Exporter<Record> recordExporter ;
@@ -60,10 +60,10 @@ public class ExportHandler extends AbstractExportHandler
   @Override
   protected void exportSelected(Set<MenuContentItem> items) throws ExecutionException
   {
-    // ³»º¸³»±â Dialog ¿¡¼­ view¿¡¼­ÀÇ ´ÜÃàÅ° Ctrl + c, Ctrl + vÀÇ µ¿ÀÛÀ» È¸ÇÇÇÏ±â À§ÇÔ
+    // ë‚´ë³´ë‚´ê¸° Dialog ì—ì„œ viewì—ì„œì˜ ë‹¨ì¶•í‚¤ Ctrl + c, Ctrl + vì˜ ë™ì‘ì„ íšŒí”¼í•˜ê¸° ìœ„í•¨
     ((AbstractMenuViewPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MenuViewPart.ID)).refresh(items.iterator()) ;
 
-    // ======= ³»º¸³»±â °¡´É ¿©ºÎ Ã¼Å© =======
+    // ======= ë‚´ë³´ë‚´ê¸° ê°€ëŠ¥ ì—¬ë¶€ ì²´í¬ =======
     TreeSet<String> possibleTypes = new TreeSet<>() ;
     TreeSet<String> impossibleTypes = new TreeSet<>() ;
 
@@ -73,7 +73,7 @@ public class ExportHandler extends AbstractExportHandler
       else
         impossibleTypes.add(menuContentItem.getValue().getClass().getSimpleName()) ;
 
-    // export ½Ãµµ Ç×¸ñµé ÁßÀÇ Å¸ÀÔº° 1 ºÒ°¡´É/°¡´É È®ÀÎ ¸Ş½ÃÁö
+    // export ì‹œë„ í•­ëª©ë“¤ ì¤‘ì˜ íƒ€ì…ë³„ 1 ë¶ˆê°€ëŠ¥/ê°€ëŠ¥ í™•ì¸ ë©”ì‹œì§€
     String message = "\n\n" ;
     if (!impossibleTypes.isEmpty())
       message += impossibleTypes.toString() + " " + UiMessage.INFORMATION_IO_MESSAGE3 ;
@@ -85,28 +85,28 @@ public class ExportHandler extends AbstractExportHandler
       message += UiMessage.INFORMATION_IO_MESSAGE7 ;
     }
 
-    // export °¡´ÉÇÑ Å¸ÀÔÀÌ ¾ø´Â °æ¿ì ¸Ş½ÃÄ¡ Ãâ·Â ÈÄ Á¾·á
+    // export ê°€ëŠ¥í•œ íƒ€ì…ì´ ì—†ëŠ” ê²½ìš° ë©”ì‹œì¹˜ ì¶œë ¥ í›„ ì¢…ë£Œ
     if (possibleTypes.isEmpty())
     {
       LogHandler.openInformation(message.substring(2)) ;
       return ;
     }
-    //export °¡´ÉÇÑ Å¸ÀÔÀÌ Á¸Àç ÇÏ´Â °æ¿ì export ÁøÇàÇÒÁö ¿©ºÎ È®ÀÎ ¸Ş½ÃÁöÃ¢ 
+    //export ê°€ëŠ¥í•œ íƒ€ì…ì´ ì¡´ì¬ í•˜ëŠ” ê²½ìš° export ì§„í–‰í• ì§€ ì—¬ë¶€ í™•ì¸ ë©”ì‹œì§€ì°½ 
     else if (!LogHandler.openConfirm(message.substring(2) + "\n\n" + UiMessage.INFORMATION_IO_MESSAGE11))
       return ;
-    // ======= ³»º¸³»±â °¡´É ¿©ºÎ Ã¼Å© =======
+    // ======= ë‚´ë³´ë‚´ê¸° ê°€ëŠ¥ ì—¬ë¶€ ì²´í¬ =======
 
-    // ======= ³»º¸³»±â Ã³¸® °¡´É Å¸ÀÔ º°·Î Ã³¸® =======
-    // ¿£Æ¼Æ¼ Å¸ÀÔº° export ÇÒ °æ·Î
+    // ======= ë‚´ë³´ë‚´ê¸° ì²˜ë¦¬ ê°€ëŠ¥ íƒ€ì… ë³„ë¡œ ì²˜ë¦¬ =======
+    // ì—”í‹°í‹° íƒ€ì…ë³„ export í•  ê²½ë¡œ
     HashMap<String, String> exportTypePathMap = new HashMap<String, String>() ;
-    // ¿£Æ¼ÀÌ Å¸ÀÔº° export ÇÒ ÆÄÀÏÀÇ Å¸ÀÔ ( [ ex ] Record : (1)json / (2)excel , Operation : (1)xml )
+    // ì—”í‹°ì´ íƒ€ì…ë³„ export í•  íŒŒì¼ì˜ íƒ€ì… ( [ ex ] Record : (1)json / (2)excel , Operation : (1)xml )
     HashMap<String, Integer> exportFileTypeMap = new HashMap<String, Integer>() ;
 
     for (String entityType : possibleTypes)
     {
-      // Browse(ÀúÀå°æ·Î)
+      // Browse(ì €ì¥ê²½ë¡œ)
       BatchExportDialog dialog = new BatchExportDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()) ;
-      // entity Å¸ÀÔ Á¤º¸ ³Ñ±è
+      // entity íƒ€ì… ì •ë³´ ë„˜ê¹€
       dialog.setEntityType(entityType) ;
 
       if (BatchExportDialog.OK == dialog.open())
@@ -122,7 +122,7 @@ public class ExportHandler extends AbstractExportHandler
       }
     }
 
-    // °æ·Î¸¦ ÁöÁ¤ÇÏÁö ¾ÊÀº °æ¿ì Á¾·á
+    // ê²½ë¡œë¥¼ ì§€ì •í•˜ì§€ ì•Šì€ ê²½ìš° ì¢…ë£Œ
     if (exportTypePathMap.isEmpty())
       return ;
 
@@ -140,19 +140,19 @@ public class ExportHandler extends AbstractExportHandler
       if (null == selectedPath)
         continue ;
 
-      // Record ÀÎ °æ¿ì,
+      // Record ì¸ ê²½ìš°,
       if (isRecord(menuContentItem.getValue()))
         exportRecord((Record) menuContentItem.getValue(), selectedPath, exportFileTypeMap.get(Record.class.getSimpleName())) ;
-      //Operation ÀÎ °æ¿ì ,
+      //Operation ì¸ ê²½ìš° ,
       else if (isOperation(menuContentItem.getValue()))
         exportOperation((Operation) menuContentItem.getValue(), selectedPath, exportFileTypeMap.get(Operation.class.getSimpleName())) ;
     }
 
-    // °á°ú ¸Ş½ÃÁö Á¶¸³
+    // ê²°ê³¼ ë©”ì‹œì§€ ì¡°ë¦½
     String resulTotaltMessage = StringUtils.EMPTY ;
     if (!resulRecordtMessage.equals(StringUtils.EMPTY))
     {
-      // export °¹¼ö
+      // export ê°¯ìˆ˜
       if (exportTotalRecordCount > 0)
         resulRecordtMessage += String.format(MetaConstants.MESSAGE_SUMMARYINFO, exportTotalRecordCount, exportSuccessRecordCount, exportTotalRecordCount - exportSuccessRecordCount) ;
 
@@ -161,7 +161,7 @@ public class ExportHandler extends AbstractExportHandler
 
     if (!resulOperationtMessage.equals(StringUtils.EMPTY))
     {
-      // export °¹¼ö
+      // export ê°¯ìˆ˜
       if (exportTotalOperationCount > 0)
         resulOperationtMessage += String.format(MetaConstants.MESSAGE_SUMMARYINFO, exportTotalOperationCount, exportSuccessOperationCount, exportTotalOperationCount - exportSuccessOperationCount) ;
 
@@ -229,11 +229,11 @@ public class ExportHandler extends AbstractExportHandler
     Map<String, Object> resultMap = null ;
     switch (fileTpye)
     {
-    case 1 : // JSON ÀÎ °æ¿ì,
+    case 1 : // JSON ì¸ ê²½ìš°,
       resultMap = recordExporter.exportJson(selectedPath, currentRecord) ;
       break ;
 
-    case 2 : // Excel ÀÎ °æ¿ì,
+    case 2 : // Excel ì¸ ê²½ìš°,
       resultMap = recordExporter.exportExcel(selectedPath, currentRecord) ;
       break ;
     }
@@ -268,7 +268,7 @@ public class ExportHandler extends AbstractExportHandler
     Map<String, Object> resultMap = null ;
     switch (fileTpye)
     {
-    case 1 :// xml ÀÎ °æ¿ì,
+    case 1 :// xml ì¸ ê²½ìš°,
       resultMap =  operationExporter.exportXml(selectedPath, currentOperation) ;
       break ;
     }

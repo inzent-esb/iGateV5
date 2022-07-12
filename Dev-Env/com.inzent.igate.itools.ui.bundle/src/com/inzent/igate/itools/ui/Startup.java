@@ -113,9 +113,9 @@ public class Startup implements IStartup
 
     RecordUtils.importHandler = new RecordImportHandlerImpl() ;
 
-    new TestCaseExporterImpl() ; // TestCase Result ÅÇÀÇ ´Ù¸¥ÀÌ¸§ÀúÀå ¹öÆ° Ã³¸® -Excel ÀúÀå
+    new TestCaseExporterImpl() ; // TestCase Result íƒ­ì˜ ë‹¤ë¥¸ì´ë¦„ì €ì¥ ë²„íŠ¼ ì²˜ë¦¬ -Excel ì €ì¥
 
-    new TestSuiteExporterImpl() ; // TestSuite Result ÅÇÀÇ ´Ù¸¥ÀÌ¸§ÀúÀå ¹öÆ° Ã³¸® -Excel ÀúÀå
+    new TestSuiteExporterImpl() ; // TestSuite Result íƒ­ì˜ ë‹¤ë¥¸ì´ë¦„ì €ì¥ ë²„íŠ¼ ì²˜ë¦¬ -Excel ì €ì¥
   }
 
   protected ImageDescriptor getActivityImageDescriptor(Activity t)

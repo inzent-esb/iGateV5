@@ -60,7 +60,7 @@ public interface CustomHandlerConstants extends CustomMessageConstants
   public int TELLER_CODE_OFFSET = BRANCH_OFFSET + BRANCH_LENGTH ;
   public int TELLER_CODE_LENGTH = 6 ;
 
-  public static String SYNC_MODE_FIELD = "SyncMode" ; // Sync ±∏∫–
+  public static String SYNC_MODE_FIELD = "SyncMode" ; // Sync Íµ¨Î∂Ñ
   public static String SYNC_MODE_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + SYNC_MODE_FIELD ;
   public int SYNC_MODE_OFFSET = TELLER_CODE_OFFSET + TELLER_CODE_LENGTH + 1 ;
   public int SYNC_MODE_LENGTH = 1 ;
@@ -68,7 +68,7 @@ public interface CustomHandlerConstants extends CustomMessageConstants
   public static String TELEGRAM_TYPE_FIELD = "RequestMode" ;
   public static String TELEGRAM_TYPE_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + TELEGRAM_TYPE_FIELD ;
   public static int TELEGRAM_TYPE_OFFSET = SYNC_MODE_OFFSET + SYNC_MODE_LENGTH ;
-  public static int TELEGRAM_TYPE_LENGTH = 1 ; // ø‰√ª¿¿¥‰±∏∫–
+  public static int TELEGRAM_TYPE_LENGTH = 1 ; // ÏöîÏ≤≠ÏùëÎãµÍµ¨Î∂Ñ
 
   public static String RESPONSE_CODE_FIELD = "ResponseCode" ;
   public static String RESPONSE_CODE_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + RESPONSE_CODE_FIELD ;
@@ -82,7 +82,7 @@ public interface CustomHandlerConstants extends CustomMessageConstants
   public static int SID_OFFSET = IID_OFFSET + IID_LENGTH ;
   public static int SID_LENGTH = 20 ;
     
-  //√§≥Œ «Ï¥ı C_RESULT	¿¿¥‰ƒ⁄µÂ
+  //Ï±ÑÎÑê Ìó§Îçî C_RESULT	ÏùëÎãµÏΩîÎìú
   public static String CHL_RESPONSE_CODE_FIELD = "C_RESULT" ;
   public static String CHL_RESPONSE_CODE_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_CHANNEL_HEADER_ID + Record.NAME_SEPARATOR_STRING + CHL_RESPONSE_CODE_FIELD ;
    
@@ -95,16 +95,16 @@ public interface CustomHandlerConstants extends CustomMessageConstants
 
     String errorCode = MessageTranslator.getStandardCode(throwable) ;
 
-    // ¿¸πÆ«ÿ¥ı∫Œ
+    // Ï†ÑÎ¨∏Ìï¥ÎçîÎ∂Ä
     record.setFieldValue(MID_PATH, ((Number) record.getFieldValue(MID_PATH)).intValue() + 1) ;
     record.setFieldValue(TELEGRAM_TYPE_PATH, "R") ;
     record.setFieldValue(RESPONSE_CODE_PATH, "2") ;
     
-    //√§≥Œ «Ï¥ı C_RESULT	¿¿¥‰ƒ⁄µÂ
+    //Ï±ÑÎÑê Ìó§Îçî C_RESULT	ÏùëÎãµÏΩîÎìú
     if(record.hasField(CHL_RESPONSE_CODE_PATH) )
     	record.setFieldValue(CHL_RESPONSE_CODE_PATH, "99") ;	
 
-    // ø°∑Ø∏ﬁºº¡ˆ∫Œ
+    // ÏóêÎü¨Î©îÏÑ∏ÏßÄÎ∂Ä
     Record addRecord = ((RecordImpl) record).addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID) ;
     Record errorHeader = addRecord.addRecord(DATA_HEADER_RECORD, DATA_HEADER_ID) ;
     errorHeader.setFieldValue(DATA_TYPE_FIELD, DATA_TYPE_MSG_ERROR) ;

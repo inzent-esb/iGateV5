@@ -15,7 +15,7 @@ public class CustomTraceLogDbFile extends TraceLogDbFile<TraceLog>
   {
     super.formalizeTraceLog(traceLog) ;
 
-    // ·Î±ë ÀÏÀÚ¸¦ partition key·Î ÁöÁ¤
+    // ë¡œê¹… ì¼ìë¥¼ partition keyë¡œ ì§€ì •
     traceLog.setPartitionId(traceLog.getPk().getLogDateTime().substring(8, 10)) ;
   }
 }

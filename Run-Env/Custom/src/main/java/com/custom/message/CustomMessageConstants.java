@@ -15,14 +15,14 @@ public interface CustomMessageConstants
   public String HEADER_ID = "Header" ;
 
   public String STANDARD_HEADER_ID = "StandardHeader" ;
-  public String STANDARD_HEADER_RECORD = "HDR_STANDARD" ; // Ç¥ÁØ Çì´õºÎ
+  public String STANDARD_HEADER_RECORD = "HDR_STANDARD" ; // í‘œì¤€ í—¤ë”ë¶€
   
   
-  //Ã¤³Î Çì´õ
+  //ì±„ë„ í—¤ë”
   public String STANDARD_CHANNEL_HEADER_ID = "ChannelHeader" ;
   
 
-  public int STD_HEADER_LENGTH = 220 ; // Àü¹®Çì´õ 220 (±æÀÌ 8 + GUID 36 + Àü¹®Çì´õ Á¤º¸ 176 )
+  public int STD_HEADER_LENGTH = 220 ; // ì „ë¬¸í—¤ë” 220 (ê¸¸ì´ 8 + GUID 36 + ì „ë¬¸í—¤ë” ì •ë³´ 176 )
 
   public static String TID_FIELD = "Guid" ;
   public static String TID_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + TID_FIELD ;
@@ -31,8 +31,8 @@ public interface CustomMessageConstants
   
   public static String MID_FIELD = "ProgressNo" ;
   
-  public static String LANG_CD = "LANGCD" ; // ¾ğ¾îÄÚµå
-  public static String LANG_CD_FIELD = "LangCd" ; // ¾ğ¾îÄÚµå
+  public static String LANG_CD = "LANGCD" ; // ì–¸ì–´ì½”ë“œ
+  public static String LANG_CD_FIELD = "LangCd" ; // ì–¸ì–´ì½”ë“œ
   public static String LANG_CD_PATH = HEADER_ID + Record.NAME_SEPARATOR_STRING + STANDARD_HEADER_ID + Record.NAME_SEPARATOR_STRING + LANG_CD_FIELD ;
   public static int LANG_CD_FIELD_OFFSET = 150 ;
   public static int LANG_CD_FIELD_LENGTH = 2 ;
@@ -40,16 +40,16 @@ public interface CustomMessageConstants
   public static final String BODY_ROOT = "Body" ;
 
   public String DATA_HEADER_ID = "DataHeader" ; // RECORD_DATA
-  public String DATA_HEADER_RECORD = "HDR_DATA_HEADER" ; // Ç¥ÁØ µ¥ÀÌÅÍ°øÅëºÎ
+  public String DATA_HEADER_RECORD = "HDR_DATA_HEADER" ; // í‘œì¤€ ë°ì´í„°ê³µí†µë¶€
   public String DATA_HEADER_MAPPING = "HMP_DATA_HEADER" ; // HDR_DATA_COMMON -> HDR_DATA_COMMON
 
-  public String DATA_TYPE_FIELD = "DataType" ; // ¸Ş½ÃÁö Á¾·ù
-  public String DATA_TYPE_DATA = "IO" ; // °³º°ºÎ
-  public String DATA_TYPE_MSG_NORMAL = "MN" ; // Á¤»ó¸Ş½ÃÁö
-  public String DATA_TYPE_MSG_ERROR = "ER" ; // ¿¡·¯ ¸Ş½ÃÁö
+  public String DATA_TYPE_FIELD = "DataType" ; // ë©”ì‹œì§€ ì¢…ë¥˜
+  public String DATA_TYPE_DATA = "IO" ; // ê°œë³„ë¶€
+  public String DATA_TYPE_MSG_NORMAL = "MN" ; // ì •ìƒë©”ì‹œì§€
+  public String DATA_TYPE_MSG_ERROR = "ER" ; // ì—ëŸ¬ ë©”ì‹œì§€
   public int DATA_TYPE_LENGTH = 2 ;
   
-  public int DATA_LEN_LENGTH = 8 ; // ±æÀÌºÎ
+  public int DATA_LEN_LENGTH = 8 ; // ê¸¸ì´ë¶€
 
   public String SERVICE_ID_FIELD = "ServiceID";
   public int SERVICE_ID_LENGTH = 20 ;
@@ -61,14 +61,14 @@ public interface CustomMessageConstants
 
   public String FORM_ID_FIELD = "FormID" ;
 
-  public String DATA_BODY_ID = "DataBody" ; // °³º°ºÎ
+  public String DATA_BODY_ID = "DataBody" ; // ê°œë³„ë¶€
 
-  public String MESSAGE_ID = "Message" ; // ¸Ş½ÃÁö Á¤º¸
-  public String MESSAGE_RECORD = "HDR_MESSAGE" ; // ¸Ş½ÃÁöºÎ
+  public String MESSAGE_ID = "Message" ; // ë©”ì‹œì§€ ì •ë³´
+  public String MESSAGE_RECORD = "HDR_MESSAGE" ; // ë©”ì‹œì§€ë¶€
 
-  public String MESSAGE_CODE_FIELD = "MessageCode" ; //¸Ş½ÃÁöÄÚµå
-  public String MESSAGE_CONTENT_COUNT_FIELD = "MessageCount" ; // MessageContent °Ç¼ö
-  public String MESSAGE_CONTENT_FIELD = "MessageContent" ; //MessageContent ÇÊµå
+  public String MESSAGE_CODE_FIELD = "MessageCode" ; //ë©”ì‹œì§€ì½”ë“œ
+  public String MESSAGE_CONTENT_COUNT_FIELD = "MessageCount" ; // MessageContent ê±´ìˆ˜
+  public String MESSAGE_CONTENT_FIELD = "MessageContent" ; //MessageContent í•„ë“œ
   
   public static final String PRE_FIX_STD = "I_" ;
   public static final String PRE_FIX_NON = "E_" ;

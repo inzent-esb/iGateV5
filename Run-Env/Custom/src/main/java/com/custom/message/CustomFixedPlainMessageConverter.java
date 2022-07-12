@@ -53,7 +53,7 @@ public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter
 
     super.compose(record, log) ;
 
-    if (0 <= dataHeaderPos) // µ•¿Ã≈Õº¬¿« ±Ê¿Ã∏¶ ∞ËªÍ
+    if (0 <= dataHeaderPos) // Îç∞Ïù¥ÌÑ∞ÏÖãÏùò Í∏∏Ïù¥Î•º Í≥ÑÏÇ∞
     {
       try
       {
@@ -69,7 +69,7 @@ public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter
             record.getPath(), th.getMessage()) ;
       }
     }
-    else if (null == record.getParent()) // «•¡ÿ¿¸πÆ¿« ±Ê¿Ã∏¶ ∞ËªÍ
+    else if (null == record.getParent()) // ÌëúÏ§ÄÏ†ÑÎ¨∏Ïùò Í∏∏Ïù¥Î•º Í≥ÑÏÇ∞
     {
       try
       {
@@ -90,8 +90,8 @@ public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter
   }
 
   /**
-   * « µÂ∞° null¿Ã∞Ì(∏ «Œ¥ÎªÛ¿Ã æ∆¥“ ∞ÊøÏ) « µÂº”º∫¿« ±‚∫ª∞™¿Ã æ¯¿ª ∞ÊøÏ Numeric ≈∏¿‘¿« ±‚∫ª∞™¿∫ ' ' ¿Ã¥Ÿ. µ˚∂Ûº≠ ±◊
-   * ∞ÊøÏø°µµ '0'¿∏∑Œ ∆–µ˘«œ±‚¿ß«ÿ overriding
+   * ÌïÑÎìúÍ∞Ä nullÏù¥Í≥†(ÎßµÌïëÎåÄÏÉÅÏù¥ ÏïÑÎãê Í≤ΩÏö∞) ÌïÑÎìúÏÜçÏÑ±Ïùò Í∏∞Î≥∏Í∞íÏù¥ ÏóÜÏùÑ Í≤ΩÏö∞ Numeric ÌÉÄÏûÖÏùò Í∏∞Î≥∏Í∞íÏùÄ ' ' Ïù¥Îã§. Îî∞ÎùºÏÑú Í∑∏
+   * Í≤ΩÏö∞ÏóêÎèÑ '0'ÏúºÎ°ú Ìå®Îî©ÌïòÍ∏∞ÏúÑÌï¥ overriding
    **/
   @Override
   protected Object encodingNumeric(Field field, Numeric source) throws IGateException
@@ -106,7 +106,7 @@ public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter
 
     if (null != buffer)
     {
-      // ∞≥∫∞∞¯≈Î∫ŒøÕ ∞≥∫∞∫Œ RecordSet¿ª ±∏º∫«—¥Ÿ.
+      // Í∞úÎ≥ÑÍ≥µÌÜµÎ∂ÄÏôÄ Í∞úÎ≥ÑÎ∂Ä RecordSetÏùÑ Íµ¨ÏÑ±ÌïúÎã§.
       if (STD_HEADER_LENGTH < length)
         record = MessageBeans.SINGLETON.messageBuilder.addInterfaceRequestIndividual(record, this, interfaceMeta, log) ;
 
@@ -195,7 +195,7 @@ public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter
 
     if (null != buffer)
     {
-      // ∞≥∫∞∞¯≈Î∫ŒøÕ ∞≥∫∞∫Œ RecordSet¿ª ±∏º∫«—¥Ÿ.
+      // Í∞úÎ≥ÑÍ≥µÌÜµÎ∂ÄÏôÄ Í∞úÎ≥ÑÎ∂Ä RecordSetÏùÑ Íµ¨ÏÑ±ÌïúÎã§.
       if (STD_HEADER_LENGTH < length)
         record = MessageBeans.SINGLETON.messageBuilder.addServiceRequestIndividual(record, this, service, log) ;
 
@@ -236,12 +236,12 @@ public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter
           outputFormCount = Integer.parseInt(StringCodec.decode(buffer, pos2, FORM_COUNT_LENGTH, adapter.getCharset())) ;
           pos2 += FORM_COUNT_LENGTH ;
 
-          // √‚∑¬ ∆˚ ID ∏Ò∑œ
+          // Ï∂úÎ†• Ìèº ID Î™©Î°ù
           List<String> outputFormIds ;
           if (outputFormCount > 0)
           {
             outputFormIds = new ArrayList<String>(outputFormCount) ;
-            for (int idx = 0 ; outputFormCount > idx ; idx++) // √‚∑¬ ∆˚ ID ∏Ò∑œ
+            for (int idx = 0 ; outputFormCount > idx ; idx++) // Ï∂úÎ†• Ìèº ID Î™©Î°ù
             {
               outputFormIds.add(StringUtils.stripEnd(StringCodec.decode(buffer, pos2, SCREEN_ID_LENGTH, adapter.getCharset()), null)) ;
               pos2 += SCREEN_ID_LENGTH ;

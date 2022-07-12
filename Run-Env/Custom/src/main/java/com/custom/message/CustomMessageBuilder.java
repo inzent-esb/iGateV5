@@ -133,7 +133,7 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
       Array sourceMessageContent = (Array) ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CONTENT_FIELD) ;
       String errorCode = ((String) sourceMessageContent.getField(0).getValue()).trim() ;
     
-      //messageCode ÇÊµå Ã³¸® Ãß°¡
+      //messageCode í•„ë“œ ì²˜ë¦¬ ì¶”ê°€
       Field targetMessageCode = null;
       Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
       String messageCodeValue = null;

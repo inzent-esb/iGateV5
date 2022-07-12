@@ -128,32 +128,32 @@ public class PushMessage extends AbstractActivity  implements CustomHandlerConst
 		if (!Objects.equals(iGateInstance.getInstanceId(), mciSession.getMciInstanceId()))
 			return false ;
 
-		// TODO ¸Ş½ÃÁö ¹ß¼Û Á¶°Ç °Ë»ç
+		// TODO ë©”ì‹œì§€ ë°œì†¡ ì¡°ê±´ ê²€ì‚¬
 		return true ;
 	}
 
 	protected boolean isValid(AdapterParameter adapterParameter, Record response, String pushType, ArrayList<String> pushTargetList,  MciSession mciSession)
 	{
-		//·Î±×ÀÎ »óÅÂ°¡ ¾Æ´Ï¸é º¸³»Áö ¾ÊÀ½ 
+		//ë¡œê·¸ì¸ ìƒíƒœê°€ ì•„ë‹ˆë©´ ë³´ë‚´ì§€ ì•ŠìŒ 
 		if (!(Objects.equals("N", mciSession.getSessionDelYn()) || null == mciSession.getLogoffYms()))
 			return false ;
 			
-		//ÀÎ½ºÅÏ½º ´Ù¸¥ °æ¿ì 
+		//ì¸ìŠ¤í„´ìŠ¤ ë‹¤ë¥¸ ê²½ìš° 
 		if (!Objects.equals(iGateInstance.getInstanceId(), mciSession.getMciInstanceId()))
 			return false ;
 
-		//ÀüÃ¼ push
+		//ì „ì²´ push
 		if(pushType.trim().equals(PUSH_TYPE_All))
 		{
 			return true ;
 		}
-		//±×·ì push ÁöÁ¡¹øÈ£ µ¿ÀÏ
+		//ê·¸ë£¹ push ì§€ì ë²ˆí˜¸ ë™ì¼
 		else if(pushType.trim().equals(PUSH_TYPE_GROUP))
 	    {
 	    	if(!mciSession.getBrnCd().trim().isEmpty())
 	    		return pushTargetList.contains(mciSession.getBrnCd().trim());
 	    }
-		//°³º° push Á÷¿ø¹øÈ£ µ¿ÀÏ
+		//ê°œë³„ push ì§ì›ë²ˆí˜¸ ë™ì¼
 	    else if(pushType.trim().equals(PUSH_TYPE_TERLLER))
 	    {
 	    	if(!mciSession.getEmpId().trim().isEmpty())

@@ -35,7 +35,7 @@ import com.inzent.igate.repository.meta.Service ;
 import com.inzent.imanager.controller.HttpSession ;
 
 /**
- * <code>EimsController</code> eims Àü¹® ¹Ş¾Æ update, insert, delete ¼öÇàÇÏ´Â controller
+ * <code>EimsController</code> eims ì „ë¬¸ ë°›ì•„ update, insert, delete ìˆ˜í–‰í•˜ëŠ” controller
  *
  * @since 2021. 2. 7.
  * @version 5.0
@@ -70,7 +70,7 @@ public abstract class AbstractEimsController
   protected InterfaceRecognizeService interfaceRecognizeService ;
 
   /**
-   * ParameterÀÇ interfaceId¸¦ Á¶È¸ÇÏ¿© Àü¹® »ı¼ºÇÏ´Â ¸Ş¼­µå
+   * Parameterì˜ interfaceIdë¥¼ ì¡°íšŒí•˜ì—¬ ì „ë¬¸ ìƒì„±í•˜ëŠ” ë©”ì„œë“œ
    * 
    * @param request
    * @param response
@@ -103,7 +103,7 @@ public abstract class AbstractEimsController
   }
 
   /**
-   * eims Àü¹®À» ¹Ş¾Æ ÆÄ½Ì ÈÄ, ÆÄ¶ó¹ÌÅÍ °ª¿¡ µû¶ó Insert, Update ÁøÇàÇÏ´Â method
+   * eims ì „ë¬¸ì„ ë°›ì•„ íŒŒì‹± í›„, íŒŒë¼ë¯¸í„° ê°’ì— ë”°ë¼ Insert, Update ì§„í–‰í•˜ëŠ” method
    * 
    * @param request
    * @param response
@@ -134,7 +134,7 @@ public abstract class AbstractEimsController
       Map<String, Interface> interfaceAfters = new HashMap<>() ;
       Map<RecognizePK, InterfaceRecognize> interfaceRecognizeAfters = new HashMap<>() ;
 
-      // ±ÇÇÑÁ¤º¸ ¿ìÈ¸
+      // ê¶Œí•œì •ë³´ ìš°íšŒ
       httpSession.setMigration(true) ;
 
       transactionTemplate.execute(new TransactionCallback<Object>()
@@ -320,7 +320,7 @@ public abstract class AbstractEimsController
   }
 
   /**
-   * eims delete request¸¦ ¹Ş¾Æ, ÆÄ¶ó¹ÌÅÍ(interfaceId)·Î ¹ŞÀº interface¸¦ delete ÇÏ´Â method
+   * eims delete requestë¥¼ ë°›ì•„, íŒŒë¼ë¯¸í„°(interfaceId)ë¡œ ë°›ì€ interfaceë¥¼ delete í•˜ëŠ” method
    * 
    * @param request
    * @param response

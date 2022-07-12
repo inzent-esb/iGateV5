@@ -15,7 +15,7 @@ import com.inzent.igate.exception.IGateException ;
 import com.inzent.igate.repository.meta.Activity ;
 
 /**
- * R&DÆÀ È¸±Í Å×½ºÆ®¸¦ À§ÇÑ Activity
+ * R&DíŒ€ íšŒê·€ í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•œ Activity
  */
 public class PushResponseInt extends PushResponse
 {

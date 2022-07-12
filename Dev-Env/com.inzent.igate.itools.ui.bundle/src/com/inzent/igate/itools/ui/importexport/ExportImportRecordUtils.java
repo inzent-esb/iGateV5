@@ -60,9 +60,9 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
    * Export Json
    * 
    * @param String
-   *          path ÀúÀå À§Ä¡
+   *          path ì €ì¥ ìœ„ì¹˜
    * @param Record
-   *          record view ¿¡¼­ ¼±ÅÃÇÑ record
+   *          record view ì—ì„œ ì„ íƒí•œ record
    * @return
    * @author jkh, 2020. 3. 4.
    */
@@ -105,9 +105,9 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
    * Export Excel
    * 
    * @param String
-   *          path ÀúÀå À§Ä¡
+   *          path ì €ì¥ ìœ„ì¹˜
    * @param Record
-   *          record view ¿¡¼­ ¼±ÅÃÇÑ record
+   *          record view ì—ì„œ ì„ íƒí•œ record
    * @return
    * @author jkh, 2020. 3. 9.
    */
@@ -192,13 +192,13 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
   // ==[Import]========================================================================================================
   // ===[Json]========================================================================================================
   /**
-   * json ÆÄÀÏ °¡Á®¿À±â
+   * json íŒŒì¼ ê°€ì ¸ì˜¤ê¸°
    * 
    * @param String
-   *          filePath °¡Á®¿Ã ÆÄÀÏ °æ·Î
+   *          filePath ê°€ì ¸ì˜¬ íŒŒì¼ ê²½ë¡œ
    * @param String[]
-   *          fileList °¡Á®¿Ã ÆÄÀÏ ¸ñ·Ï
-   * @return String °á°ú ¸Ş½ÃÁö
+   *          fileList ê°€ì ¸ì˜¬ íŒŒì¼ ëª©ë¡
+   * @return String ê²°ê³¼ ë©”ì‹œì§€
    * @author jkh, 2020. 3. 6.
    */
   @Override
@@ -225,12 +225,12 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
 
   // ===[Excel]========================================================================================================
   /**
-   * ¿¢¼¿ÆÄÀÏÀ» °¡Á®¿À±â
+   * ì—‘ì…€íŒŒì¼ì„ ê°€ì ¸ì˜¤ê¸°
    * 
    * @param String
-   *          filePath ÆÄÀÏ °æ·Î
+   *          filePath íŒŒì¼ ê²½ë¡œ
    * @param String
-   *          fileList °¡Á®¿Ã ÆÄÀÏ ¸ñ·Ï
+   *          fileList ê°€ì ¸ì˜¬ íŒŒì¼ ëª©ë¡
    * @return
    * @author jkh, 2020. 3. 6.
    */
@@ -264,51 +264,51 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
 
   protected void exportExcelSheet(Workbook workbook, Sheet writeSheet, Record record)
   {
-    // Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+    // Cell ìŠ¤íƒ€ì¼ ì§€ì •.
     CellStyle cellStyle = workbook.createCellStyle() ;
-    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER) ;// ÅØ½ºÆ® ¸ÂÃã(¼¼·Î°¡¿îµ¥)
-    cellStyle.setAlignment(HorizontalAlignment.LEFT) ;// ÅØ½ºÆ® ¸ÂÃã (°¡·Î ¿ŞÂÊ)
+    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER) ;// í…ìŠ¤íŠ¸ ë§ì¶¤(ì„¸ë¡œê°€ìš´ë°)
+    cellStyle.setAlignment(HorizontalAlignment.LEFT) ;// í…ìŠ¤íŠ¸ ë§ì¶¤ (ê°€ë¡œ ì™¼ìª½)
 
-    Font font = workbook.createFont() ;// ÆùÆ®
+    Font font = workbook.createFont() ;// í°íŠ¸
     font.setFontHeight((short) 180) ;
-    font.setFontName("±¼¸²") ;
+    font.setFontName("êµ´ë¦¼") ;
     cellStyle.setFont(font) ;
 
-    cellStyle.setBorderBottom(BorderStyle.HAIR) ;// Cell Å×µÎ¸® (Á¡¼±)
+    cellStyle.setBorderBottom(BorderStyle.HAIR) ;// Cell í…Œë‘ë¦¬ (ì ì„ )
     cellStyle.setBorderLeft(BorderStyle.HAIR) ;
     cellStyle.setBorderRight(BorderStyle.HAIR) ;
     cellStyle.setBorderTop(BorderStyle.HAIR) ;
 
-    cellStyle.setLocked(true) ; // Cell Àá±İ
-    cellStyle.setWrapText(true) ; // Cell ¿¡¼­ Text ÁÙ¹Ù²Ş È°¼ºÈ­
+    cellStyle.setLocked(true) ; // Cell ì ê¸ˆ
+    cellStyle.setWrapText(true) ; // Cell ì—ì„œ Text ì¤„ë°”ê¿ˆ í™œì„±í™”
 
-    // ¿¢¼¿ 2¹øÂ° ÁÙ °ª ¼³Á¤
+    // ì—‘ì…€ 2ë²ˆì§¸ ì¤„ ê°’ ì„¤ì •
     Row row = writeSheet.getRow(1) ;
 
-    // ¸ğµ¨ID
+    // ëª¨ë¸ID
     Cell cell = row.getCell(1) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(record.getRecordId()) ;
 
-    // ¼³¸í
+    // ì„¤ëª…
     cell = row.getCell(3) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(record.getRecordDesc()) ;
 
-    // ÀÔ/Ãâ·Â
+    // ì…/ì¶œë ¥
     cell = row.getCell(8) ;
 
     String value = record.getRecordId() ;
     if (value.endsWith("_I"))
-      value = "ÀÔ·Â" ;
+      value = "ì…ë ¥" ;
     else if (value.endsWith("_O"))
-      value = "Ãâ·Â" ;
+      value = "ì¶œë ¥" ;
     else
       value = StringUtils.EMPTY ;
 
     cell.setCellValue(value) ;
 
-    // ¸ğµ¨À¯Çü
+    // ëª¨ë¸ìœ í˜•
     cell = row.getCell(10) ;
 
     if (record.getRecordType() == Record.TYPE_HEADER)
@@ -320,39 +320,39 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
 
     cell.setCellValue(value) ;
 
-    // ¸ğµ¨ ÀÌ¸§
+    // ëª¨ë¸ ì´ë¦„
     cell = row.getCell(12) ;
     cell.setCellValue(record.getRecordName()) ;
 
-    // ¿¢¼¿ 3¹øÂ° ÁÙ °ª ¼³Á¤
+    // ì—‘ì…€ 3ë²ˆì§¸ ì¤„ ê°’ ì„¤ì •
     row = writeSheet.getRow(2) ;
 
-    // ±×·ì
+    // ê·¸ë£¹
     cell = row.getCell(1) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(record.getRecordGroup()) ;
 
-    // ±ÇÇÑ
+    // ê¶Œí•œ
     cell = row.getCell(3) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(record.getPrivilegeId()) ;
 
-    // ¿É¼Ç
+    // ì˜µì…˜
     cell = row.getCell(5) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(record.getRecordOptions()) ;
 
-    // Àü¹®°øÀ¯
+    // ì „ë¬¸ê³µìœ 
     cell = row.getCell(10) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(new Character(record.getPrivateYn()).toString()) ;
 
-    // ÀÛ¼ºÀÚ
+    // ì‘ì„±ì
     cell = row.getCell(14) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(record.getUpdateUserId()) ;
 
-    // ÀÛ¼ºÀÏ
+    // ì‘ì„±ì¼
     cell = row.getCell(17) ;
     cell.setCellStyle(cellStyle) ;
     cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(null != record.getUpdateTimestamp() ? record.getUpdateTimestamp() : new Date(System.currentTimeMillis()) )) ;
@@ -362,18 +362,18 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
 
   //
   /**
-   * ¸ğµ¨ ÇÊµå Á¤º¸ »ı¼º
+   * ëª¨ë¸ í•„ë“œ ì •ë³´ ìƒì„±
    * 
    * @param Workbook
-   *          workbook ³»º¸³»±â ÇÒ ¿¢¼¿ workbook
+   *          workbook ë‚´ë³´ë‚´ê¸° í•  ì—‘ì…€ workbook
    * @param Sheet
-   *          writeSheet ³»º¸³»±â ÇÒ ¿¢¼¿ ½ÃÆ®
+   *          writeSheet ë‚´ë³´ë‚´ê¸° í•  ì—‘ì…€ ì‹œíŠ¸
    * @param Record
-   *          record ³»º¸³»±â ÇÒ record
+   *          record ë‚´ë³´ë‚´ê¸° í•  record
    * @param int
-   *          index ¸ğµ¨ ÇÊµåÁ¤º¸°¡ ÀÔ·ÂµÉ ¿¢¼¿ÀÇ row ¹øÈ£ (4)
+   *          index ëª¨ë¸ í•„ë“œì •ë³´ê°€ ì…ë ¥ë  ì—‘ì…€ì˜ row ë²ˆí˜¸ (4)
    * @param int
-   *          depth Level (½ÃÀÛÀº 0)
+   *          depth Level (ì‹œì‘ì€ 0)
    * @return
    * @author jkh, 2020. 3. 4.
    */
@@ -382,23 +382,23 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     Row row ;
     Cell cell ;
 
-    // Cell ½ºÅ¸ÀÏ ÁöÁ¤.
+    // Cell ìŠ¤íƒ€ì¼ ì§€ì •.
     CellStyle cellStyle = workbook.createCellStyle() ;
-    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER) ;// ÅØ½ºÆ® ¸ÂÃã(¼¼·Î °¡¿îµ¥)
-    cellStyle.setAlignment(HorizontalAlignment.LEFT) ;// ÅØ½ºÆ® ¸ÂÃã (°¡·Î ¿ŞÂÊ)
+    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER) ;// í…ìŠ¤íŠ¸ ë§ì¶¤(ì„¸ë¡œ ê°€ìš´ë°)
+    cellStyle.setAlignment(HorizontalAlignment.LEFT) ;// í…ìŠ¤íŠ¸ ë§ì¶¤ (ê°€ë¡œ ì™¼ìª½)
 
-    Font font = workbook.createFont() ;// ÆùÆ®
+    Font font = workbook.createFont() ;// í°íŠ¸
     font.setFontHeight((short) 180) ;
-    font.setFontName("±¼¸²") ;
+    font.setFontName("êµ´ë¦¼") ;
     font.setBold(false) ;
     cellStyle.setFont(font) ;
 
-    cellStyle.setBorderBottom(BorderStyle.HAIR) ;// Cell Å×µÎ¸® (Á¡¼±)
+    cellStyle.setBorderBottom(BorderStyle.HAIR) ;// Cell í…Œë‘ë¦¬ (ì ì„ )
     cellStyle.setBorderLeft(BorderStyle.HAIR) ;
     cellStyle.setBorderRight(BorderStyle.HAIR) ;
     cellStyle.setBorderTop(BorderStyle.HAIR) ;
 
-    cellStyle.setLocked(true) ;// Cell Àá±İ
+    cellStyle.setLocked(true) ;// Cell ì ê¸ˆ
 
     for (Field currentField : record.getFields())
     {
@@ -408,7 +408,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       cell.setCellStyle(cellStyle) ;
       cell.setCellValue(Integer.toString(depth)) ;
 
-      // ÇÊµå ID
+      // í•„ë“œ ID
       String value = currentField.getPk().getFieldId() ;
       for (int j = 0 ; j < depth ; j++)
         value = "   " + value ;
@@ -512,11 +512,11 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
   }
 
   /**
-   * json ÆÄÀÏ °¡Á®¿À±â
+   * json íŒŒì¼ ê°€ì ¸ì˜¤ê¸°
    * 
    * @param String
-   *          path °æ·Î Æ÷ÇÔ ÆÄÀÏ¸í
-   * @return String °á°ú ¸Ş½ÃÁö
+   *          path ê²½ë¡œ í¬í•¨ íŒŒì¼ëª…
+   * @return String ê²°ê³¼ ë©”ì‹œì§€
    * @author jkh, 2020. 3. 6.
    */
   protected Map<String, Object> importJson(String filePath, Record record)
@@ -548,7 +548,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
         ResponseObject<Record> responseObject ;
         try
         {
-          // ¸ğµ¨ Á¸Àç À¯¹«¿¡ µû¶ó update / insert ·Î ³ª´²¼­ Ã³¸®
+          // ëª¨ë¸ ì¡´ì¬ ìœ ë¬´ì— ë”°ë¼ update / insert ë¡œ ë‚˜ëˆ ì„œ ì²˜ë¦¬
           responseObject = ClientManager.getInstance().getIManagerClient().update(jsonRecord) ;
         }
         catch (Exception e)
@@ -605,10 +605,10 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
   }
 
   /**
-   * ¸ğµ¨ ±âº» Á¤º¸ ¼³Á¤
+   * ëª¨ë¸ ê¸°ë³¸ ì •ë³´ ì„¤ì •
    * 
    * @param String
-   *          path °æ·Î¸¦ Æ÷ÇÔÇÑ ÆÄÀÏ ¸í
+   *          path ê²½ë¡œë¥¼ í¬í•¨í•œ íŒŒì¼ ëª…
    * @return
    * @author jkh, 2020. 3. 6.
    */
@@ -639,7 +639,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
         ResponseObject<Record> responseObject ;
         try
         {
-          // ¸ğµ¨ Á¸Àç À¯¹«¿¡ µû¶ó update / insert ·Î ³ª´²¼­ Ã³¸®
+          // ëª¨ë¸ ì¡´ì¬ ìœ ë¬´ì— ë”°ë¼ update / insert ë¡œ ë‚˜ëˆ ì„œ ì²˜ë¦¬
           responseObject = ClientManager.getInstance().getIManagerClient().update(excelRecord) ;
         }
         catch (Exception e)
@@ -713,18 +713,18 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     {
       record = new Record() ;
 
-      // ¿¢¼¿ 2¹øÂ° ÁÙ °ª °¡Á®¿À±â
+      // ì—‘ì…€ 2ë²ˆì§¸ ì¤„ ê°’ ê°€ì ¸ì˜¤ê¸°
       row = readSheet.getRow(1) ;
 
       // ID
       cell = row.getCell(1) ;
       record.setRecordId(getStringNumericValue(cell)) ;
 
-      // ¼³¸í
+      // ì„¤ëª…
       cell = row.getCell(3) ;
       record.setRecordDesc(getStringNumericValue(cell)) ;
 
-      // ¸ğµ¨À¯Çü
+      // ëª¨ë¸ìœ í˜•
       cell = row.getCell(10) ;
       switch (getStringNumericValue(cell))
       {
@@ -740,30 +740,30 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
         record.setRecordType(Record.TYPE_INDIVI) ;
       }
 
-      // ¸ğµ¨ÀÌ¸§
+      // ëª¨ë¸ì´ë¦„
       cell = row.getCell(12) ;
       record.setRecordName(getStringNumericValue(cell)) ;
 
-      // ¿¢¼¿ 3¹øÂ° ÁÙ °ª °¡Á®¿À±â
+      // ì—‘ì…€ 3ë²ˆì§¸ ì¤„ ê°’ ê°€ì ¸ì˜¤ê¸°
       row = readSheet.getRow(2) ;
 
-      // ±×·ì
+      // ê·¸ë£¹
       cell = row.getCell(1) ;
       record.setRecordGroup(getStringNumericValue(cell)) ;
 
-      // ±ÇÇÑID
+      // ê¶Œí•œID
       cell = row.getCell(3) ;
       record.setPrivilegeId(getStringNumericValue(cell)) ;
 
-      // ¿É¼Ç
+      // ì˜µì…˜
       cell = row.getCell(5) ;
       record.setRecordOptions(getStringNumericValue(cell)) ;
 
-      // Àü¹®°øÀ¯
+      // ì „ë¬¸ê³µìœ 
       cell = row.getCell(10) ;
       record.setPrivateYn(getStringNumericValue(cell).charAt(0)) ;
 
-      // ÀÛ¼ºÀÚ
+      // ì‘ì„±ì
       cell = row.getCell(14) ;
       record.setUpdateUserId(getStringNumericValue(cell)) ;
 
@@ -773,7 +773,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     {
       row = readSheet.getRow(2) ;
 
-      // ¿É¼Ç
+      // ì˜µì…˜
       cell = row.getCell(5) ;
       record.setRecordOptions(getStringNumericValue(cell)) ;
 
@@ -784,14 +784,14 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
   }
 
   /**
-   * ¸ğµ¨ ÇÊµåÁ¤º¸ ¼³Á¤
+   * ëª¨ë¸ í•„ë“œì •ë³´ ì„¤ì •
    * 
    * @param Sheet
-   *          readSheet ¿¢¼¿ Data_Model ½ÃÆ®
+   *          readSheet ì—‘ì…€ Data_Model ì‹œíŠ¸
    * @param Record
-   *          record ¿¢¼¿ ³»¿ëÀ» ´ãÀ» Record
+   *          record ì—‘ì…€ ë‚´ìš©ì„ ë‹´ì„ Record
    * @param int
-   *          index ¿¢¼¿ ¸ğµ¨ ÇÊµåÁ¤º¸°¡ ½ÃÀÛÇÏ´Â ÁÙ ¹øÈ£ (4)
+   *          index ì—‘ì…€ ëª¨ë¸ í•„ë“œì •ë³´ê°€ ì‹œì‘í•˜ëŠ” ì¤„ ë²ˆí˜¸ (4)
    * @return
    * @throws Exception
    * @author jkh, 2020. 3. 6.
@@ -811,24 +811,24 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       if (null == row || getStringNumericValue(row.getCell(1)).isEmpty())
         break ;
 
-      // ÇÊµå°¡ ÀÖ´Â °æ¿ì, Level °¡Á®¿À±â
+      // í•„ë“œê°€ ìˆëŠ” ê²½ìš°, Level ê°€ì ¸ì˜¤ê¸°
       cell = row.getCell(0) ;
       nVal = Integer.parseInt(getStringNumericValue(cell)) ;
 
-      if (depth < nVal) // À­ÁÙ ÇÊµåÀÇ Level < ÇöÀç ÇÊµåÀÇ Level
+      if (depth < nVal) // ìœ—ì¤„ í•„ë“œì˜ Level < í˜„ì¬ í•„ë“œì˜ Level
       {
         index = importExcelSheetRows(readSheet, filedList.getLast().getRecordObject(), index, nVal) ;
 
         continue ;
       }
-      else if (depth > nVal) // ¾Õ¼± ÇÊµåÀÇ Level > ÇöÀç ÇÊµåÀÇ Level
+      else if (depth > nVal) // ì•ì„  í•„ë“œì˜ Level > í˜„ì¬ í•„ë“œì˜ Level
         break ;
 
       field = new Field() ;
       field.setPk(new FieldPK()) ;
       field.setRecord(record) ;
 
-      // ÇÊµå ID
+      // í•„ë“œ ID
       cell = row.getCell(1) ;
       field.getPk().setFieldId(getStringNumericValue(cell).trim()) ;
 
@@ -837,55 +837,55 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       else
         idList.add(field.getPk().getFieldId()) ;
 
-      // ÇÊµå ¸í
+      // í•„ë“œ ëª…
       cell = row.getCell(2) ;
       field.setFieldName(getStringNumericValue(cell)) ;
 
-      // ÇÊµå Index
+      // í•„ë“œ Index
       cell = row.getCell(3) ;
       field.setFieldIndex(getStringNumericValue(cell)) ;
 
-      // ÇÊµå Å¸ÀÔ (¿ÀºêÁ§Æ®¸í)
+      // í•„ë“œ íƒ€ì… (ì˜¤ë¸Œì íŠ¸ëª…)
       cell = row.getCell(4) ;
       field.setFieldType(MetaConstants.FIELD_TYPES_INVERT.get(getStringNumericValue(cell))) ;
 
-      // ÇÊµå ±æÀÌ
+      // í•„ë“œ ê¸¸ì´
       cell = row.getCell(5) ;
       field.setFieldLength(Integer.parseInt(getStringNumericValue(cell))) ;
 
-      // ÇÊµå ¼Ò¼ö
+      // í•„ë“œ ì†Œìˆ˜
       cell = row.getCell(6) ;
       field.setFieldScale(Integer.parseInt(getStringNumericValue(cell))) ;
 
-      // ¹İº¹Å¸ÀÔ (¹è¿­ÇüÅÂ)
+      // ë°˜ë³µíƒ€ì… (ë°°ì—´í˜•íƒœ)
       cell = row.getCell(7) ;
       field.setArrayType(MetaConstants.FIELD_ARRAYTYPES_INVERT.get(getStringNumericValue(cell))) ;
 
-      // ÂüÁ¶ ÇÊµå ID (¹İº¹È½¼ö)
+      // ì°¸ì¡° í•„ë“œ ID (ë°˜ë³µíšŸìˆ˜)
       cell = row.getCell(8) ;
       field.setReferenceFieldId(getStringNumericValue(cell)) ;
 
-      // ÇÊµå ±âº»°ª
+      // í•„ë“œ ê¸°ë³¸ê°’
       cell = row.getCell(9) ;
       field.setFieldDefaultValue(getStringNumericValue(cell)) ;
 
-      // ºñ°ø°³¿©ºÎ (¸¶½ºÅ·¿©ºÎ)
+      // ë¹„ê³µê°œì—¬ë¶€ (ë§ˆìŠ¤í‚¹ì—¬ë¶€)
       cell = row.getCell(10) ;
       field.setFieldHiddenYn(getStringNumericValue(cell).charAt(0)) ;
 
-      // ÇÊ¼ö¿©ºÎ
+      // í•„ìˆ˜ì—¬ë¶€
       cell = row.getCell(11) ;
       field.setFieldRequireYn(getStringNumericValue(cell).charAt(0)) ;
 
-      // À¯È¿°ª
+      // ìœ íš¨ê°’
       cell = row.getCell(12) ;
       field.setFieldValidValue(getStringNumericValue(cell)) ;
 
-      // º¯È¯
+      // ë³€í™˜
       cell = row.getCell(13) ;
       field.setCodecId(getStringNumericValue(cell)) ;
 
-      // ±âÅ¸¼Ó¼º
+      // ê¸°íƒ€ì†ì„±
       cell = row.getCell(14) ;
       field.setFieldOptions(getStringNumericValue(cell)) ;
 
@@ -893,7 +893,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       {
         Record subRecord = new Record() ;
 
-        // ÂüÁ¶¿©ºÎ
+        // ì°¸ì¡°ì—¬ë¶€
         cell = row.getCell(15) ;
         if (Objects.equals("Y", getStringNumericValue(cell)))
         {
@@ -929,7 +929,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
   }
 
   /**
-   * ¼øÀÚÀû Çüº¯È¯ String > Numeric
+   * ìˆœìì  í˜•ë³€í™˜ String > Numeric
    * 
    * @param cell
    * @return
