@@ -1,4 +1,4 @@
-package com.inzent.igate.session.http ;
+package com.custom.session.http ;
 
 import org.apache.http.client.config.RequestConfig ;
 import org.apache.http.client.methods.HttpRequestBase ;
@@ -8,6 +8,8 @@ import com.inzent.igate.connector.OutBoundConnector ;
 import com.inzent.igate.message.HttpConstants ;
 import com.inzent.igate.message.ValueObject ;
 import com.inzent.igate.session.SessionPool ;
+import com.inzent.igate.session.http.HttpComponentsSession ;
+import com.inzent.igate.session.http.ThinHttpClientSession ;
 
 public class AppianClientSession extends HttpComponentsSession
 {
