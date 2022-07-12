@@ -71,9 +71,19 @@
       </GroupHeader>
       <GroupHeader label="확장속성정보" expanded="false">
         <Column label="FieldTrim" align="left" width="100" name="FieldTrim" editType="checkbox" extened="true"/>
-        <Column label="CheckSample" align="left" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
-        <Column label="EditSample" align="left" width="100" name="ext1" editType="edit" extened="true"/>
-        <Column label="ComboSample" align="left" width="100" name="FieldHttp" editType="select" availableValue="header=header,query=query,body=body" extened="true"/> 
+        <Column label="FieldFullWidth" align="left" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
+        <Column label="Table.PK" align="left" width="100" name="table.key" editType="checkbox" extened="true"/>
+        <Column label="Table.Seq" align="left" width="100" name="table.seq" editType="checkbox" extened="true"/>
+        <Column label="Table.Date" align="left" width="100" name="table.date" editType="checkbox" extened="true"/>
+        <Column label="Table.Success" align="left" width="100" name="table.flag.success" editType="edit" extened="true"/>
+        <Column label="Table.Fail" align="left" width="100" name="table.flag.fail" editType="edit" extened="true"/>
+        <Column label="Table.Exclude" align="left" width="100" name="table.exclude" editType="checkbox" extened="true"/>
+        <Column label="Table.Exclude" align="left" width="100" name="table.exclude" editType="checkbox" extened="true"/>
+        <Column label="Http.Type" align="left" width="100" name="FieldHttpType" editType="select" availableValue="uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="body" />
+        <Column label="Http.Query.Name" align="left" width="100" name="FieldHttpName" editType="edit" extened="true"/>
+        <Column label="Xml.Type" align="left" width="100" name="SchemaType" editType="select" availableValue="attribute=Attribute,element=Element,cdata=CData,elementcdata=Elementcdata" availableDefaultValue="element" />
+        <Column label="Xml.NS" align="left" width="100" name="xmlns" editType="edit" extened="true"/>
+        <Column label="Xml.Name" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
         <Column label="전체확장속성" align="left" width="220" name="fieldOptions" editType="edit" />
       </GroupHeader>
     </GroupHeaders>
