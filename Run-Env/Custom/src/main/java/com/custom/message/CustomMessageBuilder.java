@@ -110,89 +110,89 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
 
   protected Record mappingMessagePart(Record target, Record[] sources, Log log) throws IGateException
   {
-    RecordImpl targetIndividualRoot = (RecordImpl) target ;
     RecordImpl sourceIndividualRoot = (RecordImpl) sources[0] ;
-    for (int index = 0, count = sourceIndividualRoot.getSize() ; count > index ; index++)
+    if (sourceIndividualRoot.getAdapterId().startsWith(PRE_FIX_STD))
     {
-      Field field = sourceIndividualRoot.getField(index) ;
-      if (!field.getId().startsWith(MESSAGE_ID))
-        continue ;
+      RecordImpl targetIndividualRoot = (RecordImpl) target ;
+      for (int index = 0, count = sourceIndividualRoot.getSize() ; count > index ; index++)
+      {
+        Field field = sourceIndividualRoot.getField(index) ;
+        if (!field.getId().startsWith(MESSAGE_ID))
+          continue ;
 
-      Record addRecord = targetIndividualRoot.addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID + "_" + index) ;
-      addRecord.addRecord(DATA_HEADER_RECORD, DATA_HEADER_ID) ;
-      Record targetMessage = addRecord.addRecord(MESSAGE_RECORD, DATA_BODY_ID) ;
-     
-      ArrayImpl targetMessageContent = (ArrayImpl) targetMessage.getField(MESSAGE_CONTENT_FIELD) ;
+        Record addRecord = targetIndividualRoot.addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID + "_" + index) ;
+        addRecord.addRecord(DATA_HEADER_RECORD, DATA_HEADER_ID) ;
+        Record targetMessage = addRecord.addRecord(MESSAGE_RECORD, DATA_BODY_ID) ;
+       
+        ArrayImpl targetMessageContent = (ArrayImpl) targetMessage.getField(MESSAGE_CONTENT_FIELD) ;
 
-      String targetPrefix = addRecord.getPath() + Field.NAME_SEPARATOR_STRING + DATA_HEADER_ID ;
-      String[] sourcePrefix = new String[sources.length] ;
-      sourcePrefix[0] = field.getPath() + Field.NAME_SEPARATOR_STRING + DATA_HEADER_ID ;
+        String targetPrefix = addRecord.getPath() + Field.NAME_SEPARATOR_STRING + DATA_HEADER_ID ;
+        String[] sourcePrefix = new String[sources.length] ;
+        sourcePrefix[0] = field.getPath() + Field.NAME_SEPARATOR_STRING + DATA_HEADER_ID ;
 
-      MappingEngine.mapping(DATA_HEADER_MAPPING, log, target, targetPrefix, sources, sourcePrefix) ;
+        MappingEngine.mapping(DATA_HEADER_MAPPING, log, target, targetPrefix, sources, sourcePrefix) ;
 
-      Array sourceMessageContent = (Array) ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CONTENT_FIELD) ;
-      String errorCode = ((String) sourceMessageContent.getField(0).getValue()).trim() ;
-    
-      //messageCode 필드 처리 추가
-      Field targetMessageCode = null;
-      Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
-      String messageCodeValue = null;
-      if( messageCodeField !=null)
-        messageCodeValue = messageCodeField.getValue()==null ? StringUtils.EMPTY :((String)(messageCodeField.getValue())).trim();
+        Array sourceMessageContent = (Array) ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CONTENT_FIELD) ;
+        String errorCode = ((String) sourceMessageContent.getField(0).getValue()).trim() ;
       
-      if( !StringUtils.isEmpty(messageCodeValue))
-      {
-        if(targetMessage.hasField(MESSAGE_CODE_FIELD))
-        {
-          targetMessageCode = (Field) targetMessage.getField(MESSAGE_CODE_FIELD) ;
-          targetMessageCode.setValue(messageCodeValue);
-        }
-
-        int idx = 0 ;
-        for (String message : MessageTranslator.getStandardMessage(messageCodeValue,
-            targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
-        {
-          if (StringUtils.isBlank(message))
-            break ;
-
-          if (0 == idx)
-          {
-            Object[] arguments = new Object[sourceMessageContent.getSize()] ;
-            for (int idy = 0 ; arguments.length > idy ; idy++)
-            {
-                arguments[idy] = sourceMessageContent.getField(idy).getValue() instanceof String 
-                    ? ((String) sourceMessageContent.getField(idy).getValue()).trim()
-                      : sourceMessageContent.getField(idy).getValue();
-            }
-            message = MessageFormat.format(message, arguments) ; 
-          }
-          targetMessageContent.getField(idx++).setValue(message) ;
-        }
+        //messageCode 필드 처리 추가
+        Field targetMessageCode = null;
+        Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
+        String messageCodeValue = null;
+        if( messageCodeField !=null)
+          messageCodeValue = messageCodeField.getValue()==null ? StringUtils.EMPTY :((String)(messageCodeField.getValue())).trim();
         
-        targetMessageContent.offAddMode() ;
-      }
-      else
-      {
-        int idx = 0 ;
-        for (String message : MessageTranslator.getStandardMessage(errorCode,
-            targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
+        if( !StringUtils.isEmpty(messageCodeValue))
         {
-          if (StringUtils.isBlank(message))
-            break ;
-
-          if (0 == idx)
+          if(targetMessage.hasField(MESSAGE_CODE_FIELD))
           {
-            Object[] arguments = new Object[sourceMessageContent.getSize() - 1] ;
-            for (int idy = 0 ; arguments.length > idy ; idy++)
-              arguments[idy] = sourceMessageContent.getField(idy + 1).getValue() ;
-
-            message = MessageFormat.format(message, arguments) ; 
+            targetMessageCode = (Field) targetMessage.getField(MESSAGE_CODE_FIELD) ;
+            targetMessageCode.setValue(messageCodeValue);
           }
 
-          targetMessageContent.getField(idx++).setValue(message) ;
-        }
+          int idx = 0 ;
+          for (String message : MessageTranslator.getStandardMessage(messageCodeValue, targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
+          {
+            if (StringUtils.isBlank(message))
+              break ;
 
-        targetMessageContent.offAddMode() ;
+            if (0 == idx)
+            {
+              Object[] arguments = new Object[sourceMessageContent.getSize()] ;
+              for (int idy = 0 ; arguments.length > idy ; idy++)
+              {
+                  arguments[idy] = sourceMessageContent.getField(idy).getValue() instanceof String 
+                      ? ((String) sourceMessageContent.getField(idy).getValue()).trim() : sourceMessageContent.getField(idy).getValue();
+              }
+              message = MessageFormat.format(message, arguments) ; 
+            }
+            targetMessageContent.getField(idx++).setValue(message) ;
+          }
+
+          targetMessageContent.offAddMode() ;
+        }
+        else
+        {
+          int idx = 0 ;
+          for (String message : MessageTranslator.getStandardMessage(errorCode, targetIndividualRoot.getAdapterId(), (String) target.getFieldValue(LANG_CD_PATH)))
+          {
+            if (StringUtils.isBlank(message))
+              break ;
+
+            if (0 == idx)
+            {
+              Object[] arguments = new Object[sourceMessageContent.getSize() - 1] ;
+              for (int idy = 0 ; arguments.length > idy ; idy++)
+                arguments[idy] = sourceMessageContent.getField(idy + 1).getValue() ;
+
+              message = MessageFormat.format(message, arguments) ; 
+            }
+
+            targetMessageContent.getField(idx++).setValue(message) ;
+          }
+
+          targetMessageContent.offAddMode() ;
+        }
       }
     }
 
