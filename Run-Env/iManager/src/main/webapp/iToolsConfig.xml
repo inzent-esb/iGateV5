@@ -50,7 +50,7 @@
 
   <Record>
     <GroupHeaders>
-      <GroupHeader label="기본정보" expanded="true">
+      <GroupHeader label="기본정보" expandable="false">
         <Column label="ID" align="left" width="180" name="fieldId" editType="regEdit" availableValue="^[_$A-z가-힣][a-zA-Z0-9가-힣_$]*$" />
         <Column label="이름" align="left" width="120" name="fieldName" editType="edit" />
         <Column label="Index" align="left" width="50" name="fieldIndex" editType="edit" />
@@ -58,33 +58,34 @@
         <Column label="길이" align="center" width="50" name="fieldLength" editType="edit" availableValue="integer" />
         <Column label="소수" align="center" width="50" name="fieldScale" editType="edit" availableValue="numeric" />
       </GroupHeader>
-      <GroupHeader label="반복정보" expanded="false">
+      <GroupHeader label="반복정보" expandable="false">
         <Column label="반복타입" align="left" width="80" name="arrayType" editType="select" availableValue="N=Not,F=Fixed,V=Variable" availableDefaultValue="N" />
         <Column label="반복횟수" align="left" width="70" name="referenceFieldId" editType="edit" />
       </GroupHeader>
-      <GroupHeader label="기본속성정보" expanded="true">
+      <GroupHeader label="기본속성정보" expandable="false">
         <Column label="기본값" align="left" width="70" name="fieldDefaultValue" editType="edit" />
         <Column label="마스킹" align="center" width="80" name="fieldHiddenYn" editType="checkbox" availableValue="Y=true,N=false" availableDefaultValue="N" />
         <Column label="필수" align="center" width="60" name="fieldRequireYn" editType="checkbox" availableValue="Y=true,N=false" availableDefaultValue="N" />
         <Column label="유효값" align="left" width="100" name="fieldValidValue" editType="edit" />
         <Column label="변환" align="left" width="100" name="codecId" editType="codec" />
       </GroupHeader>
-      <GroupHeader label="확장속성정보" expanded="false">
-        <Column label="FieldTrim" align="left" width="100" name="FieldTrim" editType="checkbox" extened="true"/>
-        <Column label="FieldFullWidth" align="left" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
-        <Column label="Table.PK" align="left" width="100" name="table.key" editType="checkbox" extened="true"/>
-        <Column label="Table.Seq" align="left" width="100" name="table.seq" editType="checkbox" extened="true"/>
-        <Column label="Table.Date" align="left" width="100" name="table.date" editType="checkbox" extened="true"/>
-        <Column label="Table.Success" align="left" width="100" name="table.flag.success" editType="edit" extened="true"/>
-        <Column label="Table.Fail" align="left" width="100" name="table.flag.fail" editType="edit" extened="true"/>
-        <Column label="Table.Exclude" align="left" width="100" name="table.exclude" editType="checkbox" extened="true"/>
-        <Column label="Table.Exclude" align="left" width="100" name="table.exclude" editType="checkbox" extened="true"/>
-        <Column label="Http.Type" align="left" width="100" name="FieldHttpType" editType="select" availableValue="uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="body" />
-        <Column label="Http.Query.Name" align="left" width="100" name="FieldHttpName" editType="edit" extened="true"/>
-        <Column label="Xml.Type" align="left" width="100" name="SchemaType" editType="select" availableValue="attribute=Attribute,element=Element,cdata=CData,elementcdata=Elementcdata" availableDefaultValue="element" />
-        <Column label="Xml.NS" align="left" width="100" name="xmlns" editType="edit" extened="true"/>
-        <Column label="Xml.Name" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
-        <Column label="전체확장속성" align="left" width="220" name="fieldOptions" editType="edit" />
+      <GroupHeader label="확장속성정보" expandable="true">
+        <Column label="FieldTrim" align="center" width="100" name="FieldTrim" editType="checkbox" extened="true"/>
+        <Column label="FieldFullWidth" align="center" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
+        <Column label="TableSeq" align="center" width="100" name="table.seq" editType="checkbox" extened="true"/>
+        <Column label="TableDate" align="center" width="100" name="table.date" editType="checkbox" extened="true"/>
+        <Column label="TableSuccess" align="left" width="100" name="table.flag.success" editType="edit" extened="true"/>
+        <Column label="TableFail" align="left" width="100" name="table.flag.fail" editType="edit" extened="true"/>
+        <Column label="TableExclude" align="center" width="100" name="table.exclude" editType="checkbox" extened="true"/>
+        <Column label="HttpType" align="center" width="100" name="FieldHttpType" editType="select" availableValue="none= ,uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="none" extened="true"/>
+        <Column label="XmlType" align="center" width="100" name="SchemaType" editType="select" availableValue="none= ,attribute=Attribute,element=Element,cdata=CData,elementcdata=Elementcdata" availableDefaultValue="none" extened="true"/>
+        <Column label="XmlName" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
+        <!-- 확장속성 필요 시 주석해제
+        <Column label="TablePK" align="left" width="100" name="table.key" editType="checkbox" extened="true"/>
+        <Column label="HttpQueryName" align="left" width="100" name="FieldHttpName" editType="edit" extened="true"/>
+        <Column label="XmlNS" align="left" width="100" name="xmlns" editType="edit" extened="true"/>
+        -->
+        <Column label="전체확장속성" align="left" width="220" name="fieldOptions" editType="edit" disable="true"/>
       </GroupHeader>
     </GroupHeaders>
     <FieldMetas>
