@@ -19,7 +19,6 @@ public class GenTid extends AbstractActivity
   }
 
   /**
-   * 
    * @return
    * @throws IGateException
    * @author jkh, 2021. 12. 17.
