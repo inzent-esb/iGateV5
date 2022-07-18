@@ -20,6 +20,10 @@ public class GenTid extends AbstractActivity
 
   /**
    * 
+<<<<<<< HEAD
+=======
+   * 대외 온라인 거래 / 비동기-비동기구성 인경우, TID를 생성해서 사용하도록 수정
+>>>>>>> branch 'main' of https://github.com/inzent-esb/iGateV5.git/
    * @return
    * @throws IGateException
    * @author jkh, 2021. 12. 17.
