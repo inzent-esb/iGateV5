@@ -27,7 +27,7 @@
 		</exclusions>
 
 		<dependencies>
-			<system>
+			<system export="true">
 				<paths>
 					<path name="com/sun/management" />
 				</paths>
