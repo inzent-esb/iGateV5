@@ -33,6 +33,7 @@
 				</paths>
 			</system>
 			<module name="javax.persistence.api" services="import" />
+			<module name="javax.servlet.api" services="import" />
 		</dependencies>
 	</deployment>
 
