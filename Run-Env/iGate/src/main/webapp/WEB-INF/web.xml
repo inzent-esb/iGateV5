@@ -12,8 +12,27 @@
 
 	<listener>
 		<listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
-	</listener>
-
+	</listener> 
+	<servlet>
+		<servlet-name>Dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				/WEB-INF/contextBase.xml
+				/WEB-INF/contextConfig.xml
+				/WEB-INF/contextCustom.xml
+				/WEB-INF/contextJBoss.xml
+				/WEB-INF/contextMBean.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Dispatcher</servlet-name>
+		<url-pattern>/TER</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>I_INB_S_HTTP_S01</servlet-name>
 		<servlet-class>com.inzent.igate.session.http.HttpServlet</servlet-class>
@@ -30,26 +49,6 @@
 	<servlet-mapping>
 		<servlet-name>I_INB_S_HTTP_S01</servlet-name>
 		<url-pattern>/INB</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>Dispatcher</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>
-				/WEB-INF/contextBase.xml
-				/WEB-INF/contextConfig.xml
-				/WEB-INF/contextCustom.xml
-				/WEB-INF/contextTomEE.xml
-				/WEB-INF/contextMBean.xml
-			</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Dispatcher</servlet-name>
-		<url-pattern>/TER</url-pattern>
 	</servlet-mapping>
 <!--
 	<servlet>
