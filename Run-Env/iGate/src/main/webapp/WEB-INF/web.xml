@@ -22,7 +22,7 @@
 				/WEB-INF/contextBase.xml
 				/WEB-INF/contextConfig.xml
 				/WEB-INF/contextCustom.xml
-				/WEB-INF/contextJBoss.xml
+				/WEB-INF/contextTomEE.xml
 				/WEB-INF/contextMBean.xml
 			</param-value>
 		</init-param>
