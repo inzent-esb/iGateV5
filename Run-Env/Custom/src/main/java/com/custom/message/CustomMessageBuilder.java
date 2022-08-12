@@ -123,7 +123,7 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
         Record addRecord = targetIndividualRoot.addIndividualRecord(IMessageBuilder.EMPTY_RECORD, MESSAGE_ID + "_" + index) ;
         addRecord.addRecord(DATA_HEADER_RECORD, DATA_HEADER_ID) ;
         Record targetMessage = addRecord.addRecord(MESSAGE_RECORD, DATA_BODY_ID) ;
-       
+
         ArrayImpl targetMessageContent = (ArrayImpl) targetMessage.getField(MESSAGE_CONTENT_FIELD) ;
 
         String targetPrefix = addRecord.getPath() + Field.NAME_SEPARATOR_STRING + DATA_HEADER_ID ;
@@ -134,20 +134,20 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
 
         Array sourceMessageContent = (Array) ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CONTENT_FIELD) ;
         String errorCode = ((String) sourceMessageContent.getField(0).getValue()).trim() ;
-      
-        //messageCode 필드 처리 추가
-        Field targetMessageCode = null;
-        Field messageCodeField =((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
-        String messageCodeValue = null;
-        if( messageCodeField !=null)
-          messageCodeValue = messageCodeField.getValue()==null ? StringUtils.EMPTY :((String)(messageCodeField.getValue())).trim();
-        
-        if( !StringUtils.isEmpty(messageCodeValue))
+
+        // messageCode 필드 처리 추가
+        Field targetMessageCode = null ;
+        Field messageCodeField = ((Record) field).getField(DATA_BODY_ID + Field.NAME_SEPARATOR_STRING + MESSAGE_CODE_FIELD) ;
+        String messageCodeValue = null ;
+        if (messageCodeField != null)
+          messageCodeValue = messageCodeField.getValue() == null ? StringUtils.EMPTY : ((String) (messageCodeField.getValue())).trim() ;
+
+        if (!StringUtils.isEmpty(messageCodeValue))
         {
-          if(targetMessage.hasField(MESSAGE_CODE_FIELD))
+          if (targetMessage.hasField(MESSAGE_CODE_FIELD))
           {
             targetMessageCode = (Field) targetMessage.getField(MESSAGE_CODE_FIELD) ;
-            targetMessageCode.setValue(messageCodeValue);
+            targetMessageCode.setValue(messageCodeValue) ;
           }
 
           int idx = 0 ;
@@ -160,12 +160,11 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
             {
               Object[] arguments = new Object[sourceMessageContent.getSize()] ;
               for (int idy = 0 ; arguments.length > idy ; idy++)
-              {
-                  arguments[idy] = sourceMessageContent.getField(idy).getValue() instanceof String 
-                      ? ((String) sourceMessageContent.getField(idy).getValue()).trim() : sourceMessageContent.getField(idy).getValue();
-              }
-              message = MessageFormat.format(message, arguments) ; 
+                arguments[idy] = sourceMessageContent.getField(idy).getValue() instanceof String ? ((String) sourceMessageContent.getField(idy).getValue()).trim() : sourceMessageContent.getField(idy).getValue() ;
+
+              message = MessageFormat.format(message, arguments) ;
             }
+
             targetMessageContent.getField(idx++).setValue(message) ;
           }
 
@@ -185,7 +184,7 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
               for (int idy = 0 ; arguments.length > idy ; idy++)
                 arguments[idy] = sourceMessageContent.getField(idy + 1).getValue() ;
 
-              message = MessageFormat.format(message, arguments) ; 
+              message = MessageFormat.format(message, arguments) ;
             }
 
             targetMessageContent.getField(idx++).setValue(message) ;
@@ -227,7 +226,6 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
     if (null != interfaceMeta.getInterfaceService(service.getServiceId()))
       return interfaceMeta ;
     else
-      return MessageBeans.SINGLETON.interfaceManager.get(
-          "IF" + interfaceMeta.getAdapterId().substring(1, 5) + service.getServiceId().substring(2)) ;
+      return MessageBeans.SINGLETON.interfaceManager.get("IF" + interfaceMeta.getAdapterId().substring(1, 5) + service.getServiceId().substring(2)) ;
   }
 }
