@@ -72,16 +72,17 @@
       <GroupHeader label="확장속성정보" expandable="true">
         <Column label="FieldTrim" align="center" width="100" name="FieldTrim" editType="checkbox" extened="true"/>
         <Column label="FieldFullWidth" align="center" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
+        <Column label="TablePK" align="left" width="100" name="table.key" editType="checkbox" extened="true"/>
         <Column label="TableSeq" align="center" width="100" name="table.seq" editType="checkbox" extened="true"/>
         <Column label="TableDate" align="center" width="100" name="table.date" editType="checkbox" extened="true"/>
         <Column label="TableSuccess" align="left" width="100" name="table.flag.success" editType="edit" extened="true"/>
         <Column label="TableFail" align="left" width="100" name="table.flag.fail" editType="edit" extened="true"/>
         <Column label="TableExclude" align="center" width="100" name="table.exclude" editType="checkbox" extened="true"/>
+        <Column label="TableCommand" align="center" width="100" name="table.command" editType="checkbox" extened="true"/>
         <Column label="HttpType" align="center" width="100" name="FieldHttpType" editType="select" availableValue="none= ,uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="none" extened="true"/>
         <Column label="XmlType" align="center" width="100" name="SchemaType" editType="select" availableValue="none= ,attribute=Attribute,element=Element,cdata=CData,elementcdata=Elementcdata" availableDefaultValue="none" extened="true"/>
         <Column label="XmlName" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
         <!-- 확장속성 필요 시 주석해제
-        <Column label="TablePK" align="left" width="100" name="table.key" editType="checkbox" extened="true"/>
         <Column label="HttpQueryName" align="left" width="100" name="FieldHttpName" editType="edit" extened="true"/>
         <Column label="XmlNS" align="left" width="100" name="xmlns" editType="edit" extened="true"/>
         -->

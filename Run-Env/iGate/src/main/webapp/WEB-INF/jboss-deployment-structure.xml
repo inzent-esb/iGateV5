@@ -2,7 +2,8 @@
 <jboss-deployment-structure>
 
 	<deployment>
-		<!-- Exclusions allow you to prevent the server from automatically adding some dependencies -->
+		<!-- Exclusions allow you to prevent the server from automatically adding 
+			some dependencies -->
 		<exclusions>
 			<module name="com.fasterxml.classmate" />
 			<module name="com.fasterxml.jackson.core.jackson-annotations" />
@@ -20,7 +21,7 @@
 			<module name="org.javassist" />
 			<module name="org.jaxen" />
 			<module name="org.jboss.logging.commons.logging" />
-			<module name="org.jgroups"/>
+			<module name="org.jgroups" />
 			<module name="org.slf4j" />
 			<module name="org.slf4j.ext" />
 			<module name="org.slf4j.impl" />

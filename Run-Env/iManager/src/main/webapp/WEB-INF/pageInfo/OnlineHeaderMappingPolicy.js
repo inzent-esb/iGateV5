@@ -412,11 +412,6 @@ const info = {
 													name: "mappingDesc",
 										            header: this.$t('head.description'),
 										            align: "left"
-												}, 
-												{
-													name: "mappingType",
-										            header: this.$t('common.type'),
-										            align: "left"
 												}
 											],
 										},						
@@ -475,11 +470,6 @@ const info = {
 												{
 													name: "mappingDesc",
 										            header: this.$t('head.description'),
-										            align: "left"
-												}, 
-												{
-													name: "mappingType",
-										            header: this.$t('common.type'),
 										            align: "left"
 												}
 											],
@@ -540,11 +530,6 @@ const info = {
 													name: "mappingDesc",
 										            header: this.$t('head.description'),
 										            align: "left"
-												}, 
-												{
-													name: "mappingType",
-										            header: this.$t('common.type'),
-										            align: "left"
 												}
 											],
 										},						
@@ -603,11 +588,6 @@ const info = {
 												{
 													name: "mappingDesc",
 										            header: this.$t('head.description'),
-										            align: "left"
-												}, 
-												{
-													name: "mappingType",
-										            header: this.$t('common.type'),
 										            align: "left"
 												}
 											],

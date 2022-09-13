@@ -1,6 +1,13 @@
 const info = {
 		type: 'basic',
 		cudUrl: '/igate/reservedSchedule/object.json',
+		updateStatusFunc: function(row, mod) {
+			return {
+				url: 'ready' === mod? '/igate/reservedSchedule/updateReady.json' : '/igate/reservedSchedule/updateCancel.json',
+				params: {},
+				columnName: 'executeStatus',
+			}
+		},		
 		search: {
 			load: true,
 			list: [
@@ -160,6 +167,8 @@ const info = {
 		button: {
 			list: [
 				{ id: 'initialize', isUse: true },
+				{ id: 'updateCancel', isUse: true },
+				{ id: 'updateReady', isUse: true },				
 				{ id: 'newTab', isUse: true },
 			],
 		},
@@ -171,11 +180,15 @@ const info = {
 				side: 'server',
 			},
 			options: {
+				rowHeaders: ['checkbox'],
 				columns: [
 					{
 						name: 'pk.reserveDateTime',
 						header: this.$t('igate.reservedSchedule.reserved.dateTime'),
 						align: 'center',
+						formatter: function(obj) {
+							return obj.value.substring(0, 19);
+						}
 					},
 					{
 						name: 'pk.scheduleType',
@@ -224,6 +237,9 @@ const info = {
 									vModel: 'pk.reserveDateTime',
 									label: this.$t('igate.reservedSchedule.reserved.dateTime'),
 									isPK: true,
+									formatter: function(value) {
+										return value ? value.substring(0, 19) : value;
+									}
 								},
 								{
 									type: 'text',
@@ -236,7 +252,9 @@ const info = {
 									vModel: 'pk.reserveSchedule',
 									label: this.$t('igate.reservedSchedule'),
 									isPK: true,
-								},
+								},					
+							],
+							[
 								{
 									type: 'select',
 									vModel: 'pk.scheduleType',
@@ -253,9 +271,7 @@ const info = {
 										optionValue: 'option.pk.propertyKey',
 										optionText: 'option.propertyValue',
 									},
-								},								
-							],
-							[
+								},
 								{
 									type: 'select',
 									vModel: 'executeStatus',
@@ -275,7 +291,10 @@ const info = {
 								{
 									type: 'text',
 									vModel: 'executeTimestamp',
-									label: this.$t('igate.reservedSchedule.execute.timestamp'),								
+									label: this.$t('igate.reservedSchedule.execute.timestamp'),
+									formatter: function(value) {
+										return value ? value.substring(0, 19) : value;
+									}
 								},
 							],
 							[
@@ -287,7 +306,10 @@ const info = {
 								{
 									type: 'text',
 									vModel: 'exceptionDateTime',
-									label: this.$t('igate.reservedSchedule.exception.dateTime'),								
+									label: this.$t('igate.reservedSchedule.exception.dateTime'),
+									formatter: function(value) {
+										return value? value.substring(0, 19) : value;
+									}
 								},
 								{
 									type: 'text',

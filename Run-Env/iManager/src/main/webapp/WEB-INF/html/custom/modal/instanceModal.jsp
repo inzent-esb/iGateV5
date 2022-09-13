@@ -94,7 +94,7 @@
 			 },
 			 instanceTypes: [],
 		 },
-		 methods: {
+		 methods: $.extend(true, {}, searchMethodOption, {
 			 search: function() {
 				 vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 				 
@@ -118,7 +118,7 @@
 			 inputEvt: function(info) {
     			setLengthCnt.call(this, info);
     		 },
-		 },
+		 }),
 		 mounted: function() {
 			 (new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.Instance.InstanceType', orderByKey: true }, function(instanceTypeResult) {
 				 this.instanceTypes = instanceTypeResult.object;

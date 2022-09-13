@@ -15,6 +15,8 @@
 <link rel="stylesheet" type="text/css" href="${prefixFileUrl}/css/common-external.css">
 
 <script type="text/javascript">
+var windowId = null;
+
 var failMessage = '<fmt:message>head.fail.notice</fmt:message>';
 
 var prefixUrl = '${prefixUrl}';
@@ -60,6 +62,8 @@ function makeScript(idx) {
 			if (2 == $('[data-ready]').children('.ct-header, .ct-content').length) {
 				$('[data-ready]').children('.ct-content').height('calc(100% - ' + $('[data-ready]').children('.ct-header').outerHeight(true) +'px)');
 			}
+			
+			windowId = 'GUID-' + getUUID();
 		} else {
 			makeScript(idx + 1);	
 		}

@@ -20,18 +20,18 @@ function HttpReq(url) {
 						return -1 === info.indexOf('NEW-WINDOW-ID')
 					}).join('&');
 				} else {
-					X_IMANAGER_WINDOW = sessionStorage.getItem('X-IMANAGER-WINDOW');
+					X_IMANAGER_WINDOW = windowId;
 				}
 			} else {
 				if (param['NEW-WINDOW-ID']) {
 					X_IMANAGER_WINDOW = param['NEW-WINDOW-ID'];
 					delete param['NEW-WINDOW-ID'];
 				} else {
-					X_IMANAGER_WINDOW = sessionStorage.getItem('X-IMANAGER-WINDOW');
+					X_IMANAGER_WINDOW = windowId;
 				}
 			}
 		} else {
-			X_IMANAGER_WINDOW = sessionStorage.getItem('X-IMANAGER-WINDOW');	
+			X_IMANAGER_WINDOW = windowId;	
 		}		
 		
 		$.ajax({

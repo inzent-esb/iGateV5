@@ -74,6 +74,7 @@
 						type: 'select',
 						name: '<fmt:message>igate.logStatistics.searchType</fmt:message>',
 						isHideAllOption: true,
+						changeEvt: 'initDatePicker',
 						mappingDataInfo: {
 							id: 'dailyTimes',
 							selectModel: 'object.searchType',
@@ -157,7 +158,7 @@
 				    			}				    			
 				    		}
 				    	},
-				    	methods: {
+				    	methods: $.extend(true, {}, searchMethodOption, {
 				    		inputEvt: function(info) {
 				    			setLengthCnt.call(this, info);
 				    		},				    		
@@ -212,6 +213,28 @@
 				        		this.initDatePicker();
 				            },
 				            initDatePicker: function() {
+				            	if ('D' === this.object.searchType) {
+					            	var date = new Date(this.object.fromDateTime? this.object.fromDateTime : Date.now());
+					            	
+					            	date.setHours(0);
+					            	date.setMinutes(0);
+					            	date.setSeconds(0);
+					            	date.setMilliseconds(0);
+					            	
+					            	this.object.fromDateTime = moment(date).format('YYYY-MM-DD HH:mm:ss');
+					            	
+					            	date.setHours(23);
+					            	date.setMinutes(59);
+					            	date.setSeconds(59);
+					            	date.setMilliseconds(59);
+					            	
+									this.object.toDateTime = moment(date).format('YYYY-MM-DD HH:mm:ss');
+									
+									$('body').addClass('searchTypeDaily');
+				            	} else {
+				            		$('body').removeClass('searchTypeDaily');
+				            	}
+				            	
 				            	var fromDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromDateTime');
 				            	var toDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toDateTime');
 				            	
@@ -234,7 +257,7 @@
 				            setSearchinterfaceServiceId: function(param) {
 				            	this.object.pk.interfaceServiceId = param.serviceId ;
 				            },				            
-				    	},
+				    	}),
 				    	mounted: function() {
 				    		this.dailyTimes = searchTypeResult.object;
 				    		this.statsTypes = statsDataTypesResult.object;
@@ -444,6 +467,7 @@
 			});
 		    
 			this.addEventListener('destroy', function(evt) {
+				$('body').removeClass('searchTypeDaily');
 				$(".daterangepicker").remove();
 				$(".ui-datepicker").remove();
 				$(".backdrop").remove();

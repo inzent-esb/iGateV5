@@ -1284,7 +1284,7 @@ function panelClose(o) {
 		}
 		ct.removeAttr('style');
 		windowResizeSearchGrid();
-	}, 50);
+	}, 300);
 }
 
 function getMakeGridObj() {

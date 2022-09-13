@@ -54,7 +54,7 @@
 					serviceName: null
 				}
 			},
-			methods : {
+			methods: $.extend(true, {}, searchMethodOption, {
 				search : function() {
 					vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 					vmList.makeGridObj.search(this, function() {
@@ -75,7 +75,7 @@
 				inputEvt: function(info) {
 	    			setLengthCnt.call(this, info);
 	    		},
-			 },
+			 }),
 			 mounted: function() {
 				 this.initSearchArea();
 			 },

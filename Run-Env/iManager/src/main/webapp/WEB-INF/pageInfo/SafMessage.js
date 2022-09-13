@@ -4,9 +4,7 @@ const info = {
 		updateStatusFunc: function(row, mod) {
 			return {
 				url: 'ready' === mod? '/igate/safMessage/updateReady.json' : '/igate/safMessage/updateCancel.json',
-				params: {
-					safStatus: row.safStatus
-				},
+				params: {},
 				columnName: 'safStatus',
 			}
 		},
@@ -229,6 +227,9 @@ const info = {
 						name: 'pk.createDateTime',
 						header: this.$t('igate.connectorControl.create') + ' ' + this.$t('head.date'),
 						align: 'center',
+						formatter: function(obj) {
+							return obj.value.substring(0, 19);
+						}
 					},
 					{
 						name: 'transactionId',
@@ -291,6 +292,9 @@ const info = {
 									vModel: 'pk.createDateTime',
 									label: this.$t('igate.connectorControl.create') + ' ' + this.$t('head.date'),
 									isPK: true,
+									formatter: function(value) {
+										return value ? value.substring(0, 19) : value;
+									}
 								},
 								{
 									type: 'text',

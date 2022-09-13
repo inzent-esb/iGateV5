@@ -99,7 +99,6 @@ function removeStorage() {
 	sessionStorage.removeItem('externalMenuUrl');
 	sessionStorage.removeItem('externalMenuParam');
 	sessionStorage.removeItem('selectedMenuPathIdList');
-	sessionStorage.removeItem('X-IMANAGER-WINDOW');
 }
 
 function getFileSize(fileSize){
@@ -111,4 +110,10 @@ function getFileSize(fileSize){
 	}
 	  
 	return rtn;
+}
+
+function changeDateFormat(date, format) {	
+	if (!date) return date;
+	
+	return moment(new Date(date.split('.')[0].replace('-', '/'))).format(format ? format : 'YYYY-MM-DD HH:mm:ss');
 }

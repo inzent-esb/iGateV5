@@ -70,7 +70,7 @@
 						 connectorDesc : 0,
 					 }
 				 },
-				 methods : {
+				 methods: $.extend(true, {}, searchMethodOption, {
 					 search : function() {
 						 vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 						 
@@ -96,7 +96,7 @@
 					 inputEvt: function(info) {
 		    			setLengthCnt.call(this, info);
 		    		 },
-				 },
+				 }),
 				 mounted: function() {
 					 this.connectorTypes = connectorTypeResult.object;
 				    	

@@ -65,14 +65,14 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 			CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 			
 			// From
-			values = entity.getFromExceptionDateTime().toString();
+			values = entity.getFromExceptionDateTime().toString().substring(0, 19);
 			row = writeSheet.getRow(3);
 			cell = row.createCell(1);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
 			// To
-			values = entity.getToExceptionDateTime().toString();
+			values = entity.getToExceptionDateTime().toString().substring(0, 19);
 			row = writeSheet.getRow(3);
 			cell = row.createCell(3);
 			cell.setCellStyle(cellStyle_Base);
@@ -142,7 +142,7 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 				int c = 0;
 				
 				//날짜/시간
-				values = data.getPk().getExceptionDateTime().toString();
+				values = data.getPk().getExceptionDateTime().toString().substring(0, 19);
 				cell = row.createCell(c);
 				cell.setCellValue(values);
 

@@ -151,7 +151,7 @@
 		    			},		    			
 		    		},
 		    	},
-		    	methods: {
+		    	methods: $.extend(true, {}, searchMethodOption, {
 		    		inputEvt: function(info) {
 		    			setLengthCnt.call(this, info);
 		    		},
@@ -190,7 +190,7 @@
 		            setSearchServiceId: function(param) {
 		            	this.object.serviceId = param.serviceId ;
 		            }
-		    	},
+		    	}),
 		    	mounted: function() {
 		    		this.initSearchArea();
 		    	}
@@ -240,7 +240,7 @@
 		        	
 		        	SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 		        	
-		        	if(this.newTabSearchGrid()) {
+		        	if(!this.newTabSearchGrid()) {
 		            	this.$nextTick(function() {
 		            		window.vmSearch.search();	
 		            	});        		

@@ -254,18 +254,22 @@ public class YellowPageController extends AbstractEimsController
 
     for (com.inzent.yellowpage.marshaller.Format format : sender.getResponseFormats())
     {
-      Record responseRecord = unmarshalRecord(format, interfaceMeta) ;
-
-      InterfaceResponsePK interfaceResponsePK = new InterfaceResponsePK() ;
-      interfaceResponsePK.setInterfaceId(interfaceMeta.getInterfaceId()) ;
-      interfaceResponsePK.setRecordId(responseRecord.getRecordId()) ;
-
       InterfaceResponse interfaceResponse = new InterfaceResponse() ;
-      interfaceResponse.setPk(interfaceResponsePK) ;
+      interfaceResponse.setPk(new InterfaceResponsePK()) ;
+      interfaceResponse.getPk().setInterfaceId(interfaceMeta.getInterfaceId()) ;
       interfaceResponse.setInterfaceObject(interfaceMeta) ;
 
+      if (format.hasContents())
+      {
+        Record responseRecord = unmarshalRecord(format, interfaceMeta) ;
+
+        interfaceResponse.getPk().setRecordId(responseRecord.getRecordId()) ;
+        interfaceResponse.setRecordObject(responseRecord) ;
+      }
+      else
+        interfaceResponse.getPk().setRecordId(format.getId()) ;
+
       interfaceMeta.getInterfaceResponses().add(interfaceResponse) ;
-      interfaceResponse.setRecordObject(responseRecord) ;
     }
 
     int order = 0 ;
@@ -450,10 +454,13 @@ public class YellowPageController extends AbstractEimsController
     }
 
     if (null != receiver.getResponseFormat())
-    {
-      service.setResponseRecordObject(unmarshalRecord(receiver.getResponseFormat(), service)) ;
-      service.setResponseRecordId(service.getResponseRecordObject().getRecordId()) ;
-    }
+      if (receiver.getResponseFormat().hasContents())
+      {
+        service.setResponseRecordObject(unmarshalRecord(receiver.getResponseFormat(), service)) ;
+        service.setResponseRecordId(service.getResponseRecordObject().getRecordId()) ;
+      }
+      else
+        service.setResponseRecordId(receiver.getResponseFormat().getId()) ;
 
     return service ;
   }

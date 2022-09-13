@@ -67,14 +67,14 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 			CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 			
 			// From
-			values = entity.getFromLogDateTime().toString();
+			values = entity.getFromLogDateTime().toString().substring(0, 19);
 			row = writeSheet.getRow(3);
 			cell = row.createCell(1);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
 			
 			// To
-			values = entity.getToLogDateTime().toString();
+			values = entity.getToLogDateTime().toString().substring(0, 19);
 			cell = row.createCell(3);
 			cell.setCellStyle(cellStyle_Base);
 			cell.setCellValue(values);
@@ -172,7 +172,7 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 				//요청시간
 				values = "";
 				if(data.getRequestTimestamp() != null) {
-					values = data.getRequestTimestamp().toString();				
+					values = data.getRequestTimestamp().toString().substring(0, 19);				
 				}
 				
 				cell = row.createCell(c);

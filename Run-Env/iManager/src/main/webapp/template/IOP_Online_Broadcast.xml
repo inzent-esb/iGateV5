@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Operation name="Broadcase Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online" desc="Broadcase Interface"> 
+<Operation name="Broadcase Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online"> 
   <Variables> 
     <Variable type="com.inzent.igate.message.Record" name="chlReq" desc="interface request" isParameter="false"> 
       <Value><![CDATA[]]></Value>  
@@ -29,8 +29,8 @@
         <Value><![CDATA[adapterParameter]]></Value> 
       </Parameter> 
     </Start>  
-    <End uniqueKey="0001" index="1" desc="End" xPos="388" yPos="692"/>  
-    <Activity uniqueKey="0002" index="2" desc="Parse Interface Request" id="ParseInterfaceRequest" xPos="151" yPos="242"> 
+    <End uniqueKey="0001" index="1" desc="End" xPos="620" yPos="599"/>  
+    <Activity uniqueKey="0002" index="2" desc="Parse Interface Request" id="ParseInterfaceRequest" xPos="151" yPos="254"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Parsed Record" from="Variable" dynamic="false">
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
@@ -38,7 +38,7 @@
         <Value><![CDATA[adapterParameter]]></Value>
       </Parameter>
     </Activity>  
-    <Activity uniqueKey="0006" index="6" desc="Mapping Online Response" id="MappingOnlineResponse" dynamic="true" xPos="560" yPos="284"> 
+    <Activity uniqueKey="0006" index="6" desc="Mapping Online Response" id="MappingOnlineResponse" dynamic="true" xPos="560" yPos="254"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Target Record" from="Variable" dynamic="false">
         <Value><![CDATA[chlRes]]></Value>
       </Parameter>
@@ -64,22 +64,22 @@
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
     </Activity>  
-    <Condition uniqueKey="0008" index="8" desc="Is Request" xPos="371" yPos="89"> 
-      <When target="10" desc="request"> 
-        <JavaExpression><![CDATA[!adapterParameter.isReply()]]></JavaExpression> 
+    <Condition uniqueKey="0008" index="8" desc="Is Response" xPos="367" yPos="89"> 
+      <When target="4" desc="response"> 
+        <MethodExpression variableName="adapterParameter"> 
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isReply" argumentTypes="" argumentType="boolean"/> 
+        </MethodExpression> 
       </When>  
-      <Others target="4" desc="response"> 
-        <JavaExpression><![CDATA[true]]></JavaExpression> 
-      </Others>  
+      <Others target="10" desc="request"/>  
       <Value><![CDATA[
-// request
-if ( !adapterParameter.isReply() ) 
-   return 0;
 // response
+if ( adapterParameter.isReply() ) 
+   return 0;
+// request
 else 
    return 1;]]></Value> 
     </Condition>  
-    <Activity uniqueKey="0004" index="4" desc="Parse Service Response" id="ParseServiceResponse" xPos="568" yPos="160"> 
+    <Activity uniqueKey="0004" index="4" desc="Parse Service Response" id="ParseServiceResponse" xPos="568" yPos="158"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Parsed Record" from="Variable" dynamic="false">
         <Value><![CDATA[bizRes]]></Value>
       </Parameter>
@@ -87,7 +87,7 @@ else
         <Value><![CDATA[adapterParameter]]></Value>
       </Parameter>
     </Activity>  
-    <Activity uniqueKey="0005" index="5" desc="Parse Interface Request" id="ParseInterfaceRequest" xPos="568" yPos="222"> 
+    <Activity uniqueKey="0005" index="5" desc="Parse Interface Request" id="ParseInterfaceRequest" xPos="568" yPos="206"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Parsed Record" from="Variable" dynamic="false">
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
@@ -95,7 +95,7 @@ else
         <Value><![CDATA[adapterParameter]]></Value>
       </Parameter>
     </Activity>  
-    <ForEach height="251" width="402" uniqueKey="0009" index="9" desc="ForEach" xPos="33" yPos="335"> 
+    <ForEach height="223" width="402" uniqueKey="0009" index="9" desc="ForEach" xPos="33" yPos="350"> 
       <Activities> 
         <Activity uniqueKey="0010" index="1" desc="Mapping Online Request" id="MappingOnlineRequest" dynamic="true" xPos="15" yPos="81"> 
           <Parameter type="com.inzent.igate.message.Record" desc="Target Record" from="Variable" dynamic="false">
@@ -123,7 +123,7 @@ else
             </MethodExpression>
           </Parameter>
           <Parameter type="java.lang.Boolean" desc="Push To Queue" from="Constant" dynamic="false">
-            <Value><![CDATA[false]]></Value>
+            <Value><![CDATA[true]]></Value>
           </Parameter>
           <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
             <Value><![CDATA[bizReq]]></Value>
@@ -137,8 +137,7 @@ else
             <Value><![CDATA[chlReq]]></Value>
           </Parameter>
         </Activity>  
-        <Continue uniqueKey="0013" index="4" desc="Continue" xPos="284" yPos="81"/>  
-        <Break uniqueKey="0014" index="5" desc="Break" xPos="67" yPos="186"/> 
+        <Continue uniqueKey="0013" index="4" desc="Continue" xPos="284" yPos="81"/> 
       </Activities>  
       <Transitions> 
         <Transition from="start" to="3" order="0" fromTerminal="bottom" toTerminal="top"> 
@@ -150,13 +149,10 @@ else
         <Transition from="3" to="4" order="1" fromTerminal="bottom" toTerminal="top"> 
           <bendPoints/> 
         </Transition>  
-        <Transition from="2" to="5" order="0" fromTerminal="bottom" toTerminal="top"> 
-          <bendPoints/> 
-        </Transition>  
-        <Transition from="5" to="end" order="0" fromTerminal="bottom" toTerminal="bottom"> 
-          <bendPoints/> 
-        </Transition>  
         <Transition from="1" to="2" order="0" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="2" to="end" order="0" fromTerminal="bottom" toTerminal="bottom"> 
           <bendPoints/> 
         </Transition> 
       </Transitions>  
@@ -189,23 +185,20 @@ else
         <Value><![CDATA[adapterParameter]]></Value>
       </Parameter>
     </Activity>  
-    <Activity uniqueKey="0019" index="14" desc="Start Interface" id="StartInterface" xPos="172" yPos="200"> 
-      <Parameter type="java.lang.Boolean" desc="Is sync-interface" from="Method" dynamic="false">
-        <Value><![CDATA[adapterParameter.isResponseSync()]]></Value>
-        <MethodExpression variableName="adapterParameter">
-          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isResponseSync" argumentTypes="" argumentType="boolean"/>
-        </MethodExpression>
+    <Activity uniqueKey="0019" index="14" desc="Start Interface" id="StartInterface" xPos="172" yPos="206"> 
+      <Parameter type="java.lang.Boolean" desc="Is sync-interface" from="Constant" dynamic="false">
+        <Value><![CDATA[false]]></Value>
       </Parameter>
       <Parameter type="java.lang.Boolean" desc="Is send ack" from="Constant" dynamic="false">
         <Value><![CDATA[false]]></Value>
       </Parameter>
     </Activity>  
-    <Activity uniqueKey="001d" index="16" desc="ValidateRequest" id="ValidateRequest" xPos="167" yPos="284"> 
+    <Activity uniqueKey="001d" index="16" desc="ValidateRequest" id="ValidateRequest" xPos="167" yPos="302"> 
       <Parameter type="com.inzent.igate.message.Record" desc="Request Record" from="Variable" dynamic="false">
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
     </Activity>  
-    <Activity uniqueKey="001e" index="17" desc="Save Response" id="SaveResponse" xPos="170" yPos="628"> 
+    <Activity uniqueKey="001e" index="17" desc="Save Response" id="SaveResponse" xPos="170" yPos="599"> 
       <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
         <Value><![CDATA[adapterParameter]]></Value>
       </Parameter>
@@ -213,7 +206,7 @@ else
         <Value><![CDATA[null]]></Value>
       </Parameter>
     </Activity>  
-    <Activity uniqueKey="0017" index="18" desc="Send Response" id="SendResponse" xPos="586" yPos="346"> 
+    <Activity uniqueKey="0017" index="18" desc="Send Response" id="SendResponse" xPos="586" yPos="302"> 
       <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
         <Value><![CDATA[adapterParameter]]></Value>
       </Parameter>
@@ -235,12 +228,6 @@ else
     <Transition from="4" to="5" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
-    <Transition from="8" to="10" order="0" desc="request" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
-    <Transition from="8" to="4" order="1" desc="response" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
     <Transition from="10" to="14" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
@@ -256,15 +243,21 @@ else
     <Transition from="9" to="17" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
-    <Transition from="17" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
     <Transition from="6" to="18" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
     <Transition from="18" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
-    </Transition> 
+    </Transition>  
+    <Transition from="8" to="4" order="0" desc="response" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="8" to="10" order="1" desc="request" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="17" to="1" order="0" fromTerminal="right" toTerminal="left"> 
+      <bendPoints/> 
+    </Transition>
   </Transitions>  
   <Imports> 
     <Import name="com.inzent.igate.repository.meta.AdapterPropertyPK"/> 

@@ -66,7 +66,6 @@
 				<value>com.inzent.igate.repository.log</value>
 			</list>
 		</property>
-		<property name="jtaTransactionManager" ref="transactionManager" />
 	</bean>
 
 	<!-- Hibernate Template -->

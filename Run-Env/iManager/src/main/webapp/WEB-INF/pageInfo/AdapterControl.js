@@ -4,111 +4,24 @@ const info = {
 	search: {
 		list: [
 			{
-				type: 'modal', 
-				modalInfo: {
-					title: this.$t('igate.instance'),
-					search: {
-						list: [
-							{ type: 'text', vModel: 'instanceId', label: this.$t('head.id'), placeholder: this.$t('head.searchId'), regExpType: 'searchId' },
-							{ type: 'text', vModel: 'instanceNode', label: this.$t('igate.instance.node'), placeholder: this.$t('head.searchData') },
-							{
-								type: 'select',
-								vModel: 'instanceType',
-								label: this.$t('common.type'),
-								val: 'T',
-								optionInfo: {
-									url: '/common/property/properties.json',
-									params: {
-										propertyId: 'List.Instance.InstanceType',
-										orderByKey: true
-									},
-									optionListName: 'instanceTypes',
-									optionFor: 'option in instanceTypes',
-									optionValue: 'option.pk.propertyKey',
-									optionText: 'option.propertyValue',
-									optionIf: "option.pk.propertyKey == 'T'",										
-									isViewAll: false,
-								},
-							},
-							{
-								type: 'dataList',
-								vModel: 'pageSize',
-								label: this.$t('head.listCount'),
-								val: '10',
-								optionInfo: {
-									optionFor: 'option in [10, 100, 1000]',
-									optionValue: 'option',
-									optionText: 'option',
-								},
-							},
-						],
-					},
-					button: {
-						list: [{ id: 'initialize', isUse: true }],
-					},
-					grid: {
-						url: '/igate/instance/searchPopup.json',
-						totalCntUrl: '/igate/instance/rowCount.json',
-						paging: {
-							isUse: true,
-							side: 'server',
-						},
-						options: {
-							columns: [
-								{
-									name: 'instanceId',
-									header: this.$t('head.id'),
-									width: '25%',
-								},
-								{
-									name: 'instanceType',
-									header: this.$t('common.type'),
-									width: '25%',
-									formatter: function(value) {
-										switch (value.row.instanceType) {
-											case 'T' : {
-												return this.$t('igate.instance.type.trx');
-											}
-											case 'A' : {
-												return this.$t('igate.instance.type.adm');
-											}
-											case 'L' : {
-												return this.$t('igate.instance.type.log');
-											}
-											case 'M' : {
-												return this.$t('igate.instance.type.mnt');
-											}
-										}
-									},
-								},
-								{
-									name: 'instanceAddress',
-									header: this.$t('igate.instance.address'),
-									width: '25%',
-								},
-								{
-									name: 'instanceNode',
-									header: this.$t('igate.instance.node'),
-									width: '25%',
-								},
-							],
-						},
-					},
-					rowClickedCallback: function (rowInfo) {
-						return rowInfo.instanceId;
-					},
-				},
-				vModel: 'instanceIdId',
+				type: 'select',
+				vModel: 'instanceId',
 				label: this.$t('igate.instance') + ' ' + this.$t('head.id'),
-				placeholder: this.$t('head.searchId'),
-				regExpType: 'searchId',
+				optionInfo: {
+					url: '/igate/instance/list.json',
+					optionListName: 'instanceList',
+					optionFor: 'option in instanceList',
+					'optionValue': 'option.instanceId',
+	  				'optionText': 'option.instanceId',
+	  				'optionIf': "option.instanceType == 'T'",	
+				},
 			},
 			{
 				type: 'select',
 				vModel: 'statusInfo',
 				label: this.$t('head.queue') + ' ' + this.$t('head.status'),
 				optionInfo: {
-					'optionFor': "value in [ 'Down', 'Starting', 'Stoping', 'Fail', 'Warn', 'Normal', 'Undeployed' ]",
+					'optionFor': "value in [ 'Down', 'Starting', 'Stopping', 'Fail', 'Warn', 'Normal', 'Undeployed' ]",
 					'optionValue': 'value',
 	  				'optionText': 'value',
 				},
@@ -189,7 +102,7 @@ const info = {
 						return rowInfo.adapterId;
 					},
 				},
-				vModel: 'pk.adapterId',
+				vModel: 'adapterId',
 				label: this.$t('igate.adapter') + ' ' + this.$t('head.id'),
 				placeholder: this.$t('head.searchId') ,
 				regExpType: 'searchId',
@@ -235,6 +148,17 @@ const info = {
     	    		}
     	    	]
     	    },
+    	    onGridMounted: function(evt) {
+    			evt.instance.on('click', function(clickEvt) {
+    				if('processResult' !== clickEvt.columnName) return;
+    				
+    				if('columnHeader' == clickEvt.targetType) return;
+    				
+    				if(' ' === clickEvt.instance.getFormattedValue(clickEvt.rowKey, 'processResult')) return;
+    				    				
+    				window.$alert({ type: 'normal', message: clickEvt.instance.getFormattedValue(clickEvt.rowKey, 'processResult') } );
+    			})
+    		},
     	    columns : [
     	      	{
     	      		name : 'instanceId',

@@ -21,7 +21,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -50,7 +49,7 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 	}
 
 	public void generateDownload(HttpServletResponse response, String templateFile, Interface entity, List<Interface> entityList) throws Exception 
-	{
+	{		
 	  try (OutputStream outputStream = response.getOutputStream();
 		   FileInputStream fileInputStream = new FileInputStream(templateFile);
 		   Workbook workbook = WorkbookFactory.create(fileInputStream);) 
@@ -127,6 +126,23 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 		cell = row.createCell(9);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
+		 
+		// 인터페이스 비활성화 여부
+		switch (String.valueOf(entity.getDisabledYn()).trim()) {
+	      case "Y" :
+	    	  values = MessageGenerator.getMessage("head.yes", "Yes");
+	    	  break ;
+	      case "N" :
+		      values = MessageGenerator.getMessage("head.no", "No");
+		      break ;
+	      default: 
+	    	  values = "";
+	    }
+
+		row = writeSheet.getRow(4);
+		cell = row.createCell(1);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(values);		
 		
 		// 인터페이스 사용여부
 		switch (String.valueOf(entity.getUsedYn()).trim()) {
@@ -141,28 +157,28 @@ public class InterfaceDownloadExcel implements InterfaceDownloadBean {
 	    }
 
 		row = writeSheet.getRow(4);
-		cell = row.createCell(1);
+		cell = row.createCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
 		// 그룹
 		values = entity.getInterfaceGroup();
 		row = writeSheet.getRow(4);
-		cell = row.createCell(3);
+		cell = row.createCell(5);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 
 		// 권한
 		values = entity.getPrivilegeId();
 		row = writeSheet.getRow(4);
-		cell = row.createCell(5);
+		cell = row.createCell(7);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 		
 		// 비고
 		values = entity.getInterfaceDesc();
 		row = writeSheet.getRow(4);
-		cell = row.createCell(7);
+		cell = row.createCell(9);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(values);
 

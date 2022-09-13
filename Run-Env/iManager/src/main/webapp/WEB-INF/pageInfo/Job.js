@@ -33,6 +33,26 @@ const info = {
 					search: {
 						list: [
 							{ type: 'text', vModel: 'operationId', label: this.$t('head.id'), placeholder: this.$t('head.searchId'), regExpType: 'searchId' },
+							{ type: 'text', vModel: 'operationName', label: this.$t('head.name'), placeholder: this.$t('head.searchName'), regExpType: 'name' },
+							{
+								type: 'select',
+								vModel: 'operationType',
+								label: this.$t('common.type'),
+								val: 'J',
+								optionInfo: {
+									url: '/common/property/properties.json',
+									params: {
+										propertyId: 'List.Operation.OperationType',
+										orderByKey: true,
+									},
+									optionListName: 'operationTypeList',
+									optionFor: 'option in operationTypeList',
+									optionValue: 'option.pk.propertyKey',
+									optionText: 'option.propertyValue',
+									optionIf: "option.pk.propertyKey === 'J'",
+									isViewAll: false,
+								},
+							},							
 							{
 								type: 'dataList',
 								vModel: 'pageSize',
@@ -64,7 +84,12 @@ const info = {
 									name: "operationId",
 						            header: this.$t('head.id'),
 						            align: "left"
-								}			        		
+								},
+								{
+									name: "operationName",
+						            header: this.$t('head.name'),
+						            align: "left"
+								}								
 							],
 						},						
 					},

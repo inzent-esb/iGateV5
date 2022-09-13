@@ -242,6 +242,9 @@ const info = {
 						header: this.$t('igate.jobResult.scheduledDateTime'),
 						align : 'center',
 						width: '26%',
+						formatter: function(obj) {
+							return obj.value.substring(0, 19);
+						}
 					},
 					{
 						name: 'pk.jobId',
@@ -278,7 +281,15 @@ const info = {
 					content: [
 						[
 							[
-								{ type: 'text', vModel: 'pk.scheduledDateTime', label: this.$t('igate.jobResult.scheduledDateTime'), isPK: true },
+								{ 
+									type: 'text', 
+									vModel: 'pk.scheduledDateTime', 
+									label: this.$t('igate.jobResult.scheduledDateTime'), 
+									isPK: true,
+									formatter: function(value) {
+										return value ? value.substring(0, 19) : value;
+									}
+								},
 								{ type: 'text', vModel: 'pk.instanceId', label: this.$t('igate.instance') + ' ' + this.$t('head.id') },
 								{ type: 'text', vModel: 'pk.jobId', label: this.$t('igate.job') + ' ' + this.$t('head.id'), isPK: true },
 								{ 
@@ -299,9 +310,23 @@ const info = {
 								},
 							],
 							[
-								{ type: 'text', vModel: 'executeTimestamp', label: this.$t('igate.jobResult.executeTimestamp') },
+								{ 
+									type: 'text', 
+									vModel: 'executeTimestamp', 
+									label: this.$t('igate.jobResult.executeTimestamp'),
+									formatter: function(value) {
+										return value ? value.substring(0, 19) : value;
+									}
+								},
 								{ type: 'text', vModel: 'exceptionMessage', label: this.$t('head.exception.message') },
-								{ type: 'text', vModel: 'exceptionDateTime', label: this.$t('igate.jobResult.exceptionDateTime') },
+								{ 
+									type: 'text', 
+									vModel: 'exceptionDateTime', 
+									label: this.$t('igate.jobResult.exceptionDateTime'),
+									formatter: function(value) {
+										return value ? value.substring(0, 19) : value;
+									}
+								},
 								{ 
 									type: 'text',
 									vModel: 'exceptionId',

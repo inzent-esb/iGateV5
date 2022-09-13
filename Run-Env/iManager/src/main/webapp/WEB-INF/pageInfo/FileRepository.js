@@ -3,10 +3,8 @@ const info = {
 	cudUrl: '/igate/fileRepository/object.json',
 	updateStatusFunc: function(row, mod) {
 		return {
-			url: 'R' === mod? '/igate/fileRepository/updateReady.json' : '/igate/fileRepository/updateCancel.json',
-			params: {
-				fileStatus: row.fileStatus
-			},
+			url: 'ready' === mod? '/igate/fileRepository/updateReady.json' : '/igate/fileRepository/updateCancel.json',
+			params: {},
 			columnName: 'fileStatus',
 		}
 	},
@@ -232,6 +230,9 @@ const info = {
 					name: 'createDateTime',
 					header: this.$t('igate.connectorControl.create') + ' ' + this.$t('head.date'),
 					align: 'center',
+					formatter: function(obj) {
+	                	return obj.value.substring(0, 19);
+	                }
 				},				
 				{
 					name: 'pk.fileMode',
@@ -394,6 +395,14 @@ const info = {
 								type: 'text',
 								vModel: 'createDateTime',
 								label: this.$t('igate.connectorControl.create') + ' ' + this.$t('head.date'),
+								formatter: function(value) {
+				                	return value ? value.substring(0, 19) : value; 
+				                }
+							},
+							{
+								type: 'text',
+								vModel: 'instanceId',
+								label: this.$t('igate.instance') + ' ' + this.$t('head.id'),
 							},							
 						],
 						[
@@ -459,11 +468,6 @@ const info = {
 					                  }
 				                  }
 				                }.bind(this),
-							},
-							{
-								type: 'text',
-								vModel: 'instanceId',
-								label: this.$t('igate.instance') + ' ' + this.$t('head.id'),
 							},	
 						],
 					],					

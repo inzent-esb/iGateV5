@@ -321,7 +321,7 @@
 			    			exceptionCode: 0,
 			    		},
 			    	},
-			    	methods: {
+			    	methods: $.extend(true, {}, searchMethodOption, {
 			    		inputEvt: function(info) {
 			    			setLengthCnt.call(this, info);
 			    		},
@@ -438,7 +438,7 @@
 			            setSearchInstanceId: function(param) {
 			            	this.object.instanceId = param.instanceId;
 			            }
-			    	},
+			    	}),
 			    	mounted: function() {
 			    		this.timeoutYnList = timeoutYnResult.object;
 			    	
@@ -556,6 +556,9 @@
 									header: '<fmt:message>igate.traceLog.requestTimestamp</fmt:message>',
 									align: 'center',
 									width: '12%',
+									formatter: function(obj) {
+										return changeDateFormat(obj.value);
+									},
 								},
 			              		{
 									name: "transactionId",
@@ -647,7 +650,8 @@
 			    	},
 			        methods : {
 			        	loaded : function() {
-			        		window.vmMain.object.logDateTime = this.object.pk.logDateTime;
+			        		window.vmMain.object.requestTimestamp = changeDateFormat(this.object.requestTimestamp);
+			        		window.vmMain.object.responseTimestamp = changeDateFormat(this.object.responseTimestamp);
 				            window.vmMain.object.logId = this.object.pk.logId;
 			              	window.vmMain.object = this.object;
 			              	window.vmMessageInfo.messageModel();
@@ -713,17 +717,17 @@
 			        			_this.makebasicInfoGridObj.getSearchGrid().setWidth($('#panel').find('.panel-body').width());
 			       			}, 350);
 			       		});
-			        	  
+			        	
 			        	if(localStorage.getItem('selectedTraceSearch')) { 
 			        		this.selectedTraceSearch = JSON.parse(localStorage.getItem('selectedTraceSearch'));
 			        		localStorage.removeItem('selectedTraceSearch');
-			        	  	
+			        					        		
 			        		if(this.selectedTraceSearch.startTimestamp!=null) {
-			        			window.vmSearch.object.fromLogDateTime = moment(this.selectedTraceSearch.startTimestamp).format('YYYY-MM-DD 00:00:00');
-			        			window.vmSearch.object.toLogDateTime = moment(this.selectedTraceSearch.startTimestamp).format('YYYY-MM-DD 23:59:59');
+			        			window.vmSearch.object.fromLogDateTime = changeDateFormat(this.selectedTraceSearch.startTimestamp, 'yyyy-mm-dd') + '00:00:00';
+			        			window.vmSearch.object.toLogDateTime = changeDateFormat(this.selectedTraceSearch.startTimestamp, 'yyyy-mm-dd') + '23:59:59';
 			       			} else {
-			       				window.vmSearch.object.fromLogDateTime = moment(this.selectedTraceSearch.endTimestamp).format('YYYY-MM-DD 00:00:00');
-			       				window.vmSearch.object.toLogDateTime = moment(this.selectedTraceSearch.endTimestamp).format('YYYY-MM-DD 23:59:59');
+			       				window.vmSearch.object.fromLogDateTime = changeDateFormat(this.selectedTraceSearch.startTimestamp, 'yyyy-mm-dd') + '00:00:00';
+			       				window.vmSearch.object.toLogDateTime = changeDateFormat(this.selectedTraceSearch.startTimestamp, 'yyyy-mm-dd') + '23:59:59';
 			  				}
 			        		  
 			        		window.vmSearch.object.transactionId = this.selectedTraceSearch.transactionId;
@@ -759,12 +763,18 @@
 			              		{
 			              			name : "requestTimestamp",
 					                header : "<fmt:message>igate.traceLog.requestTimestamp</fmt:message>",
-					                align : "left"
+					                align : "left",
+					                formatter: function(obj) {
+					                	return changeDateFormat(obj.value);
+					                }
 		              			},
 		              			{
 		              				name : "responseTimestamp",
 					                header : "<fmt:message>igate.traceLog.responseTimestamp</fmt:message>",
-					                align : "left"
+					                align : "left",
+					                formatter: function(obj) {
+					                	return changeDateFormat(obj.value);
+					                }
 			              		},
 			              		{
 			              			name : "transactionTime",

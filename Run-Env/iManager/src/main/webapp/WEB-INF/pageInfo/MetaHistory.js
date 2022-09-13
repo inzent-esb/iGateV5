@@ -2,7 +2,6 @@ const info = {
 	type: 'basic',
 	cudUrl: '/common/metaHistory/object.json',
 	search: {
-		load: true,
 		list: [			
 			{ type: 'singleDaterange', 	vModel: 'modifyDateTimeFrom',		label: this.$t('head.from'), 	dateRangeType : 'from'},
 			{ type: 'singleDaterange', 	vModel: 'modifyDateTimeTo',			label: this.$t('head.to'), 	dateRangeType : 'to'},
@@ -57,6 +56,9 @@ const info = {
               		name : 'pk.modifyDateTime',
                     width: '25%',
               		align : 'center',
+              		formatter: function(obj) {
+						return obj.value.substring(0, 19);
+					}
             	},				
 				{
               		header : this.$t('common.metaHistory.entityName'),
@@ -106,6 +108,9 @@ const info = {
 								vModel: 'pk.modifyDateTime',
 								label: this.$t('head.update.timestamp'),
 								isPK: true,
+								formatter: function(value) {
+									return value ? value.substring(0, 19) : value;
+								}
 							},
 							{
 								type: 'text',
@@ -158,7 +163,7 @@ const info = {
 			{
 				type: 'bundle',
 				label: 'Modified Contents',
-				url: '/metaHistory/Modifed',
+				url: '/metaHistory/Modified',
 			},
 		],
 	},

@@ -482,8 +482,10 @@
             name="Query">
       </wizard>
       <wizard
+            canFinishEarly="true"
             category="com.inzent.igate.itools.newWizards.category"
             class="com.inzent.igate.itools.activity.wizards.ActivityNewWizard"
+            hasPages="false"
             icon="platform:/plugin/com.inzent.igate.itools.activity/icons/obj16/activity.png"
             id="com.inzent.igate.itools.activity.wizards.ActivityNewWizard"
             name="Activity">

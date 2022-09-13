@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Operation name="External Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online" desc="External Interface"> 
+<Operation name="External Interface" privilegeId="Administrator" privateYn="N" type="I" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.online"> 
   <Variables> 
     <Variable type="com.inzent.igate.message.Record" name="chlReq" desc="interface request" isParameter="false"> 
       <Value><![CDATA[]]></Value>  
@@ -64,18 +64,18 @@
         <Value><![CDATA[chlReq]]></Value>
       </Parameter>
     </Activity>  
-    <Condition uniqueKey="0008" index="8" desc="Is Request" xPos="384" yPos="81"> 
-      <When target="13" desc="request"> 
-        <JavaExpression><![CDATA[!adapterParameter.isReply()]]></JavaExpression> 
+    <Condition uniqueKey="0008" index="8" desc="Is Response" xPos="380" yPos="81"> 
+      <When target="4" desc="response"> 
+        <MethodExpression variableName="adapterParameter"> 
+          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isReply" argumentTypes="" argumentType="boolean"/> 
+        </MethodExpression> 
       </When>  
-      <Others target="4" desc="response"> 
-        <JavaExpression><![CDATA[true]]></JavaExpression> 
-      </Others>  
+      <Others target="13" desc="request"/>  
       <Value><![CDATA[
-// request
-if ( !adapterParameter.isReply() ) 
-   return 0;
 // response
+if ( adapterParameter.isReply() ) 
+   return 0;
+// request
 else 
    return 1;]]></Value> 
     </Condition>  
@@ -185,11 +185,8 @@ else
       </Parameter> 
     </ForEach>  
     <Activity uniqueKey="0018" index="13" desc="Start Interface" id="StartInterface" xPos="183" yPos="141"> 
-      <Parameter type="java.lang.Boolean" desc="Is sync-interface" from="Method" dynamic="false">
-        <Value><![CDATA[adapterParameter.isResponseSync()]]></Value>
-        <MethodExpression variableName="adapterParameter">
-          <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isResponseSync" argumentTypes="" argumentType="boolean"/>
-        </MethodExpression>
+      <Parameter type="java.lang.Boolean" desc="Is sync-interface" from="Constant" dynamic="false">
+        <Value><![CDATA[false]]></Value>
       </Parameter>
       <Parameter type="java.lang.Boolean" desc="Is send ack" from="Constant" dynamic="false">
         <Value><![CDATA[false]]></Value>
@@ -197,7 +194,7 @@ else
     </Activity>  
     <Scope width="342" height="190" uniqueKey="0019" index="14" desc="Scope" xPos="516" yPos="333"> 
       <Activities> 
-        <Activity uniqueKey="0016" index="1" desc="Push Response" id="PushResponse" xPos="27" yPos="49"> 
+        <Activity uniqueKey="0016" index="1" desc="Push Response" id="PushResponse" xPos="21" yPos="74"> 
           <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
             <Value><![CDATA[adapterParameter]]></Value>
           </Parameter>
@@ -208,7 +205,7 @@ else
             <Value><![CDATA[null]]></Value>
           </Parameter>
         </Activity>  
-        <Activity uniqueKey="001a" index="2" desc="Save The Exception" id="SaveException" xPos="166" yPos="103"> 
+        <Activity uniqueKey="001a" index="2" desc="Save The Exception" id="SaveException" xPos="166" yPos="102"> 
           <Parameter type="java.lang.Throwable" desc="Throwable" from="Variable" dynamic="false">
             <Value><![CDATA[throwed]]></Value>
           </Parameter>
@@ -251,12 +248,6 @@ else
     <Transition from="9" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
-    <Transition from="8" to="13" order="0" desc="request" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
-    <Transition from="8" to="4" order="1" desc="response" fromTerminal="bottom" toTerminal="top"> 
-      <bendPoints/> 
-    </Transition>  
     <Transition from="13" to="2" order="0" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition>  
@@ -270,6 +261,12 @@ else
       <bendPoints/> 
     </Transition>  
     <Transition from="15" to="9" order="0" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="8" to="4" order="0" desc="response" fromTerminal="bottom" toTerminal="top"> 
+      <bendPoints/> 
+    </Transition>  
+    <Transition from="8" to="13" order="1" desc="request" fromTerminal="bottom" toTerminal="top"> 
       <bendPoints/> 
     </Transition> 
   </Transitions>  

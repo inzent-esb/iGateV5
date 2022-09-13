@@ -10,6 +10,8 @@ var constants = {
 		ip: { maxLength: 30, regExp: '[^0-9.]' },
 		className: { maxLength: 200, regExp: '' },
 		cron: { maxLength: 30, regExp: '[^A-Za-z0-9*,#-? ]'},
+		password: { maxLength: 30, regExp: '[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]'},
+		pageSize: { maxLength: 4, regExp: '[^0-9]' },
 		default: { maxLength: 100, regExp: '' },
 	}
 };

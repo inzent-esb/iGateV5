@@ -8,10 +8,10 @@ import com.inzent.igate.connector.OutBoundConnector ;
 import com.inzent.igate.message.HttpConstants ;
 import com.inzent.igate.message.ValueObject ;
 import com.inzent.igate.session.SessionPool ;
-import com.inzent.igate.session.http.HttpComponentsSession ;
+import com.inzent.igate.session.http.HttpComponents4Session;
 import com.inzent.igate.session.http.ThinHttpClientSession ;
 
-public class AppianClientSession extends HttpComponentsSession
+public class AppianClientSession extends HttpComponents4Session
 {
   public AppianClientSession(OutBoundConnector connector, SessionPool sessionPool, AdapterParameter adapterParameter)
   {

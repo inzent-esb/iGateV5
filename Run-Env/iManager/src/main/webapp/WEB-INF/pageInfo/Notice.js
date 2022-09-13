@@ -55,6 +55,9 @@ const info = {
               		name : 'pk.createTimestamp',
                     width: '30%',
               		align : 'center',
+              		formatter: function(obj) {
+						return obj.value.substring(0, 19);
+					}
             	},
 			],
 		},

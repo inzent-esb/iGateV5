@@ -26,7 +26,7 @@ const info = {
 					type: 'text',
 					vModel: 'queryGroup',
 					label: this.$t('head.group'),
-					placeholder: this.$t('head.searchId'),
+					placeholder: this.$t('head.searchData'),
 				},
 				{
 					type: 'dataList',
@@ -170,6 +170,9 @@ const info = {
 									vModel: 'updateTimestamp',
 									label: this.$t('head.update.timestamp'),
 									readonly: true,
+									formatter: function(value) {
+										return value ? value.substring(0, 19) : value;
+									}
 								},
 							],
 						],
