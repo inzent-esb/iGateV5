@@ -40,10 +40,8 @@
       <OperationTemplate type="I" name="IOP_Online_External.xml">대외 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_File_Normal.xml">파일 인터페이스</OperationTemplate>
       
-      <!-- DB 배치 IOP 추가 -->
-      <OperationTemplate type="I" name="IOP_Table_Fetch.xml">DB2DB Fetch 단위 인터페이스</OperationTemplate>
-      <OperationTemplate type="I" name="IOP_Table_Row.xml">DB2DB Row 단위 인터페이스</OperationTemplate>
-      <OperationTemplate type="I" name="IOP_Table2Online_Sync.xml">DB 2 Online 인터페이스</OperationTemplate>
+      <!-- Mix IOP 추가 -->
+      <OperationTemplate type="I" name="IOP_Table2Online.xml">DB2Online 인터페이스</OperationTemplate>      
       <OperationTemplate type="I" name="IOP_Online2Table.xml">Online 2 DB 인터페이스</OperationTemplate>
     </OperationTemplates>
   </Operation>
