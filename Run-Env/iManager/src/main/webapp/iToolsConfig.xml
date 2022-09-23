@@ -39,6 +39,7 @@
       <OperationTemplate type="I" name="IOP_Online_Broadcast.xml">배포 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_Online_External.xml">대외 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_File_Normal.xml">파일 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Table_Normal.xml">DB 인터페이스</OperationTemplate>
       
       <!-- Mix IOP 추가 -->
       <OperationTemplate type="I" name="IOP_Table2Online.xml">DB2Online 인터페이스</OperationTemplate>      
