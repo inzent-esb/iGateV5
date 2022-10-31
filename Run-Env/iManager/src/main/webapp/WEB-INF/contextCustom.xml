@@ -55,7 +55,7 @@
 		<security:intercept-url pattern="/*/*/rowCount.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/igate/fieldMeta/groups.*" access="isAuthenticated()"  />
 		<security:intercept-url pattern="/common/privilege/list.*" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/igate/instance/list.*" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/igate/instance/list.*"  access="permitAll()"/> <!--  access="isAuthenticated()"/> -->
 		<security:intercept-url pattern="/igate/calendar/list.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/igate/activity/list.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/*/*/popup.*" access="isAuthenticated()"/>
@@ -149,6 +149,7 @@
 		<security:intercept-url pattern="/igate/onlineHeaderMappingPolicy.*" access="hasRole('ROLE_OnlineHeaderMappingPolicyViewer')"/>
 		<security:intercept-url pattern="/igate/onlineHeaderMappingPolicy/**" access="hasRole('ROLE_OnlineHeaderMappingPolicyViewer')"/>
 		<security:intercept-url pattern="/igate/operation.*" access="hasRole('ROLE_OperationViewer')"/>
+		<security:intercept-url pattern="/igate/page/common/logoFileName.*" access="permitAll()"/>
 		<security:intercept-url pattern="/igate/page/common/title.*" access="permitAll()"/>
 		<security:intercept-url pattern="/igate/page/common.*" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/igate/page/common/**" access="isAuthenticated()"/>
@@ -180,7 +181,9 @@
 		<security:intercept-url pattern="/igate/transactionContext/**" access="hasRole('ROLE_TransactionContextViewer')"/>
 		<security:intercept-url pattern="/igate/webservice.*" access="hasRole('ROLE_ServiceEditor')" />
 		<security:intercept-url pattern="/igate/webservice/**" access="hasRole('ROLE_ServiceEditor')"/>
-
+		<security:intercept-url pattern="/igate/adapterWizard.*" access="hasRole('ROLE_AdapterWizardEditor')"/>
+		<security:intercept-url pattern="/igate/adapterWizard/**" access="hasRole('ROLE_AdapterWizardEditor')"/>
+		
 		<security:access-denied-handler ref="accessDeniedHandler" />
 		<security:form-login login-processing-url="/common/auth/login.*" login-page="/common/auth/login.html"
 			username-parameter="userId" password-parameter="password"

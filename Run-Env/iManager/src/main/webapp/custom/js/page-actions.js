@@ -166,6 +166,14 @@ var SearchImngObj = {
 					var vmSub = window[name];
 					vmSub.viewMode = result.viewMode;
 					vmSub[key] = value;
+					
+					value.forEach(function(v) {
+		                v.letter = {};
+		                
+		                for(var key in v) {
+	                		v.letter[key] = v[key]? v[key].toString().length : 0; 
+	                	}
+					});
 				}
 			}
 

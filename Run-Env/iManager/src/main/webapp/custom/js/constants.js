@@ -4,7 +4,7 @@ var constants = {
 		searchId: { maxLength: 70, regExp: '[^A-Za-z0-9_.#%-]'},
 		name: { maxLength: 70, regExp: '' },
 		value: { maxLength: 90, regExp: '' },
-		desc: { maxLength: 130, regExp: '' },
+		desc: { maxLength: 500, regExp: '' },
 		num: { maxLength: 30, regExp: '[^0-9]' },
 		url: { maxLength: 100, regExp: '' },
 		ip: { maxLength: 30, regExp: '[^0-9.]' },
@@ -13,5 +13,6 @@ var constants = {
 		password: { maxLength: 30, regExp: '[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]'},
 		pageSize: { maxLength: 4, regExp: '[^0-9]' },
 		default: { maxLength: 100, regExp: '' },
-	}
+	},
+	logInTime: 300000
 };

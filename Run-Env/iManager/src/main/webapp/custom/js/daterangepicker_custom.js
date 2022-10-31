@@ -30,26 +30,40 @@ $.fn.customDateRangePicker = function(type, callBackFunc, paramOption) {
 	endDate.setSeconds(59);
 	endDate.setMilliseconds(59);
 	
+	var formatDate = option.format? option.format : 'YYYY-MM-DD HH:mm:ss';	
+	
+	option.locale.format = formatDate;
+	
 	if('from' == type) {	
 		if(!option.startDate)
-			option.startDate = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+			option.startDate = moment(startDate).format(formatDate);
 		
 		if(!option.maxDate) {
-			option.maxDate = moment(endDate).format('YYYY-MM-DD HH:mm:ss');
+			option.maxDate = moment(endDate).format(formatDate);
 		}
 		
 	}else if('to' == type){
-		if(!option.startDate)
-			option.startDate = moment(endDate).format('YYYY-MM-DD HH:mm:ss');
+		if(!option.startDate || endDate.getTime() > new Date(option.startDate).getTime())
+			option.startDate = moment(endDate).format(formatDate);
 		
 		if(!option.minDate)
-			option.minDate = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+			option.minDate = moment(startDate).format(formatDate);
 	}
 	
 	this.daterangepicker(option, function(startDate, endDate, label) {
-		callBackFunc(startDate.format('YYYY-MM-DD HH:mm:ss')); 		
-		this.element.val(startDate.format('YYYY-MM-DD HH:mm:ss'));
+		callBackFunc(startDate.format(formatDate)); 		
+		this.element.val(startDate.format(formatDate));
 	});
+	
+	this.on('showCalendar.daterangepicker', function(ev, picker) {
+		if(paramOption.isMinutueFix) {
+			if('showCalendar' !== ev.type) return;
+			
+			setTimeout(function() {
+				$('.daterangepicker.show-calendar').find('.minuteselect').attr({disabled: paramOption.isMinutueFix});
+			}.bind(this), 0)
+		}
+	})
 	
 	if(callBackFunc)
 		callBackFunc(option.startDate);

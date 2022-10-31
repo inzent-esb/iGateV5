@@ -211,43 +211,42 @@
 				        		this.initDatePicker();
 				            },
 				            initDatePicker: function() {
-				            	if ('D' === this.object.searchType) {
-					            	var date = new Date(this.object.fromDateTime? this.object.fromDateTime : Date.now());
-					            	
-					            	date.setHours(0);
-					            	date.setMinutes(0);
-					            	date.setSeconds(0);
-					            	date.setMilliseconds(0);
-					            	
-					            	this.object.fromDateTime = moment(date).format('YYYY-MM-DD HH:mm:ss');
-					            	
-					            	date.setHours(23);
-					            	date.setMinutes(59);
-					            	date.setSeconds(59);
-					            	date.setMilliseconds(59);
-					            	
-									this.object.toDateTime = moment(date).format('YYYY-MM-DD HH:mm:ss');
-									
-									$('body').addClass('searchTypeDaily');
-				            	} else {
-				            		$('body').removeClass('searchTypeDaily');
-				            	}
+				            	var dateFormat = 'D' === this.object.searchType? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+				            	var date = new Date(this.object.fromDateTime? this.object.fromDateTime : Date.now());
+				            	
+				            	date.setHours(0);
+				            	date.setMinutes(0);
+				            	date.setSeconds(0);
+				            	date.setMilliseconds(0);
+				            	
+				            	this.object.fromDateTime = moment(date).format(dateFormat);
+				            	
+				            	date.setHours(23);
+				            	date.setMinutes(59);
+				            	date.setSeconds(59);
+				            	date.setMilliseconds(59);
+				            	
+				            	this.object.toDateTime = moment(date).format(dateFormat);
 				            	
 				            	var fromDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromDateTime');
 				            	var toDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toDateTime');
+				            	var datePickerInfo = {
+				            		format: dateFormat,
+				            		timePicker: 'D' !== this.object.searchType,		
+				            		timePickerSeconds: false,
+				            		isMinutueFix: 'H' === this.object.searchType, 
+						        };
 				            	
 				            	fromDateTime.customDateRangePicker('from', function(fromDateTime) {
 				            		this.object.fromDateTime = fromDateTime;
 				            		
 					            	toDateTime.customDateRangePicker('to', function(toDateTime) {
 					            		this.object.toDateTime = toDateTime;
-					            	}.bind(this), {
-					            		startDate: this.object.toDateTime,
-					            		minDate : fromDateTime
-					            	});		            		
-				            	}.bind(this), {
-				            		startDate: this.object.fromDateTime
-				            	});
+					            	}.bind(this), Object.assign({
+										startDate: this.object.fromDateTime, 
+										minDate: fromDateTime
+									}, datePickerInfo))	            		
+				            	}.bind(this), Object.assign({ startDate: this.object.fromDateTime }, datePickerInfo));
 				            },
 				            openModal: function(openModalParam, regExpInfo) {
 				            	createPageObj.openModal.call(this, openModalParam, regExpInfo) ;		            	

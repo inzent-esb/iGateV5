@@ -27,6 +27,8 @@
 					<label class="control-label"></label>
 					<div class="input-group">
 						<input type="text" class="form-control view-disabled" style="display: none;">
+						<input type="radio" class="form-control view-disabled" style="display: none;">
+						<input type="checkbox" class="form-control view-disabled" style="display: none;">
 						<select class="form-control view-disabled" style="display: none;"></select>
 						<textarea class="form-control view-disabled" style="display: none;"></textarea>
 						<span type="password" style="width:100%; display: none;">
@@ -36,6 +38,9 @@
 						<span type="datalist" style="width:100%; display: none;">
 							<input type="text" class="form-control view-disabled"> 
 							<datalist></datalist>			
+						</span>
+						<div type="radio" style="display: none;" />
+						<div type="checkbox" style="display: none;" />
 						</span>
 						<div class="input-group-append" style="display: none;">
 							<button type="button" class="btn" id="lookupBtn"><i class="icon-srch"></i><fmt:message>head.search</fmt:message></button>

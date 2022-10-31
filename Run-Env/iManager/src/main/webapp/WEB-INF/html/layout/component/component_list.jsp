@@ -68,11 +68,7 @@ var listMethodOption = {
     	localStorage.removeItem(this.$el.id + '-newTabSearchCondition');
     	
     	window.vmSearch.$nextTick(function() {
-        	window.vmSearch.initSearchArea(newTabSearchCondition);
-        	
-        	this.$nextTick(function() {
-        		window.vmSearch.search();	
-        	});    		
+        	window.vmSearch.initSearchArea(newTabSearchCondition);    		
     	}.bind(this));
     	
     	return true;

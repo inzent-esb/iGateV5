@@ -9,7 +9,8 @@ const info = {
 				type: 'text', 	
 				vModel: 'noticeTitle',		
 				label: this.$t('igate.notice.title'),		
-				placeholder: this.$t('igate.notice.enter.title') 
+				placeholder: this.$t('igate.notice.enter.title'),
+				regExpType: 'name',
 			},
 			{
 				type: 'dataList',
@@ -83,6 +84,7 @@ const info = {
 								vModel: 'noticeTitle',
 								label: this.$t('igate.notice.title'),
 								isRequired: true,
+								regExpType: 'name',
 							},
 						],						
 					],
@@ -94,6 +96,7 @@ const info = {
 								label: this.$t('igate.notice.contents'),
 								height: '200px',
 								isRequired: true,
+								regExpType: 'desc',
 							},
 						],						
 					],

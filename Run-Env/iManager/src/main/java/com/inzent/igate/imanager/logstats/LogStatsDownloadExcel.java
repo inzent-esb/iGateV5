@@ -8,6 +8,7 @@
  *******************************************************************************/
 package com.inzent.igate.imanager.logstats ;
 
+import java.io.File ;
 import java.io.FileInputStream ;
 import java.io.OutputStream ;
 import java.net.URLEncoder ;
@@ -62,7 +63,6 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   public void downloadStats(HttpServletRequest request, HttpServletResponse response, String type, LogStats logStats, List<LogStats> logStatsList) throws Exception
   {
     StringBuffer sb = new StringBuffer().append(WordUtils.capitalize(type)).append('_').append(getStatsTypeName(type, logStats)).append("_TranStats_") ;
-    boolean isDB = false;
     
     switch (type)
     {
@@ -123,7 +123,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
   protected void generateDownload(OutputStream outputStream, String type, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
   {
     Workbook workbook ;
-    try (FileInputStream fileInputStream = new FileInputStream(templateFile))
+    try (FileInputStream fileInputStream = new FileInputStream(new File(templateFile)))
     {
       workbook = WorkbookFactory.create(fileInputStream) ;
     }
@@ -603,7 +603,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     switch (entity.getSearchType())
     {
     case LogStatsRepository.SEARCHTYPE_DAILY :
-      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd 00:00").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd 23:59").format(entity.getToDateTime()) } ;
+      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd").format(entity.getToDateTime()) } ;
 
     case LogStatsRepository.SEARCHTYPE_HOUR :
       return new String[] { FastDateFormat.getInstance("yyyy-MM-dd HH:00").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd HH:59").format(entity.getToDateTime()) } ;

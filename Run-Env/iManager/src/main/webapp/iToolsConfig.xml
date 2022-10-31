@@ -33,8 +33,8 @@
       <OperationTemplate type="A" transaction="database" event="request.extract" name="AOP_Table_Extract.xml">DB 추출</OperationTemplate>
       <OperationTemplate type="A" transaction="database" event="request.write" name="AOP_Table_Load.xml">DB 배포</OperationTemplate>
 
-      <OperationTemplate type="I" name="IOP_Online_Sync.xml">동기 인터페이스</OperationTemplate>
-      <OperationTemplate type="I" name="IOP_Online_Composite.xml">동기(BID) 인터페이스</OperationTemplate>      
+      <OperationTemplate type="I" name="IOP_Online_Normal.xml">온라인 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online_Composite.xml">동기(BID) 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_Online_Async.xml">비동기 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_Online_Broadcast.xml">배포 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_Online_External.xml">대외 인터페이스</OperationTemplate>
@@ -43,7 +43,10 @@
       
       <!-- Mix IOP 추가 -->
       <OperationTemplate type="I" name="IOP_Table2Online.xml">DB2Online 인터페이스</OperationTemplate>      
-      <OperationTemplate type="I" name="IOP_Online2Table.xml">Online 2 DB 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Table2File.xml">DB2File 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online2Table.xml">Online2DB 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_File2Online.xml">File2Online 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_File2Table.xml">File2Table 인터페이스</OperationTemplate>
     </OperationTemplates>
   </Operation>
 
@@ -81,8 +84,9 @@
         <Column label="HttpType" align="center" width="100" name="FieldHttpType" editType="select" availableValue="none= ,uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="none" extened="true"/>
         <Column label="XmlType" align="center" width="100" name="SchemaType" editType="select" availableValue="none= ,attribute=Attribute,element=Element,cdata=CData,elementcdata=Elementcdata" availableDefaultValue="none" extened="true"/>
         <Column label="XmlName" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
-        <!-- 확장속성 필요 시 주석해제
+        
         <Column label="HttpQueryName" align="left" width="100" name="FieldHttpName" editType="edit" extened="true"/>
+        <!-- 확장속성 필요 시 주석해제
         <Column label="XmlNS" align="left" width="100" name="xmlns" editType="edit" extened="true"/>
         -->
         <Column label="전체확장속성" align="left" width="220" name="fieldOptions" editType="edit" disable="true"/>

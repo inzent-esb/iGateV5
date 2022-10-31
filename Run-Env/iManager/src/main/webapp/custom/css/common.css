@@ -920,13 +920,15 @@ input::-ms-reveal {
 }
 
 .propertyTab .regExp-text, .regExp-password {
-	width: calc(100% - 95px) !important;
+	width: calc(100% - 72px) !important;
 }
 
 .propertyTab .regExp-dataList { 
-	width: calc(100% - 95px) !important; 
+	width: calc(100% - 72px) !important; 
 	line-height: 1.1rem !important;
 }
+
+.propertyTab .letterLength { margin : 0px; }
 
 #menuContextMenu li:hover {
 	background: #eee;

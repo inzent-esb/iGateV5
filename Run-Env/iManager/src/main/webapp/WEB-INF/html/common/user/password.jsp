@@ -33,7 +33,7 @@
     <div id="password" class="login wrap" data-ready>
         <header id="hd">
             <h1 class="logo text-hide">
-                <a href="javascript:void(0);"><img src="${prefixFileUrl}/img/logo_wh.svg" alt="INZENT" />INZENT</a>
+                <a href="javascript:void(0);"><img id="logoImg" src="${prefixFileUrl}/img/logo_wh.svg" alt="INZENT" />INZENT</a>
             </h1>
         </header>
         <div id="ct">
@@ -81,6 +81,8 @@
 <c:choose>
 	<c:when test="${not empty _client_mode && 'c' == _client_mode}">
 		$(document).ready(function() {
+			getLogoFileName();
+			
 			$("#passwordStrOld").focus();
 			
 			initEventBind();			
@@ -103,12 +105,30 @@
 	</c:when>
 	<c:otherwise>
 		document.querySelector('#password').addEventListener('ready', function(evt) {
+			getLogoFileName();
+		
 			$("#passwordStrOld").focus();
 			
 			initEventBind();
 		});	
 	</c:otherwise>
 </c:choose>	
+
+function getLogoFileName() {
+	$.ajax({
+		type: 'GET',
+		url: "${prefixUrl}/igate/page/common/logoFileName.json",
+		dataType: "json",
+		data: {
+			'type': 'login'
+		},		
+        success: function(res) {
+			if ('ok' !== res.result || !res.object) return;
+			
+			$('#logoImg').attr('src', "${prefixFileUrl}/img/" + escapeHtml(res.object));
+		}
+	});
+}
 
 function initEventBind() {
 	$("#passwordStrOld, #passwordStrNew").keypress(function(evt) {

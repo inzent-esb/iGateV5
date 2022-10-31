@@ -721,7 +721,54 @@ function getCreatePageObj() {
 													)
 											  )
 										);
-									}
+								 } else if ('radio' == detailSubObj.type) {
+									object
+									.children('.input-group')
+									.children('div[type=radio]')
+									.removeClass()
+									.addClass('custom-control custom-radio single')
+									.append(
+										$('<label/>').css({'padding-right': '30px'}).attr({
+											'v-for': detailSubObj.mappingDataInfo.optionFor,
+										}).append(
+											$('<input/>').addClass('custom-control-input').attr({
+												type: 'radio',
+												'v-model': detailSubObj.mappingDataInfo.vModel,
+												'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
+												'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
+											})
+										)
+										.append(
+											$('<span/>').addClass('custom-control-label').attr({
+												'v-text': detailSubObj.mappingDataInfo.optionText
+											}).css({'padding-left': '5px'})
+										)
+									).show();
+								 } else if ('checkbox' == detailSubObj.type) {
+									object
+									.children('.input-group')
+									.children('div[type=checkbox]')
+									.removeClass()
+									.addClass('custom-control custom-checkbox single')
+									.append(
+										$('<label/>').css({'padding-right': '30px'}).attr({
+											'v-for': detailSubObj.mappingDataInfo.optionFor,
+										}).append(
+											$('<input/>').addClass('custom-control-input').attr({
+												type: 'checkbox',
+												'v-model': detailSubObj.mappingDataInfo.vModel,
+												'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
+												'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
+												'v-on:change': searchSubObj.mappingDataInfo.changeEvt ? searchSubObj.mappingDataInfo.changeEvt : null,
+											})
+										)
+										.append(
+											$('<span/>').addClass('custom-control-label').attr({
+												'v-text': detailSubObj.mappingDataInfo.optionText
+											}).css({'padding-left': '5px'})
+										)
+									).show();
+								 }
 								});
 							} else if ('datalist' == detailSubObj.type) {
 								var regExpDataInfo = detailSubObj.mappingDataInfo.vModel.replace('object', 'letter');
@@ -760,7 +807,54 @@ function getCreatePageObj() {
 									);
 
 								object.children('.input-group').children('span[type=datalist]').show();
-							} else if ('grid' == detailSubObj.type) {
+							} else if ('radio' == detailSubObj.type) {
+								object
+								.children('.input-group')
+								.children('div[type=radio]')
+								.removeClass()
+								.addClass('custom-control custom-radio single')
+								.append(
+									$('<label/>').css({'padding-right': '30px'}).attr({
+										'v-for': detailSubObj.mappingDataInfo.optionFor,
+									}).append(
+										$('<input/>').addClass('custom-control-input').attr({
+											type: 'radio',
+											'v-model': detailSubObj.mappingDataInfo.vModel,
+											'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
+											'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
+										})
+									)
+									.append(
+										$('<span/>').addClass('custom-control-label').attr({
+											'v-text': detailSubObj.mappingDataInfo.optionText
+										}).css({'padding-left': '5px'})
+									)
+								).show();
+						 } else if ('checkbox' == detailSubObj.type) {
+								object
+								.children('.input-group')
+								.children('div[type=checkbox]')
+								.removeClass()
+								.addClass('custom-control custom-checkbox single')
+								.append(
+									$('<label/>').css({'padding-right': '30px'}).attr({
+										'v-for': detailSubObj.mappingDataInfo.optionFor,
+									}).append(
+										$('<input/>').addClass('custom-control-input').attr({
+											type: 'checkbox',
+											'v-model': detailSubObj.mappingDataInfo.vModel,
+											'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
+											'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
+											'v-on:change': searchSubObj.mappingDataInfo.changeEvt ? searchSubObj.mappingDataInfo.changeEvt : null,
+										})
+									)
+									.append(
+										$('<span/>').addClass('custom-control-label').attr({
+											'v-text': detailSubObj.mappingDataInfo.optionText
+										}).css({'padding-left': '5px'})
+									)
+								).show();
+						 } else if ('grid' == detailSubObj.type) {
 								object.append(
 									$('<div/>')
 										.addClass('table-responsive')
@@ -839,7 +933,7 @@ function getCreatePageObj() {
 
 					rowDiv.append(
 						$('<div/>')
-							.addClass('form-table form-table-responsive')
+							.addClass('form-table form-table-responsive propertyTab')
 							.append($('<div/>').addClass('form-table-wrap'))
 							.append(
 								$('<div/>')
@@ -1172,6 +1266,10 @@ function panelOpen(o, object, callBackFunc) {
 
 				$('#panel').find('.dataKey').not('[name=detail_type_search]').attr('readonly', false);
 
+				$('#panel').find('.detail-content-common').removeClass().addClass('detail-content-regExp');
+				$('#panel').find('.detail-content-regExp').children('input').removeClass('form-control').addClass('regExp-text');
+				$('#panel').find('.detail-content-regExp').children('input[type="password"]').removeClass('form-control').addClass('regExp-password');
+			
 				if ($('#panel').find('.warningLabel, .letterLength')) $('#panel').find('.warningLabel, .letterLength').show();
 
 				if (window.vmMain) {
@@ -1190,6 +1288,10 @@ function panelOpen(o, object, callBackFunc) {
 
 				$('#panel').find('.dataKey').attr('readonly', true);
 
+				$('#panel').find('.detail-content-common').removeClass().addClass('detail-content-regExp');
+				$('#panel').find('.detail-content-regExp').children('input').removeClass('form-control').addClass('regExp-text');
+				$('#panel').find('.detail-content-regExp').children('input[type="password"]').removeClass('form-control').addClass('regExp-password');
+			
 				if ($('#panel').find('.warningLabel, .letterLength')) $('#panel').find('.warningLabel, .letterLength').show();
 			} else if (o == 'detail' || o == 'done') {
 				$('#panel').find('.sub-bar-tit').text('Detail');
@@ -1201,6 +1303,10 @@ function panelOpen(o, object, callBackFunc) {
 				$('#panel').find('.view-disabled').filter("input[type='checkbox']").attr('disabled', true);
 
 				$('#panel').find('.dataKey').attr('readonly', true);
+
+				$('#panel').find('.detail-content-regExp').removeClass().addClass('detail-content-common');
+				$('#panel').find('.detail-content-common').find('input').removeClass('regExp-text').addClass('form-control');
+				$('#panel').find('detail-content-common').find('input[type="password"]').removeClass('regExp-password').addClass('form-control');
 
 				if ($('#panel').find('.warningLabel, .letterLength')) $('#panel').find('.warningLabel, .letterLength').hide();
 			}
