@@ -35,7 +35,6 @@
 
       <OperationTemplate type="I" name="IOP_Online_Normal.xml">온라인 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_Online_Composite.xml">동기(BID) 인터페이스</OperationTemplate>
-      <OperationTemplate type="I" name="IOP_Online_Async.xml">비동기 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_Online_Broadcast.xml">배포 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_Online_External.xml">대외 인터페이스</OperationTemplate>
       <OperationTemplate type="I" name="IOP_File_Normal.xml">파일 인터페이스</OperationTemplate>
