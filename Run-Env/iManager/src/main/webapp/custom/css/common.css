@@ -928,6 +928,10 @@ input::-ms-reveal {
 	line-height: 1.1rem !important;
 }
 
+.propertyTab .input-group .regExp-text {
+	width: 100% !important;
+}
+
 .propertyTab .letterLength { margin : 0px; }
 
 #menuContextMenu li:hover {
