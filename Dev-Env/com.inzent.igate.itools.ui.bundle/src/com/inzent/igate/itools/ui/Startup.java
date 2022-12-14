@@ -50,6 +50,8 @@ import com.inzent.igate.itools.service.editors.ReplyEmulateEditor ;
 import com.inzent.igate.itools.service.editors.ServiceEditor ;
 import com.inzent.igate.itools.testcase.TestCaseExporterImpl ;
 import com.inzent.igate.itools.testcase.TestSuiteExporterImpl ;
+import com.inzent.igate.itools.utils.NamingRules ;
+import com.inzent.igate.itools.utils.NamingRulesImpl ;
 import com.inzent.igate.repository.log.ReplyEmulate ;
 import com.inzent.igate.repository.log.TestCase ;
 import com.inzent.igate.repository.log.TestSuite ;
@@ -102,11 +104,13 @@ public class Startup implements IStartup
     
     EntityEditorInput.appendEntity(Query.class, QueryEditor.ID, QueryUtils.getFigureImageDescriptor(QueryUtils.IMAGE_QUERY)) ;
     FilterHandler.appendEntity(Query.class, QueryFilterDialog.class) ;
-    
+
+    NamingRules.setInstance(new NamingRulesImpl()) ;
+
     MappingUtils.classLoader = this.getClass().getClassLoader() ;
 
     MappingUtils.validationMappingInstance = new ValidationMappingStandard() ;
-    
+
     MappingUtils.autoMapping = new AutoMappingImpl();
 
     RecordUtils.exportHandler = new RecordExportHandlerImpl() ;
