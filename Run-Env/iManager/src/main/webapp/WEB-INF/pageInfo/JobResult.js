@@ -338,8 +338,7 @@ const info = {
 							        	localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['100000', '103000', '103010']));
 							        	localStorage.setItem('searchObj', JSON.stringify({"pk.exceptionId" : component.getData().exceptionId }) );
 							        	
-							        	window.open(location.href);
-							        	
+							        	window.open(location.href);							        	
 									}
 								},
 							],

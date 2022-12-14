@@ -120,6 +120,7 @@ const info = {
 		
 		detail: {
 			pk: ['queryId'],
+			selectedInfoTitleKey: ['queryId', 'queryDesc'],
 			controlUrl: '/igate/query/control.json',
 			controlParams: function(detailData) {
 				return {

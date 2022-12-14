@@ -68,7 +68,7 @@
 	<context:component-scan base-package="com.inzent.igate" />
 
 	<bean id="activity" class="com.inzent.igate.rule.activity.ActivityManager" />
-	
+
 	<bean class="com.inzent.igate.message.MessageBeans"/>
 
 	<bean id="connector" class="com.inzent.igate.context.ConnectorManagerBean" />

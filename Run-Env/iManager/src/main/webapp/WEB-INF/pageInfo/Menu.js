@@ -11,8 +11,8 @@ const info = {
 			{
 				type: 'modal',
 				vModel: 'menuPrivilegeId',
-				label: this.$t('common.privilege'),
-				placeholder: this.$t('head.searchData'),
+				label: this.$t('common.privilege') + ' ' + this.$t('head.id'),
+				placeholder: this.$t('head.searchId'),
 				modalInfo: {
 					title: this.$t('common.privilege'),
 					search: {
@@ -148,6 +148,7 @@ const info = {
 
 	detail: {
 		pk: ['menuId'],
+		selectedInfoTitleKey: ['menuId', 'menuUrl'], 
 		button: {
 			list: [
 				{ id: 'insert', isUse: true },

@@ -44,5 +44,7 @@
 			</array>
 		</property>
 	</bean>
-
+<!-- 설정 예제 
+	<bean class="com.custom.mapping.CustomMappingEngineBean" />
+-->
 </beans>

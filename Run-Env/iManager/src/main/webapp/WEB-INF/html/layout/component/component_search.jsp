@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		
-		<div class="toggleSearchExpandBtn collapsed" data-toggle="collapse" data-target=".toggleSearchExpandArea" style="display: none;">
+		<div class="toggleSearchExpandBtn collapsed" data-toggle="collapse" data-target=".toggleSearchExpandArea" style="display: none;" v-on:click="collapseFilter">
 			<i class="icon-down"></i>
 		</div>		
 		
@@ -58,6 +58,11 @@ var searchMethodOption = {
    	pageSizeBlur: function() {
    		return this.pageSize = 10 > window.vmSearch.pageSize ? 10 : window.vmSearch.pageSize;
    	},
+   	collapseFilter: function() {
+   		setTimeout(function() {
+   			windowResizeSearchGrid();
+   		}, 0);
+   	}
 };
 </script>
    	

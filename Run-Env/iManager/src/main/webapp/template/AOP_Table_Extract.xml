@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Operation name="Extract Table" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.table" desc="AOP_DB_extract"> 
+<Operation name="Extract Table" privilegeId="Administrator" privateYn="N" type="A" operationLogLevel="N/A" xaTransactionAttribute="S" operationGroup="embed.table"> 
   <Variables> 
     <Variable type="java.lang.Boolean" name="started" desc="" isParameter="false"> 
       <Value><![CDATA[false]]></Value>  
@@ -19,7 +19,7 @@
         <Value><![CDATA[adapterParameter]]></Value>
       </Parameter>
     </Activity>  
-    <While width="462" height="507" uniqueKey="0005" index="6" desc="While" xPos="322" yPos="66"> 
+    <While width="462" height="555" uniqueKey="0005" index="6" desc="While" xPos="322" yPos="66"> 
       <Activities> 
         <Activity uniqueKey="0003" index="1" desc="Extract Request" id="ExtractRequest" xPos="169" yPos="51"> 
           <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
@@ -43,7 +43,7 @@
           </Parameter>
         </Activity>  
         <Break uniqueKey="000t" index="11" desc="Break" xPos="342" yPos="260"/>  
-        <Activity uniqueKey="000x" index="13" desc="Logging Trace" id="LoggingTrace" xPos="168" yPos="366"> 
+        <Activity uniqueKey="000x" index="13" desc="Logging Trace" id="LoggingTrace" xPos="168" yPos="420"> 
           <Parameter type="java.lang.String" desc="LogCode" from="Constant" dynamic="false">
             <Value><![CDATA["INE"]]></Value>
           </Parameter>
@@ -54,7 +54,7 @@
             <Value><![CDATA[null]]></Value>
           </Parameter>
         </Activity>  
-        <Condition uniqueKey="000z" index="14" desc="Condition" xPos="97" yPos="154"> 
+        <Condition uniqueKey="000z" index="14" desc="isFirst" xPos="97" yPos="154"> 
           <When target="5" desc="isFirst"> 
             <MethodExpression variableName="adapterParameter"> 
               <FunctionExpression className="com.inzent.igate.adapter.AdapterParameter" methodName="isTableBegin" argumentTypes="" argumentType="boolean"/> 
@@ -69,7 +69,7 @@ if ( adapterParameter.isTableBegin() )
 else 
    return 1;]]></Value> 
         </Condition>  
-        <Condition uniqueKey="0010" index="15" desc="Condition" xPos="180" yPos="101"> 
+        <Condition uniqueKey="0010" index="15" desc="isNoData" xPos="180" yPos="101"> 
           <When target="22" desc="No Data"> 
             <JavaExpression><![CDATA[0 == ((com.inzent.igate.message.ValueArray) adapterParameter.getRequestData()).size()]]></JavaExpression> 
           </When>  
@@ -88,7 +88,7 @@ else
           <Value><![CDATA[started = true ;
 return 0 ;]]></Value> 
         </Script>  
-        <Condition uniqueKey="0016" index="22" desc="Condition" xPos="275" yPos="154"> 
+        <Condition uniqueKey="0016" index="22" desc="isStarted in Loop" xPos="275" yPos="154"> 
           <When target="9" desc="started"> 
             <VariableExpression name="started"/> 
           </When>  
@@ -101,11 +101,25 @@ if ( started )
 else 
    return 1;]]></Value> 
         </Condition>  
-        <Activity uniqueKey="001a" index="23" desc="Update CheckPoint" id="UpdateCheckPoint" xPos="155" yPos="419"> 
+        <Activity uniqueKey="001a" index="23" desc="Update CheckPoint" id="UpdateCheckPoint" xPos="155" yPos="475"> 
           <Parameter type="com.inzent.igate.adapter.AdapterParameter" desc="AdapterParameter" from="Variable" dynamic="false">
             <Value><![CDATA[adapterParameter]]></Value>
           </Parameter>
-        </Activity> 
+        </Activity>  
+        <Condition uniqueKey="001d" index="24" desc="isNoData &amp; isEnd" xPos="159" yPos="365"> 
+          <When target="25" desc="NoData &amp; isEnd"> 
+            <JavaExpression><![CDATA[0 == ((com.inzent.igate.message.ValueArray) adapterParameter.getRequestData()).size() && adapterParameter.isTableEnd()]]></JavaExpression> 
+          </When>  
+          <Others target="13" desc="... 이 아닐 경우"/>  
+          <Value><![CDATA[
+// NoData & isEnd
+if ( 0 == ((com.inzent.igate.message.ValueArray) adapterParameter.getRequestData()).size() && adapterParameter.isTableEnd() ) 
+   return 0;
+// ... 이 아닐 경우
+else 
+   return 1;]]></Value> 
+        </Condition>  
+        <Break uniqueKey="001e" index="25" desc="Break" xPos="356" yPos="418"/> 
       </Activities>  
       <Transitions> 
         <Transition from="start" to="1" order="0" fromTerminal="bottom" toTerminal="top"> 
@@ -141,10 +155,16 @@ else
         <Transition from="14" to="9" order="1" desc="isNotFirst" fromTerminal="bottom" toTerminal="top"> 
           <bendPoints/> 
         </Transition>  
-        <Transition from="9" to="13" order="0" fromTerminal="bottom" toTerminal="top"> 
+        <Transition from="13" to="23" order="0" fromTerminal="bottom" toTerminal="top"> 
           <bendPoints/> 
         </Transition>  
-        <Transition from="13" to="23" order="0" fromTerminal="bottom" toTerminal="top"> 
+        <Transition from="9" to="24" order="0" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="24" to="25" order="0" desc="NoData &amp; isEnd" fromTerminal="bottom" toTerminal="top"> 
+          <bendPoints/> 
+        </Transition>  
+        <Transition from="24" to="13" order="1" desc="... 이 아닐 경우" fromTerminal="bottom" toTerminal="top"> 
           <bendPoints/> 
         </Transition> 
       </Transitions>  
@@ -194,7 +214,7 @@ else
         <Value><![CDATA[true]]></Value>
       </Parameter>
     </Activity>  
-    <Condition uniqueKey="000w" index="20" desc="Condition" xPos="818" yPos="257"> 
+    <Condition uniqueKey="000w" index="20" desc="isStarted in Exception" xPos="787" yPos="257"> 
       <When target="14" desc="started"> 
         <VariableExpression name="started"/> 
       </When>  
@@ -220,7 +240,7 @@ else
         <Value><![CDATA[null]]></Value>
       </Parameter>
     </Activity>  
-    <Condition uniqueKey="0019" index="22" desc="Condition" xPos="89" yPos="432"> 
+    <Condition uniqueKey="0019" index="22" desc="isStarted in End" xPos="74" yPos="432"> 
       <When target="21" desc="started"> 
         <VariableExpression name="started"/> 
       </When>  

@@ -49,6 +49,7 @@ const info = {
 
 	detail: {
 		pk: ['threadPoolId'],
+		selectedInfoTitleKey: ['threadPoolId', 'threadPoolDesc'],
 		controlUrl: '/igate/threadPool/control.json',
 		controlParams: function(detailData) {
 			return {

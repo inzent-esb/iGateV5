@@ -65,6 +65,7 @@ const info = {
 	},
 	detail: {
 		pk: ['pk.createTimestamp', 'pk.noticeId'],
+		selectedInfoTitleKey: ['noticeTitle'],
 		button: {
 			list: [
 				{ id: 'insert', isUse: true },

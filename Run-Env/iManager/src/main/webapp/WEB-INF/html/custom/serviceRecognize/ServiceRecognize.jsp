@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,10 @@
 </head>
 <body>
 	<div id="serviceRecognize" data-ready>
+		<sec:authorize var="hasAdministrator" access="hasRole('Administrator')"></sec:authorize>
+		<sec:authorize var="hasServiceViewer" access="hasRole('ServiceViewer')"></sec:authorize>
+		<sec:authorize var="hasServiceEditor" access="hasRole('ServiceEditor')"></sec:authorize>
+			
 		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
@@ -15,14 +20,10 @@
 		<%@ include file="/WEB-INF/html/layout/component/component_detail.jsp"%>
 	</div>
 	<script>
-		document.querySelector('#serviceRecognize').addEventListener('privilege', function(evt) {
-			this.setAttribute('viewer', evt.detail.viewer);
-			this.setAttribute('editor', evt.detail.editor);
-		});
-		
 		document.querySelector('#serviceRecognize').addEventListener('ready', function(evt) {
-			var viewer = 'true' == this.getAttribute('viewer');
-			var editor = 'true' == this.getAttribute('editor');
+			var isAdmin = 'true' == '${hasAdministrator}';
+			var viewer = 'true' == '${hasServiceViewer}';
+			var editor = 'true' == '${hasServiceEditor}';
 			
 			var createPageObj = getCreatePageObj();
 			
@@ -267,7 +268,8 @@
 		    	          },
 		    		},
 		    		openWindows: [],
-		    		panelMode: null    		
+		    		panelMode: null,
+		    		selectedInfoTitleKey: ['pk.adapterId', 'pk.telegramValue']
 		    	},
 		    	computed: {
 		    		pk: function() {

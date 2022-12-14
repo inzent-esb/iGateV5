@@ -211,8 +211,67 @@ const info = {
 	button: {
 		list: [
 			{ id: 'initialize', isUse: true },
-			{ id: 'updateCancel', isUse: true },
-			{ id: 'updateReady', isUse: true },
+			{ 
+				id: 'updateCancel', 
+				isUse: true,
+				isUse: function(gridInfo) {
+					if (null === gridInfo) return true;
+					
+					var isUse = true;
+
+					var checkedRows = gridInfo.getCheckedRows();
+					
+					for (var i = 0; i < checkedRows.length; i++) {
+						var checkedRow = checkedRows[i];
+						var fileMode = checkedRow['pk.fileMode'];
+						var fileStatus = checkedRow.fileStatus;
+						
+						if ('S' === fileMode) {
+							if (!('R' === fileStatus || 'W' === fileStatus || 'E' === fileStatus)) {
+								isUse = false;
+								break;
+							}
+						} else {
+							if (!('A' === fileStatus || 'E' === fileStatus || 'F' === fileStatus)) {
+								isUse = false;
+								break;
+							}							
+						}
+					}
+					
+					return isUse;					
+				}
+			},
+			{ 
+				id: 'updateReady', 
+				isUse: function(gridInfo) {
+					if (null === gridInfo) return true;
+					
+					var isUse = true;
+
+					var checkedRows = gridInfo.getCheckedRows();
+					
+					for (var i = 0; i < checkedRows.length; i++) {
+						var checkedRow = checkedRows[i];
+						var fileMode = checkedRow['pk.fileMode'];
+						var fileStatus = checkedRow.fileStatus;
+						
+						if ('S' === fileMode) {
+							if (!('X' === fileStatus || 'C' === fileStatus || 'D' === fileStatus || 'S' === fileStatus)) {
+								isUse = false;
+								break;
+							}
+						} else {
+							if (!('X' === fileStatus || 'C' === fileStatus || 'H' === fileStatus)) {
+								isUse = false;
+								break;
+							}							
+						}
+					}
+					
+					return isUse;					
+				},
+			},
 			{ id: 'newTab', isUse: true },
 		],
 	},
@@ -258,43 +317,18 @@ const info = {
 					name: 'fileStatus',
 					header: this.$t('head.file') + ' ' + this.$t('head.status'),
 					align: 'center',
-					formatter : function(value)
-	                {
-	                  switch (value.row.fileStatus) {
-		                  case 'R' : {
-		                    return this.$t('igate.fileRepository.ready');
-		                  }
-		                  case 'W' : {
-		                	  return this.$t('igate.fileRepository.wait');
-		                  }
-		                  case 'M' : {
-		                	  return this.$t('igate.fileRepository.making');
-		                  }
-		                  case 'A' : {
-		                	  return this.$t('igate.fileRepository.active');
-		                  }
-		                  case 'E' : {
-		                	  return this.$t('igate.fileRepository.error');
-		                  }
-		                  case 'D' : {
-		                	  return this.$t('igate.fileRepository.done');
-		                  }
-		                  case 'P' : {
-		                	  return this.$t('igate.fileRepository.process');
-		                  }
-		                  case 'X' : {
-		                	  return this.$t('igate.fileRepository.expire');
-		                  }
-		                  case 'C' : {
-		                	  return this.$t('igate.fileRepository.cancel');
-		                  }
-		                  case 'H' : {
-		                	  return this.$t('igate.fileRepository.finish');
-		                  }
-		                  case 'F' : {
-		                	  return this.$t('igate.fileRepository.fail');
-		                  }
-	                  }
+					formatter : function(value) {
+						var fileStatus = '';
+						var fileStatusList = value.formatterData.fileStatusList;
+						
+						for (var i = 0; i < fileStatusList.length; i++) {
+							if (value.row.fileStatus === fileStatusList[i].pk.propertyKey) {
+								fileStatus = fileStatusList[i].propertyValue
+								break;
+							}
+						}
+						
+						return fileStatus;
 	                },
 				},
 				{
@@ -325,6 +359,16 @@ const info = {
 				},
 			],
 		},
+		formatterDataUrlList: [
+			{
+				key: 'fileStatusList',
+				url: '/common/property/properties.json',
+				param: {
+					propertyId: 'List.FileRepository.Status',
+					orderByKey: true,
+				}
+			}
+		]
 	},
 	
 	detail: {
@@ -427,48 +471,21 @@ const info = {
 								label: this.$t('head.file') + ' ' + this.$t('head.offset'),
 							},
 							{
-								type: 'text',
+								type: 'select',
 								vModel: 'fileStatus',
 								label: this.$t('head.file') + ' ' + this.$t('head.status'),
-								formatter : function(value)
-				                {
-				                  switch (value) {
-					                  case 'R' : {
-					                    return this.$t('igate.fileRepository.ready');
-					                  }
-					                  case 'W' : {
-					                	  return this.$t('igate.fileRepository.wait');
-					                  }
-					                  case 'M' : {
-					                	  return this.$t('igate.fileRepository.making');
-					                  }
-					                  case 'A' : {
-					                	  return this.$t('igate.fileRepository.active');
-					                  }
-					                  case 'E' : {
-					                	  return this.$t('igate.fileRepository.error');
-					                  }
-					                  case 'D' : {
-					                	  return this.$t('igate.fileRepository.done');
-					                  }
-					                  case 'P' : {
-					                	  return this.$t('igate.fileRepository.process');
-					                  }
-					                  case 'X' : {
-					                	  return this.$t('igate.fileRepository.expire');
-					                  }
-					                  case 'C' : {
-					                	  return this.$t('igate.fileRepository.cancel');
-					                  }
-					                  case 'H' : {
-					                	  return this.$t('igate.fileRepository.finish');
-					                  }
-					                  case 'F' : {
-					                	  return this.$t('igate.fileRepository.fail');
-					                  }
-				                  }
-				                }.bind(this),
-							},	
+								optionInfo: {
+									url: '/common/property/properties.json',
+									params: {
+										propertyId: 'List.FileRepository.Status',
+										orderByKey: true,
+									},
+									optionListName: 'fileStatus',
+									optionFor: 'option in fileStatus',
+									optionValue: 'option.pk.propertyKey',
+									optionText: 'option.propertyValue',
+								},
+							},
 						],
 					],					
 				]

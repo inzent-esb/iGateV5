@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,13 @@
 </head>
 <body>
 	<div id="traceLog" data-ready>
+		<sec:authorize var="hasAdministrator" access="hasRole('Administrator')"></sec:authorize>
+		<sec:authorize var="hasTraceLogViewer" access="hasRole('TraceLogViewer')"></sec:authorize>
+		<sec:authorize var="hasTraceLogMessage" access="hasRole('TraceLogMessage')"></sec:authorize>
+		<sec:authorize var="hasTraceLogModel" access="hasRole('TraceLogModel')"></sec:authorize>
+		<sec:authorize var="hasTraceLogDown" access="hasRole('TraceLogDown')"></sec:authorize>
+		<sec:authorize var="hasTraceLogTest" access="hasRole('TraceLogTest')"></sec:authorize>
+	
 		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
@@ -18,16 +26,15 @@
 	</div>
 	<script>
 		var traceLogTreeGrid = null;
-	
-		document.querySelector('#traceLog').addEventListener('privilege', function(evt) {
-			this.setAttribute('viewer', evt.detail.viewer);
-			this.setAttribute('editor', evt.detail.editor);
-		});
 		
 		document.querySelector('#traceLog').addEventListener('ready', function(evt) {
-			var viewer = 'true' == this.getAttribute('viewer');
-			var editor = 'true' == this.getAttribute('editor');
-					    			
+			var isAdmin = 'true' == '${hasAdministrator}';
+			var isViewer = 'true' == '${hasTraceLogViewer}';
+			var isMessage = 'true' == '${hasTraceLogMessage}';
+			var isModel = 'true' == '${hasTraceLogModel}';
+			var isDown = 'true' == '${hasTraceLogDown}';
+			var isTest = 'true' == '${hasTraceLogTest}';
+			
 			traceLogTreeGrid = null;
 			
 			var selectedRowTraceLog = null;
@@ -202,15 +209,15 @@
 			createPageObj.searchConstructor();
 			
 			createPageObj.setMainButtonList({
-				newTabBtn: viewer,
-				searchInitBtn: viewer,
-				downloadBtn: viewer,
-				totalCount: viewer,
+				newTabBtn: isViewer,
+				searchInitBtn: isViewer,
+				downloadBtn: isViewer,
+				totalCount: isViewer,
 			});
 			
 			createPageObj.mainConstructor();
 			
-			createPageObj.setTabList([
+			var tabList = [
 				{
 					'type': 'custom',
 					'id': 'MainBasic',
@@ -219,27 +226,50 @@
 					'getDetailArea': function() {
 						return $("#traceLog-panel").html();
 					}
-				},
-				{
+				}
+			];
+			
+			if (isMessage) {
+				tabList.push({
 					'type': 'custom',
 					'id': 'MessageInfo',
 					'name': '<fmt:message>igate.traceLog.message.info</fmt:message>',
 					'isSubResponsive': true,
 					'getDetailArea': function() {
-						return $("#messageInfoCt").html();
-					}
-				},
-				{
+						var messageInfoCt = $("#messageInfoCt").clone();
+						
+						if (!isDown) {
+							messageInfoCt.find('a[title="' + "<fmt:message>head.download</fmt:message>" + '"]').remove();
+						}
+						
+						if (!isTest) {
+							messageInfoCt.find('a[title="' + "<fmt:message>igate.traceLog.create.testCase</fmt:message>" + '"]').remove();
+						}
+						
+						return messageInfoCt.html();
+					}					
+				})
+			}
+			
+			if (isModel) {
+				tabList.push({
 					'type': 'tree',
 					'id': 'ModelInfo',
 					'name': '<fmt:message>head.model.info</fmt:message>'
-				}
-			]);		
+				});
+			}
+			
+			createPageObj.setTabList(tabList);		
 			
 			createPageObj.setPanelButtonList({	
 			});	
 			
-			createPageObj.panelConstructor(true);	
+			createPageObj.panelConstructor(true);
+			
+			if (isDown) {
+				
+			}
+			
 			
 		    SaveImngObj.setConfig({
 		    	objectUri : "/igate/traceLog/object.json"
@@ -638,7 +668,8 @@
 			    		openWindows: [],
 			    		panelMode: null,
 			    		treeGrid : null,
-			            totalData : null
+			            totalData : null,
+			            selectedInfoTitleKey: ['pk.logId', 'pk.logDateTime']
 			    	},
 			    	computed: {
 			    		pk: function() {
@@ -655,6 +686,8 @@
 				            window.vmMain.object.logId = this.object.pk.logId;
 			              	window.vmMain.object = this.object;
 			              	window.vmMessageInfo.messageModel();
+			              	window.vmMessageInfo.logCode = this.object.logCode;
+			              	window.vmMessageInfo.interfaceId = this.object.interfaceId;
 			              	window.vmModelInfo.modelModel();
 			            },
 						goDetailPanel: function() {
@@ -682,25 +715,6 @@
 	                    },
 			        	initDetailArea: function(object) {
 			        		if(object) this.object = object;
-						},
-						downloadFile: function() {
-							var object = window.vmMain.object;
-							var makeData = '?';
-	
-							for (var key in object) {
-								if (typeof object[key] === 'object') {
-									for (var subkey in object[key]) {
-										makeData += key + "." + subkey + "=" + object[key][subkey] + "&";
-									}
-				                } else {
-				                	makeData += key + "=" + object[key] + "&";
-				                }
-							}
-							
-							var url = encodeURI('${prefixUrl}/igate/traceLog/body.json' + makeData);
-							var popup = window.open(url, "_parent", "width=0, height=0, top=0, statusbar=no, scrollbars=no, toolbar=no");
-							
-							popup.focus();
 						},
 						clickExceptionInfo: function(exceptionInfo) {
 			            	localStorage.setItem('searchObj', JSON.stringify(exceptionInfo));
@@ -736,7 +750,6 @@
 			       		}
 			        },
 			        mounted : function() {
-			        	var previousTime = '';
 			        	this.makebasicInfoGridObj = getMakeGridObj();
 	
 			            this.makebasicInfoGridObj.setConfig({
@@ -828,13 +841,149 @@
 			    	el : '#MessageInfo',
 			    	data : {
 			    		viewMode : 'Open',
-			            object : {}
+			            object : {},
+			            logCode: null,
+			            interfaceId: null,
 			    	},
 			    	methods : {
 			    		messageModel : function() {
 			    			 (new HttpReq('/igate/traceLog/dump.json')).read(window.vmMain.object, function(result) {
 				                	this.object = ("ok" == result.result)? result.response : result.error[0].message;
 			    			 }.bind(this));
+			            },
+						downloadFile: function() {
+							var object = window.vmMain.object;
+							var makeData = '?';
+	
+							for (var key in object) {	
+								if (typeof object[key] === 'object') {
+									for (var subkey in object[key]) {
+										makeData += key + "." + subkey + "=" + object[key][subkey] + "&";
+									}
+				                } else {
+				                	makeData += key + "=" + object[key] + "&";
+				                }
+							}
+							
+							var url = encodeURI('${prefixUrl}/igate/traceLog/body.json' + makeData);
+							var popup = window.open(url, "_parent", "width=0, height=0, top=0, statusbar=no, scrollbars=no, toolbar=no");
+							
+							popup.focus();
+						},			            
+			            createTestCase: function() {
+			            	var instanceList = null;
+			            	var interfaceInfo = null;
+			            	var testCaseId = null; 
+			            		
+			            	getInstanceList(
+			            		getInterfaceInfo.bind(this, 
+			            			getTestCaseList.bind(this, initModal)
+			            		)
+			            	);
+							
+							function getInstanceList(callback) {
+								new HttpReq('/igate/instance/list.json').read({instanceType: 'T'}, function(result) {
+									instanceList = result.object;
+									
+									if(callback) callback();
+				            	});
+							}
+							
+							function getInterfaceInfo(callback) {
+								new HttpReq('/igate/interface/object.json').read({ interfaceId: this.interfaceId }, function(result) {
+									interfaceInfo = result.object;
+									
+									if(callback) callback();
+				            	});
+							}
+							
+							function getTestCaseList(callback) {
+								new HttpReq('/igate/testCase/rowCount.json').read({ 'pk.interfaceId': this.interfaceId }, function(result) {
+									testCaseId = 'CASE_' + (Number(result.object) + 1); 
+									
+									if(callback) callback();
+				            	});								
+							}
+							
+							function initModal() {
+				            	var createTestCaseTemplate = $('#createTestCaseTemplate').clone();
+				            	
+				            	createTestCaseTemplate.children('div').attr('id', 'createTestCaseCt');
+				            	
+				            	openModal({
+				            		name: 'createTestCase',
+				            		title: "<fmt:message>igate.traceLog.create.testCase</fmt:message>",
+				            		size: 'small',
+				            		bodyHtml: createTestCaseTemplate.html(),
+				            		isMultiCheck: true,
+				            		shownCallBackFunc: function() {
+				            			var vmTestCase = new Vue({
+				            				el: '#createTestCaseCt',
+				            				data: {
+				            		    		letter: {
+				            		    			pk: {
+				            		    				testCaseId: testCaseId.length,
+				            		    			},
+				            		    			testCaseDesc: 0,			            		    			
+				            		    		},
+				            		    		object : {
+				            		    			pk: {
+				            		    				testCaseId: testCaseId,
+				            		    				interfaceId: interfaceInfo.interfaceId,
+				            		    			},
+				            		    			testInstance: instanceList && 0 < instanceList.length? instanceList[0].instanceId : null,
+				            		    			testCaseGroup: interfaceInfo.interfaceGroup,
+				            		    			testCaseDesc: null,
+				            		    			testCaseStatus: 'N',
+				            		    			testCaseSync: 'S',
+				            		    			testCaseMessage: window.vmMessageInfo.object,
+				            		    		},
+				            		    		testCaseIdRegExp: getRegExpInfo('id'),
+				            		    		testCaseDescRegExp: getRegExpInfo('desc'),
+				            		    		
+				            		    		instanceList: instanceList
+				            				},
+				            				methods: {
+				            		    		inputEvt: function(info) {
+				            		    			setLengthCnt.call(this, info);	
+				            		    		},			            					
+				            				}
+				            			});
+				            			
+				            			$('#modalConfirm').on('click', function() {
+				            				if (null === vmTestCase.object.pk.testCaseId || 0 === vmTestCase.object.pk.testCaseId.trim().length) {
+				            					_alert({
+				            						type: 'warn',
+				            						message: "<fmt:message>igate.traceLog.not.exist.testCase.id</fmt:message>"
+				            					});
+				            					
+												return;				            					
+				            				}
+				            				
+				            				new HttpReq('/igate/testCase/rowCount.json').read({'pk.testCaseId': vmTestCase.object.pk.testCaseId, 'pk.interfaceId': vmTestCase.object.pk.interfaceId}, function(result) {
+				            					if(0 < Number(result.object)) {
+					            					_alert({
+					            						type: 'warn',
+					            						message: "<fmt:message>igate.traceLog.same.testCase</fmt:message>"
+					            					});
+					            					
+													return;	
+				            					}
+				            					
+												new HttpReq('/igate/traceLog/createTestCase.json').create($.extend({}, window.vmMain.object, vmTestCase.object), function() {
+					            					_alert({
+					            						type: 'compt',
+					            						message: "<fmt:message>igate.traceLog.created.testCase</fmt:message>",
+					            						callBackFunc: function() {
+					            							$('#createTestCaseModalSearch').find('#modalClose').trigger('click');
+					            						}
+					            					});												
+												}, true);				            					
+				            				});
+				            			});
+				            		}
+				            	});									
+							}
 			            }
 		          	}
 		        });
@@ -846,6 +995,11 @@
 		          	},
 		          	methods : {
 		          		initTreeGrid : function(data) {
+			            	if(traceLogTreeGrid) {
+			            		traceLogTreeGrid.destroy();
+			            	  	traceLogTreeGrid = null;
+			              	}
+			            	
 		          			traceLogTreeGrid = new tui.Grid({
 		          				el : document.getElementById('ModelInfo'),
 			                    data : data,
@@ -959,13 +1113,7 @@
 			        		traceLogTreeGrid.expandAll();
 			        	},
 			            modelModel : function() {
-			            	if(traceLogTreeGrid) {
-			            		traceLogTreeGrid.destroy();
-			            	  	traceLogTreeGrid = null;
-			              	}
-			              
 			              	if($('#ModelInfo').hasClass('active')) {
-			              		
 			              		setTimeout(function() {
 			              			(new HttpReq('/igate/traceLog/record.json')).read(window.vmMain.object, function(result) {
 			              				this.initTreeGrid(result.object);
@@ -1005,9 +1153,7 @@
 		    this.addEventListener('resize', function(evt) {
 		    	if(!traceLogTreeGrid) return;
 		    	
-		    	setTimeout(function() {
-		    		traceLogTreeGrid.setWidth($('#panel').find('.panel-body').width());	
-		    	}, 350);
+		    	traceLogTreeGrid.setWidth($('#panel').find('.panel-body').width());	
 		    });
 		    
 			this.addEventListener('destroy', function(evt) {

@@ -61,7 +61,6 @@
 		
 		document.querySelector('#adapter').addEventListener('ready', function(evt) {
 			var viewer = 'true' == this.getAttribute('viewer');
-			var editor = 'true' == this.getAttribute('editor');
 			
 			var createPageObj = getCreatePageObj();
 			

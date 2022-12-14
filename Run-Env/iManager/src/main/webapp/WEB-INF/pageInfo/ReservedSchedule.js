@@ -167,8 +167,50 @@ const info = {
 		button: {
 			list: [
 				{ id: 'initialize', isUse: true },
-				{ id: 'updateCancel', isUse: true },
-				{ id: 'updateReady', isUse: true },				
+				{ 
+					id: 'updateCancel', 
+					isUse: function(gridInfo) {
+						if (null === gridInfo) return true;
+						
+						var isUse = true;
+
+						var checkedRows = gridInfo.getCheckedRows();
+						
+						for (var i = 0; i < checkedRows.length; i++) {
+							var checkedRow = checkedRows[i];
+							var executeStatus = checkedRow.executeStatus;
+							
+							if (!('R' === executeStatus || 'W' === executeStatus)) {
+								isUse = false;
+								break;
+							}							
+						}
+						
+						return isUse;					
+					}						
+				},
+				{ 
+					id: 'updateReady', 
+					isUse: function(gridInfo) {
+						if (null === gridInfo) return true;
+						
+						var isUse = true;
+
+						var checkedRows = gridInfo.getCheckedRows();
+						
+						for (var i = 0; i < checkedRows.length; i++) {
+							var checkedRow = checkedRows[i];
+							var executeStatus = checkedRow.executeStatus;
+							
+							if (!('D' === executeStatus || 'S' === executeStatus || 'C' === executeStatus || 'E' === executeStatus)) {
+								isUse = false;
+								break;
+							}							
+						}
+						
+						return isUse;					
+					}					
+				},				
 				{ id: 'newTab', isUse: true },
 			],
 		},
@@ -194,10 +236,10 @@ const info = {
 						name: 'pk.scheduleType',
 						header: this.$t('common.type'),
 						align: 'center',
-						formatter : function(type) {                	        		
+						formatter : function(type) {
         	        		if(type.value == "J") 	   return "Job";
         	        		else if(type.value == "I") return "Interface";	 
-        	        		else 					   return escapeHtml(type.value);
+        	        		else 					   return $('<span />').text(type.value).html();
         	        	},
 					},					
 					{
@@ -315,6 +357,17 @@ const info = {
 									type: 'text',
 									vModel: 'exceptionId',
 									label: this.$t('head.exception') + ' ' + this.$t('head.id'),
+									clickEvt: function(component) {
+										if (!component.getData().exceptionId) return;
+										
+										localStorage.removeItem('selectedMenuPathIdListNewTab');
+										localStorage.removeItem('searchObj');
+
+										localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['100000', '103000', '103010']));
+										localStorage.setItem('searchObj', JSON.stringify({ 'pk.exceptionId': component.getData().exceptionId, 'fromExceptionDateTime': component.$parent.getData().exceptionDateTime }));
+
+										window.open(location.href);
+									}							
 								},
 							],
 						],

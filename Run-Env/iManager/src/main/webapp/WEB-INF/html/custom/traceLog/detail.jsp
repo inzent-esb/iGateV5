@@ -6,12 +6,64 @@
 <span id="messageInfoCt" style="display: none;">
 	<div class="col-lg-12" style="min-height: 270px;">
 		<div class="form-group" style="height: 100%;">
-			<label class="control-label"><span><fmt:message>igate.traceLog.message.info</fmt:message></span></label>
+			<label class="control-label">
+				<span>
+					<fmt:message>igate.traceLog.message.info</fmt:message>
+				</span>
+				<div style="position: absolute; top:-3px; right: 12px;" v-if="'INI' === logCode">
+					<a title="<fmt:message>head.download</fmt:message>" class="btn btn-m" style="padding-top: 0.1rem; padding-bottom: 0.1rem;" v-on:click="downloadFile">
+						<i class="icon-export"></i>
+						<span class="hide"><fmt:message>head.download</fmt:message></span>
+					</a>
+					<a title="<fmt:message>igate.traceLog.create.testCase</fmt:message>" class="btn btn-m" style="padding-top: 0.1rem; padding-bottom: 0.1rem;" v-on:click="createTestCase">
+						<i class="icon-play"></i>
+						<span class="hide"><fmt:message>igate.traceLog.create.testCase</fmt:message></span>
+					</a>					
+				</div>
+			</label>
 			<div class="input-group" style="height: 100%;">
 				<textarea class="form-control view-disabled dumparea" v-model="object" style="height: 100%;"></textarea>
 			</div>
 		</div>
 	</div>
+</span>
+
+<span id="createTestCaseTemplate" style="display: none;">
+	<div>
+		<div class="form-group">
+			<label class="control-label">
+				<fmt:message>igate.interface.id</fmt:message>
+			</label> 
+			<input type="text" v-model="object.pk.interfaceId" class="form-control view-disabled" readonly="readonly">
+		</div> 	
+		<div class="form-group">
+			<label class="control-label">
+				<fmt:message>igate.traceLog.testCase.id</fmt:message>
+				<span class="letterLength" v-text="'(' + letter.pk.testCaseId + ' / ' + testCaseIdRegExp.maxLength + ')'"></span>
+				<b class="icon-star"></b>
+			</label> 
+			<input type="text" v-model="object.pk.testCaseId" placeholder="<fmt:message>igate.traceLog.enter.testCase</fmt:message>" :maxLength="testCaseIdRegExp.maxLength" v-on:input="inputEvt({regExp: testCaseIdRegExp.regExp, key: 'object.pk.testCaseId'})" class="form-control">
+		</div> 
+		<div class="form-group">
+			<label class="control-label"><fmt:message>igate.instance.id</fmt:message></label> 
+			<select class="form-control"  v-model="object.testInstance">
+				<option v-for="(instanceInfo, idx) in instanceList" v-bind:value="instanceInfo.instanceId" v-text="instanceInfo.instanceId"></option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label class="control-label">
+				<fmt:message>head.group</fmt:message> <fmt:message>head.name</fmt:message>
+			</label> 
+			<input type="text" v-model="object.testCaseGroup" class="form-control view-disabled" readonly="readonly">
+		</div>		
+		<div class="form-group">
+			<label class="control-label">
+				<fmt:message>head.description</fmt:message> 
+				<span class="letterLength" v-text="'(' + letter.testCaseDesc + ' / ' + testCaseDescRegExp.maxLength + ')'"></span>
+			</label> 
+			<textarea v-model="object.testCaseDesc" placeholder="<fmt:message>head.enter.comment</fmt:message>" class="form-control" :maxLength="testCaseDescRegExp.maxLength" v-on:input="inputEvt({regExp: testCaseDescRegExp.regExp, key: 'object.testCaseDesc'})" style="height: 100px;"></textarea>
+		</div>
+	</div>	
 </span>
 
 <div id="traceLog-panel" style="display : none;">
@@ -154,9 +206,6 @@
 					<label class="control-label"><fmt:message>head.file</fmt:message> <fmt:message>head.size</fmt:message></label>
 					<div class="input-group viewGroup">
 						<input type="text" class="form-control view-disabled" v-model="object.bodySize">
-						<div class="input-group-append">
-							<button type="button" class="btn viewGroup" v-on:click="downloadFile">다운로드</button>
-						</div>
 					</div>
 				</div>
 			</div>
