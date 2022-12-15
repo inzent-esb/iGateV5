@@ -213,15 +213,15 @@ var SaveImngObj = {
 		if ('PUT' == data._method)
 			httpReq.create(data, function (result) {
 				successFunc(result);
-			});
+			}, true);
 		else if ('POST' == data._method)
 			httpReq.update(data, function (result) {
 				successFunc(result);
-			});
+			}, true);
 		else if ('DELETE' == data._method)
 			httpReq.remove(data, function (result) {
 				successFunc(result);
-			});
+			}, true);
 	},
 
 	insertSubmit: function (data, message) {
@@ -310,7 +310,7 @@ var ControlImngObj = {
 	  	  
 	  httpReq.update(data, function () {
 		  window.$stopSpinner	  
-	  });    
+	  }, true);    
     
   },
 

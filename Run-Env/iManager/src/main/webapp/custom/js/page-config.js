@@ -931,10 +931,11 @@ function getCreatePageObj() {
 						rowDiv.append(searchDiv);
 					}
 
+					rowDiv.addClass('propertyTab');
+					
 					rowDiv.append(
 						$('<div/>')
-							.addClass('form-table form-table-responsive propertyTab')
-							.append($('<div/>').addClass('form-table-wrap'))
+							.addClass('form-table form-table-responsive')
 							.append(
 								$('<div/>')
 									.addClass('form-table-head')
@@ -949,11 +950,10 @@ function getCreatePageObj() {
 									)
 							)
 							.append(
-								$('<div/>')
-									.addClass('form-table-body')
-									.attr({
-										'v-for': '(elm, index) in ' + tabObj.mappingDataInfo,
-									})
+								$('<div/>').addClass('form-table-wrap')
+										   .append(
+												   $('<div/>').addClass('form-table-body').attr({ 'v-for': '(elm, index) in ' + tabObj.mappingDataInfo })
+										   )
 							)
 					);
 
@@ -992,7 +992,6 @@ function getCreatePageObj() {
 					}
 
 					tabObj.detailList.forEach(function (detailObj, detailIndex) {
-						var disabled = detailObj.disabled ? detailObj.disabled : false;
 						var regExpType = detailObj.regExpType? detailObj.regExpType : 'default';
 						var maxLength = getRegExpInfo(regExpType).maxLength;
 						
@@ -1249,6 +1248,8 @@ function panelOpen(o, object, callBackFunc) {
 
 	function setPanel() {
 		if ('sidebar' != o) {
+			document.querySelector('#panel').dispatchEvent(new CustomEvent('detailReady'));	
+			
 			if (o != 'done') $('#accordionResult').children('.collapse-item').remove();
 
 			if (window.vmMain) window.vmMain.panelMode = o;
@@ -1310,6 +1311,38 @@ function panelOpen(o, object, callBackFunc) {
 
 				if ($('#panel').find('.warningLabel, .letterLength')) $('#panel').find('.warningLabel, .letterLength').hide();
 			}
+			
+			if (('detail' === o || 'done' === o || 'modify' === o) && window.vmMain && window.vmMain.selectedInfoTitleKey) {
+				var dataObj = parseFlattenObj(window.vmMain.object);
+				
+				var selectedInfoTitleSpan = $('<span/>').addClass('sub-bar-selected-tit');
+				
+				var selectedInfoTitle = '';
+
+				window.vmMain.selectedInfoTitleKey.forEach(function(key) {
+					if ('undefined' === typeof dataObj[key]) return;
+
+					if (0 === String(dataObj[key]).trim().length) return;
+
+					selectedInfoTitle += String(dataObj[key]);
+
+					if (1 < window.vmMain.selectedInfoTitleKey.length) selectedInfoTitle += ', ';
+				});
+
+				if (0 < selectedInfoTitle.length) {
+					selectedInfoTitle = selectedInfoTitle.trim();
+					
+					if (selectedInfoTitle.endsWith(',')) {
+						selectedInfoTitle = selectedInfoTitle.substring(0, selectedInfoTitle.length - 1);
+					}
+					
+					selectedInfoTitle = ' - ' + selectedInfoTitle;
+				}
+				
+				selectedInfoTitleSpan.text(selectedInfoTitle);
+				
+				$('#panel').find('.sub-bar-tit').append(selectedInfoTitleSpan);
+			}
 		}
 
 		var $wrap = $('#wrap');
@@ -1330,17 +1363,15 @@ function panelOpen(o, object, callBackFunc) {
 
 		$body.addClass('fixed');
 
-		setTimeout(function () {
-			target.show(0, function () {
-				$body.addClass('panel-open-' + o);
+		target.show(0, function () {
+			$body.addClass('panel-open-' + o);
+			
+			windowResizeSearchGrid();
 
-				windowResizeSearchGrid();
-
-				if (callBackFunc) {
-					callBackFunc();
-				}
-			});
-		}, 200);
+			if (callBackFunc) {
+				callBackFunc();
+			}
+		});
 	}
 }
 
@@ -1373,24 +1404,24 @@ function panelClose(o) {
 	if (window.vmMain) window.vmMain.panelMode = null;
 
 	var ct = $('.wrap');
+	
 	var originScroll = -ct.position().top;
-	$('body')
-		.removeClass('panel-open-' + o)
-		.find('.backdrop')
-		.remove();
-	$('#' + window.mainListAreaId)
-		.find('.table-responsive')
-		.height('auto');
+	
+	$('body').removeClass('panel-open-' + o).find('.backdrop').remove();
+	
+	$('#' + window.mainListAreaId).find('.table-responsive').height('auto');
 
-	setTimeout(function () {
-		$('#' + o).hide();
-		$('body').removeClass('fixed');
-		if (originScroll != -0) {
-			ct.scrollTop(originScroll);
-		}
-		ct.removeAttr('style');
-		windowResizeSearchGrid();
-	}, 300);
+	$('#' + o).hide();
+	
+	$('body').removeClass('fixed');
+	
+	if (originScroll != -0) {
+		ct.scrollTop(originScroll);
+	}
+	
+	ct.removeAttr('style');
+	
+	windowResizeSearchGrid();
 }
 
 function getMakeGridObj() {
@@ -1652,7 +1683,7 @@ function getMakeGridObj() {
 				setGridPaging(result);
 
 				if (callback) callback(result);
-			});
+			}, true);
 		}
 
 		function page(param, callback) {

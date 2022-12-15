@@ -1,17 +1,18 @@
 (function () {
-	if (typeof window.CustomEvent === 'function') return false; //If not IE
+	(function () {
+		if (typeof window.CustomEvent === 'function') return false; //If not IE
 
-	function CustomEvent(event, params) {
-		params = params || { bubbles: false, cancelable: false, detail: undefined };
-		var evt = document.createEvent('CustomEvent');
-		evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-		return evt;
-	}
+		function CustomEvent(event, params) {
+			params = params || { bubbles: false, cancelable: false, detail: undefined };
+			var evt = document.createEvent('CustomEvent');
+			evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+			return evt;
+		}
 
-	CustomEvent.prototype = window.Event.prototype;
+		CustomEvent.prototype = window.Event.prototype;
 
-	window.CustomEvent = CustomEvent;
-	
+		window.CustomEvent = CustomEvent;		
+	})();
 	
 	//https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
 	//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
@@ -29,6 +30,22 @@
 				}
 				return padString.slice(0, targetLength) + String(this);
 			}
+		};
+	}
+	
+	if (!String.prototype.endsWith) {
+		String.prototype.endsWith = function(searchString, position) {
+			var subjectString = this.toString();
+
+			if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+				position = subjectString.length;
+			}
+		    
+			position -= searchString.length;
+		    
+			var lastIndex = subjectString.indexOf(searchString, position);
+		    
+			return lastIndex !== -1 && lastIndex === position;
 		};
 	}
 })();

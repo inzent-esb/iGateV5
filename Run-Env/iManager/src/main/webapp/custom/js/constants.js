@@ -14,5 +14,7 @@ var constants = {
 		pageSize: { maxLength: 4, regExp: '[^0-9]' },
 		default: { maxLength: 100, regExp: '' },
 	},
-	logInTime: 300000
+	logInTime: 300000,
+	//escape: 27, space: 32
+	modalCloseKeyCode: [27, 32],
 };

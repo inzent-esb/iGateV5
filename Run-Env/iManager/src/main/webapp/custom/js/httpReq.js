@@ -1,7 +1,7 @@
 function HttpReq(url) {
 	this.url = url;
 
-	HttpReq.prototype.submit = function (mode, param, callback, skipSpinner) {
+	HttpReq.prototype.submit = function (mode, param, callback, isViewSpinner) {
 		var X_IMANAGER_WINDOW = null;
 		
 		if (param) {
@@ -60,12 +60,9 @@ function HttpReq(url) {
 
 				return data;
 			})(),
-			xhrFields: {
-				withCredentials: true,
-			},
 			dataType: 'json',
 			beforeSend: function (request) {
-				if (!skipSpinner) window.$startSpinner();
+				if (isViewSpinner) window.$startSpinner();
 				
                 request.setRequestHeader('X-IMANAGER-WINDOW', X_IMANAGER_WINDOW);
                 
@@ -100,24 +97,24 @@ function HttpReq(url) {
 				ResultImngObj.errorHandler(request, status, error);
 			},
 			complete: function () {
-				if (!skipSpinner) window.$stopSpinner();
+				if (isViewSpinner) window.$stopSpinner();
 			},
 		});
 	};
 
-	HttpReq.prototype.read = function (param, callback, skipSpinner) {
-		this.submit('read', param, callback, skipSpinner);
+	HttpReq.prototype.read = function (param, callback, isViewSpinner) {
+		this.submit('read', param, callback, isViewSpinner);
 	};
 
-	HttpReq.prototype.create = function (param, callback, skipSpinner) {
-		this.submit('create', param, callback, skipSpinner);
+	HttpReq.prototype.create = function (param, callback, isViewSpinner) {
+		this.submit('create', param, callback, isViewSpinner);
 	};
 
-	HttpReq.prototype.update = function (param, callback, skipSpinner) {
-		this.submit('update', param, callback, skipSpinner);
+	HttpReq.prototype.update = function (param, callback, isViewSpinner) {
+		this.submit('update', param, callback, isViewSpinner);
 	};
 
-	HttpReq.prototype.remove = function (param, callback, skipSpinner) {
-		this.submit('delete', param, callback, skipSpinner);
+	HttpReq.prototype.remove = function (param, callback, isViewSpinner) {
+		this.submit('delete', param, callback, isViewSpinner);
 	};
 }

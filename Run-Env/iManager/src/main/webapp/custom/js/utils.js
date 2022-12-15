@@ -117,3 +117,30 @@ function changeDateFormat(date, format) {
 	
 	return moment(new Date(date.split('.')[0].replace('-', '/'))).format(format ? format : 'YYYY-MM-DD HH:mm:ss');
 }
+
+function getNumFromStr(str) {
+	return Number(str.replace(/[^0-9]/g, ''));
+}
+
+function parseFlattenObj(obj, pRoots, pSep) {
+	var roots = pRoots? pRoots : []; 
+	var sep = pSep? pSep : '.';
+	
+	return Object.keys(obj).reduce(
+		function (memo, prop) {
+			return Object.assign(
+				{},
+				memo,
+				Object.prototype.toString.call(obj[prop]) === '[object Object]'
+					? parseFlattenObj(obj[prop], roots.concat([prop]))
+					:
+					(function() {
+						var source = {};
+						source[roots.concat([prop]).join(sep)] = obj[prop];
+						return source;
+					})()
+			)
+		},
+		{}
+	);
+}
