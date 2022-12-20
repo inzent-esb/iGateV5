@@ -73,6 +73,7 @@
       <GroupHeader label="확장속성정보" expandable="true">
         <Column label="FieldTrim" align="center" width="100" name="FieldTrim" editType="checkbox" extened="true"/>
         <Column label="FieldFullWidth" align="center" width="100" name="FieldFullWidth" editType="checkbox" extened="true"/>
+        <Column label="ColumnAlias" align="left" width="100" name="table.column.alias" editType="edit" extened="true"/>
         <Column label="TablePK" align="left" width="100" name="table.key" editType="checkbox" extened="true"/>
         <Column label="TableSeq" align="center" width="100" name="table.seq" editType="checkbox" extened="true"/>
         <Column label="TableDate" align="center" width="100" name="table.date" editType="checkbox" extened="true"/>
