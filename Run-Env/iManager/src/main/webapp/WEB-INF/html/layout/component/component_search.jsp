@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div class="ct-header" id="ImngSearchObject" style="display: none;">
-	<button type="button" class="btn-filter collapsed d-md-none" data-toggle="collapse" data-target="#collapse-filter">
+	<button type="button" class="btn-filter collapsed d-md-none" data-toggle="collapse" data-target="#collapse-filter" v-on:click="collapseFilter">
 		<fmt:message>head.searchFilter</fmt:message>
 		<i class="icon-down"></i>
 	</button>
@@ -56,7 +56,7 @@ var searchMethodOption = {
    		window.vmSearch.search();
    	},
    	pageSizeBlur: function() {
-   		return this.pageSize = 10 > window.vmSearch.pageSize ? 10 : window.vmSearch.pageSize;
+        return this.pageSize = 10 > window.vmSearch.pageSize ? 10 : window.vmSearch.pageSize;
    	},
    	collapseFilter: function() {
    		setTimeout(function() {

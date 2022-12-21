@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
 .wrap{height: 100vh}
-.ct-dashboard{overflow: hidden;background: #f5f6fb}
+.ct-dashboard{overflow: hidden;background: #f5f6fb !important;}
 #dashboard{display: flex;margin: 0 0 24px -1.5rem;padding-left: 1.5rem;overflow: hidden}
 #dashboard:before{content: '';height: calc(100vh - 152px)}
-#dashboard .card-body{background-repeat: no-repeat;background-position: 50% 50%;}
+#dashboard .card-body{background-repeat: no-repeat;background-position: 50% 50%;background: transparent;}
 #dashboard.widget-set-mode .card-body{background: none !important}
 
 /* dashboard */
@@ -155,44 +155,11 @@
 .widget-set>.row>[class*=col]{padding: 0 12px}
 
 /* transaction */
-.transaction{
-	position: relative;
-	display: flex;
-	align-items: center;
-	font-family: 'Nanum Gothic', 'Times New Roman', sans-serif;
-	height: calc(100% - 39px); 
-	max-height: 120px;
-	padding-bottom: 10px;
-}
-
-.transaction-info{
-	position: relative;
-	margin-left: 120px;
-	text-align: center;
-	width: calc(100% - 120px);
-	height:100%;
-	display: flex;
-	align-items: center;
-}
-
-.transaction-info:before{
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 0;
-	right: 0;
-	border-top: 1px solid #42C5E1;
-	margin-top: -1px
-}
-
-.transaction-legend {
-	margin-left: 120px;
-}
-
-.transaction-legend > .status {
-	font-size: 0.625rem;
-}
-
+.transaction{position: relative; display: flex; align-items: center; font-family: 'Nanum Gothic', 'Times New Roman', sans-serif; height: calc(100% - 39px); max-height: 120px; padding-bottom: 10px;}
+.transaction-info{position: relative; margin-left: 120px; text-align: center; width: calc(100% - 120px); height:100%; display: flex; align-items: center; }
+.transaction-info:before{content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #42C5E1; margin-top: -1px;}
+.transaction-legend {margin-left: 120px;}
+.transaction-legend > .status {font-size: 0.625rem;}
 .transaction-status{position: absolute;top: 50%;left: 0;background: #fff;transform: translateY(-50%);display: flex;align-items: center;line-height: 1.179}
 .transaction-status>span{opacity: .5;font-size: .75rem}
 .transaction-status .num{opacity: 1;font-size: 1.25rem;font-weight: 700;margin-left: .5rem}
@@ -205,299 +172,31 @@
 .transaction .ball{display: block;width: 95px;height: 14px;background: url(../img/dashboard/traffic-ball.svg) no-repeat 100% 50%}
 .traffic-ball .ball{width: 19.3482%;height: auto;padding-bottom: 2.8513%;background-size: auto 100%}
 .circle>i{position: absolute;background: inherit;border-radius: 100%;top: 0;left: 0}
-
 .btn [class*=icon-]{color: #8a8b92}
+.ui-selectable-helper {background: #42C5E1; opacity: 0.5; border:1px solid #42C5E1;}
 
-.ui-selectable-helper {
-	background: #42C5E1;
-	opacity: 0.5;
-	border:1px solid #42C5E1;
-}
+.tui-grid-cell {background-color: #fff;}
+.datatable tr>*{font-size: .625rem;}
 
-/* 응답 분포 드래그 */
-/* standard */
-.tui-grid-cell {
-	background-color: #fff;
-}
-
-/* dark */
-.dark .ui-selectable-helper {
-	background: #fff;
-	opacity: 0.5;
-	border:1px solid #fff;
-}
-
-/* 응답 분포 상세 */
-.dark .tui-grid-cell-header {
-	background-color: #292e47 !important;
-	color: rgba(255, 255, 255, .7);
-}
-
-.dark .tui-grid-cell {
-	background-color: #292e47;
-	color: rgba(255, 255, 255, .7);
-}
-
-.dark .tui-grid-row-hover .tui-grid-cell {
-	background-color: rgba(128, 128, 128, 0.4);
-}
-
-.dark .tui-grid-body-area {
-	background-color: #292e47;
-}
-
-.dark .tui-grid-header-area {
-	border-color: #545A77;
-	background-color: #292e47;
-}
-
-.dark .tui-grid-cell {
-	border-color: #545A77;
-}
-
-.dark .tui-grid-scrollbar-right-top {
-	border-color: #545A77;
-}
-
-.dark .tui-grid-scrollbar-right-bottom {
-	border-color: #545A77;
-}
-
-.dark .tui-grid-scrollbar-right-top {
-	background-color: #292e47;
-	color: rgba(255, 255, 255, .7);	
-}
-
-.dark .tui-grid-scrollbar-y-inner-border {
-	background-color: #545A77;
-}
-
-.dark .tui-grid-scrollbar-y-outer-border {
-	background-color: #545A77;
-}
-
-.dark .tui-grid-border-line-top {
-	border-top: 1px solid #545A77;
-}
-
-.dark .tui-grid-border-line-bottom {
-	border-bottom: 1px solid #545A77;
-}
-
-.dark .tui-grid-layer-state{
-	background-color: #292e47;
-	color: rgba(255, 255, 255, .7);
-}
-
-.datatable tr>*{
-	font-size: .625rem;
-}
-
-#dashContextMenu {
-	width: 180px;
-	z-index: 999999; 
-	border-radius: 4px;
-	background-color: #ffffff;
-	border: 1px solid #99a0bb;
-	color: #000000;
-	background-color: #ffffff;
-	overflow: hidden;
-}
-
-.dark #dashContextMenu {
-	background-color: #1f2337;
-	border: 1px solid #777fa6;
-	color: #fff;
-}
-
-#dashContextMenu li {
- 	padding: 3px;
-}
-
-#dashContextMenu li:hover, .contextMenuHover {
-	background: #eee;
-	color: #000;
-	cursor: pointer;
-}
-
-.dark #dashContextMenu li:hover, .dark .contextMenuHover {
-	background: #484f70;
-	color: #fff;
-}
-
-#dashContextSetting {
-	width: 300px;
-	height: 345px; 
-	z-index: 999999; 
-	border-radius: 8px;
-	background-color: #ffffff;
-	border: 1px solid #99a0bb;
-}
-
-.dark #dashContextSetting {
-	background-color: #1f2337;
-	border: 1px solid #777fa6;
-	color: #fff;
-}
-
-#dashContextSetting #contextMenuContainerList {
-	background: #ffffff;
-	padding-right: 0.5rem;
-}
-
-.dark #dashContextSetting #contextMenuContainerList {
-	background: #484f70;
-}
-
-.dark .nav-link:hover {
-	color: #fff;
-	background: #292e47;
-}
-
-.export-nav-link {
-	position: absolute;
-	top: .75rem;
-	right: .75rem;	
-}
-
-.card-header .icon-export, .card-header .icon-set {
-	cursor: pointer;	
-}
-
-#noticeArea {
-	position: absolute;
-	bottom: 0px; 
-	right: 0px;
-	border: 1px solid #ccc;
-	z-index: 999;
-	
-}
-
-.dark #noticeArea {
-	border: 1px solid #fff	
-}
-
-.componentHover {
-	border-radius: 10px;
-	position: absolute;
-	z-index: 9999;	
-	top: 3px;
-	left: 5px;
-}
-
-#prevCompoentHover {
-	background : rgba(101, 110, 183, 0.3);
-}
-#componentHover {
-	background : rgba(101, 110, 183, 0.3);
-}
-
-.dark #prevCompoentHover {
-	opacity: 0.8;
-}
-
-.dark #componentHover {
-	opacity: 0.8;
-}
-
-.chartjs-tooltip {
-	font-family: "Nanum Gothic";
-	font-size: 0.7rem;
-	font-style: normal;
-	pointer-events: none;
-}
-
-.resize-tooptip {
-	position: absolute;
-	background-color: #e6e8f6;
-    border-radius: 2px;
-    padding: 3px;
-	width: 60px;
-	height: 27px;
-} 
-
-.dark .resize-tooptip {
-	background-color: #343a40;
-}
-
-.filterModal .tui-grid-lside-area {
-	width: 38px !important;
-	border-left: 1px solid #aaa;
-	border-right: 1px solid #aaa;
-} 
-
-.filterModal .tui-grid-scrollbar-right-top{
-	border-right-color: #aaa;
-}
-
-.filterModal .tui-grid-scrollbar-y-outer-border{
-	background-color: #aaa;
-}
-
-.filterModal .tui-grid-scrollbar-right-bottom{
-	border-bottom: 1px solid #aaa;
-}
-
-.filterModal .tui-grid-layer-state{
-	border-left: 1px solid #aaa;
-}
-
-.dark .filterModal .tui-grid-lside-area {
-	width: 38px !important;
-	border-left: 1px solid #545A77;	
-	border-right: 1px solid #545A77;
-} 
-
-.dark .filterModal .tui-grid-scrollbar-right-top{
-	border-right-color: #545A77;
-}
-
-.dark .filterModal .tui-grid-scrollbar-y-outer-border{
-	background-color: #545A77;
-}
-
-.dark .filterModal .tui-grid-scrollbar-right-bottom{
-	border-bottom-color: 1px solid #545A77;
-}
-
-.dark .filterModal .tui-grid-layer-state{
-	border-left: 1px solid #545A77;
-}
-
-.dark .dark .filterModal .tui-grid-lside-area {
-	border-left: 1px solid #545A77;
-}
-
-.addHover {
-	position: absolute;
-	background-color: rgba(63, 88, 209, 0.5);
-	z-index: 2;
-	width: 100%;
-	height: 100%;
-}
-
-.addAreaHover {
-	position: absolute;
-	background-color: rgba(63, 88, 209, 0.8);
-	z-index: 3;
-}
-
-.dark .addHover {
-	background-color: rgba(236, 237, 242, 0.5);
-}
-
-.dark .addAreaHover {
-	background-color: rgba(236, 237, 242, 0.8);
-}
-
-.graph-caption .iconb-warn {
-	width: 0.925rem;
-	height: 0.925rem;
-	margin-left: 0.25rem;
-}
-
-.gate .iconb-warn {
-	width: 0.68rem;
-	height: 0.68rem;
-	margin-top: -2px;
-}
+#dashContextMenu {width: 180px; z-index: 999999; border-radius: 4px; background-color: #ffffff; border: 1px solid #99a0bb; color: #000000; background-color: #ffffff; overflow: hidden;}
+#dashContextMenu li {padding: 3px;}
+#dashContextMenu li:hover, .contextMenuHover {background: #eee; color: #000; cursor: pointer;}
+#dashContextSetting {width: 300px;height: 345px;z-index: 999999;border-radius: 8px;background-color: #ffffff;border: 1px solid #99a0bb;}
+#dashContextSetting #contextMenuContainerList {background: #ffffff;padding-right: 0.5rem;}
+.export-nav-link {position: absolute;top: .75rem;right: .75rem;}
+.card-header .icon-export, .card-header .icon-set {cursor: pointer;}
+#noticeArea {position: absolute;bottom: 0px;right: 0px;border: 1px solid #ccc;z-index: 999;}
+.componentHover {border-radius: 10px; position: absolute; z-index: 9999; top: 3px; left: 5px;}
+#prevCompoentHover {background : rgba(101, 110, 183, 0.3);}
+#componentHover {background : rgba(101, 110, 183, 0.3);}
+.chartjs-tooltip {font-family: "Nanum Gothic";font-size: 0.7rem;font-style: normal;pointer-events: none;}
+.resize-tooptip {position: absolute;background-color: #e6e8f6;border-radius: 2px;padding: 3px;width: 60px;height: 27px;} 
+.filterModal .tui-grid-lside-area {width: 38px !important;border-left: 1px solid #aaa;border-right: 1px solid #aaa;} 
+.filterModal .tui-grid-scrollbar-right-top{border-right-color: #aaa;}
+.filterModal .tui-grid-scrollbar-y-outer-border{background-color: #aaa;}
+.filterModal .tui-grid-scrollbar-right-bottom{border-bottom: 1px solid #aaa;}
+.filterModal .tui-grid-layer-state{border-left: 1px solid #aaa;}
+.addHover {position: absolute;background-color: rgba(63, 88, 209, 0.5);z-index: 2;width: 100%;height: 100%;}
+.addAreaHover {position: absolute;background-color: rgba(63, 88, 209, 0.8);z-index: 3;}
+.graph-caption .iconb-warn {width: 0.925rem;height: 0.925rem;margin-left: 0.25rem;}
+.gate .iconb-warn {width: 0.68rem;height: 0.68rem;margin-top: -2px;}

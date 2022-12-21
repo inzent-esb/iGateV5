@@ -17,4 +17,5 @@ var constants = {
 	logInTime: 300000,
 	//escape: 27, space: 32
 	modalCloseKeyCode: [27, 32],
+	isUseTheme: true,
 };
