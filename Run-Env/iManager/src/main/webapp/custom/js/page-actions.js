@@ -358,8 +358,10 @@ var JsonImngObj = {
 			var subname = name ? name + '.' + key : key;
 
 			if (value instanceof Array)
-				value.forEach(function (item, idx) {
-					JsonImngObj.serialize_sub(subname + '[' + idx + ']', item, newObject);
+				value.forEach(function (item, idx) {					
+					if ('object' !== typeof item) newObject.push(encodeURIComponent(subname + '[' + idx + ']') + '=' + encodeURIComponent(item) );
+					else JsonImngObj.serialize_sub(subname + '[' + idx + ']', item, newObject);
+					
 				});
 			else {
 				var vType = typeof value;
