@@ -164,7 +164,7 @@
 .moon #ct:not(.ct-dashboard) .ct-header .form-control-label.disabled, .moon #ct:not(.ct-dashboard) .ct-header .form-control-label.disabled .form-control{background-color: rgb(61, 63, 77);}
 .moon #ct:not(.ct-dashboard) .collapse-content{background-color: rgba(128, 128, 128, 0.3);}
 .moon #ct:not(.ct-dashboard) .collapse-content pre{color: #fff;}
-.moon #ct:not(.ct-dashboard) #panel .table thead th, .moon #ct:not(.ct-dashboard) .form-table-head>[class*=col]{background: rgba(128, 128, 128, 0.3);color: #fff;border-color: #8a8b92;}
+.moon #ct:not(.ct-dashboard) #panel .table thead th{background: rgba(128, 128, 128, 0.3);color: #fff;border-color: rgba(128, 128, 128, 0.3);}
 .moon #ct:not(.ct-dashboard) #panel .table td{border-color: #8a8b92;}
 .moon #ct:not(.ct-dashboard) #panel .table td.text-center.view-disabled.align-middle{background: transparent;}
 .moon #ct:not(.ct-dashboard) #panel .table tr:hover{background: rgba(128, 128, 128, 0.3) !important;}
@@ -300,7 +300,7 @@
 .moon > .modal .ct-header .form-control-label.disabled, .moon > .modal .ct-header .form-control-label.disabled .form-control{background-color: rgb(61, 63, 77);}
 .moon > .modal .collapse-content{background-color: rgba(128, 128, 128, 0.3);}
 .moon > .modal .collapse-content pre{color: #fff;}
-.moon > .modal #panel .table thead th, .moon > .modal .form-table-head>[class*=col]{background: rgba(128, 128, 128, 0.3);color: #fff;border-color: #8a8b92;}
+.moon > .modal #panel .table thead th{background: rgba(128, 128, 128, 0.3);color: #fff;border-color: rgba(128, 128, 128, 0.3);}
 .moon > .modal #panel .table td{border-color: #8a8b92;}
 .moon > .modal #panel .table td.text-center.view-disabled.align-middle{background: transparent;}
 .moon > .modal #panel .table tr:hover{background: rgba(128, 128, 128, 0.3) !important;}
