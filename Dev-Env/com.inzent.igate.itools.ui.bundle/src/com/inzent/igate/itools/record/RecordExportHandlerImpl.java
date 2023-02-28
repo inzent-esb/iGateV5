@@ -74,6 +74,7 @@ public class RecordExportHandlerImpl implements RecordExportHandler
 
     default :
       resultMap = null ;
+      break ;
     }
 
     if (null != resultMap)

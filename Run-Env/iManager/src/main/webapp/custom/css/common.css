@@ -954,6 +954,10 @@ input::-ms-reveal {
     overflow: hidden;
 }
 
+span.ellipsis {
+	display: inline-block;
+}
+
 .customLayout {
     width: 100%;
     height: 100%;
@@ -1084,3 +1088,19 @@ input::-ms-reveal {
 }
 
 .external-menu-url .logo{margin: 0 12px;}
+
+.userPrivileges *.admin { background-color: rgb(127,127,127) ; color: white; }
+.userPrivileges *.member { background-color: rgb(175,171,171); color: white; }
+.userPrivileges *.none { background-color: rgb(242,242,242); }
+
+.userPrivileges *.admin:hover { color: white; }
+.userPrivileges *.member:hover { color: white; }
+
+.customLayout .form-group {
+    margin-bottom: 1rem;
+}
+
+.propertyTab .form-control.readonly {
+    background: #f5f6fb;
+    pointer-events: none;
+}

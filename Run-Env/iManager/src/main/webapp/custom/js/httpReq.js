@@ -73,7 +73,7 @@ function HttpReq(url) {
 				if ('ok' == result.result) {
 					if ('read' !== mode) ResultImngObj.resultResponseHandler(result);
 
-					callback(result);
+					if(callback) callback(result);
 				} else {
 					$.ajax({
 						type: 'GET',

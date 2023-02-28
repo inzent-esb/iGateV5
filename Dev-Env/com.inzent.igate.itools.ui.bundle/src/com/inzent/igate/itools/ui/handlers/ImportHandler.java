@@ -176,7 +176,11 @@ public class ImportHandler extends AbstractImportHandler
     FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.MULTI) ;
 
     fileDialog.setText(String.format("%s %s", entityType, UiMessage.LABEL_IMPORT)) ;
-    fileDialog.setFilterPath("C:/") ;
+    /*
+     * Kiuwan
+     * Avoid absolute paths 처리
+     */
+    fileDialog.setFilterPath(System.getProperty("user.home")) ;
     fileDialog.setFilterExtensions(new String[] { MetaConstants.FILTER_FILE_EXTENDER_EXCEL1, MetaConstants.FILTER_FILE_EXTENDER_EXCEL2, MetaConstants.FILTER_FILE_EXTENDER_JSON }) ;
 
     String selectedPath = fileDialog.open() ;
@@ -207,7 +211,11 @@ public class ImportHandler extends AbstractImportHandler
     FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.MULTI) ;
 
     fileDialog.setText(String.format("%s %s", entityType, UiMessage.LABEL_IMPORT)) ;
-    fileDialog.setFilterPath("C:/") ;
+    /*
+     * Kiuwan
+     * Avoid absolute paths 처리
+     */
+    fileDialog.setFilterPath(System.getProperty("user.home")) ;
     fileDialog.setFilterExtensions(new String[] { MetaConstants.FILTER_FILE_EXTENDER_XML }) ;
 
     String selectedPath = fileDialog.open() ;

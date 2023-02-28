@@ -61,391 +61,414 @@
 		
 		document.querySelector('#daily').addEventListener('ready', function(evt) {
 			var viewer = 'true' == this.getAttribute('viewer');
-			
+
 			var createPageObj = getCreatePageObj();
-			
+
 			createPageObj.setViewName('daily');
 			createPageObj.setIsModal(false);
-			
-			createPageObj.setSearchList(
-				[
-					{
-						type: 'select',
-						name: '<fmt:message>igate.logStatistics.searchType</fmt:message>',
-						isHideAllOption: true,
-						changeEvt: 'initDatePicker',
-						mappingDataInfo: {
-							id: 'dailyTimes',
-							selectModel: 'object.searchType',
-							optionFor: 'option in dailyTimes',
-							optionValue: 'option.pk.propertyKey',
-							optionText: 'option.propertyValue',
-						}
-					},				
-					{
-						type: 'daterange',
-						name: '<fmt:message>igate.logStatistics.searchType</fmt:message>',
-						mappingDataInfo: {
-							daterangeInfo: [
-								{ id: 'fromDateTime', name: '<fmt:message>head.from</fmt:message>'},
-								{ id: 'toDateTime', name: '<fmt:message>head.to</fmt:message>'},
-							]							
-						}
-					},	
-					{
-						type: 'select',
-						name: '<fmt:message>igate.logStatistics.classification</fmt:message>',
-						placeholder: '<fmt:message>head.all</fmt:message>',
-						mappingDataInfo: {
-							id: 'statsTypes',
-							selectModel: 'object.pk.statsType',
-							optionFor: 'option in statsTypes',
-							optionValue: 'option.pk.propertyKey',
-							optionText: 'option.propertyValue',
-						}
-					},					
-				]
-			);
-			
+
+			createPageObj.setSearchList([
+			    {
+			        type: 'select',
+			        name: '<fmt:message>igate.logStatistics.searchType</fmt:message>',
+			        isHideAllOption: true,
+			        changeEvt: 'initDatePicker',
+			        mappingDataInfo: {
+			            id: 'dailyTimes',
+			            selectModel: 'object.searchType',
+			            optionFor: 'option in dailyTimes',
+			            optionValue: 'option.pk.propertyKey',
+			            optionText: 'option.propertyValue'
+			        }
+			    },
+			    {
+			        type: 'daterange',
+			        name: '<fmt:message>igate.logStatistics.searchType</fmt:message>',
+			        mappingDataInfo: {
+			            daterangeInfo: [
+			                {
+			                    id: 'fromDateTime',
+			                    name: '<fmt:message>head.from</fmt:message>'
+			                },
+			                { id: 'toDateTime', name: '<fmt:message>head.to</fmt:message>' }
+			            ]
+			        }
+			    },
+			    {
+			        type: 'select',
+			        name: '<fmt:message>igate.logStatistics.classification</fmt:message>',
+			        placeholder: '<fmt:message>head.all</fmt:message>',
+			        mappingDataInfo: {
+			            id: 'statsTypes',
+			            selectModel: 'object.pk.statsType',
+			            optionFor: 'option in statsTypes',
+			            optionValue: 'option.pk.propertyKey',
+			            optionText: 'option.propertyValue'
+			        }
+			    }
+			]);
+
 			createPageObj.searchConstructor();
-			
+
 			createPageObj.setMainButtonList({
-				newTabBtn: viewer,
-				searchInitBtn: viewer,
-				downloadBtn: viewer,
-				totalCount: viewer,
+			    newTabBtn: viewer,
+			    searchInitBtn: viewer,
+			    downloadBtn: viewer,
+			    totalCount: viewer
 			});
-			
+
 			createPageObj.mainConstructor();
-			
+
 			$('.empty').after($('#summaryTemplate'));
-			
-			(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.SearchType', orderByKey: true }, function(searchTypeResult) {
-				(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.LogStats.file.statsDataTypes', orderByKey: true }, function(statsDataTypesResult) {
-					window.vmSearch = new Vue({
-						el: '#' + createPageObj.getElementId('ImngSearchObject'),
-				    	data: {
-				    		pageSize : '10',
-				    		dailyTimes: [],
-				    		statsTypes: [],
-				    		object : {
-				    			searchType: 'D',
-				    			fromDateTime: null,
-				    			toDateTime: null,
-				    			pk: {
-				    				statsType: ' ',
-				    			}
-				    		},
-				    	},
-				    	methods: $.extend(true, {}, searchMethodOption, {
-							search: function() {
-								$('#summaryTemplate').removeAttr('id').show();
-								
-								vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-								
-								vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
-								
-								vmList.makeGridObj.search(this, function(result) {
-									vmList.totalCount = result.object.page.length;
 
-						        	vmList.requestCount = 0;
-						        	vmList.successCount = 0;
-						        	vmList.exceptionCount = 0;
-						        	vmList.timeoutCount = 0;
-									
-									result.object.page.forEach(function(info) {
-							        	vmList.requestCount += Number(info.requestCount);
-							        	vmList.successCount += Number(info.successCount);
-							        	vmList.exceptionCount += Number(info.exceptionCount);
-							        	vmList.timeoutCount += Number(info.timeoutCount);								
-									});
+			new HttpReq('/common/property/properties.json').read({ propertyId: 'List.LogStats.SearchType', orderByKey: true }, function (searchTypeResult) {
+			    new HttpReq('/common/property/properties.json').read({ propertyId: 'List.LogStats.file.statsDataTypes', orderByKey: true }, function (statsDataTypesResult) {
+			        window.vmSearch = new Vue({
+			            el: '#' + createPageObj.getElementId('ImngSearchObject'),
+			            data: {
+			                pageSize: '10',
+			                dailyTimes: [],
+			                statsTypes: [],
+			                object: {
+			                    searchType: 'D',
+			                    fromDateTime: null,
+			                    toDateTime: null,
+			                    pk: {
+			                        statsType: ' '
+			                    }
+			                }
+			            },
+			            methods: $.extend(true, {}, searchMethodOption, {
+			                search: function () {
+			                    $('#summaryTemplate').removeAttr('id').show();
 
-						        	vmList.requestCount = numberWithComma(vmList.requestCount);
-						        	vmList.successCount = numberWithComma(vmList.successCount);
-						        	vmList.exceptionCount = numberWithComma(vmList.exceptionCount);
-						        	vmList.timeoutCount = numberWithComma(vmList.timeoutCount);
-					            }.bind(this));
-							},					
-				            initSearchArea: function(searchCondition) {
-				            	if(searchCondition) {
-				            		for(var key in searchCondition) {
-				            		    this.$data[key] = searchCondition[key];
-				            		}
-				            	}else {
-				                	this.pageSize = '10';
-				                	this.object.searchType = 'D';
-				                	this.object.fromDateTime = null;
-				                	this.object.toDateTime = null;
-				                	this.object.pk.statsType = ' ';
-				            	}
-								
-				            	initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#statsTypes'), this.object.pk.statsType);
-				            	initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#dailyTimes'), this.object.searchType);
-				        		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
-				        		
-				        		this.initDatePicker();
-				            },
-				            initDatePicker: function() {
-				            	var dateFormat = 'D' === this.object.searchType? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
-				            	var date = new Date(this.object.fromDateTime? this.object.fromDateTime : Date.now());
-				            	
-				            	date.setHours(0);
-				            	date.setMinutes(0);
-				            	date.setSeconds(0);
-				            	date.setMilliseconds(0);
-				            	
-				            	this.object.fromDateTime = moment(date).format(dateFormat);
-				            	
-				            	date.setHours(23);
-				            	date.setMinutes(59);
-				            	date.setSeconds(59);
-				            	date.setMilliseconds(59);
-				            	
-				            	this.object.toDateTime = moment(date).format(dateFormat);
-				            	
-				            	var fromDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromDateTime');
-				            	var toDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toDateTime');
-				            	var datePickerInfo = {
-				            		format: dateFormat,
-				            		timePicker: 'D' !== this.object.searchType,		
-				            		timePickerSeconds: false,
-				            		isMinutueFix: 'H' === this.object.searchType, 
-						        };
-				            	
-				            	fromDateTime.customDateRangePicker('from', function(fromDateTime) {
-				            		this.object.fromDateTime = fromDateTime;
-				            		
-					            	toDateTime.customDateRangePicker('to', function(toDateTime) {
-					            		this.object.toDateTime = toDateTime;
-					            	}.bind(this), Object.assign({
-										startDate: this.object.fromDateTime, 
-										minDate: fromDateTime
-									}, datePickerInfo))	            		
-				            	}.bind(this), Object.assign({ startDate: this.object.fromDateTime }, datePickerInfo));
-				            },
-				    	}),
-				    	mounted: function() {
-				    		this.dailyTimes = searchTypeResult.object;
-				    		this.statsTypes = statsDataTypesResult.object;
+			                    vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
 
-			    			this.$nextTick(function() {
-			    				this.initSearchArea();
-			    			});
-				    	}
-				    });				
-					
-				    var vmList = new Vue({
-				        el: '#' + createPageObj.getElementId('ImngListObject'),
-				        data: {
-				        	makeGridObj: null,
-				        	totalCount: 0,
-				        	requestCount: 0,
-				        	successCount: 0,
-				        	exceptionCount: 0,
-				        	timeoutCount: 0,
-				        },        
-				        methods: $.extend(true, {}, listMethodOption, {
-				        	initSearchArea: function() {
-				        		window.vmSearch.initSearchArea();
-				        	},
-				        	downloadFile: function() {
-				        		var excelForm = document.createElement('form');
-				        		
-				        		['fromDateTime', 'toDateTime', 'pk.statsType', 'searchType'].forEach(function(key) {
-				        			var hiddenField = document.createElement('input');
-				        			
-				        			hiddenField.setAttribute('type', 'hidden');
-				        			hiddenField.setAttribute('name', key);
-				        			
-				        			var object = window.vmSearch.object;
-				        			var value = null;
-				        			
-				        			key.split('.').forEach(function(info) {
-				        				if ('object' === typeof(object[info]))  object = object[info];
-				        				else									value = object[info];
-				        			});
-				        			
-				        			hiddenField.setAttribute('value', null === value? '' : value);
-				        			
-				        			excelForm.appendChild(hiddenField);
-				        		});
-				        		
-		                        var data = new FormData(excelForm);
-		                        
-		                        window.$startSpinner();
+			                    vmList.makeGridObj.getSearchGrid().setPerPage(Number(this.pageSize));
 
-		                        var req = new XMLHttpRequest();
-		                        
-		                        req.open("POST", "${prefixUrl}/igate/logStatistics/generateExcelFileDaily.json", true);
+			                    vmList.makeGridObj.search(
+			                        this,
+			                        function (result) {
+			                            vmList.totalCount = result.object.page.length;
 
-		        				var csrfToken = JSON.parse(localStorage.getItem('csrfToken'));
-		        				req.setRequestHeader(csrfToken.headerName, csrfToken.token);
-		        				
-		        				req.withCredentials = true;
-		        				
-		                        req.responseType = "blob";
-		                        req.send(data);
-		                        
-		                        req.onload = function (event) {
-		                        	window.$stopSpinner();
-		                        	
-		                        	var blob = req.response;
-		                        	var file_name = "<fmt:message>igate.logStatistics.dailyStatistics</fmt:message>_<fmt:message>head.excel.output</fmt:message>_" + Date.now() + ".xlsx";
+			                            vmList.requestCount = 0;
+			                            vmList.successCount = 0;
+			                            vmList.exceptionCount = 0;
+			                            vmList.timeoutCount = 0;
 
-		                        	if (blob.size <= 0){
-		                        		window._alert({type: 'warn', message: "<fmt:message>head.fail.notice</fmt:message>"});
-		                                return;
-		                        	}
+			                            result.object.page.forEach(function (info) {
+			                                vmList.requestCount += Number(info.requestCount);
+			                                vmList.successCount += Number(info.successCount);
+			                                vmList.exceptionCount += Number(info.exceptionCount);
+			                                vmList.timeoutCount += Number(info.timeoutCount);
+			                            });
 
-		                        	if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-		                        		window.navigator.msSaveOrOpenBlob(blob, file_name);
-		                        	} else {
-		                        		var link = document.createElement('a');
-		                        		link.href = window.URL.createObjectURL(blob);
-		                        		link.download = file_name;
-		                        		link.click();
-		                        		URL.revokeObjectURL(link.href)
-		                        		link.remove();
-		                        	}
-		                        };
-				        	},
-				        }),
-				        mounted: function() {
-				        	this.makeGridObj = getMakeGridObj();
-				        	
-				        	this.makeGridObj.setConfig({
-				        		elementId: createPageObj.getElementId('ImngSearchGrid'),
-				        		searchUri: "/igate/logStatistics/fileDailyList.json",
-				        		viewMode: "${viewMode}",
-				              	popupResponse: "${popupResponse}",
-				              	popupResponsePosition: "${popupResponsePosition}",
-				                pageOptions: {
-				                	useClient: true,
-				                	perPage: 10
-				                },		              	
-				              	columns: [		              		
-									{
-										name: 'pk.logDateTime',
-										header: '<fmt:message>head.transaction</fmt:message>' + ' ' + '<fmt:message>head.date</fmt:message>',
-										align: 'center',
-										width: '20%',
-										sortable: true,
-									},
-									{
-										name: 'pk.statsType',
-										header: '<fmt:message>igate.logStatistics.classification</fmt:message>',
-										align: 'center',
-										width: '20%',
-										formatter: function(info) {
-											if ('I' === info.value) return '<fmt:message>head.online.interface</fmt:message>';
-											else if ('O' === info.value) return '<fmt:message>head.online.service</fmt:message>';
-											else if ('R' === info.value) return '<fmt:message>head.file.interface</fmt:message>';
-											else if ('S' === info.value) return '<fmt:message>head.file.service</fmt:message>';
-										},
-									},	
-									{
-										name: 'requestCount',
-										header: '<fmt:message>igate.logStatistics.requestCount</fmt:message>',
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(info.row.requestCount);
-										}
-									},
-									{
-										name: 'successCount',
-										header: '<fmt:message>igate.logStatistics.successCount</fmt:message>',
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(info.row.successCount);
-										}								
-									},
-									{
-										name: 'exceptionCount',
-										header: '<fmt:message>igate.logStatistics.exceptionCount</fmt:message>',
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(info.row.exceptionCount);
-										}								
-									},
-									{
-										name: 'timeoutCount',
-										header: '<fmt:message>igate.logStatistics.timeoutCount</fmt:message>',
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(info.row.timeoutCount);
-										}								
-									},
-									{
-										name: 'responseTotal',
-										header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>' + " (ms)",
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(info.row.responseTotal);
-										}								
-									},
-									{
-										name: 'responseMax',
-										header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>' + " (ms)",
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(info.row.responseMax);
-										}								
-									},	
-									{
-										name: 'fileSizeTotal',
-										header: '<fmt:message>igate.logStatistics.fileSizeTotal</fmt:message>' + " (kb)",
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(getFileSize(info.row.fileSizeTotal));
-										}								
-									},
-									{
-										name: 'fileSizeMax',
-										header: '<fmt:message>igate.logStatistics.fileSizeMax</fmt:message>' + " (kb)",
-										align: 'right',
-										width: '15%',
-										sortable: true,
-										formatter: function(info) {
-											return numberWithComma(getFileSize(info.row.fileSizeMax));
-										}								
-									},							
-				              	]        	    
-				        	});
-				        	
-				        	SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
-				        	
-				        	if(this.newTabSearchGrid()) {
-				            	this.$nextTick(function() {
-				            		window.vmSearch.search();	
-				            	});        		
-				        	}		        	
-				        }
-				    });						
-				});
+			                            vmList.requestCount = numberWithComma(vmList.requestCount);
+			                            vmList.successCount = numberWithComma(vmList.successCount);
+			                            vmList.exceptionCount = numberWithComma(vmList.exceptionCount);
+			                            vmList.timeoutCount = numberWithComma(vmList.timeoutCount);
+			                        }.bind(this)
+			                    );
+			                },
+			                initSearchArea: function (searchCondition) {
+			                    if (searchCondition) {
+			                        for (var key in searchCondition) {
+			                            this.$data[key] = searchCondition[key];
+			                        }
+			                    } else {
+			                        this.pageSize = '10';
+			                        this.object.searchType = 'D';
+			                        this.object.fromDateTime = null;
+			                        this.object.toDateTime = null;
+			                        this.object.pk.statsType = ' ';
+			                    }
+
+			                    initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#statsTypes'), this.object.pk.statsType);
+			                    initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#dailyTimes'), this.object.searchType);
+			                    initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
+
+			                    this.initDatePicker();
+			                },
+			                initDatePicker: function () {
+			                    var dateFormat = 'D' === this.object.searchType ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+			                    var date = new Date(this.object.fromDateTime ? this.object.fromDateTime : Date.now());
+
+			                    date.setHours(0);
+			                    date.setMinutes(0);
+			                    date.setSeconds(0);
+			                    date.setMilliseconds(0);
+
+			                    this.object.fromDateTime = moment(date).format(dateFormat);
+
+			                    date.setHours(23);
+			                    date.setMinutes(59);
+			                    date.setSeconds(59);
+			                    date.setMilliseconds(59);
+
+			                    this.object.toDateTime = moment(date).format(dateFormat);
+
+			                    var fromDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromDateTime');
+			                    var toDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toDateTime');
+			                    var datePickerInfo = {
+			                        format: dateFormat,
+			                        timePicker: 'D' !== this.object.searchType,
+			                        timePickerSeconds: false,
+			                        isMinutueFix: 'H' === this.object.searchType
+			                    };
+
+			                    fromDateTime.customDateRangePicker(
+			                        'from',
+			                        function (fromDateTime) {
+			                            this.object.fromDateTime = fromDateTime;
+
+			                            toDateTime.customDateRangePicker(
+			                                'to',
+			                                function (toDateTime) {
+			                                    this.object.toDateTime = toDateTime;
+			                                }.bind(this),
+			                                Object.assign(
+			                                    {
+			                                        startDate: this.object.fromDateTime,
+			                                        minDate: fromDateTime
+			                                    },
+			                                    datePickerInfo
+			                                )
+			                            );
+			                        }.bind(this),
+			                        Object.assign(
+			                            {
+			                                startDate: this.object.fromDateTime
+			                            },
+			                            datePickerInfo
+			                        )
+			                    );
+			                }
+			            }),
+			            mounted: function () {
+			                this.dailyTimes = searchTypeResult.object;
+			                this.statsTypes = statsDataTypesResult.object;
+
+			                this.$nextTick(function () {
+			                    this.initSearchArea();
+			                });
+			            }
+			        });
+
+			        var vmList = new Vue({
+			            el: '#' + createPageObj.getElementId('ImngListObject'),
+			            data: {
+			                makeGridObj: null,
+			                totalCount: 0,
+			                requestCount: 0,
+			                successCount: 0,
+			                exceptionCount: 0,
+			                timeoutCount: 0
+			            },
+			            methods: $.extend(true, {}, listMethodOption, {
+			                initSearchArea: function () {
+			                    window.vmSearch.initSearchArea();
+			                },
+			                downloadFile: function () {
+			                    var excelForm = document.createElement('form');
+
+			                    ['fromDateTime', 'toDateTime', 'pk.statsType', 'searchType'].forEach(function (key) {
+			                        var hiddenField = document.createElement('input');
+
+			                        hiddenField.setAttribute('type', 'hidden');
+			                        hiddenField.setAttribute('name', key);
+
+			                        var object = window.vmSearch.object;
+			                        var value = null;
+
+			                        key.split('.').forEach(function (info) {
+			                            if ('object' === typeof object[info]) object = object[info];
+			                            else value = object[info];
+			                        });
+
+			                        hiddenField.setAttribute('value', null === value ? '' : value);
+
+			                        excelForm.appendChild(hiddenField);
+			                    });
+
+			                    var data = new FormData(excelForm);
+
+			                    window.$startSpinner();
+
+			                    var req = new XMLHttpRequest();
+
+			                    req.open('POST', '${prefixUrl}/igate/logStatistics/generateExcelFileDaily.json', true);
+
+			                    var csrfToken = JSON.parse(localStorage.getItem('csrfToken'));
+			                    req.setRequestHeader(csrfToken.headerName, csrfToken.token);
+
+			                    req.withCredentials = true;
+
+			                    req.responseType = 'blob';
+			                    req.send(data);
+
+			                    req.onload = function (event) {
+			                        window.$stopSpinner();
+
+			                        var blob = req.response;
+			                        var file_name = '<fmt:message>igate.logStatistics.dailyStatistics</fmt:message>_<fmt:message>head.excel.output</fmt:message>_' + Date.now() + '.xlsx';
+
+			                        if (blob.size <= 0) {
+			                            window._alert({
+			                                type: 'warn',
+			                                message: '<fmt:message>head.fail.notice</fmt:message>'
+			                            });
+			                            return;
+			                        }
+
+			                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+			                            window.navigator.msSaveOrOpenBlob(blob, file_name);
+			                        } else {
+			                            var link = document.createElement('a');
+			                            link.href = window.URL.createObjectURL(blob);
+			                            link.download = file_name;
+			                            link.click();
+			                            URL.revokeObjectURL(link.href);
+			                            link.remove();
+			                        }
+			                    };
+			                }
+			            }),
+			            mounted: function () {
+			                this.makeGridObj = getMakeGridObj();
+
+			                this.makeGridObj.setConfig({
+			                    elementId: createPageObj.getElementId('ImngSearchGrid'),
+			                    searchUri: '/igate/logStatistics/fileDailyList.json',
+			                    viewMode: '${viewMode}',
+			                    popupResponse: '${popupResponse}',
+			                    popupResponsePosition: '${popupResponsePosition}',
+			                    pageOptions: {
+			                        useClient: true,
+			                        perPage: 10
+			                    },
+			                    columns: [
+			                        {
+			                            name: 'pk.logDateTime',
+			                            header: '<fmt:message>head.transaction</fmt:message>' + ' ' + '<fmt:message>head.date</fmt:message>',
+			                            align: 'center',
+			                            width: '20%',
+			                            sortable: true
+			                        },
+			                        {
+			                            name: 'pk.statsType',
+			                            header: '<fmt:message>igate.logStatistics.classification</fmt:message>',
+			                            align: 'center',
+			                            width: '20%',
+			                            formatter: function (info) {
+			                                if ('I' === info.value) return '<fmt:message>head.online.interface</fmt:message>';
+			                                else if ('O' === info.value) return '<fmt:message>head.online.service</fmt:message>';
+			                                else if ('R' === info.value) return '<fmt:message>head.file.interface</fmt:message>';
+			                                else if ('S' === info.value) return '<fmt:message>head.file.service</fmt:message>';
+			                            }
+			                        },
+			                        {
+			                            name: 'requestCount',
+			                            header: '<fmt:message>igate.logStatistics.requestCount</fmt:message>',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(info.row.requestCount);
+			                            }
+			                        },
+			                        {
+			                            name: 'successCount',
+			                            header: '<fmt:message>igate.logStatistics.successCount</fmt:message>',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(info.row.successCount);
+			                            }
+			                        },
+			                        {
+			                            name: 'exceptionCount',
+			                            header: '<fmt:message>igate.logStatistics.exceptionCount</fmt:message>',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(info.row.exceptionCount);
+			                            }
+			                        },
+			                        {
+			                            name: 'timeoutCount',
+			                            header: '<fmt:message>igate.logStatistics.timeoutCount</fmt:message>',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(info.row.timeoutCount);
+			                            }
+			                        },
+			                        {
+			                            name: 'responseTotal',
+			                            header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>' + ' (ms)',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(info.row.responseTotal);
+			                            }
+			                        },
+			                        {
+			                            name: 'responseMax',
+			                            header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>' + ' (ms)',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(info.row.responseMax);
+			                            }
+			                        },
+			                        {
+			                            name: 'fileSizeTotal',
+			                            header: '<fmt:message>igate.logStatistics.fileSizeTotal</fmt:message>' + ' (kb)',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(getFileSize(info.row.fileSizeTotal));
+			                            }
+			                        },
+			                        {
+			                            name: 'fileSizeMax',
+			                            header: '<fmt:message>igate.logStatistics.fileSizeMax</fmt:message>' + ' (kb)',
+			                            align: 'right',
+			                            width: '15%',
+			                            sortable: true,
+			                            formatter: function (info) {
+			                                return numberWithComma(getFileSize(info.row.fileSizeMax));
+			                            }
+			                        }
+			                    ]
+			                });
+
+			                SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
+
+			                if (this.newTabSearchGrid()) {
+			                    this.$nextTick(function () {
+			                        window.vmSearch.search();
+			                    });
+			                }
+			            }
+			        });
+			    });
 			});
-		    
-			this.addEventListener('destroy', function(evt) {
-				$('body').removeClass('searchTypeDaily');
-				$(".daterangepicker").remove();
-				$(".ui-datepicker").remove();
-				$(".backdrop").remove();
-				$(".modal").remove();
-				$(".modal-backdrop").remove();
-				$('#ct').find('script').remove();
+
+			this.addEventListener('destroy', function (evt) {
+			    $('body').removeClass('searchTypeDaily');
+			    $('.daterangepicker').remove();
+			    $('.ui-datepicker').remove();
+			    $('.backdrop').remove();
+			    $('.modal').remove();
+			    $('.modal-backdrop').remove();
+			    $('#ct').find('script').remove();
 			});
 		});	
 	</script>

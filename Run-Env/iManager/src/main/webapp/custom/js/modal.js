@@ -165,7 +165,7 @@ function initModalArea(modalId, spinnerMode, shownCallBackFunc) {
 
 		var rafId = requestAnimationFrame(step);
 	});
-
+	
 	$('#' + modalId).on('shown.bs.modal', function (e) {
 		if (shownCallBackFunc) shownCallBackFunc();
 
@@ -175,7 +175,6 @@ function initModalArea(modalId, spinnerMode, shownCallBackFunc) {
 	});
 
 	$('#' + modalId).on('hidden.bs.modal', function (e) {
-		window.$stopSpinner();
 		$('#' + modalId).remove();
 	});
 }

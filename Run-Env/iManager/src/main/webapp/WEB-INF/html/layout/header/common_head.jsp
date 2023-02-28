@@ -29,6 +29,8 @@ var scriptInfoArr = [
  	{'url': "/js/aes.js"},
  	{'url': "/js/moment.min.js"},
  	{'url': "/js/daterangepicker.min.js"},
+ 	{'url': "/js/cytoscape.min.js"},
+ 	{'url': "/js/xml2json.js"},
  	{'url': "/js/polyfill.js"},
  	{'url': "/js/httpReq.js"},
  	{'url': "/js/constants.js" },

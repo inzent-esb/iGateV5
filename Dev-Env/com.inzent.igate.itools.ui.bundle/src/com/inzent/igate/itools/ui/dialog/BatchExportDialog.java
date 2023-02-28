@@ -125,7 +125,11 @@ public class BatchExportDialog extends Dialog
     public void widgetSelected(SelectionEvent event)
     {
       DirectoryDialog dirDialog = new DirectoryDialog(Display.getCurrent().getActiveShell()) ;
-      dirDialog.setFilterPath("C:/") ; //$NON-NLS-1$
+      /*
+       * Kiuwan
+       * Avoid absolute paths 처리
+       */
+      dirDialog.setFilterPath(System.getProperty("user.home")) ;
       String selected = dirDialog.open() ;
       
       if(selected != null) 

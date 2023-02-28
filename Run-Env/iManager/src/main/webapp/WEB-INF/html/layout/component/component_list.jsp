@@ -53,25 +53,27 @@
 
 <script type="text/javascript">
 var listMethodOption = {
-   	goSavePanel: function() {
-   		panelOpen('add');
-   	},
-    goNewTab: function() {
-    	localStorage.setItem(this.$el.id + '-newTabSearchCondition', JSON.stringify(window.vmSearch.$data));
-    	window.open(window.location.href) ;
+    goSavePanel: function () {
+        panelOpen('add');
     },
-    newTabSearchGrid: function() {
-    	if(!localStorage.getItem(this.$el.id + '-newTabSearchCondition')) return false;
-    		
-    	var newTabSearchCondition = JSON.parse(localStorage.getItem(this.$el.id + '-newTabSearchCondition'));
-    	
-    	localStorage.removeItem(this.$el.id + '-newTabSearchCondition');
-    	
-    	window.vmSearch.$nextTick(function() {
-        	window.vmSearch.initSearchArea(newTabSearchCondition);    		
-    	}.bind(this));
-    	
-    	return true;
+    goNewTab: function () {
+        localStorage.setItem(this.$el.id + '-newTabSearchCondition', JSON.stringify(window.vmSearch.$data));
+        window.open(window.location.href);
+    },
+    newTabSearchGrid: function () {
+        if (!localStorage.getItem(this.$el.id + '-newTabSearchCondition')) return false;
+
+        var newTabSearchCondition = JSON.parse(localStorage.getItem(this.$el.id + '-newTabSearchCondition'));
+
+        localStorage.removeItem(this.$el.id + '-newTabSearchCondition');
+
+        window.vmSearch.$nextTick(
+            function () {
+                window.vmSearch.initSearchArea(newTabSearchCondition);
+            }.bind(this)
+        );
+
+        return true;
     }
 };
 </script>

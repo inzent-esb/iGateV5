@@ -193,8 +193,7 @@ var SaveImngObj = {
 
 	submit: function (uri, data, message, callback, modalMode) {
 		var successFunc = function (result) {
-			if (SearchImngObj.searchGrid) 
-				window.vmSearch.search();
+			if (SearchImngObj.searchGrid) window.vmSearch.search();
 			
 			window._alert({
 				type: 'normal',
@@ -202,10 +201,9 @@ var SaveImngObj = {
 				backdropMode: modalMode,
 			});			
 			
-			panelOpen('done');
-
-			if (callback) 
-				callback(result);
+			if('DELETE' !== data._method) panelOpen('done');
+			
+			if (callback) callback();
 		};
 
 		var httpReq = new HttpReq(uri);
@@ -224,24 +222,22 @@ var SaveImngObj = {
 			}, true);
 	},
 
-	insertSubmit: function (data, message) {
+	insertSubmit: function (data, message, callback) {
 		data._method = 'PUT';
-		SaveImngObj.submit(SaveImngObj.objectUri, data, message);
+		SaveImngObj.submit(SaveImngObj.objectUri, data, message, callback);
 	},
 
-	updateSubmit: function (data, message) {
+	updateSubmit: function (data, message, callback) {
 		data._method = 'POST';
-		SaveImngObj.submit(SaveImngObj.objectUri, data, message);
+		SaveImngObj.submit(SaveImngObj.objectUri, data, message, callback);
 	},
 
-	deleteSubmit: function (data, message) {
+	deleteSubmit: function (data, message, callback) {
 		data._method = 'DELETE';
-		SaveImngObj.submit(SaveImngObj.objectUri, data, message, function (result) {
-			if ('ok' == result.result) panelClose('panel');
-		});
+		SaveImngObj.submit(SaveImngObj.objectUri, data, message, callback);
 	},
 
-	insert: function (message) {
+	insert: function (message, callback) {
 		var vmMain = window.vmMain;
 		var object = vmMain.object;
 
@@ -255,7 +251,7 @@ var SaveImngObj = {
 		this.insertSubmit(object, message);
 	},
 
-	update: function (message) {
+	update: function (message, callback) {
 		var vmMain = window.vmMain;
 		var object = vmMain.object;
 		for (var key in object) {
@@ -268,11 +264,14 @@ var SaveImngObj = {
 		this.updateSubmit(object, message);
 	},
 
-	remove: function (confirm, message) {
+	remove: function (confirm, message, callback) {
 		window._confirm({
 			type: 'normal',
 			message: confirm,
 			callBackFunc: function () {
+
+				window.$startSpinner();
+				
 				var vmMain = window.vmMain;
 				var object = vmMain.object;
 
@@ -284,40 +283,64 @@ var SaveImngObj = {
 
 				if (vmMain.saving) vmMain.saving();
 
-				this.deleteSubmit(object, message);
+				this.deleteSubmit(object, message, callback);
 			}.bind(this),
 		});
 	},
 };
 
 var ControlImngObj = {
-  controlUri: null,
+	controlUri: null,
 
-  setConfig: function(instanceSettings) {
-	  
+	setConfig: function(instanceSettings) {
 	  ControlImngObj.controlUri = instanceSettings.controlUri;
-  },
-
-  control: function(command, instance, data) {
-	  var param = {
-			  command: command
-	  } ; 
-	 	  
-	  if (instance)
-		  param['instance'] = instance ;
-	  
-	  var httpReq = new HttpReq(ControlImngObj.controlUri + "?" + $.param(param));
-	  	  
-	  httpReq.update(data, function () {
-		  window.$stopSpinner	  
-	  }, true);    
-    
-  },
-
-  dump : function() {
-	  this.control("dump", null, JsonImngObj.serialize(window.vmMain.pk)) ;
-  },
-} ;
+	},
+	control: function(command, data, callback) {
+		new HttpReq(ControlImngObj.controlUri + "?" + $.param({ command : command })).update(data, callback, true);
+	},
+	gridControl: function(command, controlParams) {
+		var checkedRows = SearchImngObj.searchGrid.getCheckedRows();
+		
+		if(checkedRows.length == 0) {
+			window._alert({ type: 'normal', message: noSelect});
+			return;
+		}
+		
+		window.$startSpinner();
+		
+		getGridControlResult(0)
+		
+		function getGridControlResult(idx) {
+			var item = checkedRows[idx];
+			
+			SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', running);
+			
+			var url = ControlImngObj.controlUri + "?" + $.param({ command : command });
+			 
+			 new HttpReq(url).update(controlParams(item), function (result) {
+				 if('ok' === result.result) {
+					 if (result.response[0].success) {
+						 SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', command + " was successed") ;
+						 SearchImngObj.searchGrid.setValue(item.rowKey, 'status', result.object.status);						  
+					 } else {
+						 SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', result.response[0].response) ;
+					 }
+				 } else {
+					 SearchImngObj.searchGrid.setValue(row.rowKey, 'processResult', command + " was failed") ;
+				 }
+				 
+				 if(idx == checkedRows.length - 1) window.$stopSpinner();
+				 else getGridControlResult(idx+1);				 
+			 });
+		};
+	},
+	dump : function() {
+		this.control('dump', JsonImngObj.serialize(window.vmMain.pk)) ;
+	},
+	load : function() {
+		this.control('dump', JsonImngObj.serialize(window.vmMain.pk)) ;
+	},
+};
 
 var JsonImngObj = {
 	planarize: function (object) {

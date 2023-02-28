@@ -72,10 +72,16 @@
 			</div>
 			
 			<footer id="panel-footer" class="panel-footer sub-bar">
-				<div class="ml-auto">
+				<div class="ml-auto">				
+					<a href="javascript:void(0);" id="guideBtn"    	   class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="guide"		title="<fmt:message>igate.connector.guide</fmt:message>"><fmt:message>igate.connector.guide</fmt:message></a>
+					<a href="javascript:void(0);" id="externalGuideBtn"class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="externalGuide"title="<fmt:message>igate.external.guide</fmt:message>"><fmt:message>igate.external.guide</fmt:message></a>
+					<a href="javascript:void(0);" id="dumpBtn"   	   class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="dump"		 	title="<fmt:message>head.dump</fmt:message>"><fmt:message>head.dump</fmt:message></a>
+					<a href="javascript:void(0);" id="startBtn"        class="viewGroup btn btn-m"    				    style="display: none;" 	  v-on:click="start" 		title="<fmt:message>head.execute</fmt:message>"><i class="icon-play"></i><fmt:message>head.execute</fmt:message></a>			
 					<a href="javascript:void(0);" id="stopBtn"    	   class="btn viewGroup" 	    		           	style="display: none;"    v-on:click="stop"		 	title="<fmt:message>head.stop</fmt:message>"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
 					<a href="javascript:void(0);" id="stopForceBtn"    class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="stopForce" 	title="<fmt:message>head.stop.force</fmt:message>"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>
-					<a href="javascript:void(0);" id="dumpBtn"   	   class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="dump"		 	title="<fmt:message>head.dump</fmt:message>"><fmt:message>head.dump</fmt:message></a>
+					<a href="javascript:void(0);" id="interruptBtn"    class="viewGroup btn btn-m"    				 	style="display: none;" 	  v-on:click="interrupt" 	title="<fmt:message>head.interrupt</fmt:message>"><fmt:message>head.interrupt</fmt:message></a>
+					<a href="javascript:void(0);" id="blockBtn" 	   class="viewGroup btn btn-m"    				 	style="display: none;" 	  v-on:click="block"		title="<fmt:message>head.block</fmt:message>"><fmt:message>head.block</fmt:message></a>
+					<a href="javascript:void(0);" id="unblockBtn" 	   class="viewGroup btn btn-m"   				 	style="display: none;" 	  v-on:click="unblock" 		title="<fmt:message>head.unblock</fmt:message>"><fmt:message>head.unblock</fmt:message></a>					
 					<a href="javascript:void(0);" id="removeBtn"       class="btn viewGroup removeBtn" 		  		   	style="display: none;"    v-on:click="removeInfo"	title="<fmt:message>head.delete</fmt:message>"><i class="icon-delete"></i><fmt:message>head.delete</fmt:message></a>
 					<a href="javascript:void(0);" id="goModBtn"        class="btn viewGroup goModBtn" 		  		   	style="display: none;"    v-on:click="goModifyPanel"title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>						
 					<a href="javascript:void(0);" id="saveBtn"         class="btn btn-primary saveGroup saveBtn" 	   	style="display: none;"    v-on:click="saveInfo"		title="<fmt:message>head.insert</fmt:message>"><fmt:message>head.insert</fmt:message></a>
@@ -125,6 +131,15 @@ var panelMethodOption = {
 			document.querySelector('#panel .panel-content').style.height = null;
 		}
 		
+		localStorage.setItem(
+			'detailLayoutInfo_' + menuId,
+			JSON.stringify({
+				panelLayoutDirection: document.querySelector('#panel').classList.contains('horizon') ? 'horizon' : 'vertical',
+				panelContentStyle: panelContentStyle,
+				screenType: screenType,
+			})
+		);
+		
    		$('#panel').toggleClass('expand');
 		
    		windowResizeSearchGrid();
@@ -137,13 +152,16 @@ var panelMethodOption = {
 		}   		
    	}, 	
    	removeInfo: function() {
-   		SaveImngObj.remove('<fmt:message>dashboard.delete.warn</fmt:message>', '<fmt:message>dashboard.delete.success</fmt:message>');
+   		SaveImngObj.remove('<fmt:message>dashboard.delete.warn</fmt:message>', '<fmt:message>dashboard.delete.success</fmt:message>', this.closePanel);
    	},
    	updateInfo: function() {
    		SaveImngObj.update('<fmt:message>head.update.notice</fmt:message>');
    	},
    	saveInfo: function() {
    		SaveImngObj.insert('<fmt:message>head.insert.notice</fmt:message>');
+   	},
+   	load: function() {
+   		ControlImngObj.load();
    	},
    	dump: function() {
    		ControlImngObj.dump();
@@ -161,6 +179,14 @@ var panelMethodOption = {
 		document.querySelector('#panel .panel-content').style.width = panelContentStyle.width;
 		document.querySelector('#panel .panel-content').style.height = panelContentStyle.height;
 		document.querySelector('#panel .panel-content').style['margin-left'] = panelContentStyle['margin-left'];
+	
+		var isModMode = $('body').hasClass('panel-open-mod');
+		
+		if (document.querySelector('#panel .sub-bar-tit'))
+			document.querySelector('#panel .sub-bar-tit').style.width = 'calc(100% - ' + (isModMode ? 170 : 125) + 'px)';
+		
+		if (document.querySelector('#panel .sub-bar-selected-tit'))
+			document.querySelector('#panel .sub-bar-selected-tit').style.width = 'calc(100% - ' + (isModMode ? 80 : 65) + 'px)';	 	
 		
 		if (document.querySelector('#panel').classList.contains('vertical')) {
 			document.querySelector('.customLayout > [data-ready]').classList.remove('horizon');

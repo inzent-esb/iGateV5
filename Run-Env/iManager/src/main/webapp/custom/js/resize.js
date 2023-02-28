@@ -33,16 +33,16 @@ function resizeSearchGrid() {
 
 	SearchImngObj.searchGrid.setWidth(adjustWidth);
 
-	$('[data-ready]').children('.ct-content').find('.table-responsive').width(adjustWidth);
+	$('#' + window.mainListAreaId).find('.table-responsive').width(adjustWidth);
 
 	//height
 	var adjustHeight = 0;
 
 	adjustHeight += window.innerHeight - ($('#ct').innerHeight() - $('#ct').height());
 
-	adjustHeight -= $('[data-ready]').children('.ct-header').outerHeight(true);
+	adjustHeight -= $('#' + window.mainSearchAreaId).outerHeight(true);
 
-	$.each($('[data-ready]').children('.ct-content').children().not('.table-responsive, .empty'), function (index, element) {
+	$.each($('#' + window.mainListAreaId).children().not('.table-responsive, .empty'), function (index, element) {
 		adjustHeight -= $(element).outerHeight(true);
 	});
 

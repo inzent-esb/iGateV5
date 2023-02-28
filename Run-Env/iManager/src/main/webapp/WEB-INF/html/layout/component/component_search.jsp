@@ -48,21 +48,21 @@
 
 <script type="text/javascript">
 var searchMethodOption = {
-	pageSizeInput: function() {
-   		return this.pageSize = this.pageSize.replace(/constants.regExpList.pageSize/g, '');
-   	},
-   	pageSizeEnter: function(e) {
-   		e.target.blur();
-   		window.vmSearch.search();
-   	},
-   	pageSizeBlur: function() {
-        return this.pageSize = 10 > window.vmSearch.pageSize ? 10 : window.vmSearch.pageSize;
-   	},
-   	collapseFilter: function() {
-   		setTimeout(function() {
-   			windowResizeSearchGrid();
-   		}, 0);
-   	}
+    pageSizeInput: function () {
+        return (this.pageSize = this.pageSize.replace(/constants.regExpList.pageSize/g, ''));
+    },
+    pageSizeEnter: function (e) {
+        e.target.blur();
+        window.vmSearch.search();
+    },
+    pageSizeBlur: function () {
+        return (this.pageSize = 10 > window.vmSearch.pageSize ? 10 : window.vmSearch.pageSize);
+    },
+    collapseFilter: function () {
+        setTimeout(function () {
+            windowResizeSearchGrid();
+        }, 0);
+    }
 };
 </script>
    	

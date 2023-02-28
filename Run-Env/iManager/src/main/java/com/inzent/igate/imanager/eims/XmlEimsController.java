@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils ;
 import org.dom4j.Document ;
 import org.dom4j.DocumentFactory ;
 import org.dom4j.Element ;
-import org.dom4j.dom.DOMDocumentFactory ;
 import org.dom4j.io.OutputFormat ;
 import org.dom4j.io.SAXReader ;
 import org.dom4j.io.XMLWriter ;
@@ -185,7 +184,7 @@ public class XmlEimsController extends AbstractEimsController
   {
     List<Object> objects = new LinkedList<>() ;
 
-    Document document = new SAXReader(DOMDocumentFactory.getInstance()).read(request.getInputStream()) ;
+    Document document = SAXReader.createDefault().read(request.getInputStream()) ;
     Element root = document.getRootElement() ;
 
     for (Element interfaceElement : root.elements(ELEMENT_IF))

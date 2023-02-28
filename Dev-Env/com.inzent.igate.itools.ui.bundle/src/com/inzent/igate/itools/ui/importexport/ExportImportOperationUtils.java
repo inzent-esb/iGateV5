@@ -71,8 +71,14 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
     }
 
     try
-    {
-      Document doc = new SAXReader().read(new ByteArrayInputStream(operation.getOperationRule()));
+    {	
+    	  
+      /* Kiuwan - XML entity injection 처리 */
+      SAXReader saxReader = new SAXReader();
+      saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      saxReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      saxReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);      
+      Document doc = saxReader.read(new ByteArrayInputStream(operation.getOperationRule()));
 
       Element root = doc.getRootElement();
       root.addAttribute(OperationNode.XML_ATTRIBUTE_ID, operation.getOperationId()) ; // operationId
@@ -193,9 +199,14 @@ public class ExportImportOperationUtils implements Exporter<Operation>, Importer
     {
       Document document ;
       try (FileInputStream fis = new FileInputStream(path))
-      {
-        SAXReader reader = new SAXReader() ;
-        document = reader.read(fis) ;
+      {        
+        /* Kiuwan - XML entity injection 처리 */
+        SAXReader saxReader = new SAXReader();
+        saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        saxReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        saxReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);     
+       
+        document = saxReader.read(fis) ;
       }
 
       Element element = document.getRootElement() ;

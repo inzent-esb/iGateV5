@@ -647,7 +647,7 @@ function getCreatePageObj() {
 									)
 									.show();
 							} else if ('textarea' == detailSubObj.type) {
-								var regExpDataInfo = mappingDataInfo.replace('object', 'letter');
+								var regExpDataInfo = detailSubObj.mappingDataInfo.replace('object', 'letter');
 								var regExpInputInfo = {
 									key : detailSubObj.mappingDataInfo,
 									regExp: getRegExpInfo(regExpType).regExp,
@@ -750,8 +750,9 @@ function getCreatePageObj() {
 									.children('div[type=checkbox]')
 									.removeClass()
 									.addClass('custom-control custom-checkbox single')
+									.css({'padding-left': '0'})
 									.append(
-										$('<label/>').css({'padding-right': '30px'}).attr({
+										$('<label/>').css({'padding-right': '10px'}).attr({
 											'v-for': detailSubObj.mappingDataInfo.optionFor,
 										}).append(
 											$('<input/>').addClass('custom-control-input').attr({
@@ -760,7 +761,7 @@ function getCreatePageObj() {
 												'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
 												'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
 												'v-on:change': searchSubObj.mappingDataInfo.changeEvt ? searchSubObj.mappingDataInfo.changeEvt : null,
-											})
+											}).css({'position': 'relative', 'width': '0.75rem', 'height': '1.05rem'})
 										)
 										.append(
 											$('<span/>').addClass('custom-control-label').attr({
@@ -1006,26 +1007,30 @@ function getCreatePageObj() {
 								key : detailObj.mappingDataInfo,
 								regExp:  getRegExpInfo(regExpType).regExp,
 							}
-						
-							appendTag = $('<div/>').addClass('detail-content-regExp')
+							
+							appendTag = $('<div/>').addClass(detailObj.readonly? 'detail-content-common' : 'detail-content-regExp')
 										.append(
-											$('<input/>').addClass('regExp-text view-disabled ')
+											$('<input/>').addClass(detailObj.readonly? 'form-control readonly' : 'regExp-text view-disabled')
 											.attr({
 												'v-model': detailObj.mappingDataInfo,
 												maxlength: maxLength,
-												'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ', elm)' : null
+												readonly: detailObj.readonly,
+												'v-on:input': !detailObj.readonly && regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ', elm)' : null
 											})
-										)
-								  		.append(
-								  			$('<span/>').addClass('letterLength')
-											.append($('<span/>').text('('))
-											.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-											.append($('<span/>').text('/' + maxLength + ')')
-										)
-								  	);
+										)	
+					
+						if(!detailObj.readonly) {
+							appendTag.append(
+						  			$('<span/>').addClass('letterLength')
+									.append($('<span/>').text('('))
+									.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
+									.append($('<span/>').text('/' + maxLength + ')'))
+							  	);
+						}
+						
 						} else if ('search' == detailObj.type) {
 							appendTag = $('<div/>')
-								.addClass('input-group-append ')
+								.addClass('input-group-append')
 								.width('100%')
 								.append(
 									$('<input/>').addClass('form-control').attr({
@@ -1064,19 +1069,106 @@ function getCreatePageObj() {
 											})
 										)
 								);
+							
+							if(detailObj.clickEvt) {
+								appendTag.attr({'v-on:click': detailObj.clickEvt});
+								appendTag.children('input[type=search]').addClass('underlineTxt');
+								appendTag.css({cursor: 'pointer'});
+							}
+						} else if ('customModal' == detailObj.type) {
+							appendTag = $('<div/>')
+							.addClass('input-group-append ')
+							.width('100%')
+							.append(
+								$('<input/>').addClass('form-control').attr({
+									type: detailObj.type,
+									'v-model': detailObj.mappingDataInfo.vModel,
+									readonly: true,
+									disabled: true,
+								})
+							)
+							.append(
+								$('<button/>')
+									.addClass('btn saveGroup updateGroup')
+									.attr({
+										'v-on:click': 'openCustomModal(' + JSON.stringify(detailObj.mappingDataInfo) + ', index)',
+									})
+									.css({
+										'margin-left': '3px',
+									})
+									.append($('<i/>').addClass('icon-srch'))
+									.append(searchBtn)
+							)
+							.append(
+								$('<button/>')
+									.addClass('btn saveGroup updateGroup')
+									.attr({
+										'v-on:click': detailObj.mappingDataInfo.vModel + ' = null;',
+									})
+									.css({
+										'margin-left': '3px',
+										'min-width': '0px',
+										'padding-left': '0.5rem',
+									})
+									.append(
+										$('<i/>').addClass('icon-reset').css({
+											'margin-right': '0px',
+										})
+									)
+							);
 						} else if ('select' == detailObj.type) {
 							appendTag = $('<select/>')
 								.attr({
 									'v-model': detailObj.mappingDataInfo.selectModel,
+									'v-on:change': detailObj.changeEvt,
 								})
 								.addClass('form-control view-disabled')
 								.append(
 									$('<option/>').attr({
 										'v-for': detailObj.mappingDataInfo.optionFor,
 										'v-bind:value': detailObj.mappingDataInfo.optionValue,
-										'v-text': detailObj.mappingDataInfo.optionText,
+										'v-text': detailObj.mappingDataInfo.optionText,										
 									})
 								);
+						} else if ('datalist' == detailObj.type) {
+							var dataInfoArr = detailObj.mappingDataInfo.vModel.split('.');								
+							dataInfoArr.splice(1, 0, 'letter'); 
+							
+							var regExpDataInfo = dataInfoArr.join('.');
+							var regExpInputInfo = {
+								key : detailObj.mappingDataInfo.vModel,
+								regExp:  getRegExpInfo(regExpType).regExp,
+							}
+						
+							appendTag = $('<div/>').addClass('detail-content-regExp')
+										.append(
+											$('<input/>').addClass('regExp-text view-disabled ')
+											.attr({
+												'v-model': detailObj.mappingDataInfo.vModel,
+												maxlength: maxLength,
+												'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ', elm)' : null,
+												'v-on:change': detailObj.changeEvt,
+												'list' : detailObj.mappingDataInfo.dataListId,
+											})
+										)
+								  		.append(
+								  			$('<span/>').addClass('letterLength')
+											.append($('<span/>').text('('))
+											.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
+											.append($('<span/>').text('/' + maxLength + ')'))
+										)
+										.append(
+											$('<datalist/>')
+											.attr({
+												id: detailObj.mappingDataInfo.dataListId,
+											})
+											.append(
+												$('<option/>').attr({
+													'v-for': detailObj.mappingDataInfo.dataListFor,
+													'v-text': detailObj.mappingDataInfo.dataListText,
+												})
+											)
+										);
 						} else if ('singleDaterange' == detailObj.type) {
 							appendTag = $('<input/>')
 								.addClass('form-control view-disabled input-date')
@@ -1230,6 +1322,46 @@ function getCreatePageObj() {
 			
 			$('#' + viewName + 'ModalSearch').modal('show');
 		};
+		
+		this.openCustomModal = function(modalInfo, index) {
+	    	var modalTitle = modalInfo.modalTitle;
+	    	var spinnerMode = modalInfo.spinnerMode;
+	    	var bodyHtml = modalInfo.bodyHtml;
+	    	var shownCallBackFunc = modalInfo.shownCallBackFunc;
+	    	var okCallBackFunc = modalInfo.okCallBackFunc;
+	    	
+	    	var modalHtml = '' ;
+
+	        modalHtml += '<div id="' + viewName + 'ModalSearch"  class="modal fade" tabindex="-1" role="dialog">' ;
+	        modalHtml += '    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">' ;
+	        modalHtml += '        <div class="modal-content">' ;
+	        modalHtml += '            <div class="modal-header">' ;
+	        modalHtml += '                <h2 class="modal-title">' + modalTitle + '</h2>' ;
+	        modalHtml += '                <button type="button" class="btn-icon" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>' ;
+	        modalHtml += '            </div>' ;
+	        modalHtml += '            <div class="modal-body"></div>' ;
+	        modalHtml += '            <div class="modal-footer">' ;
+	        modalHtml += '                <button type="button" class="btn btn-primary" id="modalOk" >OK</button>' ;
+	        modalHtml += '                <button type="button" class="btn" data-dismiss="modal" id="modalClose">Close</button>' ;
+	        modalHtml += '            </div>' ;
+	        modalHtml += '        </div>' ;
+	        modalHtml += '    </div>' ;
+	        modalHtml += '</div>' ;
+
+	        $('#' + viewName + 'ModalSearch').remove() ;
+	        
+	        $("body").append($(modalHtml)) ;
+	        	        
+	        $('#' + viewName + 'ModalSearch').find('.modal-body').append($(bodyHtml));
+	        
+	        initModalArea(viewName + 'ModalSearch', spinnerMode, shownCallBackFunc);
+	        
+	        $('#' + viewName + 'ModalSearch').modal('show');
+	        
+			$('#' + viewName + 'ModalSearch').find('#modalOk').off().on('click', function() {
+				okCallBackFunc() ;
+			});	
+	    };
 	}
 
 	return new createPageObj();
@@ -1266,8 +1398,8 @@ function panelOpen(o, object, callBackFunc) {
 				$('#panel').find('.form-control').filter('[name=detail_type_cron]').attr('readonly', false);
 
 				$('#panel').find('.dataKey').not('[name=detail_type_search]').attr('readonly', false);
-
-				$('#panel').find('.detail-content-common').removeClass().addClass('detail-content-regExp');
+				
+				$('#panel').find('.detail-content-common').find('input:not([readonly])').parent().removeClass().addClass('detail-content-regExp');				
 				$('#panel').find('.detail-content-regExp').children('input').removeClass('form-control').addClass('regExp-text');
 				$('#panel').find('.detail-content-regExp').children('input[type="password"]').removeClass('form-control').addClass('regExp-password');
 			
@@ -1289,7 +1421,7 @@ function panelOpen(o, object, callBackFunc) {
 
 				$('#panel').find('.dataKey').attr('readonly', true);
 
-				$('#panel').find('.detail-content-common').removeClass().addClass('detail-content-regExp');
+				$('#panel').find('.detail-content-common').find('input:not([readonly])').parent().removeClass().addClass('detail-content-regExp');	
 				$('#panel').find('.detail-content-regExp').children('input').removeClass('form-control').addClass('regExp-text');
 				$('#panel').find('.detail-content-regExp').children('input[type="password"]').removeClass('form-control').addClass('regExp-password');
 			
@@ -1304,30 +1436,44 @@ function panelOpen(o, object, callBackFunc) {
 				$('#panel').find('.view-disabled').filter("input[type='checkbox']").attr('disabled', true);
 
 				$('#panel').find('.dataKey').attr('readonly', true);
-
-				$('#panel').find('.detail-content-regExp').removeClass().addClass('detail-content-common');
+				
+				$('#panel').find('.detail-content-regExp').removeClass().addClass('detail-content-common');	
 				$('#panel').find('.detail-content-common').find('input').removeClass('regExp-text').addClass('form-control');
 				$('#panel').find('detail-content-common').find('input[type="password"]').removeClass('regExp-password').addClass('form-control');
 
 				if ($('#panel').find('.warningLabel, .letterLength')) $('#panel').find('.warningLabel, .letterLength').hide();
 			}
 			
-			if (('detail' === o || 'done' === o || 'modify' === o) && window.vmMain && window.vmMain.selectedInfoTitleKey) {
+			if ('detail' === o || 'done' === o || 'modify' === o) {
 				var dataObj = parseFlattenObj(window.vmMain.object);
 				
-				var selectedInfoTitleSpan = $('<span/>').addClass('sub-bar-selected-tit');
+				var selectedInfoTitleSpan = $('<span/>').addClass('sub-bar-selected-tit ellipsis').css({ width : 'calc(100% - ' + ('modify' === o ? 80 : 65) + 'px)' });
 				
 				var selectedInfoTitle = '';
 
-				window.vmMain.selectedInfoTitleKey.forEach(function(key) {
-					if ('undefined' === typeof dataObj[key]) return;
+				var selectedMenuPathIdList = JSON.parse(sessionStorage.getItem('selectedMenuPathIdList'));
+				var menuId = selectedMenuPathIdList[selectedMenuPathIdList.length - 1];
+				var menuDetailConstants = constants.detail[menuId];		
+				
+				var selectedInfoTitleKey = null;
+				
+				if (menuDetailConstants && menuDetailConstants.selectedInfoTitleKey) {
+					selectedInfoTitleKey = menuDetailConstants.selectedInfoTitleKey; 
+				} else if (window.vmMain.pk && 0 < Object.keys(window.vmMain.pk).length){
+					selectedInfoTitleKey = Object.keys(window.vmMain.pk);
+				}
+				
+				if (selectedInfoTitleKey) {
+					selectedInfoTitleKey.forEach(function(key) {
+						if ('undefined' === typeof dataObj[key]) return;
 
-					if (0 === String(dataObj[key]).trim().length) return;
+						if (0 === String(dataObj[key]).trim().length) return;
 
-					selectedInfoTitle += String(dataObj[key]);
+						selectedInfoTitle += String(dataObj[key]);
 
-					if (1 < window.vmMain.selectedInfoTitleKey.length) selectedInfoTitle += ', ';
-				});
+						if (1 < selectedInfoTitleKey.length) selectedInfoTitle += ', ';
+					});
+				}
 
 				if (0 < selectedInfoTitle.length) {
 					selectedInfoTitle = selectedInfoTitle.trim();
@@ -1341,7 +1487,7 @@ function panelOpen(o, object, callBackFunc) {
 				
 				selectedInfoTitleSpan.text(selectedInfoTitle);
 				
-				$('#panel').find('.sub-bar-tit').append(selectedInfoTitleSpan);
+				$('#panel').find('.sub-bar-tit').css({ width : 'calc(100% - ' + ('modify' === o ? 170 : 125) + 'px)' }).append(' ').append(selectedInfoTitleSpan.attr({title: selectedInfoTitle ? selectedInfoTitle.substr(3) : '' }));
 			}
 		}
 
@@ -1466,18 +1612,18 @@ function getMakeGridObj() {
 					height: 32,
 					align: 'center',
 				},
-				onGridMounted: function () {
+				onGridMounted: function (evt) {
 					if (instanceSettings.onGridMounted) {
-						instanceSettings.onGridMounted();
+						instanceSettings.onGridMounted(evt);
 					}
 
 					$('#' + elementId)
 						.find('.tui-grid-column-resize-handle')
 						.removeAttr('title');
 				},
-				onGridUpdated: function () {
+				onGridUpdated: function (evt) {
 					if (instanceSettings.onGridUpdated) {
-						instanceSettings.onGridUpdated();
+						instanceSettings.onGridUpdated(evt);
 					}
 
 					var resetColumnWidths = [];

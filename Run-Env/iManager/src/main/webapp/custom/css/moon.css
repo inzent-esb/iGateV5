@@ -10,6 +10,7 @@
 .moon #sidebar .panel-content .menu-divider{border-top-color: #8a8b92;}
 .moon #sidebar .panel-content .menu-collapse-link{color: #fff !important}
 .moon #sidebar [class*=-link]:hover, .moon .menu-item:hover .menu-link, .moon .menu-link.active{background: rgba(128, 128, 128, 0.3)}
+.moon #sidebar .bookmark-text{color: #fff}
 .moon #sidebar ::-webkit-scrollbar-track{background: #1B203D}
 .moon #sidebar ::-webkit-scrollbar-button:start:decrement, .moon #sidebar ::-webkit-scrollbar-button:end:increment{display: block;height:4px;width:4px;background: #1B203D}
 .moon #sidebar ::-webkit-scrollbar-thumb{background-color: rgba(128, 128, 128, 0.3) !important;}
@@ -150,7 +151,7 @@
 .moon #ct:not(.ct-dashboard) .list-group-item:hover{background-color: rgba(128, 128, 128, 0.3);}
 .moon #ct:not(.ct-dashboard) .media-dl .media{border-color: #8a8b92;}
 .moon #ct:not(.ct-dashboard) .tui-pagination .tui-page-btn{border-color: #8a8b92;color: #fff;}
-.moon #ct:not(.ct-dashboard) .tui-pagination .tui-page-btn:hover{background-color: rgba(128, 128, 128, 0.3);color: #fff;}
+.moon #ct:not(.ct-dashboard) .tui-pagination .tui-page-btn:hover{background-color: #4b96e6;color: #fff;}
 .moon #ct:not(.ct-dashboard) .tui-pagination .tui-ico-first{background-position: -13px 0px;}
 .moon #ct:not(.ct-dashboard) .tui-pagination .tui-is-disabled .tui-ico-first{background-position: 0px 0px;}
 .moon #ct:not(.ct-dashboard) .tui-pagination .tui-ico-prev{background-position: -26px -12px;}
@@ -286,7 +287,7 @@
 .moon > .modal .list-group-item:hover{background-color: rgba(128, 128, 128, 0.3);}
 .moon > .modal .media-dl .media{border-color: #8a8b92;}
 .moon > .modal .tui-pagination .tui-page-btn{border-color: #8a8b92;color: #fff;}
-.moon > .modal .tui-pagination .tui-page-btn:hover{background-color: rgba(128, 128, 128, 0.3);color: #fff;}
+.moon > .modal .tui-pagination .tui-page-btn:hover{background-color: #4b96e6;color: #fff;}
 .moon > .modal .tui-pagination .tui-ico-first{background-position: -13px 0px;}
 .moon > .modal .tui-pagination .tui-is-disabled .tui-ico-first{background-position: 0px 0px;}
 .moon > .modal .tui-pagination .tui-ico-prev{background-position: -26px -12px;}
@@ -320,3 +321,7 @@
 	.moon #ct:not(.ct-dashboard) .btn-filter,  .moon > .modal .btn-filter{background: #1f2337; color: #fff;}
 	.moon #ct:not(.ct-dashboard) .ct-header, .moon > .modal .ct-header{border-color: #8a8b92;}
 }
+
+.moon #ct:not(.ct-dashboard) .userPrivileges *.admin { background-color: rgba(150, 150, 150, 0.7) !important; }
+.moon #ct:not(.ct-dashboard) .userPrivileges *.member { background-color: #484f70 !important; }
+.moon #ct:not(.ct-dashboard) .userPrivileges *.none { background-color: #1f2337 !important; }

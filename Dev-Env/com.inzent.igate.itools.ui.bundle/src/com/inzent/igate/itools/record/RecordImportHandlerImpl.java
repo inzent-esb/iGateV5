@@ -52,7 +52,11 @@ public class RecordImportHandlerImpl implements RecordImportHandler
     FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.SINGLE) ;
     fileDialog.setText(String.format("%s %s", Record.class.getSimpleName(), UiMessage.LABEL_IMPORT)) ;
     fileDialog.setFilterExtensions(new String[] { MetaConstants.FILTER_FILE_EXTENDER_EXCEL1, MetaConstants.FILTER_FILE_EXTENDER_EXCEL2, MetaConstants.FILTER_FILE_EXTENDER_JSON }) ;
-    fileDialog.setFilterPath("C:/") ;
+    /*
+     * Kiuwan
+     * Avoid absolute paths 처리
+     */
+    fileDialog.setFilterPath(System.getProperty("user.home")) ;
 
     String selectedPath = fileDialog.open() ;
     if (selectedPath == null)

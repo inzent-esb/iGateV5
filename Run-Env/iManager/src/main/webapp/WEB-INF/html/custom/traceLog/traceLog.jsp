@@ -9,7 +9,6 @@
 </head>
 <body>
 	<div id="traceLog" data-ready>
-		<sec:authorize var="hasAdministrator" access="hasRole('Administrator')"></sec:authorize>
 		<sec:authorize var="hasTraceLogViewer" access="hasRole('TraceLogViewer')"></sec:authorize>
 		<sec:authorize var="hasTraceLogMessage" access="hasRole('TraceLogMessage')"></sec:authorize>
 		<sec:authorize var="hasTraceLogModel" access="hasRole('TraceLogModel')"></sec:authorize>
@@ -28,455 +27,485 @@
 		var traceLogTreeGrid = null;
 		
 		document.querySelector('#traceLog').addEventListener('ready', function(evt) {
-			var isAdmin = 'true' == '${hasAdministrator}';
 			var isViewer = 'true' == '${hasTraceLogViewer}';
 			var isMessage = 'true' == '${hasTraceLogMessage}';
 			var isModel = 'true' == '${hasTraceLogModel}';
 			var isDown = 'true' == '${hasTraceLogDown}';
 			var isTest = 'true' == '${hasTraceLogTest}';
-			
+
 			traceLogTreeGrid = null;
-			
+
 			var selectedRowTraceLog = null;
 
 			if (localStorage.getItem('selectedRowTraceLog')) {
-				selectedRowTraceLog = JSON.parse(localStorage.getItem('selectedRowTraceLog'));
-				localStorage.removeItem('selectedRowTraceLog');
-		    }
+			    selectedRowTraceLog = JSON.parse(
+			        localStorage.getItem('selectedRowTraceLog')
+			    );
+			    localStorage.removeItem('selectedRowTraceLog');
+			}
 
-		    var selectedRowDashboard = null;
+			var selectedRowDashboard = null;
 
-		    if (localStorage.getItem('selectedRowDashboard')) {
-		    	selectedRowDashboard = localStorage.getItem('selectedRowDashboard');
-		    	localStorage.removeItem('selectedRowDashboard');
-		    }
-		    
-		    var selectedTransactionInfo = null;
+			if (localStorage.getItem('selectedRowDashboard')) {
+			    selectedRowDashboard = localStorage.getItem('selectedRowDashboard');
+			    localStorage.removeItem('selectedRowDashboard');
+			}
 
-		    if (localStorage.getItem('selectedTransactionInfo')) {
-		    	selectedTransactionInfo = JSON.parse(localStorage.getItem('selectedTransactionInfo'));
-		    	localStorage.removeItem('selectedTransactionInfo');
-		    }
-			
+			var selectedTransactionInfo = null;
+
+			if (localStorage.getItem('selectedTransactionInfo')) {
+			    selectedTransactionInfo = JSON.parse(
+			        localStorage.getItem('selectedTransactionInfo')
+			    );
+			    localStorage.removeItem('selectedTransactionInfo');
+			}
+
 			var createPageObj = getCreatePageObj();
-			
+
 			createPageObj.setViewName('traceLog');
 			createPageObj.setIsModal(false);
-			
+
 			createPageObj.setSearchList([
-				{
-					type: 'daterange',
-					mappingDataInfo: {
-						daterangeInfo: [
-							{ id: 'fromLogDateTime', name: '<fmt:message>head.from</fmt:message>'},
-							{ id: 'toLogDateTime', name: '<fmt:message>head.to</fmt:message>'},
-						]							
-					}
-				},
-				{
-					type: 'dateCalc',
-					mappingDataInfo: {
-						unit: 'm',
-						id: 'rangeTime',
-						selectModel: 'rangeTime',
-						changeEvt: 'changeRangeTime',
-						optionFor: 'time in rangeTimeList',
-						optionValue: 'time',
-						optionText: 'time',
-					},
-					name: '<fmt:message>head.from.time</fmt:message>',
-					placeholder: '<fmt:message>head.unchecked</fmt:message>'        
+			    {
+			        type: 'daterange',
+			        mappingDataInfo: {
+			            daterangeInfo: [
+			                {
+			                    id: 'fromLogDateTime',
+			                    name: '<fmt:message>head.from</fmt:message>'
+			                },
+			                {
+			                    id: 'toLogDateTime',
+			                    name: '<fmt:message>head.to</fmt:message>'
+			                }
+			            ]
+			        }
 			    },
-				{
-					type: 'text',
-					mappingDataInfo: 'object.transactionId',
-					regExpType: 'searchId',
-					name: '<fmt:message>head.transaction</fmt:message> <fmt:message>head.id</fmt:message>',
-					placeholder: '<fmt:message>head.searchId</fmt:message>'			
-				},
-				{
-					type: 'text',
-					mappingDataInfo: 'object.logCode',
-					name: '<fmt:message>head.log</fmt:message> <fmt:message>head.classification</fmt:message>',
-					placeholder: '<fmt:message>head.searchData</fmt:message>'			
-				},
-				{
-					type: "modal",
-					mappingDataInfo: {
-						url: '/modal/adapterModal.html',
-				        modalTitle: '<fmt:message>igate.adapter</fmt:message>',
-				        vModel: "object.adapterId",
-				        callBackFuncName: "setSearchAdapterId"
-					},
-					regExpType: 'searchId',
-					name: "<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>",
-					placeholder: "<fmt:message>head.searchId</fmt:message>"
-				},		
-				{
-					type: "modal",
-					mappingDataInfo: {
-						url: '/modal/interfaceModal.html',
-				        modalTitle: '<fmt:message>igate.interface</fmt:message>',
-				        vModel: "object.interfaceId",
-				        callBackFuncName: "setSearchInterfaceId"
-					},
-					regExpType: 'searchId',
-					name: "<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>",
-					placeholder: "<fmt:message>head.searchId</fmt:message>"
-				},		
-				{
-					type: "modal",
-					mappingDataInfo: {
-						url: '/modal/serviceModal.html',
-				        modalTitle: '<fmt:message>igate.service</fmt:message>',
-				        vModel: "object.serviceId",
-				        callBackFuncName: "setSearchServiceId"
-					},
-					regExpType: 'searchId',
-					name: "<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>",
-					placeholder: "<fmt:message>head.searchId</fmt:message>"
-				},
-				{
-					type: "modal",
-					mappingDataInfo: {
-						url: '/modal/connectorModal.html',
-				        modalTitle: '<fmt:message>igate.connector</fmt:message>',
-				        vModel: "object.connectorId",
-				        callBackFuncName: "setSearchConnectorId"
-					},
-					regExpType: 'searchId',
-					name: "<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>",
-					placeholder: "<fmt:message>head.searchId</fmt:message>"
-				},				
-				{
-					type: "modal",
-					mappingDataInfo: {
-						url: '/modal/instanceModal.html',
-						modalTitle: '<fmt:message>igate.instance</fmt:message>',
-				        vModel: "object.instanceId",
-				        callBackFuncName: "setSearchInstanceId"
-					},
-					regExpType: 'searchId',
-					name: '<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>',
-					placeholder: "<fmt:message>head.searchId</fmt:message>"
-				},	
-				{
-					type: 'text',
-					mappingDataInfo: 'object.externalTransaction',
-					name: '<fmt:message>igate.externalTransaction</fmt:message>',
-					placeholder: '<fmt:message>head.searchData</fmt:message>'			
-				},
-				{
-					type: 'text',
-					mappingDataInfo: 'object.externalMessage',
-					name: '<fmt:message>igate.externalMessage</fmt:message>',
-					placeholder: '<fmt:message>head.searchData</fmt:message>'			
-				},
-				{
-					type: 'text',
-					mappingDataInfo: 'object.responseCode',
-					name: '<fmt:message>igate.traceLog.responseCode</fmt:message>',
-					placeholder: '<fmt:message>head.searchData</fmt:message>'			
-				},				
-				{
-					type: 'text',
-					mappingDataInfo: 'object.remoteAddr',
-					regExpType: 'ip',
-					name: '<fmt:message>head.ip</fmt:message>',
-					placeholder: '<fmt:message>head.searchId</fmt:message>'			
-				},				
-				{
-					type: 'text',
-					mappingDataInfo: 'object.sessionId',
-					regExpType: 'searchId',
-					name: '<fmt:message>igate.connectorControl.session</fmt:message> <fmt:message>head.id</fmt:message>',
-					placeholder: '<fmt:message>head.searchId</fmt:message>'			
-				},
-				{
-					type: 'select',
-					name: '<fmt:message>head.timeoutYn</fmt:message>',
-					placeholder: '<fmt:message>head.all</fmt:message>',
-					mappingDataInfo: {
-						id: 'timeoutYnList',
-						selectModel: 'object.timeoutYn',
-						optionFor: 'option in timeoutYnList',
-						optionValue: 'option.pk.propertyKey',
-						optionText: 'option.propertyValue',
-					}
-				},
+			    {
+			        type: 'dateCalc',
+			        mappingDataInfo: {
+			            unit: 'm',
+			            id: 'rangeTime',
+			            selectModel: 'rangeTime',
+			            changeEvt: 'changeRangeTime',
+			            optionFor: 'time in rangeTimeList',
+			            optionValue: 'time',
+			            optionText: 'time'
+			        },
+			        name: '<fmt:message>head.from.time</fmt:message>',
+			        placeholder: '<fmt:message>head.unchecked</fmt:message>'
+			    },
+			    {
+			        type: 'text',
+			        mappingDataInfo: 'object.transactionId',
+			        regExpType: 'searchId',
+			        name: '<fmt:message>head.transaction</fmt:message> <fmt:message>head.id</fmt:message>',
+			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			    },
+			    {
+			        type: 'text',
+			        mappingDataInfo: 'object.logCode',
+			        name: '<fmt:message>head.log</fmt:message> <fmt:message>head.classification</fmt:message>',
+			        placeholder: '<fmt:message>head.searchData</fmt:message>'
+			    },
+			    {
+			        type: 'modal',
+			        mappingDataInfo: {
+			            url: '/modal/adapterModal.html',
+			            modalTitle: '<fmt:message>igate.adapter</fmt:message>',
+			            vModel: 'object.adapterId',
+			            callBackFuncName: 'setSearchAdapterId'
+			        },
+			        regExpType: 'searchId',
+			        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
+			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			    },
+			    {
+			        type: 'modal',
+			        mappingDataInfo: {
+			            url: '/modal/interfaceModal.html',
+			            modalTitle: '<fmt:message>igate.interface</fmt:message>',
+			            vModel: 'object.interfaceId',
+			            callBackFuncName: 'setSearchInterfaceId'
+			        },
+			        regExpType: 'searchId',
+			        name: '<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>',
+			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			    },
+			    {
+			        type: 'modal',
+			        mappingDataInfo: {
+			            url: '/modal/serviceModal.html',
+			            modalTitle: '<fmt:message>igate.service</fmt:message>',
+			            vModel: 'object.serviceId',
+			            callBackFuncName: 'setSearchServiceId'
+			        },
+			        regExpType: 'searchId',
+			        name: '<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>',
+			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			    },
+			    {
+			        type: 'modal',
+			        mappingDataInfo: {
+			            url: '/modal/connectorModal.html',
+			            modalTitle: '<fmt:message>igate.connector</fmt:message>',
+			            vModel: 'object.connectorId',
+			            callBackFuncName: 'setSearchConnectorId'
+			        },
+			        regExpType: 'searchId',
+			        name: '<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>',
+			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			    },
+			    {
+			        type: 'modal',
+			        mappingDataInfo: {
+			            url: '/modal/instanceModal.html',
+			            modalTitle: '<fmt:message>igate.instance</fmt:message>',
+			            vModel: 'object.instanceId',
+			            callBackFuncName: 'setSearchInstanceId'
+			        },
+			        regExpType: 'searchId',
+			        name: '<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>',
+			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			    },
+			    {
+			        type: 'text',
+			        mappingDataInfo: 'object.externalTransaction',
+			        name: '<fmt:message>igate.externalTransaction</fmt:message>',
+			        placeholder: '<fmt:message>head.searchData</fmt:message>'
+			    },
+			    {
+			        type: 'text',
+			        mappingDataInfo: 'object.externalMessage',
+			        name: '<fmt:message>igate.externalMessage</fmt:message>',
+			        placeholder: '<fmt:message>head.searchData</fmt:message>'
+			    },
+			    {
+			        type: 'text',
+			        mappingDataInfo: 'object.responseCode',
+			        name: '<fmt:message>igate.traceLog.responseCode</fmt:message>',
+			        placeholder: '<fmt:message>head.searchData</fmt:message>'
+			    },
+			    {
+			        type: 'text',
+			        mappingDataInfo: 'object.remoteAddr',
+			        regExpType: 'ip',
+			        name: '<fmt:message>head.ip</fmt:message>',
+			        placeholder: '<fmt:message>head.searchIP</fmt:message>'
+			    },
+			    {
+			        type: 'text',
+			        mappingDataInfo: 'object.sessionId',
+			        regExpType: 'searchId',
+			        name: '<fmt:message>igate.connectorControl.session</fmt:message> <fmt:message>head.id</fmt:message>',
+			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			    },
+			    {
+			        type: 'select',
+			        name: '<fmt:message>head.timeoutYn</fmt:message>',
+			        placeholder: '<fmt:message>head.all</fmt:message>',
+			        mappingDataInfo: {
+			            id: 'timeoutYnList',
+			            selectModel: 'object.timeoutYn',
+			            optionFor: 'option in timeoutYnList',
+			            optionValue: 'option.pk.propertyKey',
+			            optionText: 'option.propertyValue'
+			        }
+			    }
 			]);
-			
+
 			createPageObj.searchConstructor();
-			
+
 			createPageObj.setMainButtonList({
-				newTabBtn: isViewer,
-				searchInitBtn: isViewer,
-				downloadBtn: isViewer,
-				totalCount: isViewer,
+			    newTabBtn: isViewer,
+			    searchInitBtn: isViewer,
+			    downloadBtn: isViewer,
+			    totalCount: isViewer
 			});
-			
+
 			createPageObj.mainConstructor();
-			
+
 			var tabList = [
-				{
-					'type': 'custom',
-					'id': 'MainBasic',
-					'name': '<fmt:message>head.basic.info</fmt:message>',
-					'noRowClass': true,
-					'getDetailArea': function() {
-						return $("#traceLog-panel").html();
-					}
-				}
+			    {
+			        type: 'custom',
+			        id: 'MainBasic',
+			        name: '<fmt:message>head.basic.info</fmt:message>',
+			        noRowClass: true,
+			        getDetailArea: function () {
+			            return $('#traceLog-panel').html();
+			        }
+			    }
 			];
-			
+
 			if (isMessage) {
-				tabList.push({
-					'type': 'custom',
-					'id': 'MessageInfo',
-					'name': '<fmt:message>igate.traceLog.message.info</fmt:message>',
-					'isSubResponsive': true,
-					'getDetailArea': function() {
-						var messageInfoCt = $("#messageInfoCt").clone();
-						
-						if (!isDown) {
-							messageInfoCt.find('a[title="' + "<fmt:message>head.download</fmt:message>" + '"]').remove();
-						}
-						
-						if (!isTest) {
-							messageInfoCt.find('a[title="' + "<fmt:message>igate.traceLog.create.testCase</fmt:message>" + '"]').remove();
-						}
-						
-						return messageInfoCt.html();
-					}					
-				})
+			    tabList.push({
+			        type: 'custom',
+			        id: 'MessageInfo',
+			        name: '<fmt:message>igate.traceLog.message.info</fmt:message>',
+			        isSubResponsive: true,
+			        getDetailArea: function () {
+			            var messageInfoCt = $('#messageInfoCt').clone();
+
+			            if (!isDown) {
+			                messageInfoCt
+			                    .find(
+			                        'a[title="' +
+			                            '<fmt:message>head.download</fmt:message>' +
+			                            '"]'
+			                    )
+			                    .remove();
+			            }
+
+			            if (!isTest) {
+			                messageInfoCt
+			                    .find(
+			                        'a[title="' +
+			                            '<fmt:message>igate.traceLog.create.testCase</fmt:message>' +
+			                            '"]'
+			                    )
+			                    .remove();
+			            }
+
+			            return messageInfoCt.html();
+			        }
+			    });
 			}
-			
+
 			if (isModel) {
-				tabList.push({
-					'type': 'tree',
-					'id': 'ModelInfo',
-					'name': '<fmt:message>head.model.info</fmt:message>'
-				});
+			    tabList.push({
+			        type: 'tree',
+			        id: 'ModelInfo',
+			        name: '<fmt:message>head.model.info</fmt:message>'
+			    });
 			}
-			
-			createPageObj.setTabList(tabList);		
-			
-			createPageObj.setPanelButtonList({	
-			});	
-			
+
+			createPageObj.setTabList(tabList);
+
+			createPageObj.setPanelButtonList({});
+
 			createPageObj.panelConstructor(true);
-			
-			if (isDown) {
-				
+
+			SaveImngObj.setConfig({
+			    objectUri: '/igate/traceLog/object.json'
+			});
+
+			ControlImngObj.setConfig({
+			    controlUri: '/igate/record/control.json'
+			});
+
+			if (localStorage.getItem('searchObj')) {
+			    var searchObj = JSON.parse(localStorage.getItem('searchObj'));
+			    localStorage.removeItem('searchObj');
+
+			    localStorage.setItem(
+			        createPageObj.getElementId('ImngListObject') + '-newTabSearchCondition',
+			        JSON.stringify({
+			            object: {
+			                fromLogDateTime: null,
+			                toLogDateTime: null,
+			                transactionId: searchObj['transactionId']
+			                    ? searchObj['transactionId']
+			                    : null,
+			                logCode: null,
+			                instanceId: null,
+			                adapterId: null,
+			                connectorId: null,
+			                sessionId: null,
+			                remoteAddr: null,
+			                interfaceId: null,
+			                serviceId: null,
+			                externalTransaction: null,
+			                externalMessage: null,
+			                responseCode: null,
+			                timeoutYn: ' ',
+			                exceptionCode: null,
+			                requestTimestamp: null,
+			                responseTimestamp: null
+			            }
+			        })
+			    );
 			}
-			
-			
-		    SaveImngObj.setConfig({
-		    	objectUri : "/igate/traceLog/object.json"
-		    });
-		    
-		    ControlImngObj.setConfig({
-		        controlUri : "/igate/record/control.json"
-		    });
-		    
-		    if (localStorage.getItem('searchObj')) {
-		    	var searchObj = JSON.parse(localStorage.getItem('searchObj'));
-		    	localStorage.removeItem('searchObj');
-		    	
-		    	localStorage.setItem(createPageObj.getElementId('ImngListObject') + '-newTabSearchCondition', JSON.stringify({
-		    		object: {
-		    			fromLogDateTime: null,
-		    			toLogDateTime: null,
-		    			transactionId: searchObj['transactionId']? searchObj['transactionId'] : null,
-		    			logCode: null,
-		    			instanceId: null,
-		    			adapterId: null,
-		    			connectorId: null,
-		    			sessionId: null,
-		    			remoteAddr: null,
-		    			interfaceId: null,
-		    			serviceId: null,
-		    			externalTransaction: null,
-		    			externalMessage: null,
-		    			responseCode: null,
-		    			timeoutYn: ' ',
-		    			exceptionCode: null,
-		    			requestTimestamp : null,
-		                responseTimestamp: null,
-		    		}
-		    	}));
-		    }
 		    
 	    	(new HttpReq('/common/property/properties.json')).read({ propertyId: 'List.Yn', orderByKey: true }, function(timeoutYnResult) {
-			    window.vmSearch = new Vue({
-			    	el: '#' + createPageObj.getElementId('ImngSearchObject'),
-			    	data: {
-			    		pageSize : '10',
-			    		timeoutYnList: [],
-			    		rangeTime : 10,
-			            rangeTimeList : [1, 3, 5 ,10],
-			            object : {
-			    			fromLogDateTime: null,
-			    			toLogDateTime: null,
-			    			transactionId: null,
-			    			logCode: null,
-			    			instanceId: null,
-			    			adapterId: null,
-			    			connectorId: null,
-			    			sessionId: null,
-			    			remoteAddr: null,
-			    			interfaceId: null,
-			    			serviceId: null,
-			    			externalTransaction: null,
-			    			externalMessage: null,
-			    			responseCode: null,
-			    			timeoutYn: ' ',
-			    			exceptionCode: null,
-			    			requestTimestamp : null,
-			                responseTimestamp: null,
-			    		},
-						letter: {
-							transactionId: 0,
-							logCode: 0,
-							instanceId: 0,
-							adapterId: 0,
-							connectorId: 0,
-							sessionId: 0,
-							remoteAddr: 0,
-							interfaceId: 0,
-							serviceId: 0,
-							externalTransaction: 0,
-			    			externalMessage: 0,
-			    			responseCode: 0,
-			    			exceptionCode: 0,
-			    		},
-			    	},
-			    	methods: $.extend(true, {}, searchMethodOption, {
-			    		inputEvt: function(info) {
-			    			setLengthCnt.call(this, info);
-			    		},
-						search: function() {
-							vmList.makeGridObj.noDataHidePage(createPageObj.getElementId('ImngListObject'));
-							
-							vmList.makeGridObj.search(this, function() {
-								(new HttpReq("/igate/traceLog/rowCount.json")).read(this.object, function(result) {
-									vmList.totalCount = 0 == result.object? 0 : numberWithComma(result.object);
-								});
-				            }.bind(this));
-						},					
-			            initSearchArea: function(searchCondition) {
-			            	if(searchCondition) {
-			            		for(var key in searchCondition) {
-			            		    this.$data[key] = searchCondition[key];
-			            		}
-			            	}else {
-			                	this.pageSize = '10';
-			                	this.rangeTime = '10';
-			                	this.object.fromLogDateTime = null;
-			                	this.object.toLogDateTime = null;
-			                	this.object.transactionId = null;
-			                	this.object.logCode = null;
-			                	this.object.instanceId = null;
-			                	this.object.adapterId = null;
-			                	this.object.connectorId = null;
-			                	this.object.sessionId = null;
-			                	this.object.remoteAddr = null;
-			                	this.object.interfaceId = null;
-			                	this.object.serviceId = null;
-			                	this.object.externalTransaction = null;
-			                	this.object.externalMessage = null;
-			                	this.object.responseCode = null;
-			                	this.object.timeoutYn = ' ';
-			                	this.object.exceptionCode = null;
-			                	
-			                	this.letter.transactionId = 0;
-			                	this.letter.logCode = 0;
-			                	this.letter.instanceId = 0;
-			                	this.letter.adapterId = 0;
-			                	this.letter.connectorId = 0;
-			                	this.letter.sessionId = 0;
-			                	this.letter.remoteAddr = 0;
-			                	this.letter.interfaceId = 0;
-			                	this.letter.serviceId = 0;
-			                	this.letter.externalTransaction = 0;
-			                	this.letter.externalMessage = 0;
-			                	this.letter.responseCode = 0;
-			                	this.letter.exceptionCode = 0;
-			                				                	
-			                	this.changeRangeTime('m');
-			            	}
-			            	
-			            	initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#rangeTime'), this.rangeTime);
-			            	initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#timeoutYnList'), this.object.timeoutYn);
-			        		initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
-			        		
-			        		this.initDatePicker();
-			            },
-			            initDatePicker: function() {
-			            	var fromLogDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromLogDateTime');
-			            	var toLogDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toLogDateTime');
-			            	
-			            	fromLogDateTime.customDateRangePicker('from', function(fromLogDateTime) {
-			            		this.object.fromLogDateTime = fromLogDateTime;
-			            		
-			            		toLogDateTime.customDateRangePicker('to', function(toLogDateTime) {
-				            		this.object.toLogDateTime = toLogDateTime;
-				            	}.bind(this), {
-				            		startDate: this.object.toLogDateTime,
-				            		minDate : fromLogDateTime
-				            	});		            		
-			            	}.bind(this), {
-			            		startDate: this.object.fromLogDateTime
-			            	});
-			            },
-			            changeRangeTime : function(unit) {
-				   			var startDate = new Date();
-				          	startDate.setDate(startDate.getDate());
-				          	startDate.setHours(startDate.getHours());
-				          	startDate.setMinutes(startDate.getMinutes());
-				        	startDate.setSeconds(startDate.getSeconds());
-				        	
-				        	if('h' == unit) startDate.setHours(startDate.getHours() - this.rangeTime);
-				        	if('m' == unit) startDate.setMinutes(startDate.getMinutes() - this.rangeTime);
-				        	
-				        	if(this.rangeTime !== '0') 
-				        		this.object.fromLogDateTime = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
-				        	
-				           	this.initDatePicker();
-			            },
-			            openModal: function(openModalParam, regExpInfo) {
-			            	if (-1 < openModalParam.vModel.indexOf('instanceId')) {
-			            		openModalParam.modalParam = {
-			            			instanceType: 'T'		
-			            		};
-			            	}	
+	    		window.vmSearch = new Vue({
+	    		    el: '#' + createPageObj.getElementId('ImngSearchObject'),
+	    		    data: {
+	    		        pageSize: '10',
+	    		        timeoutYnList: [],
+	    		        rangeTime: 10,
+	    		        rangeTimeList: [1, 3, 5, 10],
+	    		        object: {
+	    		            fromLogDateTime: null,
+	    		            toLogDateTime: null,
+	    		            transactionId: null,
+	    		            logCode: null,
+	    		            instanceId: null,
+	    		            adapterId: null,
+	    		            connectorId: null,
+	    		            sessionId: null,
+	    		            remoteAddr: null,
+	    		            interfaceId: null,
+	    		            serviceId: null,
+	    		            externalTransaction: null,
+	    		            externalMessage: null,
+	    		            responseCode: null,
+	    		            timeoutYn: ' ',
+	    		            exceptionCode: null,
+	    		            requestTimestamp: null,
+	    		            responseTimestamp: null
+	    		        },
+	    		        letter: {
+	    		            transactionId: 0,
+	    		            logCode: 0,
+	    		            instanceId: 0,
+	    		            adapterId: 0,
+	    		            connectorId: 0,
+	    		            sessionId: 0,
+	    		            remoteAddr: 0,
+	    		            interfaceId: 0,
+	    		            serviceId: 0,
+	    		            externalTransaction: 0,
+	    		            externalMessage: 0,
+	    		            responseCode: 0,
+	    		            exceptionCode: 0
+	    		        }
+	    		    },
+	    		    methods: $.extend(true, {}, searchMethodOption, {
+	    		        inputEvt: function (info) {
+	    		            setLengthCnt.call(this, info);
+	    		        },
+	    		        search: function () {
+	    		            vmList.makeGridObj.noDataHidePage(
+	    		                createPageObj.getElementId('ImngListObject')
+	    		            );
 
-			            	createPageObj.openModal.call(this, openModalParam, regExpInfo);		            	
-			            },
-			            setSearchAdapterId: function(param) {
-			            	this.object.adapterId = param.adapterId;
-			            },
-			            setSearchConnectorId: function(param) {
-			            	this.object.connectorId = param.connectorId;
-			            },
-			            setSearchInterfaceId: function(param) {
-			            	this.object.interfaceId = param.interfaceId;
-			            },
-			            setSearchServiceId: function(param) {
-			            	this.object.serviceId = param.serviceId;
-			            },
-			            setSearchInstanceId: function(param) {
-			            	this.object.instanceId = param.instanceId;
-			            }
-			    	}),
-			    	mounted: function() {
-			    		this.timeoutYnList = timeoutYnResult.object;
-			    	
-			    		this.$nextTick(function() {
-		    				this.initSearchArea();
-		    			});
-			    	}
-			    });
+	    		            vmList.makeGridObj.search(
+	    		                this,
+	    		                function () {
+	    		                    new HttpReq('/igate/traceLog/rowCount.json').read(
+	    		                        this.object,
+	    		                        function (result) {
+	    		                            vmList.totalCount = 0 == result.object? 0 : numberWithComma(result.object);
+	    		                        }
+	    		                    );
+	    		                }.bind(this)
+	    		            );
+	    		        },
+	    		        initSearchArea: function (searchCondition) {
+	    		            if (searchCondition) {
+	    		                for (var key in searchCondition) {
+	    		                    this.$data[key] = searchCondition[key];
+	    		                }
+	    		            } else {
+	    		                this.pageSize = '10';
+	    		                this.rangeTime = '10';
+	    		                this.object.fromLogDateTime = null;
+	    		                this.object.toLogDateTime = null;
+	    		                this.object.transactionId = null;
+	    		                this.object.logCode = null;
+	    		                this.object.instanceId = null;
+	    		                this.object.adapterId = null;
+	    		                this.object.connectorId = null;
+	    		                this.object.sessionId = null;
+	    		                this.object.remoteAddr = null;
+	    		                this.object.interfaceId = null;
+	    		                this.object.serviceId = null;
+	    		                this.object.externalTransaction = null;
+	    		                this.object.externalMessage = null;
+	    		                this.object.responseCode = null;
+	    		                this.object.timeoutYn = ' ';
+	    		                this.object.exceptionCode = null;
+
+	    		                this.letter.transactionId = 0;
+	    		                this.letter.logCode = 0;
+	    		                this.letter.instanceId = 0;
+	    		                this.letter.adapterId = 0;
+	    		                this.letter.connectorId = 0;
+	    		                this.letter.sessionId = 0;
+	    		                this.letter.remoteAddr = 0;
+	    		                this.letter.interfaceId = 0;
+	    		                this.letter.serviceId = 0;
+	    		                this.letter.externalTransaction = 0;
+	    		                this.letter.externalMessage = 0;
+	    		                this.letter.responseCode = 0;
+	    		                this.letter.exceptionCode = 0;
+
+	    		                this.changeRangeTime('m');
+	    		            }
+
+	    		            initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#rangeTime'), this.rangeTime);
+	    		            initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#timeoutYnList'), this.object.timeoutYn);
+	    		            initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
+	    		            
+	    		            this.initDatePicker();
+	    		        },
+	    		        initDatePicker: function () {
+	    		        	var fromLogDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromLogDateTime');
+	    		            var toLogDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toLogDateTime');
+
+	    		            fromLogDateTime.customDateRangePicker('from', function(fromLogDateTime) {
+	    		                this.object.fromLogDateTime = fromLogDateTime;
+	    		                
+	    		                toLogDateTime.customDateRangePicker('to', function(toLogDateTime) {
+	    		                    this.object.toLogDateTime = toLogDateTime;
+	    		                }.bind(this), {
+	    		                    startDate: this.object.toLogDateTime,
+	    		                    minDate : fromLogDateTime
+	    		                });		            		
+	    		            }.bind(this), {
+	    		                startDate: this.object.fromLogDateTime
+	    		            });
+	    		        },
+	    		        changeRangeTime: function (unit) {
+	    		            var startDate = new Date();
+	    		            startDate.setDate(startDate.getDate());
+	    		            startDate.setHours(startDate.getHours());
+	    		            startDate.setMinutes(startDate.getMinutes());
+	    		            startDate.setSeconds(startDate.getSeconds());
+
+	    		            if ('h' == unit)
+	    		                startDate.setHours(startDate.getHours() - this.rangeTime);
+	    		            if ('m' == unit)
+	    		                startDate.setMinutes(startDate.getMinutes() - this.rangeTime);
+
+	    		            if (this.rangeTime !== '0')
+	    		                this.object.fromLogDateTime = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+
+	    		            this.initDatePicker();
+	    		        },
+	    		        openModal: function (openModalParam, regExpInfo) {
+	    		            if (-1 < openModalParam.vModel.indexOf('instanceId')) {
+	    		                openModalParam.modalParam = {
+	    		                    instanceType: 'T'
+	    		                };
+	    		            }
+
+	    		            createPageObj.openModal.call(this, openModalParam, regExpInfo);
+	    		        },
+	    		        setSearchAdapterId: function (param) {
+	    		            this.object.adapterId = param.adapterId;
+	    		        },
+	    		        setSearchConnectorId: function (param) {
+	    		            this.object.connectorId = param.connectorId;
+	    		        },
+	    		        setSearchInterfaceId: function (param) {
+	    		            this.object.interfaceId = param.interfaceId;
+	    		        },
+	    		        setSearchServiceId: function (param) {
+	    		            this.object.serviceId = param.serviceId;
+	    		        },
+	    		        setSearchInstanceId: function (param) {
+	    		            this.object.instanceId = param.instanceId;
+	    		        }
+	    		    }),
+	    		    mounted: function () {
+	    		        this.timeoutYnList = timeoutYnResult.object;
+
+	    		        this.$nextTick(function () {
+	    		            this.initSearchArea();
+	    		        });
+	    		    }
+	    		});
 			    
 			    var vmList = new Vue({
 			    	el: '#' + createPageObj.getElementId('ImngListObject'),
@@ -669,13 +698,12 @@
 			    		panelMode: null,
 			    		treeGrid : null,
 			            totalData : null,
-			            selectedInfoTitleKey: ['pk.logId', 'pk.logDateTime']
 			    	},
 			    	computed: {
 			    		pk: function() {
 			    			return {
-			    				'pk.exceptionDateTime' : this.object.pk.exceptionDateTime,
-			                    'pk.exceptionId' : this.object.pk.exceptionId
+			    				'pk.logId' : this.object.pk.exceptionDateTime,
+			                    'pk.logDateTime' : this.object.pk.exceptionId
 			    			};
 			    		}
 			    	},
@@ -847,9 +875,11 @@
 			    	},
 			    	methods : {
 			    		messageModel : function() {
-			    			 (new HttpReq('/igate/traceLog/dump.json')).read(window.vmMain.object, function(result) {
-				                	this.object = ("ok" == result.result)? result.response : result.error[0].message;
-			    			 }.bind(this));
+			    			if (isMessage) {
+			    				(new HttpReq('/igate/traceLog/dump.json')).read(window.vmMain.object, function(result) {
+			    					this.object = ("ok" == result.result)? result.response : result.error[0].message;
+			    				}.bind(this));			    				
+			    			}
 			            },
 						downloadFile: function() {
 							var object = window.vmMain.object;
@@ -873,12 +903,15 @@
 			            createTestCase: function() {
 			            	var instanceList = null;
 			            	var interfaceInfo = null;
+			            	var testCaseInfo = null;
 			            	var testCaseId = null; 
 			            		
 			            	getInstanceList(
 			            		getInterfaceInfo.bind(this, 
-			            			getTestCaseList.bind(this, initModal)
-			            		)
+	            					getTestCaseInfo.bind(this, 
+	    				            	getTestCaseList.bind(this, initModal)
+	    		            		)
+		            			)
 			            	);
 							
 							function getInstanceList(callback) {
@@ -892,7 +925,13 @@
 							function getInterfaceInfo(callback) {
 								new HttpReq('/igate/interface/object.json').read({ interfaceId: this.interfaceId }, function(result) {
 									interfaceInfo = result.object;
-									
+									if(callback) callback();
+				            	});
+							}
+							
+							function getTestCaseInfo(callback) {
+								new HttpReq('/igate/testCase/referencingInterface.json').read({ interfaceId: this.interfaceId }, function(result) {
+									testCaseInfo = result.object[0];
 									if(callback) callback();
 				            	});
 							}
@@ -929,13 +968,13 @@
 				            		    		object : {
 				            		    			pk: {
 				            		    				testCaseId: testCaseId,
-				            		    				interfaceId: interfaceInfo.interfaceId,
+				            		    				interfaceId: testCaseInfo? testCaseInfo.pk.interfaceId : interfaceInfo.interfaceId,
 				            		    			},
-				            		    			testInstance: instanceList && 0 < instanceList.length? instanceList[0].instanceId : null,
-				            		    			testCaseGroup: interfaceInfo.interfaceGroup,
-				            		    			testCaseDesc: null,
-				            		    			testCaseStatus: 'N',
-				            		    			testCaseSync: 'S',
+				            		    			testInstance: testCaseInfo? testCaseInfo.testInstance : null,
+				            		    			testCaseGroup: testCaseInfo? testCaseInfo.testCaseGroup : interfaceInfo.adapterId + "." + interfaceInfo.interfaceId,
+				            		    			testCaseDesc: testCaseInfo? testCaseInfo.testCaseDesc : null,
+				            		    			testCaseStatus: testCaseInfo? testCaseInfo.testCaseStatus : 'N',
+				            		    			testCaseSync: testCaseInfo? testCaseInfo.testCaseSync: 'S',
 				            		    			testCaseMessage: window.vmMessageInfo.object,
 				            		    		},
 				            		    		testCaseIdRegExp: getRegExpInfo('id'),
@@ -955,6 +994,15 @@
 				            					_alert({
 				            						type: 'warn',
 				            						message: "<fmt:message>igate.traceLog.not.exist.testCase.id</fmt:message>"
+				            					});
+				            					
+												return;				            					
+				            				}
+				            				
+				            				if (null === vmTestCase.object.testInstance || 0 === vmTestCase.object.testInstance.trim().length) {
+				            					_alert({
+				            						type: 'warn',
+				            						message: "<fmt:message>igate.traceLog.not.exist.testInstance.id</fmt:message>"
 				            					});
 				            					
 												return;				            					
@@ -1122,8 +1170,6 @@
 			              	}
 			            	
 			              	$('a[href="#ModelInfo"]').off('shown.bs.tab').on('shown.bs.tab', function(e) {
-			              		if(traceLogTreeGrid) return;
-			              		
 		              			(new HttpReq('/igate/traceLog/record.json')).read(window.vmMain.object, function(result) {
 		              				this.initTreeGrid(result.object);
 		              			}.bind(this));
@@ -1164,8 +1210,7 @@
 				$(".modal-backdrop").remove();
 				$('#ct').find('script').remove();
 			});
-		});	
-		
+		});		
 	</script>
 </body>
 </html>

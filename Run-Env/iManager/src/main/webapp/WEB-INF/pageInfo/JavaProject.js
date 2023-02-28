@@ -1,135 +1,166 @@
 const info = {
-	type: 'basic',	
-	cudUrl: '/igate/javaProject/object.json',
+	type: "basic",
+	cudUrl: "/igate/javaProject/object.json",
 	search: {
 		load: true,
 		list: [
 			{
-				type: 'text',
-				vModel: 'projectId',
-				label: this.$t('head.id'),
-				placeholder: this.$t('head.searchId'),
-				regExpType: 'searchId',
+				type: "text",
+				vModel: "projectId",
+				label: this.$t("head.id"),
+				placeholder: this.$t("head.searchId"),
+				regExpType: "searchId"
 			},
 			{
-				type: 'text',
-				vModel: 'projectName',
-				label: this.$t('head.name'),
-				placeholder: this.$t('head.searchName'),
-				regExpType:'name' },
-			{
-				type: 'text',
-				vModel: 'projectDesc',
-				label: this.$t('head.description'),
-				placeholder: this.$t('head.searchComment'),
-				regExpType: 'desc'
+				type: "text",
+				vModel: "projectName",
+				label: this.$t("head.name"),
+				placeholder: this.$t("head.searchName"),
+				regExpType: "name"
 			},
 			{
-				type: 'dataList',
-				vModel: 'pageSize',
-				label: this.$t('head.listCount'),
-				val: '10',
+				type: "text",
+				vModel: "projectDesc",
+				label: this.$t("head.description"),
+				placeholder: this.$t("head.searchComment"),
+				regExpType: "desc"
+			},
+			{
+				type: "dataList",
+				vModel: "pageSize",
+				label: this.$t("head.listCount"),
+				val: "10",
 				optionInfo: {
-					optionFor: 'option in [10, 100, 1000]',
-					optionValue: 'option',
-					optionText: 'option',
-				},
-			},	
+					optionFor: "option in [10, 100, 1000]",
+					optionValue: "option",
+					optionText: "option"
+				}
+			}
 		]
 	},
 	button: {
 		list: [
-			{ id: 'add', isUse: true },
-			{ id: 'initialize', isUse: true },
-			{ id: 'newTab', isUse: true },
-		],
+			{ id: "add", isUse: true },
+			{ id: "initialize", isUse: true },
+			{ id: "newTab", isUse: true }
+		]
 	},
 	grid: {
-		url: '/igate/javaProject/search.json',
-		totalCntUrl: '/igate/javaProject/rowCount.json',
+		url: "/igate/javaProject/search.json",
+		totalCntUrl: "/igate/javaProject/rowCount.json",
 		paging: {
 			isUse: true,
-			side: 'server',
+			side: "server"
 		},
 		options: {
-    		columns: [
-    			{
-    				name: "projectId",
-    	        	header: this.$t('head.id'),
-    	        	align: "left",
-                    width: "30%",
-    			}, 
-    			{
-    				name: "projectName",
-    	        	header: this.$t('head.name'),
-    	        	align: "left",
-                    width: "30%",
-    			}, 
-    			{
-    	        	name: "projectDesc",
-    	        	header: this.$t('head.description'),
-    	        	align: "left",
-                    width: "40%",
-    			}
-    		]
-		},
+			columns: [
+				{
+					name: "projectId",
+					header: this.$t("head.id"),
+					align: "left",
+					width: "30%"
+				},
+				{
+					name: "projectName",
+					header: this.$t("head.name"),
+					align: "left",
+					width: "30%"
+				},
+				{
+					name: "projectDesc",
+					header: this.$t("head.description"),
+					align: "left",
+					width: "40%"
+				}
+			]
+		}
 	},
 	detail: {
-		pk: ['projectId'],
-		controlUrl: '/igate/javaProject/control.json',
-		controlParams: function(detailData) {
+		pk: ["projectId"],
+		controlUrl: "/igate/javaProject/control.json",
+		controlParams: function (detailData) {
 			return {
-				'projectId': detailData.projectId
+				projectId: detailData.projectId
 			};
-		},		
+		},
 		button: {
 			list: [
-				{ id: 'insert', isUse: true },
-				{ id: 'update', isUse: true },
-				{ id: 'delete', isUse: true },
-				{ id: 'dump', isUse: true },
-			],
+				{ id: "insert", isUse: true },
+				{ id: "update", isUse: true },
+				{ id: "delete", isUse: true },
+				{ id: "dump", isUse: true }
+			]
 		},
 		tabList: [
 			{
-				type: 'basic',
-				label: this.$t('head.basic.info'),
+				type: "basic",
+				label: this.$t("head.basic.info"),
 				content: [
 					[
 						[
-							{ type: 'text', vModel: 'projectId', label: this.$t('head.id'), isPK: true, regExpType: 'id' },
-							{ type: 'text', vModel: 'projectName', label: this.$t('head.name'), regExpType:'name' },
 							{
-								type: 'select',
-								vModel: 'projectType',
+								type: "text",
+								vModel: "projectId",
+								label: this.$t("head.id"),
+								isPK: true,
+								regExpType: "id"
+							},
+							{
+								type: "text",
+								vModel: "projectName",
+								label: this.$t("head.name"),
+								regExpType: "name"
+							},
+							{
+								type: "select",
+								vModel: "projectType",
 								isRequired: true,
-								label: this.$t('common.type'),
+								label: this.$t("common.type"),
 								optionInfo: {
-									url: '/common/property/properties.json',
+									url: "/common/property/properties.json",
 									params: {
-										propertyId: 'List.JavaProject.Type',
+										propertyId: "List.JavaProject.Type",
 										orderByKey: true
 									},
-									optionListName: 'projectTypes',
-									optionFor: 'option in projectTypes',
-									optionValue: 'option.pk.propertyKey',
-									optionText: 'option.propertyValue',
-								},
-							},
+									optionListName: "projectTypes",
+									optionFor: "option in projectTypes",
+									optionValue: "option.pk.propertyKey",
+									optionText: "option.propertyValue"
+								}
+							}
 						],
 						[
-							{ type: 'text', vModel: 'projectArtifact', isRequired: true, label: this.$t('igate.javaProject.artifact') },
-							{ type: 'text', vModel: 'projectClassPath', label: this.$t('igate.javaProject.classPath') },
-							{ type: 'text', vModel: 'projectRepository', label: this.$t('igate.javaProject.repository') },
-						],
+							{
+								type: "text",
+								vModel: "projectArtifact",
+								isRequired: true,
+								label: this.$t("igate.javaProject.artifact")
+							},
+							{
+								type: "text",
+								vModel: "projectClassPath",
+								label: this.$t("igate.javaProject.classPath")
+							},
+							{
+								type: "text",
+								vModel: "projectRepository",
+								label: this.$t("igate.javaProject.repository")
+							}
+						]
 					],
 					[
 						[
-							{ type: 'textarea', vModel: 'projectDesc', label: this.$t('head.description'), height: '60px', regExpType: 'desc' },
-						],
-					],
-				],
-			},
-		],
+							{
+								type: "textarea",
+								vModel: "projectDesc",
+								label: this.$t("head.description"),
+								height: "60px",
+								regExpType: "desc"
+							}
+						]
+					]
+				]
+			}
+		]
 	}
 };

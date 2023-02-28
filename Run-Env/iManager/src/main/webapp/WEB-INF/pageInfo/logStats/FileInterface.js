@@ -1,4 +1,4 @@
 const info = {
-	type: 'custom',	
-	url: '/logStats/file/interface.html'
+	type: "custom",
+	url: "/logStats/file/interface.html"
 };

@@ -8,7 +8,7 @@ var constants = {
 		num: { maxLength: 30, regExp: '[^0-9]' },
 		url: { maxLength: 100, regExp: '' },
 		ip: { maxLength: 30, regExp: '[^0-9.]' },
-		className: { maxLength: 200, regExp: '' },
+		className: { maxLength: 200, regExp: '[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]' },
 		cron: { maxLength: 30, regExp: '[^A-Za-z0-9*,#-? ]'},
 		password: { maxLength: 30, regExp: '[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]'},
 		pageSize: { maxLength: 4, regExp: '[^0-9]' },
@@ -18,4 +18,37 @@ var constants = {
 	//escape: 27, space: 32
 	modalCloseKeyCode: [27, 32],
 	isUseTheme: true,
+	
+	detail: {
+		101010: {
+			selectedInfoTitleKey: ['recordId', 'recordDesc'],
+		},
+		101070: {
+			selectedInfoTitleKey: ['queryId', 'queryDesc'],
+		},
+		102070: {
+			selectedInfoTitleKey: ['operationId', 'operationDesc'],
+		},
+		101050: {
+			selectedInfoTitleKey: ['interfaceId', 'interfaceDesc'],
+		},
+		202030: {
+			selectedInfoTitleKey: ['adapterId', 'adapterName'],
+		},
+		202020: {
+			selectedInfoTitleKey: ['connectorId', 'connectorName'],
+		},
+		302020: {
+			selectedInfoTitleKey: ['threadPoolId', 'threadPoolDesc'],
+		},
+		302030: {
+			selectedInfoTitleKey: ['calendarId', 'calendarDesc'],
+		},
+		303070: {
+			selectedInfoTitleKey: ['menuId', 'menuUrl'],
+		},
+		303080: {
+			selectedInfoTitleKey: ['noticeTitle'],
+		}
+	}
 };

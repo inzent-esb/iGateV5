@@ -36,6 +36,8 @@ var loadDataWarn = "<fmt:message>head.error.load.data.warn</fmt:message>";
 var totalCountLabel = function(value) {
 	return '<fmt:message key="head.totalCount"><fmt:param value="'+ numberWithComma(value) +'"/></fmt:message>'
 };
+var noSelect = "<fmt:message>head.selectError</fmt:message>";
+var running = "<fmt:message>common.running</fmt:message>";
 	
 /* time Names */
 var timeHour = "<fmt:message>igate.hours.before</fmt:message>";

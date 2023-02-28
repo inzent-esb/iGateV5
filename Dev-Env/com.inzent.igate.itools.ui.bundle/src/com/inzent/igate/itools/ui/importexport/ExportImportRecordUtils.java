@@ -738,6 +738,7 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
 
       default :
         record.setRecordType(Record.TYPE_INDIVI) ;
+        break ;
       }
 
       // 모델이름

@@ -10,12 +10,12 @@
 				<span>
 					<fmt:message>igate.traceLog.message.info</fmt:message>
 				</span>
-				<div style="position: absolute; top:-3px; right: 12px;" v-if="'INI' === logCode">
+				<div style="position: absolute; top:-3px; right: 12px;" >
 					<a title="<fmt:message>head.download</fmt:message>" class="btn btn-m" style="padding-top: 0.1rem; padding-bottom: 0.1rem;" v-on:click="downloadFile">
 						<i class="icon-export"></i>
 						<span class="hide"><fmt:message>head.download</fmt:message></span>
 					</a>
-					<a title="<fmt:message>igate.traceLog.create.testCase</fmt:message>" class="btn btn-m" style="padding-top: 0.1rem; padding-bottom: 0.1rem;" v-on:click="createTestCase">
+					<a title="<fmt:message>igate.traceLog.create.testCase</fmt:message>" class="btn btn-m" style="padding-top: 0.1rem; padding-bottom: 0.1rem;" v-on:click="createTestCase" v-if="'INI' === logCode">
 						<i class="icon-play"></i>
 						<span class="hide"><fmt:message>igate.traceLog.create.testCase</fmt:message></span>
 					</a>					
@@ -45,7 +45,10 @@
 			<input type="text" v-model="object.pk.testCaseId" placeholder="<fmt:message>igate.traceLog.enter.testCase</fmt:message>" :maxLength="testCaseIdRegExp.maxLength" v-on:input="inputEvt({regExp: testCaseIdRegExp.regExp, key: 'object.pk.testCaseId'})" class="form-control">
 		</div> 
 		<div class="form-group">
-			<label class="control-label"><fmt:message>igate.instance.id</fmt:message></label> 
+			<label class="control-label">
+				<fmt:message>igate.instance.id</fmt:message>
+				<b class="icon-star"></b>
+			</label> 
 			<select class="form-control"  v-model="object.testInstance">
 				<option v-for="(instanceInfo, idx) in instanceList" v-bind:value="instanceInfo.instanceId" v-text="instanceInfo.instanceId"></option>
 			</select>
