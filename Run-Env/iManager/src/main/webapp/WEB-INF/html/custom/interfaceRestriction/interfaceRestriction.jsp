@@ -165,40 +165,41 @@
 			        ]
 			    },
 			    {
-			        type: 'property',
-			        id: 'InterfaceRestrictionConds',
-			        name: '<fmt:message>igate.transactionRestriction</fmt:message> <fmt:message>igate.transactionRestriction.value</fmt:message>',
-			        mappingDataInfo: 'interfaceRestrictionConds',
-			        detailList: [
-			            {
-			                type: 'select',
-			                name: '<fmt:message>common.type</fmt:message>',
-			                mappingDataInfo: {
-			                    id: 'restrictionTypeList',
-			                    selectModel: 'elm.pk.restrictionType',
-			                    optionFor: 'option in restrictionTypeList',
-			                    optionValue: 'option.pk.propertyKey',
-			                    optionText: 'option.propertyValue'
-			                }
-			            },
-			            {
-			                type: 'select',
-			                name: '<fmt:message>igate.transactionRestriction.operator</fmt:message>',
-			                mappingDataInfo: {
-			                    id: 'restrictionOperatorList',
-			                    selectModel: 'elm.restrictionOperator',
-			                    optionFor: 'option in restrictionOperatorList',
-			                    optionValue: 'option.pk.propertyKey',
-			                    optionText: 'option.propertyValue'
-			                }
-			            },
-			            {
-			                type: 'text',
-			                name: '<fmt:message>igate.transactionRestriction.value</fmt:message>',
-			                mappingDataInfo: 'elm.restrictionValue'
-			            }
-			        ]
-			    }
+			    	'type': 'property',
+					'id': 'InterfaceRestrictionConds',
+					'name': '<fmt:message>igate.transactionRestriction</fmt:message> <fmt:message>igate.transactionRestriction.value</fmt:message>',
+					'addRowFunc': 'interfaceRestrictionCondAdd',
+					'removeRowFunc': 'interfaceRestrictionCondRemove(index)',
+					'mappingDataInfo': 'interfaceRestrictionConds',
+					'detailList': [
+						{
+							'type': 'select',
+							'mappingDataInfo': {
+								'selectModel': 'elm.pk.restrictionType',
+								'optionFor': 'option in restrictionTypes',
+								'optionValue': 'option.pk.propertyKey',
+								'optionText': 'option.propertyValue'
+							},
+							'name': '<fmt:message>head.type</fmt:message>', 
+							'isPk': true
+						},
+						{
+							'type': 'select',
+							'mappingDataInfo': {
+								'selectModel': 'elm.restrictionOperator',
+								'optionFor': 'option in restrictionOperators',
+								'optionValue': 'option.pk.propertyKey',
+								'optionText': 'option.propertyValue'
+							},
+							'name': '<fmt:message>igate.transactionRestriction.operator</fmt:message>'
+						},
+						{
+							'type': "text", 
+							'mappingDataInfo': "elm.restrictionValue", 
+							'name': "<fmt:message>igate.transactionRestriction.value</fmt:message>"
+						}
+					]
+			    }			    
 			]);
 
 			createPageObj.setPanelButtonList({
@@ -278,15 +279,12 @@
 			                            initDateSearchPicker(this, $('#' + createPageObj.getElementId('ImngSearchObject')).find('#searchDateFrom'), dateFormatResult.object);
 			                        }
 			                    }),
-			                    mounted: function () {
+			                    created: function () {
 			                        this.enableList = interfaceRestrictionYnResult.object;
 			                        this.whitelistList = interfaceRestrictionYnResult.object;
-
-			                        this.$nextTick(
-			                            function () {
-			                                this.initSearchArea();
-			                            }.bind(this)
-			                        );
+			                    },				                    
+			                    mounted: function () {
+			                    	this.initSearchArea();
 			                    }
 			                });
 
@@ -368,11 +366,13 @@
 
 			                        SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-			                        if (!this.newTabSearchGrid()) {
-			                            this.$nextTick(function () {
-			                                window.vmSearch.search();
-			                            });
-			                        }
+							        this.$nextTick(function () {
+							        	this.newTabSearchGrid();
+							        	
+						                window.vmSearch.$nextTick(function () {
+						                	window.vmSearch.search();
+						                });
+							        }.bind(this));
 			                    }
 			                });
 
@@ -444,6 +444,8 @@
 			                                this.letter.ruleId = 0;
 			                                this.letter.rulePriority = 0;
 			                                this.letter.restrictionMessage = 0;
+			                                
+			                                window.vmInterfaceRestrictionConds.interfaceRestrictionConds = [];
 			                            }
 
 			                            $('#panel').find('#MainBasic').find('#startTime').val('');
@@ -457,18 +459,61 @@
 			                    }
 			                });
 
-			                window.vmInterfaceRestrictionConds = new Vue({
-			                    el: '#InterfaceRestrictionConds',
-			                    data: {
-			                        interfaceRestrictionConds: [],
-			                        restrictionTypeList: [],
-			                        restrictionOperatorList: []
-			                    },
-			                    mounted: function () {
-			                        this.restrictionTypeList = restrictionTypeListResult.object;
-			                        this.restrictionOperatorList = restrictionOperatorListResult.object;
-			                    }
-			                });
+			            	window.vmInterfaceRestrictionConds = new Vue({
+			            		el: '#InterfaceRestrictionConds',
+			            		data: {
+			            			viewMode: 'Open',
+			            			interfaceRestrictionConds: [],
+			            			restrictionTypes: [],
+			            			restrictionOperators: [],
+			            			selectedIndex: null,
+			            		},
+			            		methods: {
+			            			inputEvt: function(info, data) {
+			            				setLengthCnt.call(data, info);
+			            			},			            			
+			            			interfaceRestrictionCondAdd: function() {
+			            				this.interfaceRestrictionConds.push({
+			            					restrictionOperator: null,
+			            					restrictionValue: null,
+			            					pk: {
+			            						restrictionType: null
+			            					},
+			            					letter: {
+			            						restrictionValue: 0,
+			            					}			            					
+			            				});
+			            			},
+			            			interfaceRestrictionCondRemove: function(index) {
+			            				this.interfaceRestrictionConds = this.interfaceRestrictionConds.slice(0, index).concat(this.interfaceRestrictionConds.slice(index + 1));
+			            			},
+			            			validationCheck: function() {
+			            				var isValidation = true;
+			            				
+			            				for(var i = 0; i < this.interfaceRestrictionConds.length; i++) {
+			            					
+			            					var info = this.interfaceRestrictionConds[i];
+			            					
+			            					if(!info || !info.pk || !info.pk.restrictionType || !info.restrictionOperator || !info.restrictionValue) {
+			            						window._alert({type: 'warn', message: '<fmt:message>igate.transactionRestriction.valNullCheck</fmt:message>'});
+			            						isValidation = false;
+			            						break;
+			            					}
+			            				}
+			            		   		
+			            		   		return isValidation;
+			            		   	}
+			            		},
+			            		created: function() {
+			            			new HttpReq('/common/property/properties.json').read({ propertyId: 'List.InterfaceRestriction.Type', orderByKey: true }, function (restrictionTypesResult) {
+			            				this.restrictionTypes = restrictionTypesResult.object;
+			            			}.bind(this));
+			            			
+			            			new HttpReq('/common/property/properties.json').read({ propertyId: 'List.TransactionRestriction.Operator', orderByKey: true }, function (restrictionOperatorsResult) {
+			            				this.restrictionOperators = restrictionOperatorsResult.object;
+			            			}.bind(this));
+			            		},
+			            	});
 			            });
 			        });
 			    });
@@ -481,7 +526,43 @@
 
 			new Vue({
 			    el: '#panel-footer',
-			    methods: $.extend(true, {}, panelMethodOption)
+			    methods: $.extend(true, panelMethodOption, {
+					dumpInfo: function() {				
+						window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
+				   		ControlImngObj.dump();
+				   	},
+				   	removeInfo: function() {
+				   		window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
+				   		SaveImngObj.remove('<fmt:message>head.delete.conform</fmt:message>', '<fmt:message>head.delete.notice</fmt:message>');
+				   	},
+				   	updateInfo: function() {
+				   		window.vmSearch.object.startTime = changeTime(window.vmSearch.object.startTime);
+				   		window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
+				        window.vmMain.object.endTime = changeTime(window.vmMain.object.endTime);
+				        
+				        if(!window.vmInterfaceRestrictionConds.validationCheck()) return;
+				        
+				        if(window.vmMain.object.startTime > window.vmMain.object.endTime) {
+				        	window._alert({type: 'warn', message : '<fmt:message>igate.time.precedeWarn</fmt:message>'}) ;
+				   			return;
+				   		}
+				        
+				   		SaveImngObj.update('<fmt:message>head.update.notice</fmt:message>');
+				   	},
+				   	saveInfo: function() {
+				   		window.vmMain.object.startTime = changeTime(window.vmMain.object.startTime);
+				   		window.vmMain.object.endTime = changeTime(window.vmMain.object.endTime);
+				   		
+				   		if(!window.vmInterfaceRestrictionConds.validationCheck()) return;
+				   		
+				   		if(window.vmMain.object.startTime > window.vmMain.object.endTime) {
+				   			window._alert({type: 'warn', message : '<fmt:message>igate.time.precedeWarn</fmt:message>'}) ;
+				   			return;
+				   		}
+
+				   		SaveImngObj.insert('<fmt:message>head.insert.notice</fmt:message>');
+				   	}			    	
+			    })
 			});
 
 			this.addEventListener('destroy', function (evt) {
@@ -539,7 +620,7 @@
 		}
 			
 		function initDateSearchPicker(vueObj, dateSelector, dateFormat) {
-			if (${'HHmmss' == dateFormat}){
+			if (${'HHmmss' == dateFormat}) {
 				var startTime = '00:00:00';
 				
 				if(vueObj.object.startTime) {
@@ -553,15 +634,38 @@
 				dateSelector.customTimePicker(function(time){
 					vueObj.object.startTime = changeTime(time);
 				}, {startTime: startTime});		
-			}else{		
+			} else {	
 				var paramOption = {
 					timePicker: true, 
 					timePicker24Hour: true,
 					timePickerSeconds: true,
 					autoUpdateInput : false,
 					format : 'YYYYMMDDHHmmss',
-					localeFormat : 'YYYY.MM.DD HH:mm:ss'
-				}	
+					localeFormat : 'YYYY.MM.DD HH:mm:ss',
+					startDate: (function() {
+						if (vueObj.object.startTime) {
+							var startTime = vueObj.object.startTime;
+							
+							var year = startTime.substring(0, 4);
+							var month = startTime.substring(4, 6);
+							var day = startTime.substring(6, 8);
+							var hour = startTime.substring(8, 10);
+							var minute = startTime.substring(10, 12);
+							var second = startTime.substring(12, 14);
+							
+							return new Date(year, month - 1, day, hour, minute, second).getTime();
+						} else {
+							var date = new Date(Date.now());
+
+							date.setHours(0);
+							date.setMinutes(0);
+							date.setSeconds(0);
+							date.setMilliseconds(0);
+							
+							return date.getTime();
+						}
+					})()
+				};	
 				
 				dateSelector.customDatePicker(function(time) {
 					vueObj.object.startTime = changeTime(time);

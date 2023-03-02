@@ -102,7 +102,7 @@
 			                            optionFor: 'option in adapterTypeList',
 			                            optionValue: 'option.pk.propertyKey',
 			                            optionText: 'option.propertyValue',
-			                            changeEvt: 'onChangeTypeValue'
+			                            changeEvt: 'changeAdapterType'
 			                        },
 			                        warning: '<fmt:message>igate.connector.alert.type.empty</fmt:message>'
 			                    },
@@ -238,7 +238,6 @@
 			                    vModel: 'elm.operationId',
 			                    callBackFuncName: 'setOperationId'
 			                },
-			                clickEvt: 'operationClickEvt(elm.operationId)'
 			            },
 			            {
 			                type: 'customModal',
@@ -281,49 +280,45 @@
 			            var detailHtml = '';
 
 			            detailHtml += '<div class="propertyTab" style="width: 100%">';
-			            detailHtml += '<div class="form-table form-table-responsive">';
-			            detailHtml += '    <div class="form-table-wrap">';
+			            detailHtml += '    <div class="form-table form-table-responsive">';
 			            detailHtml += '        <div class="form-table-head">';
 			            detailHtml += '            <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="addProperty();"><i class="icon-plus-circle"></i></button>';
-			            detailHtml += '			   <label class="col"><fmt:message>common.property.key</fmt:message></label>';
-			            detailHtml += '			   <label class="col"><fmt:message>common.property.value</fmt:message></label>';
-			            detailHtml += '			   <label class="col"><fmt:message>head.description</fmt:message></label>';
-			            detailHtml += '        </div>';
-			            detailHtml += '        <div class="form-table-body" v-for="(elm, index) in adapterProperties">';
-			            detailHtml += '        		<button type="button" class="btn-icon saveGroup updateGroup" v-if="elm.require == true"><i class="icon-star"></i></button>';
-			            detailHtml += '        		<button type="button" class="btn-icon saveGroup updateGroup" v-on:click="removeProperty(index);" v-if="elm.require == false || elm.require == null"><i class="icon-minus-circle"></i></button>';
-			            detailHtml += '        		<div class="col">';
-			            detailHtml += '        			<div v-if="elm.require == true" style="width: 100%;">';
-			            detailHtml += '        				<input type="text" class="form-control readonly" list="propertyKeys" v-model="elm.pk.propertyKey" readonly="readonly" disabled="disabled">';
-			            detailHtml += '        				<datalist id="propertyKeys">';
-			            detailHtml += '        					<option v-for="et in propertyKeys">{{et}}</option>';
-			            detailHtml += '        				</datalist>';
-			            detailHtml += '        			</div>';
-			            detailHtml += '        			<div class="detail-content-regExp" v-if="elm.require == false || elm.require == null">';
-			            detailHtml += '        				<input type="text" class="regExp-text view-disabled" list="propertyKeys" v-model.trim="elm.pk.propertyKey" @change="searchPropertyKey(index);" @input="inputEvt(\'pk.propertyKey\', index)">';
-			            detailHtml += '        				<datalist id="propertyKeys">';
-			            detailHtml += '        					<option v-for="et in propertyKeys">{{et}}</option>';
-			            detailHtml += '        				</datalist>';
-			            detailHtml += '        				<span class="letterLength"> ( {{ curLengthArr[index]["pk.propertyKey"] }} / {{ maxLengthArr[index]["pk.propertyKey"] }} ) </span>';
-			            detailHtml += '        			</div>';
-			            detailHtml += '        		</div>';
-			            detailHtml += '        		<div class="col">';
-			            detailHtml += '        			<div class="detail-content-regExp" v-if="elm.cipher">';
-			            detailHtml += '        				<input type="password" class="regExp-text view-disabled" v-model="elm.propertyValue" @input="inputEvt(\'propertyValue\', index)">';
-			            detailHtml += '        				<span class="letterLength"> ( {{ curLengthArr[index].propertyValue }} / {{ maxLengthArr[index].propertyValue }} ) </span>';
-			            detailHtml += '        			</div>';
-			            detailHtml += '        			<div class="detail-content-regExp"  v-if="elm.cipher == false || elm.cipher == null">';
-			            detailHtml += '        				<input type="text" class="regExp-text view-disabled" v-model="elm.propertyValue" @input="inputEvt(\'propertyValue\', index)">';
-			            detailHtml += '        				<span class="letterLength"> ( {{ curLengthArr[index].propertyValue }} / {{ maxLengthArr[index].propertyValue }} ) </span>';
-			            detailHtml += '        			</div>';
-			            detailHtml += '        	    </div>';
-			            detailHtml += '        		<div class="col">';
-			            detailHtml += '        			<input type="text" class="form-control readonly" v-model="elm.propertyDesc" readonly="readonly" disabled="disabled">';
-			            detailHtml += '        		</div>';
+			            detailHtml += '            <label class="col"><fmt:message>common.property.key</fmt:message></label>';
+			            detailHtml += '            <label class="col"><fmt:message>common.property.value</fmt:message></label>';
+			            detailHtml += '            <label class="col"><fmt:message>head.description</fmt:message></label>';
+			            detailHtml += '        </div>';			            
+			            detailHtml += '        <div class="form-table-wrap">';
+			            detailHtml += '        	   <div class="form-table-body" v-for="(elm, index) in adapterProperties">';  
+			            detailHtml += '                <button type="button" class="btn-icon saveGroup updateGroup" v-if="elm.require"><i class="icon-star"></i></button>';
+			            detailHtml += '                <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="removeProperty(index);" v-else><i class="icon-minus-circle"></i></button>';
+			            detailHtml += '                <div class="col">';
+			            detailHtml += '                    <div v-if="elm.require" style="width: 100%;">';
+			            detailHtml += '                        <input type="text" class="form-control readonly" list="propertyKeys" v-model="elm.pk.propertyKey" readonly>';
+			            detailHtml += '                        <datalist id="propertyKeys">';
+			            detailHtml += '                            <option v-for="option in propertyKeys" :value="option.pk.propertyKey">{{option.pk.propertyKey}}</option>';
+			            detailHtml += '                        </datalist>';
+			            detailHtml += '                    </div>';
+			            detailHtml += '                    <div class="detail-content-regExp" v-else>';
+			            detailHtml += '                        <input type="text" class="regExp-text view-disabled" list="propertyKeys" v-model.trim="elm.pk.propertyKey" :maxlength="maxLengthObj.id" @input="inputEvt(elm, \'pk.propertyKey\')" @change="changePropertyKey(index)">';
+			            detailHtml += '                        <datalist id="propertyKeys">';
+			            detailHtml += '                            <option v-for="option in propertyKeys" :value="option.pk.propertyKey">{{option.pk.propertyKey}}</option>';
+			            detailHtml += '                        </datalist>';
+			            detailHtml += '                        <span class="letterLength"> ( {{ elm.letter.pk.propertyKey }} / {{ maxLengthObj.id }} ) </span>';
+			            detailHtml += '                    </div>';
+			            detailHtml += '                </div>';
+			            detailHtml += '                <div class="col">';
+			            detailHtml += '                    <div class="detail-content-regExp">';
+			            detailHtml += '                        <input :type="elm.cipher? \'password\' : \'text\'" class="regExp-text view-disabled" v-model="elm.propertyValue" :maxlength="maxLengthObj.value" @input="inputEvt(elm, \'propertyValue\')">';
+			            detailHtml += '                        <span class="letterLength"> ( {{ elm.letter.propertyValue }} / {{ maxLengthObj.value }} ) </span>';
+			            detailHtml += '                    </div>';
+			            detailHtml += '                </div>';
+			            detailHtml += '                <div class="col">';
+			            detailHtml += '                    <input type="text" class="form-control readonly" v-model="elm.propertyDesc" readonly>';
+			            detailHtml += '                </div>';
+			            detailHtml += '            </div>';
 			            detailHtml += '        </div>';
 			            detailHtml += '    </div>';
-			            detailHtml += '</div>';
-			            detailHtml += '</div>';
+			            detailHtml += '</div>';			            
 
 			            return detailHtml;
 			        }
@@ -459,12 +454,11 @@
 				            initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#queueModeList'), this.object.queueMode);
 				        }
 				    }),
-				    mounted: function () {
+				    created: function () {
 				    	this.adapterTypes = adapterListresult.object;
-				    	
-		                this.$nextTick(function () {
-		                	this.initSearchArea();
-		                }.bind(this));				    	
+				    },				    
+				    mounted: function () {
+				    	this.initSearchArea();				    	
 				    }
 				});
 
@@ -540,11 +534,13 @@
 
 				        SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-				        if (!this.newTabSearchGrid()) {
-				            this.$nextTick(function () {
-				                window.vmSearch.search();
-				            });
-				        }
+				        this.$nextTick(function () {
+				        	this.newTabSearchGrid();
+				        	
+			                window.vmSearch.$nextTick(function () {
+			                	window.vmSearch.search();
+			                });
+				        }.bind(this));
 				    }
 				});
 	        });
@@ -592,18 +588,32 @@
 			    },
 			    watch: {
 			        panelMode: function () {
-			            if (this.panelMode != 'add') $('#panel').find('.warningLabel').hide();
+			        	if (this.panelMode !== 'add') $('#panel').find('.warningLabel').hide();
 
 			            window.vmAdapterOperations.operationElmHide();
 			        }
 			    },
 			    methods: {
-			        onChangeTypeValue: function () {
-			            getPropertyList([
-			                {
-			                    uri: "<c:url value='/igate/adapter/propertyKeys.json?adapterType=" + this.object.adapterType + "&requireFlag=true' />"
-			                }
-			            ]);
+			        changeAdapterType: function () {
+			        	// telegram handler
+			            new HttpReq('/common/property/properties.json').read({ propertyId: 'Telegram.Adapter.' + this.object.adapterType, orderByKey: true },
+			                function (telegramHandlerResult) {
+			                    if ('ok' !== telegramHandlerResult.result) throw telegramHandlerResult;
+
+			                    this.object.telegramHandler = 0 < telegramHandlerResult.object.length ? telegramHandlerResult.object[0].propertyValue : '';
+			                }.bind(this)
+			            );
+
+			            // charset
+			            new HttpReq('/common/property/properties.json').read({ propertyId: 'Charset.Adapter.' + this.object.adapterType, orderByKey: true },
+			                function (charsetResult) {
+			                    if ('ok' !== charsetResult.result) throw charsetResult;
+
+			                    this.object.charset = 0 < charsetResult.object.length ? charsetResult.object[0].propertyValue : '';
+			                }.bind(this)
+			            );
+			            
+			            window.vmAdapterProperties.changeAdapterType();
 			        },
 			        inputEvt: function (info) {
 			            setLengthCnt.call(this, info);
@@ -635,35 +645,7 @@
 			                window.vmAdapterProperties.adapterProperties = [];
 			                window.vmAdapterQueueDeploies.adapterSubDeploies = [];
 			                vmConnectors.connectors = [];
-
-			                window.vmAdapterProperties.curLengthArr = [];
-			                window.vmAdapterProperties.maxLengthArr = [];
 			            }
-			        },
-			        adapterTypeChangeEvt: function (info) {
-			            // telegram handler
-			            var telegramHandlerPropertyId = 'Telegram.Adapter.' + info;
-
-			            new HttpReq('/common/property/properties.json').read(
-			                { propertyId: telegramHandlerPropertyId, orderByKey: true },
-			                function (telegramHandlerResult) {
-			                    if ('ok' !== telegramHandlerResult.result) throw telegramHandlerResult;
-
-			                    this.object.telegramHandler = 0 < telegramHandlerResult.object.length ? telegramHandlerResult.object[0].propertyValue : '';
-			                }.bind(this)
-			            );
-
-			            // charset
-			            var charsetPropertyId = 'Charset.Adapter.' + info;
-
-			            new HttpReq('/common/property/properties.json').read(
-			                { propertyId: charsetPropertyId, orderByKey: true },
-			                function (charsetResult) {
-			                    if ('ok' !== charsetResult.result) throw charsetResult;
-
-			                    this.object.charset = 0 < charsetResult.object.length ? charsetResult.object[0].propertyValue : '';
-			                }.bind(this)
-			            );
 			        },
 			        openModal: function (openModalParam, regExpInfo) {
 			            if ('/modal/activityModal.html' == openModalParam.url) {
@@ -682,18 +664,11 @@
 			            this.object.responseStructure = param.recordId;
 			        },
 			        loaded: function () {
-			            //letter
-			            this.object.adapterProperties.forEach(
-			                function (info) {
-			                    this.curLengthArr.push({
-			                        'pk.propertyKey': info.pk.propertyKey ? info.pk.propertyKey.length : 0,
-			                        propertyValue: info.propertyValue ? info.propertyValue.length : 0
-			                    });
-
-			                    this.maxLengthArr.push(this.maxLengthObj);
-			                }.bind(window.vmAdapterProperties)
-			            );
-
+			        	//property
+			        	window.vmAdapterProperties.adapterProperties = this.object.adapterProperties;
+			        	
+		                if(this.object.adapterType) window.vmAdapterProperties.setPropertyKeys();
+			        	
 			            //deploies
 			            var deploies = window.vmAdapterQueueDeploies;
 
@@ -712,7 +687,13 @@
 			                else deploies.adapterSubDeploies.push(false);
 			            });
 
+			            // connectors
 			            vmConnectors.connectors = this.object.connectors;
+			            
+			            //letter
+		                this.letter.adapterId = this.object.adapterId.length;
+		                this.letter.adapterName = this.object.adapterName ? this.object.adapterName.length : 0;
+		                this.letter.adapterDesc = this.object.adapterDesc ? this.object.adapterDesc.length : 0;
 			        }
 			    },
 			    created: function () {
@@ -784,7 +765,7 @@
 
 			            this.selectedIdx = selectedIdx;
 
-			            createPageObj.openModal.call(this, openModalParam, selectedIdx);
+			            createPageObj.openModal.call(this, openModalParam);
 			        },
 			        adapterEventChange: function (param, idx) {
 			            var rtnObj = this.adapterOperations[idx];
@@ -808,7 +789,7 @@
 			            if (!param) return;
 
 			            localStorage.setItem('selectedOperation', JSON.stringify({ operationId: param }));
-			            localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['900000', '901210']));
+			            localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['100000', '102000', '102070']));
 
 			            window.open(location.href);
 			        },
@@ -1360,56 +1341,141 @@
 			        },
 			        adapterProperties: [],
 			        propertyKeys: [],
-			        curLengthArr: [],
-			        maxLengthArr: [],
+			        uri: '',
 			        maxLengthObj: {
-			            'pk.propertyKey': getRegExpInfo('id').maxLength,
-			            propertyValue: getRegExpInfo('value').maxLength
-			        },
-			        uri: ''
+			        	id: getRegExpInfo('id').maxLength,
+			        	value: getRegExpInfo('value').maxLength
+			        }			        
 			    },
 			    methods: {
-			        plusBtnClick: function () {
-			            var jsonLoad = [
-			                {
-			                    uri: "<c:url value='/igate/adapter/propertyKeys.json?adapterType=" + window.vmMain.object.adapterType + "' />",
-			                    attributeName: this.propertyKeys
-			                }
-			            ];
-			            getPropertyList(jsonLoad);
-			        },
 			        addProperty: function () {
-			            onCheckPropertyCount();
-			            this.plusBtnClick();
 			            this.adapterProperties.push({
+			                pk: {
+			                    propertyKey: ''
+			                },
+			                propertyValue: '',
 			                propertyDesc: '',
-			                pk: {}
+			                letter: {
+			                	pk: {
+				                    propertyKey: 0
+				                },
+				                propertyValue: 0,
+			                }
 			            });
-
-			            this.curLengthArr.push({
-			                'pk.propertyKey': 0,
-			                propertyValue: 0
-			            });
-
-			            this.maxLengthArr.push(this.maxLengthObj);
 			        },
 			        removeProperty: function (index) {
-			            if (onCheckPropertyCount()) --propertyCount;
-
-			            this.adapterProperties = this.adapterProperties.slice(0, index).concat(this.adapterProperties.slice(index + 1));
-			            this.curLengthArr.splice(index, 1);
-			            this.maxLengthArr.splice(index, 1);
+			            this.adapterProperties.splice(index, 1);
 			        },
-			        inputEvt: function (key, index) {
-			            //letter
-			            if ('pk.propertyKey' === key) {
-			                if (this.curLengthArr[index]['pk.propertyKey'] > this.maxLengthArr[index]['pk.propertyKey']) return;
-			                this.curLengthArr[index]['pk.propertyKey'] = this.adapterProperties[index].pk.propertyKey.length;
-			            } else {
-			                if (this.curLengthArr[index].propertyValue > this.maxLengthArr[index].propertyValue) return;
-			                this.curLengthArr[index].propertyValue = this.adapterProperties[index].propertyValue.length;
+			        changeAdapterType: function () { // 기본정보 > 어댑터 타입 변경 이벤트
+			        	this.setPropertyKeys();
+			        	
+			            new HttpReq('/common/property/properties.json').read(
+			                {
+			                    propertyId: 'Property.Adapter.' + vmMain.object.adapterType,
+			                    orderByKey: true
+			                },
+			                function (adapterTypeListResult) {
+			                	this.adapterProperties = adapterTypeListResult.object
+			                	.filter(function (adapterPropertyInfo) {
+                                    return 'Y' === adapterPropertyInfo.requireYn;
+                                })
+			                	.map(function (adapterPropertyInfo) {
+	                                return {
+                                		pk: {
+                                            propertyKey: adapterPropertyInfo.pk.propertyKey
+                                        },
+                                        propertyValue: adapterPropertyInfo.propertyValue,
+                                        propertyDesc: adapterPropertyInfo.propertyDesc,
+	                                	cache: 'Y' === adapterPropertyInfo.cacheYn,
+                                        cipher: 'Y' === adapterPropertyInfo.cipherYn,
+                                        require: 'Y' === adapterPropertyInfo.requireYn,
+	                                	letter: {
+	                                    	pk: {
+	                                            propertyKey: adapterPropertyInfo.pk.propertyKey? adapterPropertyInfo.pk.propertyKey.length : 0
+	                                        },
+	                                        propertyValue: adapterPropertyInfo.propertyValue? adapterPropertyInfo.propertyValue.length : 0
+	                                    }
+	                                }
+	                            });
+			                }.bind(this)
+			            );
+			        },
+			        setPropertyKeys: function() { //프로퍼티 키 datalist 불러오기
+			        	new HttpReq('/igate/adapter/propertyKeys.json').read(
+	                        {
+	                        	adapterType: vmMain.object.adapterType,
+	                            orderByKey: true
+	                        },
+	                        function (adapterKeyListResult) {
+	                            this.propertyKeys = adapterKeyListResult.object;
+	                        }.bind(this)
+	                    );
+			        },
+			        changePropertyKey: function (index) { //프로퍼티 키 datalist 값 선택
+			            var rowInfo = this.adapterProperties[index];
+
+			            // 직접 입력일 경우
+			            if (
+		        			!this.propertyKeys.some(function (property) {
+		        				return rowInfo.pk.propertyKey === property.pk.propertyKey;
+		        			})
+		        		) 
+			            	return;
+			            
+			            // 프로퍼티 키 중복 검사
+			            var check = this.adapterProperties.filter(function(property, idx) {
+			            	return idx !== index;
+			            }).some(function(property, idx) {
+			            	return rowInfo.pk.propertyKey === property.pk.propertyKey;
+			            });
+			            
+			            if(check) {
+			            	window._alert({
+		    					type: 'warn',
+		    					message: '<fmt:message>igate.adapter.alert.overlap</fmt:message>',
+		    				});
+
+		    				this.adapterProperties[index] = {
+		    					pk: {
+		    						propertyKey: ''
+		    					},
+		    					letter : {
+		    						pk: {
+			    						propertyKey: 0
+			    					}
+		    					}
+		    				};
+
+		    				return;
 			            }
-			        }
+			            
+			            new HttpReq('/common/property/properties.json').read(
+			                {
+			                    propertyId: 'Property.Adapter.' + vmMain.object.adapterType,
+			                    propertyKey: rowInfo.pk.propertyKey,
+			                    orderByKey: true
+			                },
+			                function (adapterResult) {
+			                    var adapterInfo = adapterResult.object[0];
+
+			                    this.adapterProperties[index].propertyValue = adapterInfo.propertyValue;
+			                    this.adapterProperties[index].propertyDesc = adapterInfo.propertyDesc;
+			                    this.adapterProperties[index].cipher = 'Y' === adapterInfo.cipherYn;
+			                    this.adapterProperties[index].require = 'Y' === adapterInfo.requireYn;
+			                }.bind(this)
+			            );
+			        },
+			        inputEvt: function (info, key) {
+			        	var regExp = getRegExpInfo('pk.propertyKey' === key? 'id' : 'value').regExp;
+			        	
+						if ('pk.propertyKey' === key) {
+							info.pk.propertyKey = info.pk.propertyKey? info.pk.propertyKey.replace(new RegExp(regExp, 'g'), '') : '';
+							info.letter.pk.propertyKey = info.pk.propertyKey ? info.pk.propertyKey.length : 0;
+						} else if('propertyValue' === key) {
+							info.propertyValue = info.propertyValue? info.propertyValue.replace(new RegExp(regExp, 'g'), '') : '';
+							info.letter.propertyValue = info.propertyValue ? info.propertyValue.length : 0;
+						}
+			        },
 			    }
 			});
 
@@ -1505,123 +1571,6 @@
 			    $('#ct').find('script').remove();
 			});
 		});
-		
-		//Flag에 의해 최초 프로퍼티 개수 Count
-		function onCheckPropertyCount() {
-		    var firstTemplateMode = true;
-
-		    if (firstTemplateMode) {
-		        firstTemplateMode = false;
-		        propertyCount = window.vmAdapterProperties.adapterProperties.length;
-		        return true;
-		    }
-		    return false;
-		}
-
-		//어댑터 Property 리스트 조회
-		function getPropertyList(jsonLoad) {
-		    $.each(jsonLoad, function (idx, value) {
-		        $.ajax({
-		            type: 'GET',
-		            url: value.uri,
-		            data: {},
-		            dataType: 'json',
-		            success: function (result) {
-		                if (typeof value.attributeName == 'undefined') {
-		                    window.vmAdapterProperties.adapterProperties = result.object; //필수 값인 항목들 표시 용도
-
-		                    window.vmAdapterProperties.curLengthArr = [];
-		                    window.vmAdapterProperties.maxLengthArr = [];
-
-		                    window.vmAdapterProperties.adapterProperties.forEach(
-		                        function (info) {
-		                            this.curLengthArr.push({
-		                                'pk.propertyKey': info.pk.propertyKey ? info.pk.propertyKey.length : 0,
-		                                propertyValue: info.propertyValue ? info.propertyValue.length : 0
-		                            });
-
-		                            this.maxLengthArr.push(this.maxLengthObj);
-		                        }.bind(window.vmAdapterProperties)
-		                    );
-		                } else {
-		                    //asdf
-		                    var propertyKey = [];
-
-		                    for (key in result.object) propertyKey[key] = result.object[key].pk.propertyKey;
-
-		                    window.vmAdapterProperties.propertyKeys = propertyKey;
-		                }
-		            },
-		            error: function (request, status, error) {
-		                ResultImngObj.errorHandler(request, status, error);
-		            }
-		        });
-		    });
-		}
-
-		// 프로퍼티 키 필드의 값 변경 시, onchange 이벤트
-		function searchPropertyKey(index) {
-		    onCheckPropertyCount();
-		    var paramPropertyId = window.vmMain.object.adapterType; // Adapter Type
-		    var paramPropertyKey = window.vmAdapterProperties.adapterProperties[index]; // Property Key
-		    var propertyValue = '';
-		    var propertyDesc = '';
-
-		    // #으로 시작하는 경우, 설명 : 갱신
-		    if (paramPropertyKey.pk.propertyKey.startsWith('#')) {
-		        window.vmAdapterProperties.adapterProperties[index].propertyDesc = propertyDesc;
-		    }
-		    // #으로 시작하는 옵션이 아닌경우, 기본값 & 설명 : 갱신 가능
-		    else {
-		        $.ajax({
-		            type: 'GET',
-		            url: "<c:url value='/common/property/properties.json' />",
-		            data: {
-		                propertyId: 'Property.Adapter.' + paramPropertyId,
-		                propertyKey: paramPropertyKey.pk.propertyKey,
-		                orderByKey: true
-		            },
-		            dataType: 'json',
-		            success: function (result) {
-		                if (result.result == 'ok') {
-		                    // propertyKey가 "" 공백으로 다 건 조회되는 경우 회피.
-		                    if (result.object.length == 1) {
-		                        propertyValue = result.object[0].propertyValue;
-		                        propertyDesc = result.object[0].propertyDesc;
-		                    }
-
-		                    //(+) 신규 추가 된 옵션인 경우, 기본값 갱신
-		                    if (propertyCount < index + 1) window.vmAdapterProperties.adapterProperties[index].propertyValue = propertyValue;
-
-		                    window.vmAdapterProperties.adapterProperties[index].propertyDesc = propertyDesc;
-		                }
-		            },
-		            error: function (request, status, error) {
-		                ResultImngObj.errorHandler(request, status, error);
-		            }
-		        });
-		    }
-		}
-
-		function checkOverlap() {
-		    var checkPropertyArray = window.vmAdapterProperties.adapterProperties.map(function (element) {
-		        return element.pk.propertyKey;
-		    });
-
-		    var overlapElement;
-
-		    checkPropertyArray.forEach(function (element, index) {
-		        if (checkPropertyArray.indexOf(element) != index) overlapElement = element;
-		    });
-
-		    if (overlapElement) {
-		        window.$alert({ type: 'normal', message: '<fmt:message>igate.adapter.alert.overlap</fmt:message>' });
-
-		        return false;
-		    }
-
-		    return true;
-		}
 	</script>
 </body>
 </html>

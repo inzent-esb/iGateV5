@@ -146,43 +146,48 @@
 		        id: 'InstanceProperties',
 		        name: '<fmt:message>head.property</fmt:message>',
 		        getDetailArea: function () {
-		            var detailHtml = '';
+		        	var detailHtml = '';
 
-		            detailHtml += '<div class="form-table form-table-responsive">';
-		            detailHtml += '    <div class="form-table-wrap">';
+		            detailHtml += '<div class="propertyTab" style="width: 100%">';
+		            detailHtml += '    <div class="form-table form-table-responsive">';
 		            detailHtml += '        <div class="form-table-head">';
-		            detailHtml += '            <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="propertyAdd();"><i class="icon-plus-circle"></i></button>';
-		            detailHtml += '			   <label class="col"><fmt:message>common.property.key</fmt:message></label>';
-		            detailHtml += '			   <label class="col"><fmt:message>common.property.value</fmt:message></label>';
-		            detailHtml += '			   <label class="col"><fmt:message>head.description</fmt:message></label>';
+		            detailHtml += '            <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="addProperty();"><i class="icon-plus-circle"></i></button>';
+		            detailHtml += '            <label class="col"><fmt:message>common.property.key</fmt:message></label>';
+		            detailHtml += '            <label class="col"><fmt:message>common.property.value</fmt:message></label>';
+		            detailHtml += '            <label class="col"><fmt:message>head.description</fmt:message></label>';
 		            detailHtml += '        </div>';
-		            detailHtml += '        <div class="form-table-body" v-for="(elm,index) in instanceProperties">';
-		            detailHtml += '        		<button type="button" class="btn-icon saveGroup updateGroup" v-if="elm.require == true"><i class="icon-star"></i></button>';
-		            detailHtml += '        		<button type="button" class="btn-icon saveGroup updateGroup" v-on:click="propertyRemove(index);" v-if="elm.require == false || elm.require == null"><i class="icon-minus-circle"></i></button>';
-		            detailHtml += '        		<div class="col" v-if="elm.require == true">';
-		            detailHtml += '        			<input type="text" class="form-control view-disabled propertyKey" list="propertyKeys" v-model="elm.pk.propertyKey" readonly="readonly" disabled="disabled">';
-		            detailHtml += '        			<datalist id="propertyKeys">';
-		            detailHtml += '        				<option v-for="et in propertyKeys">{{et}}</option>';
-		            detailHtml += '        			</datalist>';
-		            detailHtml += '        		</div>';
-		            detailHtml += '        		<div class="col" v-if="elm.require != true">';
-		            detailHtml += '        			<input type="text" class="form-control view-disabled" list="propertyKeys" v-model.trim="elm.pk.propertyKey" @change="searchPropertyKey(index);">';
-		            detailHtml += '        			<datalist id="propertyKeys">';
-		            detailHtml += '        				<option v-for="et in propertyKeys">{{et}}</option>';
-		            detailHtml += '        			</datalist>';
-		            detailHtml += '        		</div>';
-		            detailHtml += '        		<div class="col" v-if="elm.cipher == true">';
-		            detailHtml += '        			<input type="password" class="form-control view-disabled" v-model="elm.propertyValue">';
-		            detailHtml += '        		</div>';
-		            detailHtml += '        		<div class="col" v-if="elm.cipher == false || elm.cipher == null">';
-		            detailHtml += '        			<input type="text" class="form-control view-disabled" v-model="elm.propertyValue">';
-		            detailHtml += '        		</div>';
-		            detailHtml += '        		<div class="col">';
-		            detailHtml += '        			<input type="text" class="form-control view-disabled propertyKey" v-model="elm.propertyDesc"  readonly="readonly" disabled="disabled">';
-		            detailHtml += '        		</div>';
+		            detailHtml += '        <div class="form-table-wrap">';
+		            detailHtml += '        	   <div class="form-table-body" v-for="(elm, index) in instanceProperties">';  
+		            detailHtml += '                <button type="button" class="btn-icon saveGroup updateGroup" v-if="elm.require"><i class="icon-star"></i></button>';
+		            detailHtml += '                <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="removeProperty(index);" v-else><i class="icon-minus-circle"></i></button>';
+		            detailHtml += '                <div class="col">';
+		            detailHtml += '                    <div v-if="elm.require" style="width: 100%;">';
+		            detailHtml += '                        <input type="text" class="form-control readonly" list="propertyKeys" v-model="elm.pk.propertyKey" readonly>';
+		            detailHtml += '                        <datalist id="propertyKeys">';
+		            detailHtml += '                            <option v-for="option in propertyKeys" :value="option.pk.propertyKey">{{option.pk.propertyKey}}</option>';
+		            detailHtml += '                        </datalist>';
+		            detailHtml += '                    </div>';
+		            detailHtml += '                    <div class="detail-content-regExp" v-else>';
+		            detailHtml += '                        <input type="text" class="regExp-text view-disabled" list="propertyKeys" v-model.trim="elm.pk.propertyKey" :maxlength="maxLengthObj.id" @input="inputEvt(elm, \'pk.propertyKey\')" @change="changePropertyKey(index)">';
+		            detailHtml += '                        <datalist id="propertyKeys">';
+		            detailHtml += '                            <option v-for="option in propertyKeys" :value="option.pk.propertyKey">{{option.pk.propertyKey}}</option>';
+		            detailHtml += '                        </datalist>';
+		            detailHtml += '                        <span class="letterLength"> ( {{ elm.letter.pk.propertyKey }} / {{ maxLengthObj.id }} ) </span>';
+		            detailHtml += '                    </div>';
+		            detailHtml += '                </div>';
+		            detailHtml += '                <div class="col">';
+		            detailHtml += '                    <div class="detail-content-regExp">';
+		            detailHtml += '                        <input :type="elm.cipher? \'password\' : \'text\'" class="regExp-text view-disabled" v-model="elm.propertyValue" :maxlength="maxLengthObj.value" @input="inputEvt(elm, \'propertyValue\')">';
+		            detailHtml += '                        <span class="letterLength"> ( {{ elm.letter.propertyValue }} / {{ maxLengthObj.value }} ) </span>';
+		            detailHtml += '                    </div>';
+		            detailHtml += '                </div>';
+		            detailHtml += '                <div class="col">';
+		            detailHtml += '                    <input type="text" class="form-control readonly" v-model="elm.propertyDesc" readonly>';
+		            detailHtml += '                </div>';
+		            detailHtml += '            </div>';
 		            detailHtml += '        </div>';
 		            detailHtml += '    </div>';
-		            detailHtml += '</div>';
+		            detailHtml += '</div>';			            
 
 		            return detailHtml;
 		        }
@@ -261,14 +266,11 @@
 		                        initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#instanceTypes'), this.object.instanceType);
 		                    }
 		                }),
+		                created: function () {
+		                	this.instanceTypes = instanceTypeResult.object;
+		                },	
 		                mounted: function () {
-		                    this.instanceTypes = instanceTypeResult.object;
-
-		                    this.$nextTick(
-		                        function () {
-		                            this.initSearchArea();
-		                        }.bind(this)
-		                    );
+		                	this.initSearchArea();
 		                }
 		            });
 
@@ -336,11 +338,13 @@
 
 		                    SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-		                    if (!this.newTabSearchGrid()) {
-		                        this.$nextTick(function () {
-		                            window.vmSearch.search();
-		                        });
-		                    }
+					        this.$nextTick(function () {
+					        	this.newTabSearchGrid();
+					        	
+				                window.vmSearch.$nextTick(function () {
+				                	window.vmSearch.search();
+				                });
+					        }.bind(this));
 		                }
 		            });
 
@@ -374,11 +378,6 @@
 		                        };
 		                    }
 		                },
-		                watch: {
-		                    panelMode: function () {
-		                        if (this.panelMode != 'add') $('#panel').find('.warningLabel').hide();
-		                    }
-		                },
 		                methods: {
 		                    inputEvt: function (info) {
 		                        setLengthCnt.call(this, info);
@@ -401,8 +400,15 @@
 		                            this.letter.instanceAddress = 0;
 		                            this.letter.instanceNode = 0;
 
-		                            window.vmInstanceProperties.instanceProperties = [];
+				                    window.vmInstanceProperties.propertyKeys = [];
+				                    window.vmInstanceProperties.instanceProperties = [];
 		                        }
+		                    },
+		                    loaded: function () {
+		                    	//letter
+				                this.letter.instanceId = this.object.instanceId.length;
+				                this.letter.instanceAddress = this.object.instanceAddress ? this.object.instanceAddress.length : 0;
+				                this.letter.instanceNode = this.object.instanceNode ? this.object.instanceNode.length : 0;
 		                    }
 		                },
 		                mounted: function () {
@@ -416,35 +422,94 @@
 		                el: '#InstanceProperties',
 		                data: {
 		                    instanceProperties: [],
-		                    propertyKeys: []
+		                    propertyKeys: [],
+					        maxLengthObj: {
+					        	id: getRegExpInfo('id').maxLength,
+					        	value: getRegExpInfo('value').maxLength
+					        },
 		                },
 		                methods: {
-		                    onClickPlus: function () {
-		                        var jsonLoad = [
-		                            {
-		                                uri: "<c:url value='/igate/instance/propertyKeys.json' />",
-		                                attributeName: this.propertyKeys
-		                            }
-		                        ];
-		                        getPropertyList(jsonLoad);
-		                    },
-		                    propertyAdd: function () {
-		                        onCheckPropertyCount();
-		                        this.onClickPlus();
+		                    addProperty: function () {		                        
 		                        this.instanceProperties.push({
-		                            pk: {}
-		                        });
+					                pk: {
+					                    propertyKey: ''
+					                },
+					                propertyValue: '',
+					                propertyDesc: '',
+					                letter: {
+					                	pk: {
+						                    propertyKey: 0,
+						                },
+						                propertyValue: 0,
+					                }
+					            });
 		                    },
-		                    propertyRemove: function (index) {
-		                        if (onCheckPropertyCount()) --propertyCount;
-		                        this.instanceProperties = this.instanceProperties.slice(0, index).concat(this.instanceProperties.slice(index + 1));
-		                    }
+		                    removeProperty: function (index) {
+					            this.instanceProperties.splice(index, 1);
+		                    },
+					        changePropertyKey: function (index) {
+					        	var rowInfo = this.instanceProperties[index];
+					        	
+					        	// 직접 입력일 경우
+					            if (
+				        			!this.propertyKeys.some(function (property) {
+				        				return rowInfo.pk.propertyKey === property.pk.propertyKey;
+				        			})
+				        		) 
+					            	return;
+					            
+					            // 프로퍼티 키 중복 검사
+					            var check = this.instanceProperties.filter(function(property, idx) {
+					            	return idx !== index;
+					            }).some(function(property, idx) {
+					            	return rowInfo.pk.propertyKey === property.pk.propertyKey;
+					            });
+					            
+					            if(check) {
+					            	window._alert({
+				    					type: 'warn',
+				    					message: '<fmt:message>igate.instance.alert.overlap</fmt:message>',
+				    				});
+
+				    				this.instanceProperties[index] = {
+				    					pk: {
+				    						propertyKey: ''
+				    					},
+				    					letter : {
+				    						pk: {
+					    						propertyKey: 0
+					    					}
+				    					}
+				    				};
+				    				return;
+					            }
+					              
+					            var instanceInfo = this.propertyKeys.filter(function(property) {
+					            	return rowInfo.pk.propertyKey === property.pk.propertyKey
+					            })[0]
+					            
+					            this.instanceProperties[index].propertyValue = instanceInfo.propertyValue;
+			                    this.instanceProperties[index].propertyDesc = instanceInfo.propertyDesc;
+			                    this.instanceProperties[index].cipher = 'Y' === instanceInfo.cipherYn;
+			                    this.instanceProperties[index].require = 'Y' === instanceInfo.requireYn;
+					        },
+					        inputEvt: function (info, key) {
+					        	//letter
+					        	var regExp = getRegExpInfo('pk.propertyKey' === key? 'id' : 'value').regExp;
+					        	
+								if ('pk.propertyKey' === key) {
+									info.pk.propertyKey = info.pk.propertyKey? info.pk.propertyKey.replace(new RegExp(regExp, 'g'), '') : '';
+									info.letter.pk.propertyKey = info.pk.propertyKey ? info.pk.propertyKey.length : 0;
+								} else if('propertyValue' === key) {
+									info.propertyValue = info.propertyValue? info.propertyValue.replace(new RegExp(regExp, 'g'), '') : '';
+									info.letter.propertyValue = info.propertyValue ? info.propertyValue.length : 0;
+								}
+					        },
 		                },
 		                mounted: function () {
-		                    var self = this;
-		                    $.getJSON(this.executePrivilegeIdsUri, function (data) {
-		                        self.executePrivilegeIds = data.object;
-		                    });
+		                	 new HttpReq('/igate/instance/propertyKeys.json').read(null, function (instranceListResult) {
+	 			           		this.propertyKeys = instranceListResult.object;  	
+	 			        	}.bind(this));
 		                }
 		            });
 		        });
@@ -470,106 +535,6 @@
 		    $('#ct').find('script').remove();
 		});
 	});
-	
-	//Flag에 의해 최초 프로퍼티 개수 Count
-	function onCheckPropertyCount() {
-	    var firstTemplateMode = true;
-	    if (firstTemplateMode) {
-	        firstTemplateMode = false;
-	        propertyCount = window.vmInstanceProperties.instanceProperties.length;
-	        return true;
-	    }
-
-	    return false;
-	}
-
-	function getPropertyList(jsonLoad) {
-	    jsonLoad.forEach(function (value, idx) {
-	        $.ajax({
-	            type: 'GET',
-	            url: value.uri,
-	            data: {},
-	            dataType: 'json',
-	            success: function (result) {
-	                //onChangeTypeValue 에서 호출된 경우,
-	                if (typeof value.attributeName == 'undefined') window.vmMain.object.instanceProperties = result.object;
-	                //필수 값인 항목들 표시 용도
-	                //onClickPlus 에서 호출된 경우,
-	                else {
-	                    var propertyKey = [];
-	                    for (key in result.object) propertyKey[key] = result.object[key].pk.propertyKey;
-
-	                    window.vmInstanceProperties.propertyKeys = propertyKey; //프로퍼티 키 필드에 보이는 리스트 용도
-	                }
-	            },
-	            error: function (request, status, error) {
-	                ResultImngObj.errorHandler(request, status, error);
-	            }
-	        });
-	    });
-	}
-
-	//프로퍼티 키 필드의 값 변경 시, onchange 이벤트
-	function searchPropertyKey(index) {
-	    onCheckPropertyCount();
-
-	    var paramPropertyKey = window.vmInstanceProperties.instanceProperties[index]; // Property Key
-	    var propertyValue = '';
-	    var propertyDesc = '';
-
-	    // #으로 시작하는 경우, 설명 : 갱신
-	    if (paramPropertyKey.pk.propertyKey.startsWith('#')) window.vmInstanceProperties.instanceProperties[index].propertyDesc = propertyDesc;
-	    // #으로 시작하는 옵션이 아닌경우, 기본값 & 설명 : 갱신 가능
-	    else {
-	        $.ajax({
-	            type: 'GET',
-	            url: "<c:url value='/common/property/properties.json' />",
-	            data: {
-	                propertyId: 'Property.Instance',
-	                propertyKey: paramPropertyKey.pk.propertyKey,
-	                orderByKey: true
-	            },
-	            dataType: 'json',
-	            success: function (result) {
-	                if (result.result == 'ok') {
-	                    // propertyKey가 "" 공백으로 다 건 조회되는 경우 회피.
-	                    if (result.object.length == 1) {
-	                        propertyValue = result.object[0].propertyValue;
-	                        propertyDesc = result.object[0].propertyDesc;
-	                    }
-
-	                    //(+) 신규 추가 된 옵션인 경우, 기본값 갱신
-	                    if (propertyCount < index + 1) window.vmInstanceProperties.instanceProperties[index].propertyValue = propertyValue;
-
-	                    window.vmInstanceProperties.instanceProperties[index].propertyDesc = propertyDesc;
-	                }
-	            },
-	            error: function (request, status, error) {
-	                ResultImngObj.errorHandler(request, status, error);
-	            }
-	        });
-	    }
-	}
-
-	function checkOverlap() {
-	    var checkPropertyArray = window.vmInstanceProperties.instanceProperties.map(function (element) {
-	        return element.pk.propertyKey;
-	    });
-	    var overlapElement;
-
-	    checkPropertyArray.forEach(function (element, index) {
-	        if (checkPropertyArray.indexOf(element) != index) overlapElement = element;
-	    });
-
-	    if (overlapElement) {
-	        warnAlert({
-	            message: '<fmt:message key="igate.instance.alert.overlap"><fmt:param value="' + overlapElement + '" /></fmt:message>'
-	        });
-	        return false;
-	    }
-
-	    return true;
-	}
 	</script>
 </body>
 </html>

@@ -461,11 +461,13 @@
 
 			        SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-			        if (!this.newTabSearchGrid()) {
-			            this.$nextTick(function () {
-			                window.vmSearch.search();
-			            });
-			        }
+			        this.$nextTick(function () {
+			        	this.newTabSearchGrid();
+			        	
+		                window.vmSearch.$nextTick(function () {
+		                	window.vmSearch.search();
+		                });
+			        }.bind(this));
 			    }
 			});
 

@@ -499,10 +499,11 @@
 					            this.object.adapterId = param.adapterId;
 					        }
 					    }),
-					    mounted: function () {
+					    created: function () {
 					    	this.privilegeList = privilegeListresult.object;
 					    	this.serviceTypes = serviceTypeResult.object;
-					    	
+					    },						    
+					    mounted: function () {
 					    	this.initSearchArea();
 					    }
 					});
@@ -616,11 +617,13 @@
 
 					        SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-					        if (!this.newTabSearchGrid()) {
-					            this.$nextTick(function () {
-					                window.vmSearch.search();
-					            });
-					        }
+					        this.$nextTick(function () {
+					        	this.newTabSearchGrid();
+					        	
+				                window.vmSearch.$nextTick(function () {
+				                	window.vmSearch.search();
+				                });
+					        }.bind(this));
 					    }
 					});		        	
 		        });

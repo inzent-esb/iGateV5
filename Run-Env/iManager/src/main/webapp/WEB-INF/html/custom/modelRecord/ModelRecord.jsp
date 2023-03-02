@@ -324,10 +324,11 @@
 					            initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#pageSize'), this.pageSize);
 					        }
 					    }),
-					    mounted: function () {
+					    created: function () {
 					    	this.privilegeList = privilegeListresult.object;
 					    	this.recordTypes = recordTypeResult.object;
-					    	
+					    },					    
+					    mounted: function () {
 					    	this.initSearchArea();
 					    }
 					});
@@ -400,12 +401,14 @@
 					        });
 
 					        SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
-
-					        if (!this.newTabSearchGrid()) {
-					            this.$nextTick(function () {
-					                window.vmSearch.search();
-					            });
-					        }
+					        
+					        this.$nextTick(function () {
+					        	this.newTabSearchGrid();
+					        	
+				                window.vmSearch.$nextTick(function () {
+				                	window.vmSearch.search();
+				                });
+					        }.bind(this));
 					    }
 					});		        	
 		        });

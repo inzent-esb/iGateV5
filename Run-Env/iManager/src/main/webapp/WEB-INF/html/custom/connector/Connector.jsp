@@ -17,8 +17,6 @@
 		<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_detail.jsp"%>
-		
-		<%@ include file="/WEB-INF/html/custom/connector/detail.jsp"%>
 	</div>
 	<script>
 		document.querySelector('#connector').addEventListener('ready', function(evt) {
@@ -211,7 +209,50 @@
 			        id: 'ConnectorProperties',
 			        name: '<fmt:message>igate.connector</fmt:message> <fmt:message>head.property</fmt:message>',
 			        getDetailArea: function () {
-			            return $('#connectorPropertiesTemplate').clone().html();
+			        	var detailHtml = '';
+
+			            detailHtml += '<div class="propertyTab" style="width: 100%">';
+			            detailHtml += '    <div class="form-table form-table-responsive">';
+			            detailHtml += '        <div class="form-table-head">';
+			            detailHtml += '            <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="addProperty();"><i class="icon-plus-circle"></i></button>';
+			            detailHtml += '            <label class="col"><fmt:message>common.property.key</fmt:message></label>';
+			            detailHtml += '            <label class="col"><fmt:message>common.property.value</fmt:message></label>';
+			            detailHtml += '            <label class="col"><fmt:message>head.description</fmt:message></label>';
+			            detailHtml += '        </div>';			            
+			            detailHtml += '        <div class="form-table-wrap">';
+			            detailHtml += '        	   <div class="form-table-body" v-for="(elm, index) in connectorProperties">';  
+			            detailHtml += '                <button type="button" class="btn-icon saveGroup updateGroup" v-if="elm.require"><i class="icon-star"></i></button>';
+			            detailHtml += '                <button type="button" class="btn-icon saveGroup updateGroup" v-on:click="removeProperty(index);" v-else><i class="icon-minus-circle"></i></button>';
+			            detailHtml += '                <div class="col">';
+			            detailHtml += '                    <div v-if="elm.require" style="width: 100%;">';
+			            detailHtml += '                        <input type="text" class="form-control readonly" list="propertyKeys" v-model="elm.pk.propertyKey" readonly>';
+			            detailHtml += '                        <datalist id="propertyKeys">';
+			            detailHtml += '                            <option v-for="option in propertyKeys" :value="option.pk.propertyKey">{{option.pk.propertyKey}}</option>';
+			            detailHtml += '                        </datalist>';
+			            detailHtml += '                    </div>';
+			            detailHtml += '                    <div class="detail-content-regExp" v-else>';
+			            detailHtml += '                        <input type="text" class="regExp-text view-disabled" list="propertyKeys" v-model.trim="elm.pk.propertyKey" :maxlength="maxLengthObj.id" @input="inputEvt(elm, \'pk.propertyKey\')" @change="changePropertyKey(index)">';
+			            detailHtml += '                        <datalist id="propertyKeys">';
+			            detailHtml += '                            <option v-for="option in propertyKeys" :value="option.pk.propertyKey">{{option.pk.propertyKey}}</option>';
+			            detailHtml += '                        </datalist>';
+			            detailHtml += '                        <span class="letterLength"> ( {{ elm.letter.pk.propertyKey }} / {{ maxLengthObj.id }} ) </span>';
+			            detailHtml += '                    </div>';
+			            detailHtml += '                </div>';
+			            detailHtml += '                <div class="col">';
+			            detailHtml += '                    <div class="detail-content-regExp">';
+			            detailHtml += '                        <input :type="elm.cipher? \'password\' : \'text\'" class="regExp-text view-disabled" v-model="elm.propertyValue" :maxlength="maxLengthObj.value" @input="inputEvt(elm, \'propertyValue\')">';
+			            detailHtml += '                        <span class="letterLength"> ( {{ elm.letter.propertyValue }} / {{ maxLengthObj.value }} ) </span>';
+			            detailHtml += '                    </div>';
+			            detailHtml += '                </div>';
+			            detailHtml += '                <div class="col">';
+			            detailHtml += '                    <input type="text" class="form-control readonly" v-model="elm.propertyDesc" readonly>';
+			            detailHtml += '                </div>';
+			            detailHtml += '            </div>';
+			            detailHtml += '        </div>';
+			            detailHtml += '    </div>';
+			            detailHtml += '</div>';			            
+
+			            return detailHtml;
 			        }
 			    },
 			    {
@@ -235,7 +276,18 @@
 			        id: 'ConnectorDeploies',
 			        name: '<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>',
 			        getDetailArea: function () {
-			            return $('#connectorDeploiesTemplate').clone().html();
+			        	var detailHtml = '';
+
+			            detailHtml += '<ul class="list-group" style="width: 100%;">';
+			            detailHtml += '    <li class="list-group-item" v-for="(element, index) in instanceList">';
+			            detailHtml += '        <label class="custom-control custom-checkbox">';
+			            detailHtml += '            <input type="checkbox" class="custom-control-input view-disabled" v-model="connectorCheckList[index]" @change="setPropertyList(element.instanceId, $event)">';			            
+			            detailHtml += '            <span class="custom-control-label">{{element.instanceId}}</span>';
+			            detailHtml += '        </label>';
+			            detailHtml += '    </li>';
+			            detailHtml += '</ul>';
+
+			            return detailHtml;
 			        }
 			    }
 			]);
@@ -335,14 +387,11 @@
 			                this.object.adapterId = param.adapterId;
 			            }
 			        }),
+			        created: function () {
+			        	this.connectorTypeList = connectorTypeList.object;
+			        },				        
 			        mounted: function () {
-			            this.connectorTypeList = connectorTypeList.object;
-
-			            this.$nextTick(
-			                function () {
-			                    this.initSearchArea();
-			                }.bind(this)
-			            );
+			        	this.initSearchArea();
 			        }
 			    });
 
@@ -409,11 +458,13 @@
 
 			            SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-			            if (!this.newTabSearchGrid()) {
-			                this.$nextTick(function () {
-			                    window.vmSearch.search();
+				        this.$nextTick(function () {
+				        	this.newTabSearchGrid();
+				        	
+			                window.vmSearch.$nextTick(function () {
+			                	window.vmSearch.search();
 			                });
-			            }
+				        }.bind(this));
 			        }
 			    });
 
@@ -448,7 +499,7 @@
 			        },
 			        watch: {
 			            panelMode: function () {
-			                if (this.panelMode != 'add') $('#panel').find('.warningLabel').hide();
+			            	if (this.panelMode !== 'add') $('#panel').find('.warningLabel').hide();
 			            }
 			        },
 			        methods: {
@@ -486,23 +537,24 @@
 			                    this.object.connectorAdapters = [];
 			                    this.object.connectorDeploies = [];
 
-			                    this.letter.connectorId = 0;
-			                    this.letter.connectorName = 0;
-			                    this.letter.connectorDesc = 0;
-
-			                    window.vmConnectorProperties.curLengthArr = [];
-			                    window.vmConnectorProperties.maxLengthArr = [];
-
+			                    window.vmConnectorProperties.propertyKeys = [];
 			                    window.vmConnectorProperties.connectorProperties = [];
 			                    window.vmConnectorAdapters.connectorAdapters = [];
 			                    window.vmConnectorDeploies.connectorDeploies = [];
 			                    window.vmConnectorDeploies.connectorCheckList = [];
+			                    
+			                    //letter
+			                    this.letter.connectorId = 0;
+			                    this.letter.connectorName = 0;
+			                    this.letter.connectorDesc = 0;
 			                }
 			            },
 			            loaded: function () {
 			                window.vmConnectorProperties.connectorProperties = this.object.connectorProperties;
 			                window.vmConnectorAdapters.connectorAdapters = this.object.connectorAdapters;
 			                window.vmConnectorDeploies.connectorDeploies = this.object.connectorDeploies;
+			                
+			                if(this.object.connectorType) window.vmConnectorProperties.setPropertyKeys();
 
 			                var deploies = this.object.connectorDeploies.map(function (info) {
 			                    return info.pk.instanceId;
@@ -517,17 +569,6 @@
 			                this.letter.connectorId = this.object.connectorId.length;
 			                this.letter.connectorName = this.object.connectorName ? this.object.connectorName.length : 0;
 			                this.letter.connectorDesc = this.object.connectorDesc ? this.object.connectorDesc.length : 0;
-
-			                this.object.connectorProperties.forEach(
-			                    function (info) {
-			                        this.curLengthArr.push({
-			                            'pk.propertyKey': info.pk.propertyKey ? info.pk.propertyKey.length : 0,
-			                            propertyValue: info.propertyValue ? info.propertyValue.length : 0
-			                        });
-
-			                        this.maxLengthArr.push(this.maxLengthObj);
-			                    }.bind(window.vmConnectorProperties)
-			                );
 			            },
 			            changeConnectorType: function () {
 			                vmConnectorProperties.changeConnectorType();
@@ -579,19 +620,11 @@
 			    data: {
 			        viewMode: 'Open',
 			        object: {},
-			        connectorProperties: [],
 			        propertyKeys: [],
-			        uri: '',
-			        curLengthArr: [],
-			        maxLengthArr: [],
+			        connectorProperties: [],
 			        maxLengthObj: {
-			            'pk.propertyKey': getRegExpInfo('id').maxLength,
-			            propertyValue: getRegExpInfo('value').maxLength
-			        }
-			    },
-			    computed: {
-			        detailMode: function() {
-			            return 'detail' === vmMain.mode || 'done' === vmMain.mode;
+			        	id: getRegExpInfo('id').maxLength,
+			        	value: getRegExpInfo('value').maxLength
 			        }
 			    },
 			    methods: {
@@ -601,91 +634,101 @@
 			                    propertyKey: ''
 			                },
 			                propertyValue: '',
-			                propertyDesc: ''
+			                propertyDesc: '',
+			                letter: {
+			                	pk: {
+				                    propertyKey: 0
+				                },
+				                propertyValue: 0,
+			                }
 			            });
-
-			            this.curLengthArr.push({
-			                'pk.propertyKey': 0,
-			                propertyValue: 0
-			            });
-
-			            this.maxLengthArr.push(this.maxLengthObj);
 			        },
 			        removeProperty: function (index) {
 			            this.connectorProperties.splice(index, 1);
-			            this.curLengthArr.splice(index, 1);
-			            this.maxLengthArr.splice(index, 1);
-			        },
-			        changeConnectorType: function () {
+			        },			        
+			        changeConnectorType: function () { // 기본정보 > 커넥터 타입 변경 이벤트
+			        	this.setPropertyKeys();
+			        	
 			            new HttpReq('/common/property/properties.json').read(
 			                {
 			                    propertyId: 'Property.Connector.' + vmMain.object.connectorType,
 			                    orderByKey: true
 			                },
 			                function (connectorTypeListResult) {
-			                    new HttpReq('/igate/connector/propertyKeys.json').read(
-			                        {
-			                            connectorType: vmMain.object.connectorType,
-			                            orderByKey: true
-			                        },
-			                        function (connectorKeyListResult) {
-			                            this.connectorProperties = connectorTypeListResult.object
-			                                .filter(function (connectorTypeInfo) {
-			                                    return 'Y' === connectorTypeInfo.requireYn;
-			                                })
-			                                .map(function (connectorTypeInfo) {
-			                                    return {
-			                                        pk: {
-			                                            propertyKey: connectorTypeInfo.pk.propertyKey
-			                                        },
-			                                        propertyValue: connectorTypeInfo.propertyValue,
-			                                        propertyDesc: connectorTypeInfo.propertyDesc,
-			                                        cache: 'Y' === connectorTypeInfo.cacheYn,
-			                                        cipher: 'Y' === connectorTypeInfo.cipherYn,
-			                                        require: 'Y' === connectorTypeInfo.requireYn
-			                                    };
-			                                });
-
-			                            this.propertyKeys = connectorKeyListResult.object;
-
-			                            //letter
-			                            this.curLengthArr = [];
-			                            this.maxLengthArr = [];
-
-			                            this.connectorProperties.forEach(function(info) {
-			                                this.curLengthArr.push({
-			                                    'pk.propertyKey': info.pk.propertyKey.length,
-			                                    propertyValue: info.propertyValue.length
-			                                });
-
-			                                this.maxLengthArr.push(this.maxLengthObj);			                            	
-			                            }.bind(this));
-			                        }.bind(this)
-			                    );
+			                	this.connectorProperties = connectorTypeListResult.object
+                                .filter(function (connectorTypeInfo) {
+                                    return 'Y' === connectorTypeInfo.requireYn;
+                                })
+                                .map(function (connectorTypeInfo) {
+                                    return {
+                                        pk: {
+                                            propertyKey: connectorTypeInfo.pk.propertyKey
+                                        },
+                                        propertyValue: connectorTypeInfo.propertyValue,
+                                        propertyDesc: connectorTypeInfo.propertyDesc,
+                                        cache: 'Y' === connectorTypeInfo.cacheYn,
+                                        cipher: 'Y' === connectorTypeInfo.cipherYn,
+                                        require: 'Y' === connectorTypeInfo.requireYn,
+                                        letter: {
+                                        	pk: {
+                                                propertyKey: connectorTypeInfo.pk.propertyKey? connectorTypeInfo.pk.propertyKey.length : 0
+                                            },
+                                            propertyValue: connectorTypeInfo.propertyValue? connectorTypeInfo.propertyValue.length : 0
+                                        }
+                                    };
+                                });
 			                }.bind(this)
 			            );
 			        },
-			        inputEvt: function (key, index) {
-			            //letter
-			            if ('pk.propertyKey' === key) {
-			                if (this.curLengthArr[index]['pk.propertyKey'] > this.maxLengthArr[index]['pk.propertyKey']) return;
-			                this.curLengthArr[index]['pk.propertyKey'] = this.connectorProperties[index].pk.propertyKey.length;
-			            } else {
-			                if (this.curLengthArr[index].propertyValue > this.maxLengthArr[index].propertyValue) return;
-			                this.curLengthArr[index].propertyValue = this.connectorProperties[index].propertyValue.length;
-			            }
+			        setPropertyKeys: function() { //프로퍼티 키 datalist 불러오기
+			        	new HttpReq('/igate/connector/propertyKeys.json').read(
+	                        {
+	                            connectorType: vmMain.object.connectorType,
+	                            orderByKey: true
+	                        },
+	                        function (connectorKeyListResult) {
+	                            this.propertyKeys = connectorKeyListResult.object;
+	                        }.bind(this)
+	                    );
 			        },
-			        changePropertyKey: function (index) {
+			        changePropertyKey: function (index) { //프로퍼티 키 datalist 값 선택
 			            var rowInfo = this.connectorProperties[index];
 
+			            // 직접 입력일 경우
 			            if (
-			                rowInfo.pk.propertyKey.startsWith('#') ||
-			                !this.propertyKeys.some(function (property) {
-			                    return rowInfo.pk.propertyKey === property.pk.propertyKey;
-			                })
-			            )
-			                return;
+		        			!this.propertyKeys.some(function (property) {
+		        				return rowInfo.pk.propertyKey === property.pk.propertyKey;
+		        			})
+		        		) 
+			            	return;
+			            
+			            // 프로퍼티 키 중복 검사
+			            var check = this.connectorProperties.filter(function(property, idx) {
+			            	return idx !== index;
+			            }).some(function(property, idx) {
+			            	return rowInfo.pk.propertyKey === property.pk.propertyKey;
+			            });
+			            
+			            if(check) {
+			            	window._alert({
+		    					type: 'warn',
+		    					message: '<fmt:message>igate.connector.alert.overlap</fmt:message>',
+		    				});
 
+		    				this.connectorProperties[index] = {
+		    					pk: {
+		    						propertyKey: ''
+		    					},
+		    					letter : {
+		    						pk: {
+			    						propertyKey: 0
+			    					}
+		    					}
+		    				};
+
+		    				return;
+			            }
+			            
 			            new HttpReq('/common/property/properties.json').read(
 			                {
 			                    propertyId: 'Property.Connector.' + vmMain.object.connectorType,
@@ -699,12 +742,21 @@
 			                    this.connectorProperties[index].propertyDesc = connectorInfo.propertyDesc;
 			                    this.connectorProperties[index].cipher = 'Y' === connectorInfo.cipherYn;
 			                    this.connectorProperties[index].require = 'Y' === connectorInfo.requireYn;
-
-			                    //letter
-			                    this.curLengthArr[index].propertyValue = connectorInfo.propertyValue.length;
 			                }.bind(this)
 			            );
-			        }
+			        },
+			        inputEvt: function (info, key) {
+			        	//letter
+			        	var regExp = getRegExpInfo('pk.propertyKey' === key? 'id' : 'value').regExp;
+			        	
+						if ('pk.propertyKey' === key) {
+							info.pk.propertyKey = info.pk.propertyKey? info.pk.propertyKey.replace(new RegExp(regExp, 'g'), '') : '';
+							info.letter.pk.propertyKey = info.pk.propertyKey ? info.pk.propertyKey.length : 0;
+						} else if('propertyValue' === key) {
+							info.propertyValue = info.propertyValue? info.propertyValue.replace(new RegExp(regExp, 'g'), '') : '';
+							info.letter.propertyValue = info.propertyValue ? info.propertyValue.length : 0;
+						}
+			        },
 			    }
 			});
 
@@ -748,7 +800,6 @@
 			window.vmConnectorDeploies = new Vue({
 			    el: '#ConnectorDeploies',
 			    data: {
-			        uri: "<c:url value='/igate/instance/list.json' />",
 			        instanceList: [],
 			        connectorDeploies: [],
 			        connectorCheckList: []

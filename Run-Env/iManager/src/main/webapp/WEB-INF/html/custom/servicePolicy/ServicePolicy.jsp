@@ -215,14 +215,11 @@
 			                this.object.activityId = param.activityId;
 			            }
 			        }),
+			        created: function () {
+			        	this.serviceTypes = serviceTypeResult.object;
+			        },				        
 			        mounted: function () {
-			            this.serviceTypes = serviceTypeResult.object;
-
-			            this.$nextTick(
-			                function () {
-			                    this.initSearchArea();
-			                }.bind(this)
-			            );
+			        	this.initSearchArea();
 			        }
 			    });
 
@@ -280,11 +277,13 @@
 
 			            SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-			            if (!this.newTabSearchGrid()) {
-			                this.$nextTick(function () {
-			                    window.vmSearch.search();
+				        this.$nextTick(function () {
+				        	this.newTabSearchGrid();
+				        	
+			                window.vmSearch.$nextTick(function () {
+			                	window.vmSearch.search();
 			                });
-			            }
+				        }.bind(this));
 			        }
 			    });
 

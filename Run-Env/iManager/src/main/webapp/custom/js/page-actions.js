@@ -151,36 +151,41 @@ var SearchImngObj = {
 			}
 		}
 	},
-
 	load: function (data) {
-		new HttpReq(SaveImngObj.objectUri).read(data, function (result) {
-			var vmMain = window.vmMain;
-			vmMain.viewMode = result.viewMode;
-			vmMain.object = result.object;
+	    new HttpReq(SaveImngObj.objectUri).read(data, function (result) {
+	        var vmMain = window.vmMain;
+	        vmMain.viewMode = result.viewMode;
+	        vmMain.object = result.object;
+	       
+	        var initLetter = function(obj) {
+	            var rtnObj = {};
+	          
+	            for (var key in obj) {
+	                rtnObj[key] = ('object' === typeof obj[key])? initLetter(obj[key]) : obj[key]? obj[key].toString().length : 0;
+	            }
+	               
+	            return rtnObj;
+	        };
+	       
+	        for (var key in result.object) {
+	            var name = 'vm' + key.charAt(0).toUpperCase() + key.slice(1);
+	            var value = result.object[key];
 
-			for (var key in result.object) {
-				var name = 'vm' + key.charAt(0).toUpperCase() + key.slice(1);
-				var value = result.object[key];
+	            if (value instanceof Array && window.hasOwnProperty(name)) {
+	                var vmSub = window[name];
+	                vmSub.viewMode = result.viewMode;
+	                vmSub[key] = value;
+	             
+	                value.forEach(function(v) {
+	                    v.letter = initLetter(v);
+	                });
+	            }
+	        }
 
-				if (value instanceof Array && window.hasOwnProperty(name)) {
-					var vmSub = window[name];
-					vmSub.viewMode = result.viewMode;
-					vmSub[key] = value;
-					
-					value.forEach(function(v) {
-		                v.letter = {};
-		                
-		                for(var key in v) {
-	                		v.letter[key] = v[key]? v[key].toString().length : 0; 
-	                	}
-					});
-				}
-			}
+	        if (vmMain.loaded) vmMain.loaded();
 
-			if (vmMain.loaded) vmMain.loaded();
-
-			if (vmMain.goDetailPanel) vmMain.goDetailPanel();
-		});
+	        if (vmMain.goDetailPanel) vmMain.goDetailPanel();
+	    });
 	},
 };
 

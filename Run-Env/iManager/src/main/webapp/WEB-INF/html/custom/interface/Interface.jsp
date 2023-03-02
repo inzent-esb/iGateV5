@@ -494,13 +494,14 @@
 			                            this.object.adapterId = param.adapterId;
 			                        }
 			                    }),
-			                    mounted: function () {
+			                    created: function () {
 			                        this.privilegeList = privilegeResult.object;
 			                        this.interfaceTypes = interfaceTypeResult.object;
 			                        this.scheduleTypes = scheduleTypeResult.object;
 			                        this.disabledYns = ynResult.object;
 			                        this.usedYns = ynResult.object;
-
+			                    },			                    
+			                    mounted: function () {
 			                        this.initSearchArea();
 			                    }
 			                });
@@ -658,11 +659,13 @@
 
 			                        SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-			                        if (!this.newTabSearchGrid()) {
-			                            this.$nextTick(function () {
-			                                window.vmSearch.search();
-			                            });
-			                        }
+							        this.$nextTick(function () {
+							        	this.newTabSearchGrid();
+							        	
+						                window.vmSearch.$nextTick(function () {
+						                	window.vmSearch.search();
+						                });
+							        }.bind(this));
 			                    }
 			                });
 

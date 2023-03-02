@@ -56,7 +56,7 @@
 			    {
 			        type: 'modal',
 			        mappingDataInfo: {
-			            url: '/modal/searchOperationModal.html',
+			            url: '/modal/operationModal.html',
 			            modalTitle: '<fmt:message>igate.operation</fmt:message>',
 			            vModel: 'object.operationId',
 			            callBackFuncName: 'setSearchOperationId'
@@ -120,7 +120,7 @@
 			                        type: 'search',
 			                        name: '<fmt:message>igate.operation.id</fmt:message>',
 			                        mappingDataInfo: {
-			                            url: '/modal/searchOperationModal.html',
+			                            url: '/modal/operationModal.html',
 			                            modalTitle: '<fmt:message>igate.operation</fmt:message>',
 			                            vModel: 'object.operationId',
 			                            callBackFuncName: 'setSearchOperationId'
@@ -219,7 +219,7 @@
 			                    initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#interfaceTypes'), this.object.pk.interfaceType);
 			                },
 			                openModal: function (openModalParam, regExpInfo) {
-			                    if ('/modal/searchOperationModal.html' == openModalParam.url) {
+			                    if ('/modal/operationModal.html' == openModalParam.url) {
 			                        openModalParam.modalParam = { operationType: 'I' };
 			                    }
 
@@ -232,14 +232,11 @@
 			                    this.object.operationId = param.operationId;
 			                }
 			            }),
+			            created: function () {
+			            	this.interfaceTypes = interfaceTypeResult.object;
+			            },				            
 			            mounted: function () {
-			                this.interfaceTypes = interfaceTypeResult.object;
-
-			                this.$nextTick(
-			                    function () {
-			                        this.initSearchArea();
-			                    }.bind(this)
-			                );
+			            	this.initSearchArea();
 			            }
 			        });
 
@@ -287,11 +284,13 @@
 
 			                SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-			                if (!this.newTabSearchGrid()) {
-			                    this.$nextTick(function () {
-			                        window.vmSearch.search();
-			                    });
-			                }
+					        this.$nextTick(function () {
+					        	this.newTabSearchGrid();
+					        	
+				                window.vmSearch.$nextTick(function () {
+				                	window.vmSearch.search();
+				                });
+					        }.bind(this));
 			            }
 			        });
 
@@ -343,7 +342,7 @@
 			                    }
 			                },
 			                openModal: function (openModalParam) {
-			                    if ('/modal/searchOperationModal.html' == openModalParam.url) {
+			                    if ('/modal/operationModal.html' == openModalParam.url) {
 			                        openModalParam.modalParam = { operationType: 'I' };
 			                    }
 
