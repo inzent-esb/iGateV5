@@ -197,27 +197,18 @@ public class YellowPageController extends AbstractEimsController
     // TODO InterfaceType 변환 및 검사 로직 필요
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
-    case "DB_MD" :
-      interfaceMeta.setInterfaceType("DB") ;
-      interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
-      break ;
-    case "DB_MM" :
-      interfaceMeta.setInterfaceType("DB") ;
-      interfaceMeta.setScheduleType(Interface.SCHEDULE_TRIGGERED) ;
-      break ;
-    case "FILE_DB" :
-      interfaceMeta.setInterfaceType("File") ;
-      interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
-      break ;
-    case "FILE_FILE" :
-      interfaceMeta.setInterfaceType("File") ;
-      interfaceMeta.setScheduleType(Interface.SCHEDULE_TRIGGERED) ;
-      break ;
-    case "REQ_RES" :
-      interfaceMeta.setInterfaceType("Online") ;
-      interfaceMeta.setScheduleType(Interface.SCHEDULE_ONLINE) ;
-      break ;
-
+    case "File" :
+        interfaceMeta.setInterfaceType("File") ;
+        interfaceMeta.setScheduleType(Interface.SCHEDULE_TRIGGERED) ;
+        break; 
+    case "Online" :
+        interfaceMeta.setInterfaceType("Online") ;
+        interfaceMeta.setScheduleType(Interface.SCHEDULE_ONLINE) ;
+        break ;        
+    case "Table" :
+        interfaceMeta.setInterfaceType("Table") ;
+        interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
+        break ;        
     default :
       interfaceMeta.setInterfaceType("Online") ;
       interfaceMeta.setScheduleType(Interface.SCHEDULE_ONLINE) ;
@@ -314,9 +305,10 @@ public class YellowPageController extends AbstractEimsController
     mapping.setMappingDetails(new LinkedList<>()) ;
 
     int order = 0 ;
+    MappingRule mappingRule = new MappingRule() ;
     for (com.inzent.yellowpage.marshaller.MappingRule eMappingRule : mappingElement.getMappingRules())
     {
-      MappingRule mappingRule = new MappingRule() ;
+      mappingRule = new MappingRule() ;
       mappingRule.setMappingRuleSources(new LinkedList<>()) ;
       mappingRule.setMappingRuleDetails(new LinkedList<>()) ;
 
@@ -405,29 +397,17 @@ public class YellowPageController extends AbstractEimsController
     // TODO SeriveType 변환 및 검사 로직 필요
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
-    case "DB_MD" :
-      service.setServiceType("DB") ;
-//      service.setServiceActivity("CompositeReplyServiceActivity") ;
-      break ;
-    case "DB_MM" :
-      service.setServiceType("DB") ;
-//      service.setServiceActivity("CompositeReplyServiceActivity") ;
-      break ;
-    case "FILE_DB" :
-      service.setServiceType("File") ;
-//      service.setServiceActivity("NoReplyServiceActivity") ;
-      break ;
-    case "FILE_FILE" :
-      service.setServiceType("File") ;
-//      service.setServiceActivity("NoReplyServiceActivity") ;
-      break ;
-    case "REQ_RES" :
-      service.setServiceType("Online") ;
-//      service.setServiceActivity("CompositeReplyServiceActivity") ;
-      break ;
-
+    case "File" :
+        service.setServiceType("File") ;
+        break ;
+    case "Online" :
+        service.setServiceType("Online") ;
+        break ;
+    case "Table" :
+        service.setServiceType("Table") ;
+        break ;         
     default :
-      service.setServiceType("File") ;
+      service.setServiceType("Online") ;
       break ;
     }
 

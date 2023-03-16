@@ -256,24 +256,27 @@ public class XmlEimsController extends AbstractEimsController
       case VALUE_PROVIDER :
         serviceAdapterId = baseElement.attributeValue(ATTRIBUTE_SYS_CD) ;
         break ;
+        
+      default:
+       	break;
       }
 
     if (null == interfaceAdapterId)
-      throw new Exception("어댑터 정보를 가져오는데 실패했습니다. INTERFACE.REGIST.BASE CP_CCD = CONSUMER's SYS_CD") ;
+      throw new IOException("어댑터 정보를 가져오는데 실패했습니다. INTERFACE.REGIST.BASE CP_CCD = CONSUMER's SYS_CD") ;
     if (null == adpaterService.get(interfaceAdapterId))
-      throw new Exception("MCI시스템에 존재하지 않는 시스템코드입니다. 시스템코드 :[" + interfaceAdapterId + "]") ;
+      throw new IOException("MCI시스템에 존재하지 않는 시스템코드입니다. 시스템코드 :[" + interfaceAdapterId + "]") ;
 
     interfaceMeta.setAdapterId(interfaceAdapterId) ;
     interfaceMeta.setInterfaceGroup(interfaceAdapterId + "." + serviceAdapterId) ;
 
     if (null == serviceAdapterId)
-      throw new Exception("어댑터 정보를 가져오는데 실패했습니다. INTERFACE.REGIST.BASE CP_CCD = PROVIDER's SYS_CD") ;
+      throw new IOException("어댑터 정보를 가져오는데 실패했습니다. INTERFACE.REGIST.BASE CP_CCD = PROVIDER's SYS_CD") ;
     if (null == adpaterService.get(serviceAdapterId))
-      throw new Exception("MCI시스템에 존재하지 않는 시스템코드입니다. 시스템코드 :[" + serviceAdapterId + "]") ;
+      throw new IOException("MCI시스템에 존재하지 않는 시스템코드입니다. 시스템코드 :[" + serviceAdapterId + "]") ;
 
     String serviceId = define.attributeValue(ATTRIBUTE_PRVD_SV_CD) ;
     if (StringUtils.isBlank(serviceId))
-      throw new Exception("인터페이스에 매핑될 서비스ID은 필수 값입니다. Service Id : [" + serviceId + "]") ;
+      throw new IOException("인터페이스에 매핑될 서비스ID은 필수 값입니다. Service Id : [" + serviceId + "]") ;
 
     if (!StringUtils.isBlank(define.attributeValue(ATTRIBUTE_EAI_ITF_ID)))
       addInterfaceProperty(interfaceMeta, ATTRIBUTE_EAI_ITF_ID, define.attributeValue(ATTRIBUTE_EAI_ITF_ID)) ;
@@ -294,10 +297,13 @@ public class XmlEimsController extends AbstractEimsController
     // 맵핑여부에 따른 BYPASS처리 -> 모델을 등록하지 않음
     if (Objects.equals("Y", regist.attributeValue(ATTRIBUTE_ITF_MPG_F)))
     {
+      Record record = new Record() ;
+      InterfaceResponsePK interfaceResponsePK = new InterfaceResponsePK() ;
+      InterfaceResponse interfaceResponse = new InterfaceResponse() ;
       for (Element modelElement : define.elements(ELEMENT_ITEMS))
         if (Objects.equals(VALUE_CONSUMER, modelElement.attributeValue(ATTRIBUTE_CP_CCD)) && Objects.equals(VALUE_OUTBOUND, modelElement.attributeValue(ATTRIBUTE_IO_CCD)))
         {
-          Record record = new Record() ;
+          record = new Record() ;
           objects.addAll(unmarshalRecord(record, modelElement, interfaceMeta, true)) ;
 
           interfaceMeta.setRequestRecordId(record.getRecordId()) ;
@@ -305,14 +311,14 @@ public class XmlEimsController extends AbstractEimsController
         }
         else if (Objects.equals(VALUE_CONSUMER, modelElement.attributeValue(ATTRIBUTE_CP_CCD)) && Objects.equals(VALUE_INBOUND, modelElement.attributeValue(ATTRIBUTE_IO_CCD)))
         {
-          Record record = new Record() ;
+          record = new Record() ;
           objects.addAll(unmarshalRecord(record, modelElement, interfaceMeta, false)) ;
 
-          InterfaceResponsePK interfaceResponsePK = new InterfaceResponsePK() ;
+          interfaceResponsePK = new InterfaceResponsePK() ;
           interfaceResponsePK.setInterfaceId(interfaceMeta.getInterfaceId()) ;
           interfaceResponsePK.setRecordId(record.getRecordId()) ;
 
-          InterfaceResponse interfaceResponse = new InterfaceResponse() ;
+          interfaceResponse = new InterfaceResponse() ;
           interfaceResponse.setPk(interfaceResponsePK) ;
           interfaceResponse.setInterfaceObject(interfaceMeta) ;
 
@@ -337,6 +343,9 @@ public class XmlEimsController extends AbstractEimsController
           interfaceService.setResponseMappingId(mapping.getMappingId()) ;
           interfaceService.setResponseMappingObject(mapping) ;
           break ;
+     
+        default:
+           	break;
         }
     }
 
@@ -392,6 +401,9 @@ public class XmlEimsController extends AbstractEimsController
     case "N" :
       service.setServiceActivity("NoReplyServiceActivity") ;
       break ;
+      
+    default:
+       	break;
     }
 
     for (Element baseElement : regist.elements(ELEMENT_BASE))
@@ -418,11 +430,13 @@ public class XmlEimsController extends AbstractEimsController
     // 인터페이스매핑여부(Y) (EAI 또는 MCI에서 매핑을 해야하는 요건이 있는지 유무 : "Y" - YES, "N" - NO)
     if (Objects.equals("Y", regist.attributeValue(ATTRIBUTE_ITF_MPG_F)))
     {
-      // 정상 맵핑처리
+     
+     // 정상 맵핑처리
+ 	  Record record = new Record() ;
       for (Element modelElement : define.elements(ELEMENT_ITEMS))
         if (Objects.equals(VALUE_PROVIDER, modelElement.attributeValue(ATTRIBUTE_CP_CCD)) && Objects.equals(VALUE_INBOUND, modelElement.attributeValue(ATTRIBUTE_IO_CCD)))
         {
-          Record record = new Record() ;
+          record = new Record() ;
           objects.addAll(unmarshalRecord(record, modelElement, service, true)) ;
 
           service.setRequestRecordId(record.getRecordId()) ;
@@ -430,7 +444,7 @@ public class XmlEimsController extends AbstractEimsController
         }
         else if (Objects.equals(VALUE_PROVIDER, modelElement.attributeValue(ATTRIBUTE_CP_CCD)) && Objects.equals(VALUE_OUTBOUND, modelElement.attributeValue(ATTRIBUTE_IO_CCD)))
         {
-          Record record = new Record() ;
+          record = new Record() ;
           objects.addAll(unmarshalRecord(record, modelElement, service, false)) ;
 
           service.setResponseRecordId(record.getRecordId()) ;
@@ -536,6 +550,10 @@ public class XmlEimsController extends AbstractEimsController
       case "GROUP" :
         objects.addAll(unmarshalGroup(record, order++, childElement)) ;
         break ;
+        
+      default:
+         	break;
+         	
       }
     }
 

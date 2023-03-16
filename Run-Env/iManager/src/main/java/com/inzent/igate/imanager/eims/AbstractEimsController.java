@@ -232,8 +232,6 @@ public abstract class AbstractEimsController
         {
           try
           {
-            Thread.currentThread().setContextClassLoader(AbstractEimsController.class.getClassLoader()) ;
-
             if (null != sourceRecord)
               recordService.afterUpdated(record, sourceRecord, new ExtendedModelMap()) ;
             else
@@ -255,8 +253,6 @@ public abstract class AbstractEimsController
         {
           try
           {
-            Thread.currentThread().setContextClassLoader(AbstractEimsController.class.getClassLoader()) ;
-
             if (null != sourceService)
               serviceService.afterUpdated(service, sourceService, new ExtendedModelMap()) ;
             else
@@ -278,8 +274,6 @@ public abstract class AbstractEimsController
         {
           try
           {
-            Thread.currentThread().setContextClassLoader(AbstractEimsController.class.getClassLoader()) ;
-
             if (null != sourceInterface)
               interfaceService.afterUpdated(interfaceMeta, sourceInterface, new ExtendedModelMap()) ;
             else
@@ -301,8 +295,6 @@ public abstract class AbstractEimsController
         {
           try
           {
-            Thread.currentThread().setContextClassLoader(AbstractEimsController.class.getClassLoader()) ;
-
             if (null != sourceInterfaceRecognize)
               interfaceRecognizeService.afterUpdated(interfaceRecognize, sourceInterfaceRecognize, new ExtendedModelMap()) ;
             else
@@ -388,8 +380,6 @@ public abstract class AbstractEimsController
         {
           try
           {
-            Thread.currentThread().setContextClassLoader(AbstractEimsController.class.getClassLoader()) ;
-
             interfaceService.afterDeleted(interfaceMeta, new ExtendedModelMap()) ;
           }
           catch (Throwable t)
@@ -404,8 +394,6 @@ public abstract class AbstractEimsController
         {
           try
           {
-            Thread.currentThread().setContextClassLoader(AbstractEimsController.class.getClassLoader()) ;
-
             serviceService.afterDeleted(service, new ExtendedModelMap()) ;
           }
           catch (Throwable t)
@@ -420,8 +408,6 @@ public abstract class AbstractEimsController
         {
           try
           {
-            Thread.currentThread().setContextClassLoader(AbstractEimsController.class.getClassLoader()) ;
-
             recordService.afterDeleted(record, new ExtendedModelMap()) ;
           }
           catch (Throwable t)
