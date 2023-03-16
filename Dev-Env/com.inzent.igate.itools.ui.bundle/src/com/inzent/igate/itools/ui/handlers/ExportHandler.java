@@ -236,6 +236,9 @@ public class ExportHandler extends AbstractExportHandler
     case 2 : // Excel 인 경우,
       resultMap = recordExporter.exportExcel(selectedPath, currentRecord) ;
       break ;
+      
+    default:          
+        break ;
     }
 
     if (null != resultMap)
@@ -271,6 +274,9 @@ public class ExportHandler extends AbstractExportHandler
     case 1 :// xml 인 경우,
       resultMap =  operationExporter.exportXml(selectedPath, currentOperation) ;
       break ;
+      
+    default:          
+        break ;
     }
 
     if (null != resultMap)

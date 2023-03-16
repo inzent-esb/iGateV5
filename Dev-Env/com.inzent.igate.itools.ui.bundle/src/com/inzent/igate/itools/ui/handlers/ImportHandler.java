@@ -195,6 +195,9 @@ public class ImportHandler extends AbstractImportHandler
 
       case 2 : // .json
         return recordImporter.importJson(fileDialog.getFilterPath(), fileDialog.getFileNames(), null) ;
+        
+      default:          
+          break ;
       }
     }
 
@@ -226,6 +229,9 @@ public class ImportHandler extends AbstractImportHandler
       {
       case 0 : // .xml
         return operationImporter.importXml(fileDialog.getFilterPath(), fileDialog.getFileNames(), null) ;
+        
+      default:          
+          break ;
       }
     }
 
