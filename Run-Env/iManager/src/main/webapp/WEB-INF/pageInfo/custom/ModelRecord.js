@@ -1,4 +1,4 @@
 const info = {
 	type: "custom",
-	url: "/modelRecord/ModelRecord.html"
+	url: "/modelRecord/modelRecord"
 };

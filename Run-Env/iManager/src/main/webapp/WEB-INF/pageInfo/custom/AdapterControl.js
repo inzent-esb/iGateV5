@@ -1,4 +1,4 @@
 const info = {
 	type: "custom",
-	url: "/adapterControl/AdapterControl.html"
+	url: "/adapterControl/adapterControl"
 };

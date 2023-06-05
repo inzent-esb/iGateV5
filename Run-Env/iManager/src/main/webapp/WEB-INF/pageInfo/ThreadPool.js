@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/threadPool/object.json",
+	cudUrl: '/api/entity/threadPool/object',
 	search: {
 		load: true,
 		list: [
@@ -39,8 +39,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/threadPool/search.json",
-		totalCntUrl: "/igate/threadPool/rowCount.json",
+		url: '/api/entity/threadPool/search',
+		totalCntUrl: '/api/entity/threadPool/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -61,7 +61,6 @@ const info = {
 
 	detail: {
 		pk: ["threadPoolId"],
-		controlUrl: "/igate/threadPool/control.json",
 		controlParams: function (detailData) {
 			return {
 				threadPoolId: detailData.threadPoolId
@@ -72,7 +71,7 @@ const info = {
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true }
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/threadPool/dump' }
 			]
 		},
 		tabList: [

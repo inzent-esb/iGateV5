@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/instance/object.json",
+	cudUrl: '/api/entity/instance/object',
 	search: {
 		load: true,
 		list: [
@@ -16,9 +16,11 @@ const info = {
 				vModel: "instanceType",
 				label: this.$t("common.type"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.Instance.InstanceType",
+						pk: {
+							propertyId: 'List.Instance.InstanceType'
+						},
 						orderByKey: true
 					},
 					optionListName: "instanceTypes",
@@ -54,8 +56,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/instance/search.json",
-		totalCntUrl: "/igate/instance/rowCount.json",
+		url: '/api/entity/instance/search',
+		totalCntUrl: '/api/entity/instance/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -100,7 +102,6 @@ const info = {
 	},
 	detail: {
 		pk: ["instanceId"],
-		controlUrl: "/igate/instance/control.json",
 		controlParams: function (detailData) {
 			return {
 				instanceId: detailData.instanceId
@@ -118,7 +119,8 @@ const info = {
 							"L" === data.instanceType ||
 							"T" === data.instanceType
 						);
-					}
+					},
+					dumpUrl: '/api/entity/instance/dump'
 				}
 			]
 		},
@@ -142,10 +144,11 @@ const info = {
 								label: this.$t("common.type"),
 								isRequired: true,
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.Instance.InstanceType",
+										pk: {
+											propertyId: 'List.Instance.InstanceType'
+										},
 										orderByKey: true
 									},
 									optionListName: "instanceTypes",
@@ -160,10 +163,12 @@ const info = {
 								label: this.$t("head.log.level"),
 								isRequired: true,
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.LogLevel",
-										orderByKey: false
+										pk: {
+											propertyId: 'List.LogLevel'
+										},
+										orderByKey: true
 									},
 									optionListName: "instanceLoglevels",
 									optionFor: "option in instanceLoglevels",
@@ -193,9 +198,11 @@ const info = {
 								label: this.$t("igate.instance.downStatus"),
 								isRequired: true,
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Yn",
+										pk: {
+											propertyId: 'List.Yn'
+										},
 										orderByKey: true
 									},
 									optionListName: "instanceDownStatus",

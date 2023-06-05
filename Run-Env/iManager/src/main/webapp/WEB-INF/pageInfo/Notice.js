@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/common/notice/object.json",
+	cudUrl: "/api/entity/notice/object",
 	privilegeType: "Notice",
 	search: {
 		load: true,
@@ -33,18 +33,19 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/common/notice/search.json",
-		totalCntUrl: "/common/notice/rowCount.json",
+		url: "/api/entity/notice/search",
+		totalCntUrl: "/api/entity/notice/count",
 		paging: {
 			isUse: true,
-			side: "server"
+			side: "client"
 		},
 		options: {
 			columns: [
 				{
 					header: this.$t("igate.notice.title"),
 					name: "noticeTitle",
-					width: "5%"
+					width: "5%",
+					sortable: true,
 				},
 				{
 					header: this.$t("igate.notice.writer"),
@@ -56,15 +57,19 @@ const info = {
 					name: "pk.createTimestamp",
 					width: "30%",
 					align: "center",
+					sortable: true,
+					sortWithColumn: ['noticeTitle'],
+					sortWithColumnType: ['desc'],
 					formatter: function (obj) {
-						return obj.value.substring(0, 19);
+						return !obj.value? obj.value : obj.value.substring(0, 19);
 					}
 				}
-			]
-		}
+			],
+			sortColumn: "pk.createTimestamp",
+		},
 	},
 	detail: {
-		pk: ["pk.createTimestamp", "pk.noticeId"],
+		pk: ["pk.createTimestamp", "pk.noticeId", "userId"],
 		button: {
 			list: [
 				{ id: "insert", isUse: true },

@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/common/metaHistory/object.json",
+	cudUrl: '/api/entity/metaHistory/object',
 	search: {
 		list: [
 			{
@@ -34,9 +34,11 @@ const info = {
 				vModel: "modifyType",
 				label: this.$t("common.metaHistory.modifyType"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.MetaHistory.Type",
+						pk: {
+							propertyId: 'List.MetaHistory.Type'
+						},
 						orderByKey: true
 					},
 					optionListName: "metaHistoryTypes",
@@ -65,8 +67,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/common/metaHistory/search.json",
-		totalCntUrl: "/common/metaHistory/rowCount.json",
+		url: '/api/entity/metaHistory/search',
+		totalCntUrl: '/api/entity/metaHistory/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -162,9 +164,11 @@ const info = {
 								vModel: "modifyType",
 								label: this.$t("common.metaHistory.modifyType"),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.MetaHistory.Type",
+										pk: {
+											propertyId: 'List.MetaHistory.Type'
+										},
 										orderByKey: true
 									},
 									optionListName: "metaHistoryTypes",

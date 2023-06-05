@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/message/object.json",
+	cudUrl: '/api/entity/message/object',
 	search: {
 		load: true,
 		list: [
@@ -9,9 +9,11 @@ const info = {
 				vModel: "messageCategory",
 				label: this.$t("igate.message.category"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.Message.MessageCategory",
+						pk: {
+							propertyId: 'List.Message.MessageCategory'
+						},
 						orderByKey: true
 					},
 					optionListName: "messageCategories",
@@ -26,7 +28,7 @@ const info = {
 				label: this.$t("igate.message.locale"),
 				placeholder: this.$t("head.searchData"),
 				optionInfo: {
-					url: "/igate/message/groups.json",
+					url: "/api/entity/message/group/search",
 					optionListName: "messageLocales",
 					optionFor: "option in messageLocales",
 					optionValue: "option",
@@ -66,8 +68,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/message/search.json",
-		totalCntUrl: "/igate/message/rowCount.json",
+		url: '/api/entity/message/search',
+		totalCntUrl: '/api/entity/message/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -130,7 +132,7 @@ const info = {
 								isPK: true,
 								label: this.$t("igate.message.locale"),
 								optionInfo: {
-									url: "/igate/message/groups.json",
+									url: "/api/entity/message/group/search",
 									optionListName: "messageLocales",
 									optionFor: "option in messageLocales",
 									optionValue: "option",
@@ -145,10 +147,11 @@ const info = {
 								label: this.$t("igate.message.category"),
 								isRequired: true,
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.Message.MessageCategory",
+										pk: {
+											propertyId: 'List.Message.MessageCategory'
+										},
 										orderByKey: true
 									},
 									optionListName: "messageCategory",

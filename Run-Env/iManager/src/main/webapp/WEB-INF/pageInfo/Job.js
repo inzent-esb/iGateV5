@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/job/object.json",
+	cudUrl: '/api/entity/job/object',
 	search: {
 		load: true,
 		list: [
@@ -23,9 +23,11 @@ const info = {
 				vModel: "jobType",
 				label: this.$t("common.type"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.Job.JobType",
+						pk: {
+							propertyId: 'List.Job.JobType'
+						},
 						orderByKey: true
 					},
 					optionListName: "jobTypes",
@@ -64,10 +66,11 @@ const info = {
 								label: this.$t("common.type"),
 								val: "J",
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.Operation.OperationType",
+										pk: {
+											propertyId: 'List.Operation.OperationType'
+										},
 										orderByKey: true
 									},
 									optionListName: "operationTypeList",
@@ -95,8 +98,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/operation/searchPopup.json",
-						totalCntUrl: "/igate/operation/rowCount.json",
+						url: '/api/entity/operation/search',
+						totalCntUrl: '/api/entity/operation/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -149,8 +152,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/job/search.json",
-		totalCntUrl: "/igate/job/rowCount.json",
+		url: '/api/entity/job/search',
+		totalCntUrl: '/api/entity/job/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -197,7 +200,7 @@ const info = {
 
 	detail: {
 		pk: ["jobId"],
-		controlUrl: "/igate/job/control.json",
+		controlUrl: "/api/entity/job/control",
 		controlParams: function (detailData) {
 			return {
 				jobId: detailData.jobId

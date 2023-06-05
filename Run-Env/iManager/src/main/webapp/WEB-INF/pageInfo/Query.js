@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/query/object.json",
+	cudUrl: '/api/entity/query/object',
 	search: {
 		load: true,
 		list: [
@@ -23,9 +23,11 @@ const info = {
 				vModel: "queryType",
 				label: this.$t("common.type"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.Query.QueryType",
+						pk: {
+							propertyId: 'List.Query.QueryType'
+						},
 						orderByKey: true
 					},
 					optionListName: "queryTypeList",
@@ -47,14 +49,19 @@ const info = {
 				placeholder: this.$t("head.searchData"),
 				regExpType: "searchId",
 				optionInfo: {
-					url: "/common/privilege/list.json",
+					url: '/api/entity/privilege/search',
 					params: {
-						privilegeType: "b"
+						object: {
+							privilegeType: 'b'
+						},
+						limit: null,
+						next: null,
+						reverseOrder: false
 					},
-					optionListName: "privilegeTypeList",
-					optionFor: "option in privilegeTypeList",
-					optionValue: "option.privilegeId",
-					optionText: "option.privilegeId"
+					optionListName: 'privilegeTypeList',
+					optionFor: 'option in privilegeTypeList',
+					optionValue: 'option.privilegeId',
+					optionText: 'option.privilegeId'			
 				}
 			},
 			{
@@ -84,8 +91,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/query/search.json",
-		totalCntUrl: "/igate/query/rowCount.json",
+		url: '/api/entity/query/search',
+		totalCntUrl: '/api/entity/query/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -140,14 +147,11 @@ const info = {
 
 	detail: {
 		pk: ["queryId"],
-		controlUrl: "/igate/query/control.json",
 		controlParams: function (detailData) {
-			return {
-				queryId: detailData.queryId
-			};
+			return detailData;
 		},
 		button: {
-			list: [{ id: "dump", isUse: true }]
+			list: [{ id: "dump", isUse: true, dumpUrl: '/api/entity/query/dump' }]
 		},
 		tabList: [
 			{

@@ -4,9 +4,15 @@
 
 <div id="ImngListObject" class="ct-content" style="display: none;">
 	<div class="sub-bar">
-        <div id="totalCount" class="form-inline m-full" showLater="true" style="display: none;">
-        	<fmt:message key="head.totalCount"><fmt:param value="{{ totalCount }}" /></fmt:message>
+		<div style="display: none;" afterload>
+			<div id="currentCnt" class="form-inline m-full" v-if="null !== currentCnt && currentCnt !== totalCnt" style="margin-right: 5px;">
+			<fmt:message key="head.currentCount"><fmt:param value="{{ currentCnt }}" /></fmt:message> /
+		</div>
+        <div id="totalCnt" class="form-inline m-full" v-if="null !== totalCnt">
+        	<fmt:message key="head.totalCount"><fmt:param value="{{ totalCnt }}" /></fmt:message>
         </div>
+		</div>
+        
 		<div class="ml-auto form-inline m-full">
 			<a id="newTabBtn" href="javascript:void(0);" class="btn btn-m" v-on:click="goNewTab" style="display: none;" title="<fmt:message>common.open.new.tab</fmt:message>"><i class="icon-info"></i><span class="hide"><fmt:message>common.open.new.tab</fmt:message></span></a>
 			<span id="timerRange">
@@ -38,6 +44,8 @@
 			<a id="updateCancelBtn"	href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="updateCancel" style="display: none;" title="<fmt:message>head.cancel</fmt:message>"><fmt:message>head.cancel</fmt:message></a>
 			<a id="searchInitBtn" 	href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="initSearchArea" style="display: none;" title="<fmt:message>head.initialize</fmt:message>"><i class="icon-reset"></i><span class="hide"><fmt:message>head.initialize</fmt:message></span></a>
 			<a id="addBtn"		    href="javascript:void(0);" class="btn btn-m btn-primary"  				v-on:click="goSavePanel" style="display: none;" title="<fmt:message>head.insert</fmt:message>"><i class="icon-plus"></i><span class="hide"><fmt:message>head.insert</fmt:message></span></a>
+			<a id="reorderBtn"      href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="reorder" style="display: none;" 	title="<fmt:message>igate.transactionRestriction.reOrder</fmt:message>"><fmt:message>igate.transactionRestriction.reOrder</fmt:message></a>
+			<a id="importDataBtn"   href="javascript:void(0);" class="btn btn-m"						    v-on:click="importData" style="display: none;" v-if="null !== currentCnt && null !== totalCnt && currentCnt !== totalCnt"><i class="icon-list"></i><span class="hide"><fmt:message>head.importData</fmt:message></span></a>			
 		</div>
 	</div>
 
@@ -57,8 +65,13 @@ var listMethodOption = {
         panelOpen('add');
     },
     goNewTab: function () {
+    	var info = validateOpenNewTabUrl(location.href);
+    	
+    	if (!info.isValidate) return false;
+    	
         localStorage.setItem(this.$el.id + '-newTabSearchCondition', JSON.stringify(window.vmSearch.$data));
-        window.open(window.location.href);
+
+        window.open(info.url);
     },
     newTabSearchGrid: function () {
         if (!localStorage.getItem(this.$el.id + '-newTabSearchCondition')) return false;
@@ -72,6 +85,6 @@ var listMethodOption = {
         });
 
         return true;
-    }
+    },
 };
 </script>

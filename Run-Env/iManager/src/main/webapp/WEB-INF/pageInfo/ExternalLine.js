@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/externalLine/object.json",
+	cudUrl: '/api/entity/externalLine/object',
 	search: {
 		load: true,
 		list: [
@@ -46,8 +46,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/externalLine/search.json",
-		totalCntUrl: "/igate/externalLine/rowCount.json",
+		url: '/api/entity/externalLine/search',
+		totalCntUrl: '/api/entity/externalLine/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -171,9 +171,11 @@ const info = {
 						vModel: "lineMode",
 						label: this.$t("igate.externalLine.lineMode"),
 						optionInfo: {
-							url: "/common/property/properties.json",
+							url: '/api/page/properties',
 							params: {
-								propertyId: "List.Connector.RequestDirection",
+								pk: {
+									propertyId: 'List.Connector.RequestDirection'
+								},
 								orderByKey: true
 							},
 							optionListName: "lineModes",
@@ -213,10 +215,11 @@ const info = {
 										vModel: "connectorType",
 										label: this.$t("common.type"),
 										optionInfo: {
-											url: "/common/property/properties.json",
+											url: '/api/page/properties',
 											params: {
-												propertyId:
-													"List.Connector.Type",
+												pk: {
+													propertyId: 'List.Connector.Type'
+												},
 												orderByKey: true
 											},
 											optionListName: "connectorTypes",
@@ -253,8 +256,8 @@ const info = {
 								list: [{ id: "initialize", isUse: true }]
 							},
 							grid: {
-								url: "/igate/connector/searchPopup.json",
-								totalCntUrl: "/igate/connector/rowCount.json",
+								url: '/api/entity/connector/search',
+								totalCntUrl: '/api/entity/connector/count',
 								paging: {
 									isUse: true,
 									side: "server"

@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/transactionContext/object.json",
+	cudUrl: '/api/entity/transactionContext/object',
 	search: {
 		load: true,
 		list: [
@@ -46,8 +46,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/transactionContext/search.json",
-		totalCntUrl: "/igate/transactionContext/rowCount.json",
+		url: '/api/entity/transactionContext/search',
+		totalCntUrl: '/api/entity/transactionContext/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -78,18 +78,15 @@ const info = {
 
 	detail: {
 		pk: ["variableId"],
-		controlUrl: "/igate/transactionContext/control.json",
 		controlParams: function (detailData) {
-			return {
-				variableId: detailData.variableId
-			};
+			return detailData;
 		},
 		button: {
 			list: [
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true }
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/transactionContext/dump' }
 			]
 		},
 		tabList: [

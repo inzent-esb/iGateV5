@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/exceptionCode/object.json",
+	cudUrl: '/api/entity/exceptionCode/object',
 	search: {
 		load: true,
 		list: [
@@ -84,9 +84,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/adapter/searchPopup.json",
-										totalCntUrl:
-											"/igate/adapter/rowCount.json",
+										url: '/api/entity/adapter/search',
+										totalCntUrl: '/api/entity/adapter/count',											
 										paging: {
 											isUse: true,
 											side: "server"
@@ -157,8 +156,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/standardCode/searchPopup.json",
-						totalCntUrl: "/igate/standardCode/rowCount.json",
+						url: '/api/entity/standardCode/search',
+						totalCntUrl: '/api/entity/standardCode/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -249,8 +248,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/exceptionCode/search.json",
-		totalCntUrl: "/igate/exceptionCode/rowCount.json",
+		url: '/api/entity/exceptionCode/search',
+		totalCntUrl: '/api/entity/exceptionCode/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -281,18 +280,15 @@ const info = {
 
 	detail: {
 		pk: ["exceptionCode"],
-		controlUrl: "/igate/exceptionCode/control.json",
 		controlParams: function (detailData) {
-			return {
-				exceptionCode: detailData.exceptionCode
-			};
+			return detailData;
 		},
 		button: {
 			list: [
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true }
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/exceptionCode/dump' }
 			]
 		},
 		tabList: [
@@ -403,9 +399,8 @@ const info = {
 														]
 													},
 													grid: {
-														url: "/igate/adapter/searchPopup.json",
-														totalCntUrl:
-															"/igate/adapter/rowCount.json",
+														url: '/api/entity/adapter/search',
+														totalCntUrl: '/api/entity/adapter/count',
 														paging: {
 															isUse: true,
 															side: "server"
@@ -487,9 +482,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/standardCode/searchPopup.json",
-										totalCntUrl:
-											"/igate/standardCode/rowCount.json",
+										url: '/api/entity/standardCode/search',
+										totalCntUrl: '/api/entity/standardCode/count',
 										paging: {
 											isUse: true,
 											side: "server"

@@ -1,4 +1,4 @@
 const info = {
 	type: "custom",
-	url: "/migration/mapping/Mapping.html"
+	url: "/migration/mapping/mapping"
 };

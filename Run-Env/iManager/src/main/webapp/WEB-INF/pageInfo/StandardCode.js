@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/standardCode/object.json",
+	cudUrl: '/api/entity/standardCode/object',
 	search: {
 		load: true,
 		list: [
@@ -57,8 +57,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/adapter/searchPopup.json",
-						totalCntUrl: "/igate/adapter/rowCount.json",
+						url: '/api/entity/adapter/search',
+						totalCntUrl: '/api/entity/adapter/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -129,8 +129,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/standardCode/search.json",
-		totalCntUrl: "/igate/standardCode/rowCount.json",
+		url: '/api/entity/standardCode/search',
+		totalCntUrl: '/api/entity/standardCode/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -159,19 +159,15 @@ const info = {
 	},
 	detail: {
 		pk: ["pk.adapterId", "pk.standardCode"],
-		controlUrl: "/igate/standardCode/control.json",
 		controlParams: function (detailData) {
-			return {
-				"pk.adapterId": detailData["pk.adapterId"],
-				"pk.standardCode": detailData["pk.standardCode"]
-			};
+			return detailData;
 		},
 		button: {
 			list: [
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true }
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/standardCode/dump' }
 			]
 		},
 		tabList: [
@@ -245,9 +241,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/adapter/searchPopup.json",
-										totalCntUrl:
-											"/igate/adapter/rowCount.json",
+										url: '/api/entity/adapter/search',
+										totalCntUrl: '/api/entity/adapter/count',											
 										paging: {
 											isUse: true,
 											side: "server"

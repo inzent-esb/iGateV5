@@ -86,7 +86,7 @@
 					<a href="javascript:void(0);" id="goModBtn"        class="btn viewGroup goModBtn" 		  		   	style="display: none;"    v-on:click="goModifyPanel"title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>						
 					<a href="javascript:void(0);" id="saveBtn"         class="btn btn-primary saveGroup saveBtn" 	   	style="display: none;"    v-on:click="saveInfo"		title="<fmt:message>head.insert</fmt:message>"><fmt:message>head.insert</fmt:message></a>
 					<a href="javascript:void(0);" id="updateBtn"       class="btn btn-primary updateGroup updateBtn"   	style="display: none;"    v-on:click="updateInfo"	title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>
-					<a href="javascript:void(0);" id="goAddBtn"        class="btn btn-primary viewGroup goAddBtn" 	 	style="display: none;"    v-on:click="goAddInfo" 	title="<fmt:message>head.insert</fmt:message>"><i class="icon-plus"></i><fmt:message>head.insert</fmt:message>(<fmt:message>head.copy</fmt:message>)</a>		
+					<a href="javascript:void(0);" id="goAddBtn"        class="btn btn-primary viewGroup goAddBtn" 	 	style="display: none;"    v-on:click="goAddInfo" 	title="<fmt:message>head.insert</fmt:message>"><i class="icon-plus"></i><fmt:message>head.insert</fmt:message> (<fmt:message>head.copy</fmt:message>)</a>		
 				</div>
 			</footer>
 			
@@ -136,7 +136,7 @@ var panelMethodOption = {
 			JSON.stringify({
 				panelLayoutDirection: document.querySelector('#panel').classList.contains('horizon') ? 'horizon' : 'vertical',
 				panelContentStyle: panelContentStyle,
-				screenType: screenType,
+				screenType: screenType
 			})
 		);
 		
@@ -201,7 +201,7 @@ var panelMethodOption = {
 			JSON.stringify({
 				panelLayoutDirection: document.querySelector('#panel').classList.contains('horizon') ? 'horizon' : 'vertical',
 				panelContentStyle: panelContentStyle,
-				screenType: screenType,
+				screenType: screenType
 			})
 		);
 		
@@ -358,7 +358,7 @@ function detailResize(evt) {
 		JSON.stringify({
 			panelLayoutDirection: document.querySelector('#panel').classList.contains('horizon') ? 'horizon' : 'vertical',
 			panelContentStyle: panelContentStyle,
-			screenType: screenType,
+			screenType: screenType
 		})
 	);	
 	
@@ -389,7 +389,7 @@ function bodyResize(evt) {
 					JSON.stringify({
 						panelLayoutDirection: 'horizon',
 						panelContentStyle: panelContentStyle,
-						screenType: screenType,
+						screenType: screenType
 					})
 				);				
 			}
@@ -414,7 +414,13 @@ function bodyResize(evt) {
 
 	screenType = 991 < window.innerWidth ? 'pc' : 767 < window.innerWidth ? 'tablet' : 'mobile';
 
-	if (isChangeVerticalLayout) panelMethodOption.changeLayout('vertical');			
+	if (isChangeVerticalLayout) panelMethodOption.changeLayout('vertical');		
+	
+	if (document.querySelector('#panel').classList.contains('vertical')) {
+		if (document.body.clientHeight < document.querySelector('#panel .panel-content').clientHeight) {
+			panelMethodOption.changeLayout('vertical');
+		}
+	}
 }
 
 function initDefaultDetailLayoutInfo() {
@@ -437,7 +443,7 @@ function initDefaultDetailLayoutInfo() {
 		JSON.stringify({
 			panelLayoutDirection: 'vertical',
 			panelContentStyle: panelContentStyle,
-			screenType: screenType,
+			screenType: screenType
 		})
 	);
 }

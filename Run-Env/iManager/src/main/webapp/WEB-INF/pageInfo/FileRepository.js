@@ -1,12 +1,9 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/fileRepository/object.json",
+	cudUrl: '/api/entity/fileRepository/object',
 	updateStatusFunc: function (row, mod) {
 		return {
-			url:
-				"ready" === mod
-					? "/igate/fileRepository/updateReady.json"
-					: "/igate/fileRepository/updateCancel.json",
+			url: "/api/entity/fileRepository/control?command=" + ("retry" === mod? "retry" : "cancel"),
 			params: {},
 			columnName: "fileStatus"
 		};
@@ -30,9 +27,11 @@ const info = {
 				vModel: "pk.fileMode",
 				label: this.$t("head.mode"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.FileRepository.Mode",
+						pk: {
+							propertyId: 'List.FileRepository.Mode'
+						},
 						orderByKey: true
 					},
 					optionListName: "fileMode",
@@ -53,9 +52,11 @@ const info = {
 				vModel: "fileStatus",
 				label: this.$t("head.status"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.FileRepository.Status",
+						pk: {
+							propertyId: 'List.FileRepository.Status'
+						},
 						orderByKey: true
 					},
 					optionListName: "fileStatus",
@@ -114,8 +115,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/adapter/searchPopup.json",
-						totalCntUrl: "/igate/adapter/rowCount.json",
+						url: '/api/entity/adapter/search',
+						totalCntUrl: '/api/entity/adapter/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -166,12 +167,84 @@ const info = {
 			{
 				type: "modal",
 				vModel: "interfaceServiceId",
-				label:
-					this.$t("igate.interface") +
-					" " +
-					this.$t("igate.service") +
-					" " +
-					this.$t("head.id"),
+				label: this.$t("igate.interface") + " " + this.$t("head.id"),
+				placeholder: this.$t("head.searchId"),
+				regExpType: "searchId",					
+				modalInfo: {
+					title: this.$t("igate.interface"),
+					search: {
+						list: [
+							{
+								type: "text",
+								vModel: "interfaceId",
+								label: this.$t("head.id"),
+								placeholder: this.$t("head.searchId"),
+								regExpType: "searchId"
+							},
+							{
+								type: "text",
+								vModel: "interfaceName",
+								label: this.$t("head.name"),
+								placeholder: this.$t("head.searchName"),
+								regExpType: "name"
+							},
+							{
+								type: "dataList",
+								vModel: "pageSize",
+								label: this.$t("head.listCount"),
+								val: "10",
+								optionInfo: {
+									optionFor: "option in [10, 100, 1000]",
+									optionValue: "option",
+									optionText: "option"
+								}
+							}
+						]
+					},
+					button: {
+						list: [{ id: "initialize", isUse: true }]
+					},
+					grid: {
+						url: '/api/entity/interface/search',
+						totalCntUrl: '/api/entity/interface/count',
+						paging: {
+							isUse: true,
+							side: "server"
+						},
+						options: {
+							columns: [
+								{
+									name: "interfaceId",
+									header: this.$t("head.id"),
+									width: "25%"
+								},
+								{
+									name: "interfaceName",
+									header: this.$t("head.name"),
+									width: "25%"
+								},
+								{
+									name: "interfaceDesc",
+									header: this.$t("head.description"),
+									width: "25%"
+								},
+								{
+									name: "interfaceType",
+									header: this.$t("common.type"),
+									width: "25%"
+								}
+							]
+						}
+					},
+					rowClickedCallback: function (rowInfo) {
+						return rowInfo.interfaceId;
+					}
+				}
+			},
+			{
+				type: "modal",
+				vModel: "interfaceServiceId",
+				label:this.$t("igate.service") + " " + this.$t("head.id"),
 				placeholder: this.$t("head.searchId"),
 				regExpType: "searchId",
 				modalInfo: {
@@ -209,8 +282,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/service/searchPopup.json",
-						totalCntUrl: "/igate/service/rowCount.json",
+						url: '/api/entity/service/search',
+						totalCntUrl: '/api/entity/service/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -297,7 +370,6 @@ const info = {
 							if (
 								!(
 									"A" === fileStatus ||
-									"E" === fileStatus ||
 									"F" === fileStatus
 								)
 							) {
@@ -311,7 +383,7 @@ const info = {
 				}
 			},
 			{
-				id: "updateReady",
+				id: "updateRetry",
 				isUse: function (gridInfo) {
 					if (null === gridInfo) return true;
 
@@ -357,8 +429,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/fileRepository/search.json",
-		totalCntUrl: "/igate/fileRepository/rowCount.json",
+		url: '/api/entity/fileRepository/search',
+		totalCntUrl: '/api/entity/fileRepository/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -459,9 +531,11 @@ const info = {
 		formatterDataUrlList: [
 			{
 				key: "fileStatusList",
-				url: "/common/property/properties.json",
+				url: "/api/page/properties",
 				param: {
-					propertyId: "List.FileRepository.Status",
+					pk: {
+						propertyId: "List.FileRepository.Status"	
+					},
 					orderByKey: true
 				}
 			}
@@ -624,10 +698,11 @@ const info = {
 									" " +
 									this.$t("head.status"),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.FileRepository.Status",
+										pk: {
+											propertyId: 'List.FileRepository.Status'
+										},
 										orderByKey: true
 									},
 									optionListName: "fileStatus",

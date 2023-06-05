@@ -51,7 +51,7 @@ function getCreatePageObj() {
 
 		this.getElementId = function (id) {
 			return id + idDelimiter + viewName;
-		};
+		};		
 
 		this.searchConstructor = function (isHidePageSize, callBackFunc) {
 			var searchRootSelector = $('#' + this.getElementId('ImngSearchObject'));
@@ -67,225 +67,256 @@ function getCreatePageObj() {
 			else searchRootSelector.find('.toggleSearchExpandBtn').hide();
 
 			var beforeSelector = searchRootSelector.find('#list-select');
+			
+			function textSearchType(searchObj) {
+				var regExpDataInfo = searchObj.mappingDataInfo.replace('object', 'letter');
+				var regExpInputInfo = {
+					key : searchObj.mappingDataInfo,
+					regExp: getRegExpInfo(searchObj.regExpType).regExp
+				};
+				
+				var letterLength = $('<span/>').addClass('letterLength')
+									.append($('<span/>').text('('))
+									.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
+									.append($('<span/>').text('/' + searchObj.maxLength + ')'));						
+				
+				beforeSelector.before(
+					$('<div/>')
+						.addClass('col')
+						.append(
+							$('<label/>')
+								.addClass('form-control-label reset')
+								.append($('<b/>').addClass('control-label').text(searchObj.name).append(letterLength))
+								.append( $('<input/>').addClass('form-control')
+										.attr({
+											id: searchObj.id, 
+											'v-model': searchObj.mappingDataInfo, 
+											placeholder: searchObj.placeholder, 
+											maxlength: searchObj.maxLength,
+											'v-on:keyup.enter': 'search',
+											'v-on:input': searchObj.regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
+										})
+								)
+								.append(
+									$('<i/>')
+										.addClass('icon-close')
+										.attr({ 'v-on:click.prevent': searchObj.mappingDataInfo + ' = null; '+ (regExpDataInfo? (regExpDataInfo  +' = 0;') : '') })
+								)
+						)
+				);
+			}
+			
+			function selectSearchType(searchObj) {
+				var mappingDataInfo = searchObj.mappingDataInfo;
+				
+				var selectDiv = $('<select/>').addClass('form-control selectpicker').attr({ 'v-model': mappingDataInfo.selectModel, id: mappingDataInfo.id, 'data-size': '10' });
 
-			searchList.forEach(function (searchInfo, index) {
-				var type = searchInfo.type;
-				var mappingDataInfo = searchInfo.mappingDataInfo;
-				var name = searchInfo.name;
-				var placeholder = searchInfo.placeholder;
-				var regExpType = searchInfo.regExpType? searchInfo.regExpType : 'default';				
-				var maxLength = getRegExpInfo(regExpType).maxLength;
+				if (searchObj.changeEvt) selectDiv.attr({ 'v-on:change': searchObj.changeEvt });
 
-				if (type === 'text') {					
-					var regExpDataInfo = mappingDataInfo.replace('object', 'letter');
-					var regExpInputInfo = {
-						key : mappingDataInfo,
-						regExp: getRegExpInfo(regExpType).regExp,
-					};
-					
-					var letterLength = $('<span/>').addClass('letterLength')
-										.append($('<span/>').text('('))
-										.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-										.append($('<span/>').text('/' + maxLength + ')'));						
-					
-					
+				if (!searchObj.isHideAllOption) selectDiv.append($('<option/>').attr({ selected: 'selected', value: ' ' }).text(searchObj.placeholder));
+
+				var appendOption = $('<option/>').attr({ 'v-for': mappingDataInfo.optionFor, 'v-bind:value': mappingDataInfo.optionValue, 'v-text': mappingDataInfo.optionText });
+
+				if (mappingDataInfo.optionIf) appendOption.attr({ 'v-if': mappingDataInfo.optionIf });
+
+				selectDiv.append(appendOption);
+
+				beforeSelector.before(
+					$('<div/>')
+						.addClass('col')
+						.append($('<label/>').addClass('form-control-label label-select').append($('<b/>').attr('class', 'control-label').text(searchObj.name)).append(selectDiv))
+				);
+			}
+			
+			function daterangeSearchType(searchObj) {
+				searchObj.mappingDataInfo.daterangeInfo.forEach(function (daterangeObj, idx) {
 					beforeSelector.before(
 						$('<div/>')
-							.addClass('col')
+							.attr('class', 'col')
+							.data('idx', idx)
 							.append(
 								$('<label/>')
-									.addClass('form-control-label reset')
-									.append($('<b/>').addClass('control-label').text(name).append(letterLength))
-									.append( $('<input/>').addClass('form-control')
-											.attr({
-												id: searchInfo.id, 
-												'v-model': mappingDataInfo, 
-												placeholder: placeholder, 
-												maxlength: maxLength,
-												'v-on:keyup.enter': 'search',
-												'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-											})
-									)
+									.attr('class', 'form-control-label')
+									.append($('<b/>').attr('class', 'control-label').text(daterangeObj.name))
 									.append(
-										$('<i/>')
-											.addClass('icon-close')
-											.attr({ 'v-on:click.prevent': mappingDataInfo + ' = null; '+ (regExpDataInfo? (regExpDataInfo  +' = 0;') : '') })
+										$('<input/>').attr({
+											id: daterangeObj.id,
+											class: 'form-control input-daterange',
+											placeholder: searchObj.placeholder,
+											autocomplete: 'off'
+										})
 									)
 							)
 					);
-				} else if (type === 'select') {
-					var selectDiv = $('<select/>').addClass('form-control selectpicker').attr({ 'v-model': mappingDataInfo.selectModel, id: mappingDataInfo.id, 'data-size': '10' });
+				});
+			}
+			
+			function dateCalcSearchType(searchObj) {
+				var mappingDataInfo = searchObj.mappingDataInfo;
+				var unitObj = { h: timeHour, m: timeMinute, s: timeSecond };
 
-					if (searchInfo.changeEvt) selectDiv.attr({ 'v-on:change': searchInfo.changeEvt });
+				var dateCalcSelectDiv = $('<select/>')
+					.addClass('form-control timerRange')
+					.attr({ 'v-model': mappingDataInfo.selectModel, id: mappingDataInfo.id, 'v-on:change': mappingDataInfo.changeEvt + '("' + mappingDataInfo.unit + '")' });
 
-					if (!searchInfo.isHideAllOption) selectDiv.append($('<option/>').attr({ selected: 'selected', value: ' ' }).text(placeholder));
+				dateCalcSelectDiv.append($('<option/>').attr({ selected: 'selected', value: '0' }).text(searchObj.placeholder));
+				dateCalcSelectDiv.append(
+					$('<option/>')
+						.attr({ 'v-for': mappingDataInfo.optionFor, 'v-bind:value': mappingDataInfo.optionValue })
+						.text('{{' + mappingDataInfo.optionText + '}}' + unitObj[mappingDataInfo.unit])
+				);
 
-					var appendOption = $('<option/>').attr({ 'v-for': mappingDataInfo.optionFor, 'v-bind:value': mappingDataInfo.optionValue, 'v-text': mappingDataInfo.optionText });
-
-					if (mappingDataInfo.optionIf) appendOption.attr({ 'v-if': mappingDataInfo.optionIf });
-
-					selectDiv.append(appendOption);
-
-					beforeSelector.before(
-						$('<div/>')
-							.addClass('col')
-							.append($('<label/>').addClass('form-control-label label-select').append($('<b/>').attr('class', 'control-label').text(name)).append(selectDiv))
-					);
-				} else if (type === 'daterange') {
-					mappingDataInfo.daterangeInfo.forEach(function (daterangeObj, idx) {
-						beforeSelector.before(
-							$('<div/>')
-								.attr('class', 'col')
-								.data('idx', idx)
+				beforeSelector.before(
+					$('<div/>')
+						.addClass('col')
+						.append($('<label/>').addClass('form-control-label label-select').append($('<b/>').addClass('control-label').text(searchObj.name)).append(dateCalcSelectDiv))
+				);
+			}
+			
+			function singleDaterangeSearchType(searchObj) {
+				beforeSelector.before(
+					$('<div/>')
+						.attr('class', 'col')
+						.append(
+							$('<label/>')
+								.attr('class', 'form-control-label')
+								.append($('<b/>').attr('class', 'control-label').text(searchObj.name))
 								.append(
-									$('<label/>')
-										.attr('class', 'form-control-label')
-										.append($('<b/>').attr('class', 'control-label').text(daterangeObj.name))
+									$('<input/>').attr({
+										'v-model': searchObj.mappingDataInfo.vModel,
+										id: searchObj.mappingDataInfo.id,
+										class: 'form-control input-filedate',
+										placeholder: searchObj.placeholder,
+										readonly: true
+									})
+								)
+						)
+				);
+			}
+			
+			function modalSearchType(searchObj) {
+				var mappingDataInfo = searchObj.mappingDataInfo
+				var modalRegExpInfo = mappingDataInfo.vModel.replace('object', 'letter');
+				var modalRegExpInputInfo = {
+					key : mappingDataInfo.vModel,
+					regExp: getRegExpInfo(searchObj.regExpType).regExp
+				};
+			
+				var modalLetterLength = $('<span/>').addClass('letterLength')
+									.append($('<span/>').text('('))
+									.append($('<span/>').attr({ 'v-text': modalRegExpInfo }))
+									.append($('<span/>').text('/' + searchObj.maxLength + ')'));
+				
+				
+				beforeSelector.before(
+					$('<div/>')
+						.addClass('col')
+						.append(
+							$('<label/>')
+								.addClass('form-control-label reset')
+								.append(
+									$('<b/>')
+										.addClass('control-label')
+										.text(searchObj.name)
 										.append(
-											$('<input/>').attr({
-												id: daterangeObj.id,
-												class: 'form-control input-daterange',
-												placeholder: placeholder,
-												autocomplete: 'off',
+											$('<i/>')
+												.addClass('icon-srch')
+												.attr({ 'v-on:click': 'openModal(' + JSON.stringify(mappingDataInfo) + ',' + JSON.stringify(modalRegExpInputInfo) + ')' })
+												.css({
+													'line-height': 'unset',
+													'padding-left': '5px'
+												})
+										)
+										.append(modalLetterLength)
+								)
+								.append( $('<input/>').addClass('form-control')
+										.attr({
+											'v-model': mappingDataInfo.vModel, 
+											placeholder: searchObj.placeholder, 
+											maxlength: searchObj.maxLength,
+											'v-on:keyup.enter': searchObj.enterEvt ? searchObj.enterEvt : 'search',
+											'v-on:input': searchObj.regExpType? 'inputEvt(' + JSON.stringify(modalRegExpInputInfo)  + ')' : null
+										})
+								)
+								.append(
+									$('<i/>')
+										.addClass('icon-close')
+										.attr({ 'v-on:click.prevent': mappingDataInfo.vModel + ' = null;'+ (modalRegExpInfo? (modalRegExpInfo  +' = 0;') : '') })
+								)
+						)
+				);
+			}
+			
+			function datalistSearchType(searchObj) {
+				var mappingDataInfo = searchObj.mappingDataInfo;
+				var datalistRegExpInfo = mappingDataInfo.vModel.replace('object', 'letter');
+				var datalistRegExpInputInfo = {
+					key : mappingDataInfo.vModel,
+					regExp: getRegExpInfo(searchObj.regExpType).regExp
+				};
+				
+				var datalistLetterLength = $('<span/>').addClass('letterLength')
+									.append($('<span/>').text('('))
+									.append($('<span/>').attr({ 'v-text': datalistRegExpInfo }))
+									.append($('<span/>').text('/' + searchObj.maxLength + ')'));						
+				
+				beforeSelector.before(
+					$('<div/>')
+						.attr('class', 'col')
+						.append(
+							$('<label/>')
+								.attr('class', 'form-control-label')
+								.append($('<b/>').attr('class', 'control-label').text(searchObj.name).append(datalistLetterLength))
+								.append(
+									$('<input/>').attr({
+										class: 'form-control',
+										list: mappingDataInfo.dataListId,
+										'v-model': mappingDataInfo.vModel,
+										placeholder: searchObj.placeholder,
+										maxlength: searchObj.maxLength,
+										'v-on:keyup.enter': 'search',
+										'v-on:input': searchObj.regExpType? 'inputEvt(' + JSON.stringify(datalistRegExpInputInfo)  + ')' : null
+									})
+								)
+								.append(
+									$('<datalist/>')
+										.attr({
+											id: mappingDataInfo.dataListId
+										})
+										.append(
+											$('<option/>').attr({
+												'v-for': mappingDataInfo.dataListFor,
+												'v-text': mappingDataInfo.dataListText
 											})
 										)
 								)
-						);
-					});
-				} else if (type === 'dateCalc') {
-					var unitObj = { h: timeHour, m: timeMinute, s: timeSecond };
+						)
+				);
+			}
 
-					var selectDiv = $('<select/>')
-						.addClass('form-control timerRange')
-						.attr({ 'v-model': mappingDataInfo.selectModel, id: mappingDataInfo.id, 'v-on:change': mappingDataInfo.changeEvt + '("' + mappingDataInfo.unit + '")' });
-
-					selectDiv.append($('<option/>').attr({ selected: 'selected', value: '0' }).text(placeholder));
-					selectDiv.append(
-						$('<option/>')
-							.attr({ 'v-for': mappingDataInfo.optionFor, 'v-bind:value': mappingDataInfo.optionValue })
-							.text('{{' + mappingDataInfo.optionText + '}}' + unitObj[mappingDataInfo.unit])
-					);
-
-					beforeSelector.before(
-						$('<div/>')
-							.addClass('col')
-							.append($('<label/>').addClass('form-control-label label-select').append($('<b/>').addClass('control-label').text(name)).append(selectDiv))
-					);
-				} else if (type === 'singleDaterange') {
-					beforeSelector.before(
-						$('<div/>')
-							.attr('class', 'col')
-							.append(
-								$('<label/>')
-									.attr('class', 'form-control-label')
-									.append($('<b/>').attr('class', 'control-label').text(name))
-									.append(
-										$('<input/>').attr({
-											'v-model': mappingDataInfo.vModel,
-											id: mappingDataInfo.id,
-											class: 'form-control input-filedate',
-											placeholder: placeholder,
-											readonly: true,
-										})
-									)
-							)
-					);
-				} else if (type === 'modal') {								
-					var regExpDataInfo = mappingDataInfo.vModel.replace('object', 'letter');
-					var regExpInputInfo = {
-						key : mappingDataInfo.vModel,
-						regExp: getRegExpInfo(regExpType).regExp,
-					};
+			searchList.forEach(function (searchInfo, index) {
+				var type = searchInfo.type;
 				
-					var letterLength = $('<span/>').addClass('letterLength')
-										.append($('<span/>').text('('))
-										.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-										.append($('<span/>').text('/' + maxLength + ')'));
-					
-					
-					beforeSelector.before(
-						$('<div/>')
-							.addClass('col')
-							.append(
-								$('<label/>')
-									.addClass('form-control-label reset')
-									.append(
-										$('<b/>')
-											.addClass('control-label')
-											.text(name)
-											.append(
-												$('<i/>')
-													.addClass('icon-srch')
-													.attr({ 'v-on:click': 'openModal(' + JSON.stringify(mappingDataInfo) + ',' + JSON.stringify(regExpInputInfo) + ')' })
-													.css({
-														'line-height': 'unset',
-														'padding-left': '5px',
-													})
-											)
-											.append(letterLength)
-									)
-									.append( $('<input/>').addClass('form-control')
-											.attr({
-												'v-model': mappingDataInfo.vModel, 
-												placeholder: placeholder, 
-												maxlength: maxLength,
-												'v-on:keyup.enter': searchInfo.enterEvt ? searchInfo.enterEvt : 'search',
-												'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-											})
-									)
-									.append(
-										$('<i/>')
-											.addClass('icon-close')
-											.attr({ 'v-on:click.prevent': mappingDataInfo.vModel + ' = null;'+ (regExpDataInfo? (regExpDataInfo  +' = 0;') : '') })
-									)
-							)
-					);
-				} else if (type === 'datalist') {
-					var regExpDataInfo = mappingDataInfo.vModel.replace('object', 'letter');
-					var regExpInputInfo = {
-						key : mappingDataInfo.vModel,
-						regExp: getRegExpInfo(regExpType).regExp,
-					};
-					
-					var letterLength = $('<span/>').addClass('letterLength')
-										.append($('<span/>').text('('))
-										.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-										.append($('<span/>').text('/' + maxLength + ')'));						
-					
-					beforeSelector.before(
-						$('<div/>')
-							.attr('class', 'col')
-							.append(
-								$('<label/>')
-									.attr('class', 'form-control-label')
-									.append($('<b/>').attr('class', 'control-label').text(name).append(letterLength))
-									.append(
-										$('<input/>').attr({
-											class: 'form-control',
-											list: mappingDataInfo.dataListId,
-											'v-model': mappingDataInfo.vModel,
-											placeholder: placeholder,
-											maxlength: maxLength,
-											'v-on:keyup.enter': 'search',
-											'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-										})
-									)
-									.append(
-										$('<datalist/>')
-											.attr({
-												id: mappingDataInfo.dataListId,
-											})
-											.append(
-												$('<option/>').attr({
-													'v-for': mappingDataInfo.dataListFor,
-													'v-text': mappingDataInfo.dataListText,
-												})
-											)
-									)
-							)
-					);
+				var searchObj = {
+						id: searchInfo.id,
+						mappingDataInfo : searchInfo.mappingDataInfo,
+						name : searchInfo.name,
+						placeholder : searchInfo.placeholder,
+						regExpType : searchInfo.regExpType? searchInfo.regExpType : 'default',
+						maxLength : getRegExpInfo(searchInfo.regExpType? searchInfo.regExpType : 'default').maxLength,
+						changeEvt: searchInfo.changeEvt,    
+						isHideAllOption: searchInfo.isHideAllOption,
+						enterEvt: searchInfo.enterEvt,
 				}
-
+				
+				if (type === 'text') textSearchType(searchObj);					
+				else if (type === 'select') selectSearchType(searchObj);				
+				else if (type === 'daterange') daterangeSearchType(searchObj);				
+				else if (type === 'dateCalc') dateCalcSearchType(searchObj);				
+				else if (type === 'singleDaterange') singleDaterangeSearchType(searchObj);
+				else if (type === 'modal') modalSearchType(searchObj);				
+				else if (type === 'datalist') datalistSearchType(searchObj);
+				
 				if (isNeedExtension) {
 					while (true) {
 						if (startSearchExpandCnt >= searchRootSelector.find('#list-select').prevAll('.col').length) {
@@ -333,21 +364,17 @@ function getCreatePageObj() {
 					.find('.sub-bar')
 					.children()
 					.each(function (index, element) {
-						if ($(element).hasClass('ml-auto')) {
-							$(element)
-								.children()
-								.each(function (subIndex, subElement) {
-									if (!$(subElement).attr('id')) return;
-									mainButtonIdList.push($(subElement).attr('id'));
-								});
-						} else if ($(element).attr('id')) {
-							mainButtonIdList.push($(element).attr('id'));
-						}
+						$(element)
+						.children()
+						.each(function (subIndex, subElement) {
+							if (!$(subElement).attr('id')) return;
+							mainButtonIdList.push($(subElement).attr('id'));
+						});
 					});
 
 				mainButtonIdList.forEach(function (id) {
 					if (!mainButtonList[id]) listObj.find('#' + id).remove();
-					else if (!$('#' + id).attr('showLater')) listObj.find('#' + id).show();
+					else listObj.find('#' + id).show();
 				});
 			} else {
 				$('#' + this.getElementId('ImngListObject'))
@@ -357,9 +384,935 @@ function getCreatePageObj() {
 			}
 		};
 
-		this.panelConstructor = function (isHideResultTab) {
+		this.panelConstructor = function (isHideResultTab) {			
+			// make tab func
+			function basicTabType(tabObj, rowDiv, tabDiv) {
+				tabObj.detailList.forEach(function (detailObj, detailIndex) {
+					var colDiv = $('<div/>').addClass(detailObj.className);
+					rowDiv.append(colDiv);
+					
+					function textBasicType(detailContentObj) {
+						var regExpDataInfo = detailContentObj.mappingDataInfo.replace('object', 'letter');
+						var regExpInputInfo = {
+							key : detailContentObj.mappingDataInfo,
+							regExp: getRegExpInfo(detailContentObj.regExpType).regExp
+						};
+						
+						detailContentObj.object.children('.control-label').children(':first-child')
+							  .append($('<span/>').addClass('letterLength')
+										.append($('<span/>').text('('))
+										.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
+										.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
+							  ).show();
+						
+						
+						detailContentObj.object
+							.children('.input-group')
+							.children('input[type=text]')
+							.removeClass()
+							.addClass(detailContentObj.formControl)
+							.attr({
+								'v-model': detailContentObj.mappingDataInfo,
+								readonly: detailContentObj.readonly,
+								disabled: detailContentObj.disabled,
+								maxlength: detailContentObj.maxLength,
+								'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
+							})
+							.show();
+					}
+					
+					
+					
+					detailObj.detailSubList.forEach(function (detailSubObj, detailSubIndex) {
+						var type = detailSubObj.type;						
+						var startIcon = detailSubObj.isPk || detailSubObj.isRequired ? '<b class="icon-star"></b>' : '';						
+						var object = $('.form-group-origin').clone();						
+						object.removeClass().addClass('form-group');
+						object.children('.control-label').append($('<span/>').text(detailSubObj.name)).append(startIcon);
+
+						if (detailSubObj.warning) object.children('.control-label').after($('<label/>').addClass('control-label warningLabel').append(escapeHtml(detailSubObj.warning)));
+						if (detailSubObj.isShowFlagDataName) object.attr({ 'v-if': detailSubObj.isShowFlagDataName });
+						
+						var detailContentObj = {
+								id: detailSubObj.id,
+								isPk: detailSubObj.isPk,
+								height: detailSubObj.height,
+								readonly: detailSubObj.readonly,
+								disabled: detailSubObj.disabled,
+								mappingDataInfo: detailSubObj.mappingDataInfo,
+								regExpType: detailSubObj.regExpType ? detailSubObj.regExpType : 'default',
+								maxLength: getRegExpInfo(detailSubObj.regExpType ? detailSubObj.regExpType : 'default').maxLength,
+								formControl: detailSubObj.isPk ? 'form-control view-disabled dataKey' : 'form-control view-disabled',
+								object: object,		
+								placeholder: detailSubObj.placeholder,
+								combiList: detailSubObj.combiList,
+								changeEvt: detailSubObj.changeEvt,
+								clickEvt: detailSubObj.clickEvt,
+								btnClickEvt: detailSubObj.btnClickEvt,
+								cryptType: detailSubObj.cryptType,
+						};
+
+						if ('text' == type) textBasicType(detailContentObj);
+						else if ('textEvt' == type) textEvtBasicType(detailContentObj); 
+						else if ('password' == type) passwordBasicType(detailContentObj);
+						else if ('search' == type) searchBasicType(detailContentObj);
+						else if ('singleDaterange' == type) singleDateBasicType(detailContentObj); 
+						else if ('select' == type) selectBasicType(detailContentObj);
+						else if ('textarea' == type) textareaBasicType(detailContentObj);
+						else if ('combination' == type) combiBasicType(detailContentObj);
+						else if ('datalist' == type) datalistBasicType(detailContentObj);
+						else if ('radio' == type) radioBasicType(detailContentObj);
+						else if ('checkbox' == type) checkboxBasicType(detailContentObj);
+						else if ('grid' == type) gridBasicType(detailContentObj);
+
+						if ('search' != type && 'cron' != type) {
+							object.children('.input-group').children('.input-group-append').remove();
+						}
+
+						colDiv.append(object);
+					});
+				});
+
+				if (tabObj.appendAreaList) {
+					var tabRowDiv = $('<div/>').addClass('row frm-row');
+					tabDiv.append(tabRowDiv);
+
+					tabObj.appendAreaList.forEach(function (appendArea) {
+						tabRowDiv.append(appendArea.getDetailArea());
+					});
+				}
+			}
+			
+			function textEvtBasicType(detailContentObj) {	
+				var textEvtRegExpInfo = detailContentObj.mappingDataInfo.replace('object', 'letter');
+				var textEvtRegExpInputInfo = {
+					key : detailContentObj.mappingDataInfo,
+					regExp: getRegExpInfo(detailContentObj.regExpType).regExp
+				};
+				
+				detailContentObj.object.children('.control-label').children(':first-child')
+					  .append($('<span/>').addClass('letterLength')
+								.append($('<span/>').text('('))
+								.append($('<span/>').attr({ 'v-text': textEvtRegExpInfo }))
+								.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
+					  ).show();
+				
+				detailContentObj.object.children('.input-group').children('input[type=text]').removeClass().addClass(detailContentObj.formControl).attr({
+					'v-model': detailContentObj.mappingDataInfo,
+					'v-on:change': detailContentObj.changeEvt,
+					maxlength: detailContentObj.maxLength,
+					'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(textEvtRegExpInputInfo)  + ')' : null
+				});
+
+				if (detailContentObj.clickEvt) {
+					detailContentObj.object.children('.input-group').attr({ 'v-on:click': detailContentObj.clickEvt });
+					detailContentObj.object.children('.input-group').children('input[type=text]').addClass('underlineTxt');
+					detailContentObj.object.children('.input-group').css({ cursor: 'pointer' });
+				}
+
+				if (detailContentObj.btnClickEvt) detailContentObj.object.children('.input-group').append($('<button/>').attr({ 'v-on:click': detailContentObj.btnClickEvt }).addClass('btn btn-icon').css({ 'margin-left': '3px', padding: '5px 10px 0px 10px' }).append($('<i/>').addClass('icon-link')));
+
+				detailContentObj.object.children('.input-group').children('input[type=text]').show();
+			}
+			
+			function passwordBasicType(detailContentObj){
+				var passwordRegExpInfo = detailContentObj.mappingDataInfo.replace('object', 'letter');
+				var passwordRegExpInputInfo = {
+					key : detailContentObj.mappingDataInfo,
+					regExp: getRegExpInfo(detailContentObj.regExpType).regExp
+				};
+					
+				detailContentObj.object.children('.control-label').children(':first-child')
+					  .append($('<span/>').addClass('letterLength')
+								.append($('<span/>').text('('))
+								.append($('<span/>').attr({ 'v-text': passwordRegExpInfo }))
+								.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
+					  ).show();
+				
+				
+				detailContentObj.object.children('.input-group').children('span[type=password]').children('input').removeClass().addClass(detailContentObj.formControl).attr({
+					'v-model': detailContentObj.mappingDataInfo,
+					disabled: detailContentObj.disabled,
+					maxlength: detailContentObj.maxLength,
+					'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(passwordRegExpInputInfo)  + ')' : null
+				});
+
+				if (detailContentObj.cryptType) {
+					detailContentObj.object.children('.input-group').children('span[type=password]').children('input').removeClass().addClass(detailContentObj.formControl).attr({
+						'v-bind:type': detailContentObj.cryptType
+					});
+
+					detailContentObj.object
+						.children('.input-group')
+						.children('span[type=password]')
+						.children('.icon-eye')
+						.attr({
+							'v-on:click': '("password" == ' + detailContentObj.cryptType + ')? ' + detailContentObj.cryptType + ' = "text" : ' + detailContentObj.cryptType + ' = "password"'
+						});
+				} else {
+					detailContentObj.object
+						.children('.input-group')
+						.children('span[type=password]')
+						.children('input')
+						.removeClass()
+						.addClass(detailContentObj.formControl)
+						.attr({
+							type: 'password'
+						})
+						.width('100%');
+
+					detailContentObj.object.children('.input-group').children('span[type=password]').children('.icon-eye').hide();
+				}
+
+				detailContentObj.object.children('.input-group').children('span[type=password]').show();
+			}
+			
+			function searchBasicType(detailContentObj) {
+				var searchClass = detailContentObj.isPk ? 'input-group-append saveGroup' : 'input-group-append saveGroup updateGroup';
+
+				if (detailContentObj.height) {
+					detailContentObj.object
+						.children('.input-group')
+						.children('textarea')
+						.removeClass()
+						.addClass(detailContentObj.formControl)
+						.attr({
+							name: 'detail_type_search',
+							'v-model': detailContentObj.mappingDataInfo.vModel,
+							readonly: true
+						})
+						.show();
+					detailContentObj.object
+						.children('.input-group')
+						.children('.input-group-append')
+						.attr({
+							class: searchClass
+						})
+						.show();
+					detailContentObj.object
+						.children('.input-group')
+						.children('.input-group-append')
+						.find('#lookupBtn')
+						.attr({
+							'v-on:click': 'openModal(' + JSON.stringify(detailContentObj.mappingDataInfo) + ')'
+						})
+						.show();
+					detailContentObj.object
+						.children('.input-group')
+						.children('.input-group-append')
+						.find('#resetBtn')
+						.attr({
+							'v-on:click': detailContentObj.mappingDataInfo.vModel + '= null;' + 'window.vmMain.$forceUpdate();'
+						});
+					detailContentObj.object.children('.input-group').children('input-group-append').css('min-height', detailContentObj.height);
+				} else {
+					detailContentObj.object
+						.children('.input-group')
+						.children('input[type=text]')
+						.removeClass()
+						.addClass(detailContentObj.formControl)
+						.attr({
+							name: 'detail_type_search',
+							'v-model': detailContentObj.mappingDataInfo.vModel,
+							readonly: true
+						})
+						.show();
+					detailContentObj.object
+						.children('.input-group')
+						.children('.input-group-append')
+						.attr({
+							class: searchClass
+						})
+						.show();
+					detailContentObj.object
+						.children('.input-group')
+						.children('.input-group-append')
+						.find('#lookupBtn')
+						.attr({
+							'v-on:click': 'openModal(' + JSON.stringify(detailContentObj.mappingDataInfo) + ')'
+						})
+						.show();
+					detailContentObj.object
+						.children('.input-group')
+						.children('.input-group-append')
+						.find('#resetBtn')
+						.attr({
+							'v-on:click': detailContentObj.mappingDataInfo.vModel + '= null;' + 'window.vmMain.$forceUpdate();'
+						});
+				}
+			}
+			
+			function singleDateBasicType(detailContentObj) {
+				detailContentObj.object
+					.children('.input-group')
+					.children('input[type=text]')
+					.removeClass()
+					.addClass(detailContentObj.formControl + ' input-date')
+					.attr({
+						id: detailContentObj.mappingDataInfo.id,
+						'v-model': detailContentObj.mappingDataInfo.vModel,
+						'data-drops': detailContentObj.mappingDataInfo.dataDrops ? detailContentObj.mappingDataInfo.dataDrops : 'up',
+						autocomplete: 'off',
+						disabled: detailContentObj.disabled
+					})
+					.show();
+			}
+			
+			function selectBasicType(detailContentObj) {
+				var selectAttr = detailContentObj.object
+									.children('.input-group')
+									.children('select')
+									.removeClass()
+									.addClass(detailContentObj.formControl)
+									.attr({
+										'v-model': detailContentObj.mappingDataInfo.selectModel,
+										'v-on:change': detailContentObj.mappingDataInfo.changeEvt ? detailContentObj.mappingDataInfo.changeEvt : null,
+										disabled: detailContentObj.disabled
+									});
+
+				if (detailContentObj.id) selectAttr.attr({ id: detailContentObj.id });
+
+				if (detailContentObj.clickEvt) detailContentObj.object.children('.input-group').append($('<button/>').attr({ 'v-on:click': detailContentObj.clickEvt }).addClass('btn btn-icon').css({ 'margin-left': '3px', padding: '5px 10px 0px 10px' }).append($('<i/>').addClass('icon-link')));
+
+				if (detailContentObj.placeholder) {
+					selectAttr.append(
+						$('<option/>')
+							.attr({
+								selected: 'selected',
+								value: ' '
+							})
+							.text(detailContentObj.placeholder)
+					);
+				}
+
+				selectAttr
+					.append(
+						$('<option/>').attr({
+							'v-for': detailContentObj.mappingDataInfo.optionFor,
+							'v-bind:value': detailContentObj.mappingDataInfo.optionValue,
+							'v-text': detailContentObj.mappingDataInfo.optionText,
+							'v-bind:disabled': detailContentObj.mappingDataInfo.optionDisabled
+						})
+					)
+					.show();
+			}
+			
+			function textareaBasicType(detailContentObj) {
+				var textareaRegExpInfo = detailContentObj.mappingDataInfo.replace('object', 'letter');
+				var textareaRegExpInputInfo = {
+					key : detailContentObj.mappingDataInfo,
+					regExp: getRegExpInfo(detailContentObj.regExpType).regExp
+				};
+				
+				detailContentObj.object.children('.control-label').children(':first-child')
+				  .append($('<span/>').addClass('letterLength')
+							.append($('<span/>').text('('))
+							.append($('<span/>').attr({ 'v-text': textareaRegExpInfo }))
+							.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
+				  ).show();
+				
+				detailContentObj.object
+					.children('.input-group')
+					.children('textarea')
+					.removeClass()
+					.addClass(detailContentObj.formControl)
+					.attr({
+						'v-model': detailContentObj.mappingDataInfo,
+						maxlength: detailContentObj.maxLength,
+						'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(textareaRegExpInputInfo)  + ')' : null
+					})
+					.show();
+
+				if (detailContentObj.height) detailContentObj.object.children('.input-group').children('textarea').css('min-height', detailContentObj.height);
+			}
+			
+			function combiBasicType(detailContentObj) {						
+				detailContentObj.combiList.forEach(function (combiObj, combiIndex) {
+					var type = combiObj.type;
+					
+					var combiRegExpType = combiObj.regExpType ? combiObj.regExpType : 'default';	
+					var combiMaxLength = getRegExpInfo(combiRegExpType).maxLength;
+												
+					if ('select' == type) {
+						detailContentObj
+							.object
+							.children('.input-group')
+							.children('select')
+							.removeClass()
+							.addClass(detailContentObj.formControl)
+							.attr({
+								'v-model': combiObj.mappingDataInfo.selectModel
+							})
+							.append(
+								$('<option/>').attr({
+									'v-for': combiObj.mappingDataInfo.optionFor,
+									'v-bind:value': combiObj.mappingDataInfo.optionValue,
+									'v-text': combiObj.mappingDataInfo.optionText
+								})
+							)
+							.show();
+					} else if ('text' == type) {
+						var regExpDataInfo = combiObj.mappingDataInfo.replace('object', 'letter');
+						var regExpInputInfo = {
+							key : combiObj.mappingDataInfo,
+							regExp:  getRegExpInfo(combiRegExpType).regExp
+						}
+						
+						detailContentObj.object.children('.input-group').append(
+								$('<div/>').addClass('detail-content-regExp').css({ 'margin-left': '5px', 'width': 'auto' })
+									.append(
+											detailContentObj
+												.object
+												.children('.input-group')
+												.children('input[type=text]')
+												.removeClass()
+												.addClass('regExp-text')
+												.attr({
+													'v-model': combiObj.mappingDataInfo,
+													maxlength: combiMaxLength,
+													'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
+												}).show()
+									)
+							  		.append(
+							  			$('<span/>').addClass('letterLength')
+										.append($('<span/>').text('('))
+										.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
+										.append($('<span/>').text('/' + combiMaxLength + ')'))
+							  		)
+						);
+					 } else if ('radio' == type) {
+						 detailContentObj
+						 	.object
+							.children('.input-group')
+							.children('div[type=radio]')
+							.removeClass()
+							.addClass('custom-control custom-radio single')
+							.append(
+								$('<label/>').css({'padding-right': '30px'}).attr({
+									'v-for': combiObj.mappingDataInfo.optionFor
+								}).append(
+									$('<input/>').addClass('custom-control-input').attr({
+										type: 'radio',
+										'v-model': combiObj.mappingDataInfo.vModel,
+										'v-bind:value': combiObj.mappingDataInfo.optionValue,
+										'v-bind:disabled': combiObj.mappingDataInfo.optionDisabled
+									})
+								)
+								.append(
+									$('<span/>').addClass('custom-control-label').attr({
+										'v-text': combiObj.mappingDataInfo.optionText
+									}).css({'padding-left': '5px'})
+								)
+							).show();
+					 } else if ('checkbox' == type) {
+						 detailContentObj
+							 .object
+							 .children('.input-group')
+							 .children('div[type=checkbox]')
+							 .removeClass()
+							 .addClass('custom-control custom-checkbox single')
+							 .css({'padding-left': '0'})
+							 .append(
+									 $('<label/>').css({'padding-right': '10px'})
+									 	.attr({
+									 		'v-for': combiObj.mappingDataInfo.optionFor
+									 	})
+									 	.append(
+								 			$('<input/>')
+								 				.addClass('custom-control-input')
+								 					.attr({
+								 						type: 'checkbox',
+								 						'v-model': combiObj.mappingDataInfo.vModel,
+								 						'v-bind:value': combiObj.mappingDataInfo.optionValue,
+								 						'v-bind:disabled': combiObj.mappingDataInfo.optionDisabled,
+								 						'v-on:change': combiObj.mappingDataInfo.changeEvt ? combiObj.mappingDataInfo.changeEvt : null
+							 						})
+						 						.css({'position': 'relative', 'width': '0.75rem', 'height': '1.05rem'})
+										)
+										.append(
+											$('<span/>').addClass('custom-control-label').attr({
+												'v-text': combiObj.mappingDataInfo.optionText
+											}).css({'padding-left': '5px'})
+										)
+							).show();
+					 }
+				});			
+			}
+			
+			function datalistBasicType(detailContentObj) {
+				var detailSubDatalistRegInfo = detailContentObj.mappingDataInfo.vModel.replace('object', 'letter');
+				var detailSubDatalistRegInputInfo = {
+					key : detailContentObj.mappingDataInfo.vModel,
+					regExp: getRegExpInfo(detailContentObj.regExpType).regExp
+				}
+				
+				detailContentObj.object.children('.control-label').children(':first-child')
+					  .append($('<span/>').addClass('letterLength')
+								.append($('<span/>').text('('))
+								.append($('<span/>').attr({ 'v-text': detailSubDatalistRegInfo }))
+								.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
+					  ).show();
+				
+				
+				detailContentObj.object.children('.input-group').children('span[type=datalist]').children('input[type=text]').removeClass().addClass(detailContentObj.formControl).attr({
+					list: detailContentObj.mappingDataInfo.dataListId,
+					'v-model': detailContentObj.mappingDataInfo.vModel,
+					maxlength: detailContentObj.maxLength,
+					'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(detailSubDatalistRegInputInfo)  + ')' : null
+				});
+
+				detailContentObj
+					.object
+					.children('.input-group')
+					.children('span[type=datalist]')
+					.children('datalist')
+					.attr({
+						id: detailContentObj.mappingDataInfo.dataListId
+					})
+					.append(
+						$('<option/>').attr({
+							'v-for': detailContentObj.mappingDataInfo.dataListFor,
+							'v-text': detailContentObj.mappingDataInfo.dataListText
+						})
+					);
+
+				detailContentObj.object.children('.input-group').children('span[type=datalist]').show();
+			}
+			
+			function radioBasicType(detailContentObj) {
+				detailContentObj
+					.object
+					.children('.input-group')
+					.children('div[type=radio]')
+					.removeClass()
+					.addClass('custom-control custom-radio single')
+					.append(
+						$('<label/>').css({'padding-right': '30px'}).attr({
+							'v-for': detailContentObj.mappingDataInfo.optionFor
+						}).append(
+							$('<input/>').addClass('custom-control-input').attr({
+								type: 'radio',
+								'v-model': detailContentObj.mappingDataInfo.vModel,
+								'v-bind:value': detailContentObj.mappingDataInfo.optionValue,
+								'v-bind:disabled': detailContentObj.mappingDataInfo.optionDisabled
+							})
+						)
+						.append(
+							$('<span/>').addClass('custom-control-label').attr({
+								'v-text': detailContentObj.mappingDataInfo.optionText
+							}).css({'padding-left': '5px'})
+						)
+					).show();
+			}
+			
+			function checkboxBasicType(detailContentObj) {
+				detailContentObj
+					.object
+					.children('.input-group')
+					.children('div[type=checkbox]')
+					.removeClass()
+					.addClass('custom-control custom-checkbox single')
+					.append(
+						$('<label/>').css({'padding-right': '30px'}).attr({
+							'v-for': detailContentObj.mappingDataInfo.optionFor
+						}).append(
+							$('<input/>').addClass('custom-control-input').attr({
+								type: 'checkbox',
+								'v-model': detailContentObj.mappingDataInfo.vModel,
+								'v-bind:value': detailContentObj.mappingDataInfo.optionValue,
+								'v-bind:disabled': detailContentObj.mappingDataInfo.optionDisabled,
+								'v-on:change': detailContentObj.mappingDataInfo.changeEvt ? detailContentObj.mappingDataInfo.changeEvt : null
+							})
+						)
+						.append(
+							$('<span/>').addClass('custom-control-label').attr({
+								'v-text': detailContentObj.mappingDataInfo.optionText
+							}).css({'padding-left': '5px'})
+						)
+					).show();				 
+			}
+			
+			function gridBasicType(detailContentObj) {
+				detailContentObj.object.append(
+					$('<div/>')
+						.addClass('table-responsive')
+						.append($('<div/>').attr({ id: detailContentObj.id }))
+				);
+			}
+			
+			function propertyTabType(tabObj, rowDiv) {				
+				if (tabObj.searchList) {
+					var searchDiv = $('<div/>').addClass('viewGroup row').css({ width: '100%', margin: '0 0 1.25rem 0' });
+										
+					tabObj.searchList.forEach(function (searchObj) {
+						var colDiv = $('<div/>').addClass(searchObj.className + ' searchArea-col');
+
+						searchObj.searchSubList.forEach(function (searchSubObj) {
+							var appendTag = $('<div/>').addClass('form-group');
+							appendTag.append($('<label/>').append($('<b/>').attr('class', 'control-label').text(searchSubObj.name)));
+
+							if ('select' == searchSubObj.type) {
+								selectDiv = $('<select/>')
+									.removeClass()
+									.addClass('form-control')
+									.css({ 'background-color': 'rgb(245, 246, 251)' })
+									.attr({
+										id: searchSubObj.mappingDataInfo.id,
+										'v-model': searchSubObj.mappingDataInfo.selectModel,
+										'v-on:change': searchSubObj.mappingDataInfo.changeEvt ? searchSubObj.mappingDataInfo.changeEvt : null
+									});
+
+								if (searchSubObj.placeholder) {
+									selectDiv.append(
+										$('<option/>')
+											.attr({
+												selected: 'selected',
+												value: ' '
+											})
+											.text(searchSubObj.placeholder)
+									);
+								}
+
+								selectDiv.append(
+									$('<option/>').attr({
+										'v-for': searchSubObj.mappingDataInfo.optionFor,
+										'v-bind:value': searchSubObj.mappingDataInfo.optionValue,
+										'v-text': searchSubObj.mappingDataInfo.optionText
+									})
+								);
+
+								appendTag.append(selectDiv);
+							}
+
+							colDiv.append(appendTag);
+						});
+
+						searchDiv.append(colDiv);
+					});
+
+					rowDiv.append(searchDiv);
+				}
+
+				rowDiv.addClass('propertyTab');
+				
+				rowDiv.append(
+					$('<div/>')
+						.addClass('form-table form-table-responsive')
+						.append(
+							$('<div/>')
+								.addClass('form-table-head')
+								.append(
+									$('<button/>')
+										.addClass('btn-icon saveGroup updateGroup')
+										.attr({
+											type: 'button',
+											'v-on:click': tabObj.addRowFunc
+										})
+										.append($('<i/>').addClass('icon-plus-circle'))
+								)
+						)
+						.append(
+							$('<div/>').addClass('form-table-wrap')
+									   .append(
+											   $('<div/>').addClass('form-table-body').attr({ 'v-for': '(elm, index) in ' + tabObj.mappingDataInfo })
+									   )
+						)
+				);
+
+				if (tabObj.isShowRemoveIconWhere) {
+					rowDiv
+						.find('.form-table-body')
+						.append(
+							$('<button/>')
+								.addClass('btn-icon saveGroup updateGroup')
+								.attr({
+									type: 'button',
+									'v-on:click': tabObj.removeRowFunc,
+									'v-if': tabObj.isShowRemoveIconWhere
+								})
+								.append($('<i/>').addClass('icon-minus-circle'))
+						)
+						.append(
+							$('<button/>')
+								.addClass('btn-icon saveGroup updateGroup')
+								.attr({
+									type: 'button',
+									'v-if': '!' + tabObj.isShowRemoveIconWhere
+								})
+								.append($('<i/>').addClass('icon-star'))
+						);
+				} else {
+					rowDiv.find('.form-table-body').append(
+						$('<button/>')
+							.addClass('btn-icon saveGroup updateGroup')
+							.attr({
+								type: 'button',
+								'v-on:click': tabObj.removeRowFunc
+							})
+							.append($('<i/>').addClass('icon-minus-circle'))
+					);
+				}
+				
+				tabObj.detailList.forEach(function (detailObj, detailIndex) {
+					var type = detailObj.type;					
+					var appendTag = null;
+					
+					var detailContentObj = {
+							type: detailObj.type,
+							regExpType: detailObj.regExpType? detailObj.regExpType : 'default',
+							maxLength: getRegExpInfo(detailObj.regExpType? detailObj.regExpType : 'default').maxLength,
+							appendTag: appendTag,
+							mappingDataInfo: detailObj.mappingDataInfo,
+							readonly: detailObj.readonly,
+							clickEvt: detailObj.clickEvt,
+							changeEvt: detailObj.changeEvt,
+					}
+					
+					if ('text' == type) appendTag = textPropertyType(detailContentObj);
+					else if ('search' == type) appendTag = searchPropertyType(detailContentObj); 
+					else if ('customModal' == type) appendTag = customModalPropertyType(detailContentObj); 
+					else if ('select' == type)  appendTag = selectPropertyType(detailContentObj);
+					else if ('datalist' == type) appendTag = datalistPropertyType(detailContentObj);
+					else if ('singleDaterange' == type) appendTag = singleDatePropertyType(detailContentObj);
+
+					$('#' + tabObj.id)
+						.find('.form-table-head')
+						.append($('<label/>').addClass('col').text(detailObj.name));
+					$('#' + tabObj.id)
+						.find('.form-table-body')
+						.append($('<div/>').addClass('col').append(appendTag));
+				});
+			}
+
+			function textPropertyType(detailContentObj) {
+				var dataInfoArr = detailContentObj.mappingDataInfo.split('.');								
+				dataInfoArr.splice(1, 0, 'letter'); 
+					
+				var regExpDataInfo = dataInfoArr.join('.');
+				var regExpInputInfo = {
+					key : detailContentObj.mappingDataInfo,
+					regExp:  getRegExpInfo(detailContentObj.regExpType).regExp,
+				}
+					
+				detailContentObj.appendTag = $('<div/>')
+								.addClass(detailContentObj.readonly? 'detail-content-common' : 'detail-content-regExp')
+								.append(
+									$('<input/>').addClass(detailContentObj.readonly? 'form-control readonly' : 'regExp-text view-disabled')
+									.attr({
+										'v-model': detailContentObj.mappingDataInfo,
+										maxlength: detailContentObj.maxLength,
+										readonly: detailContentObj.readonly,
+										'v-on:input': !detailContentObj.readonly && detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ', elm)' : null
+									})
+								)	
+			
+				if(!detailContentObj.readonly) {
+					detailContentObj.appendTag.append(
+				  			$('<span/>').addClass('letterLength')
+							.append($('<span/>').text('('))
+							.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
+							.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
+					  	);
+				}
+								
+				return detailContentObj.appendTag;
+			}
+			
+			function searchPropertyType(detailContentObj) {
+				detailContentObj.appendTag = $('<div/>')
+					.addClass('input-group-append')
+					.width('100%')
+					.append(
+						$('<input/>').addClass('form-control').attr({
+							type: detailContentObj.type,
+							'v-model': detailContentObj.mappingDataInfo.vModel,
+							readonly: true,
+							disabled: true,
+						})
+					)
+					.append(
+						$('<button/>')
+							.addClass('btn saveGroup updateGroup')
+							.attr({
+								'v-on:click': 'openModal(' + JSON.stringify(detailContentObj.mappingDataInfo) + ', index)',
+							})
+							.css({
+								'margin-left': '3px',
+							})
+							.append($('<i/>').addClass('icon-srch'))
+							.append(searchBtn)
+					)
+					.append(
+						$('<button/>')
+							.addClass('btn saveGroup updateGroup')
+							.attr({
+								'v-on:click': detailContentObj.mappingDataInfo.vModel + ' = null;',
+							})
+							.css({
+								'margin-left': '3px',
+								'min-width': '0px',
+								'padding-left': '0.5rem',
+							})
+							.append(
+								$('<i/>').addClass('icon-reset').css({
+									'margin-right': '0px',
+								})
+							)
+					);
+				
+				if(detailContentObj.clickEvt) {
+					detailContentObj.appendTag.attr({'v-on:click': detailContentObj.clickEvt});
+					detailContentObj.appendTag.children('input[type=search]').addClass('underlineTxt');
+					detailContentObj.appendTag.css({cursor: 'pointer'});
+				}
+				
+				return detailContentObj.appendTag;
+			
+			}
+			
+			function customModalPropertyType(detailContentObj) {
+				detailContentObj.appendTag = $('<div/>')
+					.addClass('input-group-append ')
+					.width('100%')
+					.append(
+						$('<input/>').addClass('form-control').attr({
+							type: detailContentObj.type,
+							'v-model': detailContentObj.mappingDataInfo.vModel,
+							readonly: true,
+							disabled: true,
+						})
+					)
+					.append(
+						$('<button/>')
+							.addClass('btn saveGroup updateGroup')
+							.attr({
+								'v-on:click': 'openCustomModal(' + JSON.stringify(detailContentObj.mappingDataInfo) + ', index)',
+							})
+							.css({
+								'margin-left': '3px',
+							})
+							.append($('<i/>').addClass('icon-srch'))
+							.append(searchBtn)
+					)
+					.append(
+						$('<button/>')
+							.addClass('btn saveGroup updateGroup')
+							.attr({
+								'v-on:click': detailContentObj.mappingDataInfo.vModel + ' = null;',
+							})
+							.css({
+								'margin-left': '3px',
+								'min-width': '0px',
+								'padding-left': '0.5rem',
+							})
+							.append(
+								$('<i/>').addClass('icon-reset').css({
+									'margin-right': '0px',
+								})
+							)
+					);
+				
+				return detailContentObj.appendTag;
+			}
+			
+			function selectPropertyType(detailContentObj) {
+				detailContentObj.appendTag = $('<select/>')
+					.attr({
+						'v-model': detailContentObj.mappingDataInfo.selectModel,
+						'v-on:change': detailContentObj.changeEvt,
+					})
+					.addClass('form-control view-disabled')
+					.append(
+						$('<option/>').attr({
+							'v-for': detailContentObj.mappingDataInfo.optionFor,
+							'v-bind:value': detailContentObj.mappingDataInfo.optionValue,
+							'v-text': detailContentObj.mappingDataInfo.optionText,										
+						})
+					);	
+				
+				return detailContentObj.appendTag;
+			}
+			
+			function datalistPropertyType(detailContentObj) {
+				var detailDataInfoArr = detailContentObj.mappingDataInfo.vModel.split('.');								
+				detailDataInfoArr.splice(1, 0, 'letter'); 
+				
+				var detailDatalistRegInfo = detailDataInfoArr.join('.');
+				var detailDatalistRegInputInfo = {
+					key : detailContentObj.mappingDataInfo.vModel,
+					regExp:  getRegExpInfo(detailContentObj.regExpType).regExp,
+				}
+			
+				detailContentObj.appendTag = $('<div/>').addClass('detail-content-regExp')
+							.append(
+								$('<input/>').addClass('regExp-text view-disabled ')
+								.attr({
+									'v-model': detailContentObj.mappingDataInfo.vModel,
+									maxlength: detailContentObj.maxLength,
+									'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(detailDatalistRegInputInfo)  + ', elm)' : null,
+									'v-on:change': detailContentObj.changeEvt,
+									'list' : detailContentObj.mappingDataInfo.dataListId,
+								})
+							)
+					  		.append(
+					  			$('<span/>').addClass('letterLength')
+								.append($('<span/>').text('('))
+								.append($('<span/>').attr({ 'v-text': detailDatalistRegInfo }))
+								.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
+							)
+							.append(
+								$('<datalist/>')
+								.attr({
+									id: detailContentObj.mappingDataInfo.dataListId,
+								})
+								.append(
+									$('<option/>').attr({
+										'v-for': detailContentObj.mappingDataInfo.dataListFor,
+										'v-text': detailContentObj.mappingDataInfo.dataListText,
+									})
+								)
+							);
+				return detailContentObj.appendTag;			
+			}		
+			
+			function singleDatePropertyType(detailContentObj) {
+				detailContentObj.appendTag = $('<input/>')
+					.addClass('form-control view-disabled input-date')
+					.attr({
+						'v-bind:id': "'" + detailContentObj.mappingDataInfo.id + "' + index",
+						'v-model': detailContentObj.mappingDataInfo.vModel,
+						'data-drops': detailContentObj.mappingDataInfo.dataDrops ? detailContentObj.mappingDataInfo.dataDrops : 'up',
+						autocomplete: 'off',
+					})
+					.show();
+				
+				return detailContentObj.appendTag;			
+			}
+			
+			function treeTabType(tabObj, rowDiv) {
+				rowDiv.append(
+					$('<div/>')
+						.addClass('table-responsive')
+						.append(
+							$('<div/>').attr({
+								id: tabObj.id + '_tree',
+							})
+						)
+				);
+			}
+			
+			function customTabType(tabObj, rowDiv, tabDiv) {
+				var appendDiv = tabObj.noRowClass ? tabDiv : rowDiv;
+
+				if (tabObj.noRowClass) tabDiv.empty();
+
+				appendDiv.append(tabObj.getDetailArea());			
+			}
+			
+			
 			tabList.forEach(function (tabObj, tabIndex) {
 				// make tab menu
+				var type = tabObj.type;
 				var tabBar = $('#panel').find('.nav-item-origin').clone();
 
 				tabBar.removeClass().addClass('nav-item');
@@ -367,7 +1320,7 @@ function getCreatePageObj() {
 					.children('.nav-link')
 					.addClass(0 == tabIndex ? 'active' : '')
 					.attr({
-						href: '#' + tabObj.id,
+						href: '#' + tabObj.id
 					})
 					.text(tabObj.name);
 
@@ -383,7 +1336,7 @@ function getCreatePageObj() {
 
 				// make tab detail area
 				var tabDiv = $('<div/>').attr({
-					id: tabObj.id,
+					id: tabObj.id
 				});
 				tabDiv.addClass('tab-pane ' + (0 == tabIndex ? 'active' : ''));
 				tabDiv.addClass(tabObj.isSubResponsive ? 'sub-responsive' : '');
@@ -393,818 +1346,10 @@ function getCreatePageObj() {
 				var rowDiv = $('<div/>').addClass('row frm-row');
 				tabDiv.append(rowDiv);
 
-				if ('basic' == tabObj.type) {
-					tabObj.detailList.forEach(function (detailObj, detailIndex) {
-						var colDiv = $('<div/>').addClass(detailObj.className);
-						rowDiv.append(colDiv);
-
-						detailObj.detailSubList.forEach(function (detailSubObj, detailSubIndex) {
-							var startIcon = detailSubObj.isPk || detailSubObj.isRequired ? '<b class="icon-star"></b>' : '';
-							var formControl = detailSubObj.isPk ? 'form-control view-disabled dataKey' : 'form-control view-disabled';
-
-							var object = $('.form-group-origin').clone();
-							
-							object.removeClass().addClass('form-group');
-							object.children('.control-label').append($('<span/>').text(detailSubObj.name)).append(startIcon);
-
-							if (detailSubObj.warning) object.children('.control-label').after($('<label/>').addClass('control-label warningLabel').append(escapeHtml(detailSubObj.warning)));
-
-							if (detailSubObj.isShowFlagDataName) object.attr({ 'v-if': detailSubObj.isShowFlagDataName });
-							
-							var regExpType = detailSubObj.regExpType ? detailSubObj.regExpType : 'default' ;
-							var maxLength = getRegExpInfo(regExpType).maxLength;
-
-							if ('text' == detailSubObj.type) {								
-								var regExpDataInfo = detailSubObj.mappingDataInfo.replace('object', 'letter');
-								var regExpInputInfo = {
-									key : detailSubObj.mappingDataInfo,
-									regExp: getRegExpInfo(regExpType).regExp,
-								};
-								
-								object.children('.control-label').children(':first-child')
-									  .append($('<span/>').addClass('letterLength')
-												.append($('<span/>').text('('))
-												.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-												.append($('<span/>').text('/' + maxLength + ')'))
-									  ).show();
-								
-								
-								object
-									.children('.input-group')
-									.children('input[type=text]')
-									.removeClass()
-									.addClass(formControl)
-									.attr({
-										'v-model': detailSubObj.mappingDataInfo,
-										readonly: detailSubObj.readonly,
-										disabled: detailSubObj.disabled,
-										maxlength: maxLength,
-										'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-									})
-									.show();
-							} else if ('textEvt' == detailSubObj.type) {
-								var regExpDataInfo = detailSubObj.mappingDataInfo.replace('object', 'letter');
-								var regExpInputInfo = {
-									key : detailSubObj.mappingDataInfo,
-									regExp: getRegExpInfo(regExpType).regExp,
-								};
-								
-								object.children('.control-label').children(':first-child')
-									  .append($('<span/>').addClass('letterLength')
-												.append($('<span/>').text('('))
-												.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-												.append($('<span/>').text('/' + maxLength + ')'))
-									  ).show();
-								
-								object.children('.input-group').children('input[type=text]').removeClass().addClass(formControl).attr({
-									'v-model': detailSubObj.mappingDataInfo,
-									'v-on:change': detailSubObj.changeEvt,
-									maxlength: maxLength,
-									'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-								});
-
-								if (detailSubObj.clickEvt) {
-									object.children('.input-group').attr({ 'v-on:click': detailSubObj.clickEvt });
-									object.children('.input-group').children('input[type=text]').addClass('underlineTxt');
-									object.children('.input-group').css({ cursor: 'pointer' });
-								}
-
-								if (detailSubObj.btnClickEvt) object.children('.input-group').append($('<button/>').attr({ 'v-on:click': detailSubObj.btnClickEvt }).addClass('btn btn-icon').css({ 'margin-left': '3px', padding: '5px 10px 0px 10px' }).append($('<i/>').addClass('icon-link')));
-
-								object.children('.input-group').children('input[type=text]').show();
-							} else if ('password' == detailSubObj.type) {
-								var regExpDataInfo = detailSubObj.mappingDataInfo.replace('object', 'letter');
-								var regExpInputInfo = {
-									key : detailSubObj.mappingDataInfo,
-									regExp: getRegExpInfo(regExpType).regExp,
-								};
-									
-								object.children('.control-label').children(':first-child')
-									  .append($('<span/>').addClass('letterLength')
-												.append($('<span/>').text('('))
-												.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-												.append($('<span/>').text('/' + maxLength + ')'))
-									  ).show();
-								
-								
-								object.children('.input-group').children('span[type=password]').children('input').removeClass().addClass(formControl).attr({
-									'v-model': detailSubObj.mappingDataInfo,
-									disabled: detailSubObj.disabled,
-									maxlength: maxLength,
-									'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-								});
-
-								if (detailSubObj.cryptType) {
-									object.children('.input-group').children('span[type=password]').children('input').removeClass().addClass(formControl).attr({
-										'v-bind:type': detailSubObj.cryptType,
-									});
-
-									object
-										.children('.input-group')
-										.children('span[type=password]')
-										.children('.icon-eye')
-										.attr({
-											'v-on:click': '("password" == ' + detailSubObj.cryptType + ')? ' + detailSubObj.cryptType + ' = "text" : ' + detailSubObj.cryptType + ' = "password"',
-										});
-								} else {
-									object
-										.children('.input-group')
-										.children('span[type=password]')
-										.children('input')
-										.removeClass()
-										.addClass(formControl)
-										.attr({
-											type: 'password',
-										})
-										.width('100%');
-
-									object.children('.input-group').children('span[type=password]').children('.icon-eye').hide();
-								}
-
-								object.children('.input-group').children('span[type=password]').show();
-							} else if ('search' == detailSubObj.type) {
-								var searchClass = detailSubObj.isPk ? 'input-group-append saveGroup' : 'input-group-append saveGroup updateGroup';
-
-								if (detailSubObj.height) {
-									object
-										.children('.input-group')
-										.children('textarea')
-										.removeClass()
-										.addClass(formControl)
-										.attr({
-											name: 'detail_type_search',
-											'v-model': detailSubObj.mappingDataInfo.vModel,
-											readonly: true,
-										})
-										.show();
-									object
-										.children('.input-group')
-										.children('.input-group-append')
-										.attr({
-											class: searchClass,
-										})
-										.show();
-									object
-										.children('.input-group')
-										.children('.input-group-append')
-										.find('#lookupBtn')
-										.attr({
-											'v-on:click': 'openModal(' + JSON.stringify(detailSubObj.mappingDataInfo) + ')',
-										})
-										.show();
-									object
-										.children('.input-group')
-										.children('.input-group-append')
-										.find('#resetBtn')
-										.attr({
-											'v-on:click': detailSubObj.mappingDataInfo.vModel + '= null;' + 'window.vmMain.$forceUpdate();',
-										});
-									object.children('.input-group').children('input-group-append').css('min-height', detailSubObj.height);
-								} else {
-									object
-										.children('.input-group')
-										.children('input[type=text]')
-										.removeClass()
-										.addClass(formControl)
-										.attr({
-											name: 'detail_type_search',
-											'v-model': detailSubObj.mappingDataInfo.vModel,
-											readonly: true,
-										})
-										.show();
-									object
-										.children('.input-group')
-										.children('.input-group-append')
-										.attr({
-											class: searchClass,
-										})
-										.show();
-									object
-										.children('.input-group')
-										.children('.input-group-append')
-										.find('#lookupBtn')
-										.attr({
-											'v-on:click': 'openModal(' + JSON.stringify(detailSubObj.mappingDataInfo) + ')',
-										})
-										.show();
-									object
-										.children('.input-group')
-										.children('.input-group-append')
-										.find('#resetBtn')
-										.attr({
-											'v-on:click': detailSubObj.mappingDataInfo.vModel + '= null;' + 'window.vmMain.$forceUpdate();',
-										});
-								}
-							} else if ('singleDaterange' == detailSubObj.type) {
-								object
-									.children('.input-group')
-									.children('input[type=text]')
-									.removeClass()
-									.addClass(formControl + ' input-date')
-									.attr({
-										id: detailSubObj.mappingDataInfo.id,
-										'v-model': detailSubObj.mappingDataInfo.vModel,
-										'data-drops': detailSubObj.mappingDataInfo.dataDrops ? detailSubObj.mappingDataInfo.dataDrops : 'up',
-										autocomplete: 'off',
-										disabled: detailSubObj.disabled,
-									})
-									.show();
-							} else if ('select' == detailSubObj.type) {
-								var selectAttr = object
-									.children('.input-group')
-									.children('select')
-									.removeClass()
-									.addClass(formControl)
-									.attr({
-										'v-model': detailSubObj.mappingDataInfo.selectModel,
-										'v-on:change': detailSubObj.mappingDataInfo.changeEvt ? detailSubObj.mappingDataInfo.changeEvt : null,
-										disabled: detailSubObj.disabled,
-									});
-
-								if (detailSubObj.id) selectAttr.attr({ id: detailSubObj.id });
-
-								if (detailSubObj.clickEvt) object.children('.input-group').append($('<button/>').attr({ 'v-on:click': detailSubObj.clickEvt }).addClass('btn btn-icon').css({ 'margin-left': '3px', padding: '5px 10px 0px 10px' }).append($('<i/>').addClass('icon-link')));
-
-								if (detailSubObj.placeholder) {
-									selectAttr.append(
-										$('<option/>')
-											.attr({
-												selected: 'selected',
-												value: ' ',
-											})
-											.text(detailSubObj.placeholder)
-									);
-								}
-
-								selectAttr
-									.append(
-										$('<option/>').attr({
-											'v-for': detailSubObj.mappingDataInfo.optionFor,
-											'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
-											'v-text': detailSubObj.mappingDataInfo.optionText,
-											'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
-										})
-									)
-									.show();
-							} else if ('textarea' == detailSubObj.type) {
-								var regExpDataInfo = detailSubObj.mappingDataInfo.replace('object', 'letter');
-								var regExpInputInfo = {
-									key : detailSubObj.mappingDataInfo,
-									regExp: getRegExpInfo(regExpType).regExp,
-								};
-								
-								object.children('.control-label').children(':first-child')
-								  .append($('<span/>').addClass('letterLength')
-											.append($('<span/>').text('('))
-											.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-											.append($('<span/>').text('/' + maxLength + ')'))
-								  ).show();
-								
-								object
-									.children('.input-group')
-									.children('textarea')
-									.removeClass()
-									.addClass(formControl)
-									.attr({
-										'v-model': detailSubObj.mappingDataInfo,
-										maxlength: maxLength,
-										'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-									})
-									.show();
-
-								if (detailSubObj.height) object.children('.input-group').children('textarea').css('min-height', detailSubObj.height);
-							} else if ('combination' == detailSubObj.type) {								
-								detailSubObj.combiList.forEach(function (combiObj, combiIndex) {
-									var combiRegExpType = combiObj.regExpType ? combiObj.regExpType : 'default';	
-									var combiMaxLength = getRegExpInfo(combiRegExpType).maxLength;
-									
-									if ('select' == combiObj.type) {
-										object
-											.children('.input-group')
-											.children('select')
-											.removeClass()
-											.addClass(formControl)
-											.attr({
-												'v-model': combiObj.mappingDataInfo.selectModel,
-											})
-											.append(
-												$('<option/>').attr({
-													'v-for': combiObj.mappingDataInfo.optionFor,
-													'v-bind:value': combiObj.mappingDataInfo.optionValue,
-													'v-text': combiObj.mappingDataInfo.optionText,
-												})
-											)
-											.show();
-									} else if ('text' == combiObj.type) {
-										var regExpDataInfo = combiObj.mappingDataInfo.replace('object', 'letter');
-										var regExpInputInfo = {
-											key : combiObj.mappingDataInfo,
-											regExp:  getRegExpInfo(combiRegExpType).regExp,
-										}
-										
-										object.children('.input-group').append(
-												$('<div/>').addClass('detail-content-regExp').css({ 'margin-left': '5px', 'width': 'auto' })
-													.append(
-														object.children('.input-group').children('input[type=text]')
-														.removeClass().addClass('regExp-text')
-														.attr({
-															'v-model': combiObj.mappingDataInfo,
-															maxlength: combiMaxLength,
-															'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-														}).show()
-													)
-											  		.append(
-											  			$('<span/>').addClass('letterLength')
-														.append($('<span/>').text('('))
-														.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-														.append($('<span/>').text('/' + combiMaxLength + ')')
-													)
-											  )
-										);
-								 } else if ('radio' == detailSubObj.type) {
-									object
-									.children('.input-group')
-									.children('div[type=radio]')
-									.removeClass()
-									.addClass('custom-control custom-radio single')
-									.append(
-										$('<label/>').css({'padding-right': '30px'}).attr({
-											'v-for': detailSubObj.mappingDataInfo.optionFor,
-										}).append(
-											$('<input/>').addClass('custom-control-input').attr({
-												type: 'radio',
-												'v-model': detailSubObj.mappingDataInfo.vModel,
-												'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
-												'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
-											})
-										)
-										.append(
-											$('<span/>').addClass('custom-control-label').attr({
-												'v-text': detailSubObj.mappingDataInfo.optionText
-											}).css({'padding-left': '5px'})
-										)
-									).show();
-								 } else if ('checkbox' == detailSubObj.type) {
-									object
-									.children('.input-group')
-									.children('div[type=checkbox]')
-									.removeClass()
-									.addClass('custom-control custom-checkbox single')
-									.css({'padding-left': '0'})
-									.append(
-										$('<label/>').css({'padding-right': '10px'}).attr({
-											'v-for': detailSubObj.mappingDataInfo.optionFor,
-										}).append(
-											$('<input/>').addClass('custom-control-input').attr({
-												type: 'checkbox',
-												'v-model': detailSubObj.mappingDataInfo.vModel,
-												'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
-												'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
-												'v-on:change': searchSubObj.mappingDataInfo.changeEvt ? searchSubObj.mappingDataInfo.changeEvt : null,
-											}).css({'position': 'relative', 'width': '0.75rem', 'height': '1.05rem'})
-										)
-										.append(
-											$('<span/>').addClass('custom-control-label').attr({
-												'v-text': detailSubObj.mappingDataInfo.optionText
-											}).css({'padding-left': '5px'})
-										)
-									).show();
-								 }
-								});
-							} else if ('datalist' == detailSubObj.type) {
-								var regExpDataInfo = detailSubObj.mappingDataInfo.vModel.replace('object', 'letter');
-								var regExpInputInfo = {
-									key : detailSubObj.mappingDataInfo.vModel,
-									regExp: getRegExpInfo(regExpType).regExp,
-								}
-								
-								object.children('.control-label').children(':first-child')
-									  .append($('<span/>').addClass('letterLength')
-												.append($('<span/>').text('('))
-												.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-												.append($('<span/>').text('/' + maxLength + ')'))
-									  ).show();
-								
-								
-								object.children('.input-group').children('span[type=datalist]').children('input[type=text]').removeClass().addClass(formControl).attr({
-									list: detailSubObj.mappingDataInfo.dataListId,
-									'v-model': detailSubObj.mappingDataInfo.vModel,
-									maxlength: maxLength,
-									'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
-								});
-
-								object
-									.children('.input-group')
-									.children('span[type=datalist]')
-									.children('datalist')
-									.attr({
-										id: detailSubObj.mappingDataInfo.dataListId,
-									})
-									.append(
-										$('<option/>').attr({
-											'v-for': detailSubObj.mappingDataInfo.dataListFor,
-											'v-text': detailSubObj.mappingDataInfo.dataListText,
-										})
-									);
-
-								object.children('.input-group').children('span[type=datalist]').show();
-							} else if ('radio' == detailSubObj.type) {
-								object
-								.children('.input-group')
-								.children('div[type=radio]')
-								.removeClass()
-								.addClass('custom-control custom-radio single')
-								.append(
-									$('<label/>').css({'padding-right': '30px'}).attr({
-										'v-for': detailSubObj.mappingDataInfo.optionFor,
-									}).append(
-										$('<input/>').addClass('custom-control-input').attr({
-											type: 'radio',
-											'v-model': detailSubObj.mappingDataInfo.vModel,
-											'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
-											'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
-										})
-									)
-									.append(
-										$('<span/>').addClass('custom-control-label').attr({
-											'v-text': detailSubObj.mappingDataInfo.optionText
-										}).css({'padding-left': '5px'})
-									)
-								).show();
-						 } else if ('checkbox' == detailSubObj.type) {
-								object
-								.children('.input-group')
-								.children('div[type=checkbox]')
-								.removeClass()
-								.addClass('custom-control custom-checkbox single')
-								.append(
-									$('<label/>').css({'padding-right': '30px'}).attr({
-										'v-for': detailSubObj.mappingDataInfo.optionFor,
-									}).append(
-										$('<input/>').addClass('custom-control-input').attr({
-											type: 'checkbox',
-											'v-model': detailSubObj.mappingDataInfo.vModel,
-											'v-bind:value': detailSubObj.mappingDataInfo.optionValue,
-											'v-bind:disabled': detailSubObj.mappingDataInfo.optionDisabled,
-											'v-on:change': searchSubObj.mappingDataInfo.changeEvt ? searchSubObj.mappingDataInfo.changeEvt : null,
-										})
-									)
-									.append(
-										$('<span/>').addClass('custom-control-label').attr({
-											'v-text': detailSubObj.mappingDataInfo.optionText
-										}).css({'padding-left': '5px'})
-									)
-								).show();
-						 } else if ('grid' == detailSubObj.type) {
-								object.append(
-									$('<div/>')
-										.addClass('table-responsive')
-										.append($('<div/>').attr({ id: detailSubObj.id }))
-								);
-							}
-
-							if ('search' != detailSubObj.type && 'cron' != detailSubObj.type) {
-								object.children('.input-group').children('.input-group-append').remove();
-							}
-
-							colDiv.append(object);
-						});
-					});
-
-					if (tabObj.appendAreaList) {
-						var rowDiv = $('<div/>').addClass('row frm-row');
-						tabDiv.append(rowDiv);
-
-						tabObj.appendAreaList.forEach(function (appendArea) {
-							rowDiv.append(appendArea.getDetailArea());
-						});
-					}
-				} else if ('property' == tabObj.type) {
-					if (tabObj.searchList) {
-						var searchDiv = $('<div/>').addClass('viewGroup row').css({ width: '100%', margin: '0 0 1.25rem 0' });
-
-						tabObj.searchList.forEach(function (searchObj) {
-							var colDiv = $('<div/>').addClass(searchObj.className + ' searchArea-col');
-
-							searchObj.searchSubList.forEach(function (searchSubObj) {
-								var appendTag = $('<div/>').addClass('form-group');
-								appendTag.append($('<label/>').append($('<b/>').attr('class', 'control-label').text(searchSubObj.name)));
-
-								if ('select' == searchSubObj.type) {
-									selectDiv = $('<select/>')
-										.removeClass()
-										.addClass('form-control')
-										.css({ 'background-color': 'rgb(245, 246, 251)' })
-										.attr({
-											id: searchSubObj.mappingDataInfo.id,
-											'v-model': searchSubObj.mappingDataInfo.selectModel,
-											'v-on:change': searchSubObj.mappingDataInfo.changeEvt ? searchSubObj.mappingDataInfo.changeEvt : null,
-										});
-
-									if (searchSubObj.placeholder) {
-										selectDiv.append(
-											$('<option/>')
-												.attr({
-													selected: 'selected',
-													value: ' ',
-												})
-												.text(searchSubObj.placeholder)
-										);
-									}
-
-									selectDiv.append(
-										$('<option/>').attr({
-											'v-for': searchSubObj.mappingDataInfo.optionFor,
-											'v-bind:value': searchSubObj.mappingDataInfo.optionValue,
-											'v-text': searchSubObj.mappingDataInfo.optionText,
-										})
-									);
-
-									appendTag.append(selectDiv);
-								}
-
-								colDiv.append(appendTag);
-							});
-
-							searchDiv.append(colDiv);
-						});
-
-						rowDiv.append(searchDiv);
-					}
-
-					rowDiv.addClass('propertyTab');
-					
-					rowDiv.append(
-						$('<div/>')
-							.addClass('form-table form-table-responsive')
-							.append(
-								$('<div/>')
-									.addClass('form-table-head')
-									.append(
-										$('<button/>')
-											.addClass('btn-icon saveGroup updateGroup')
-											.attr({
-												type: 'button',
-												'v-on:click': tabObj.addRowFunc,
-											})
-											.append($('<i/>').addClass('icon-plus-circle'))
-									)
-							)
-							.append(
-								$('<div/>').addClass('form-table-wrap')
-										   .append(
-												   $('<div/>').addClass('form-table-body').attr({ 'v-for': '(elm, index) in ' + tabObj.mappingDataInfo })
-										   )
-							)
-					);
-
-					if (tabObj.isShowRemoveIconWhere) {
-						rowDiv
-							.find('.form-table-body')
-							.append(
-								$('<button/>')
-									.addClass('btn-icon saveGroup updateGroup')
-									.attr({
-										type: 'button',
-										'v-on:click': tabObj.removeRowFunc,
-										'v-if': tabObj.isShowRemoveIconWhere,
-									})
-									.append($('<i/>').addClass('icon-minus-circle'))
-							)
-							.append(
-								$('<button/>')
-									.addClass('btn-icon saveGroup updateGroup')
-									.attr({
-										type: 'button',
-										'v-if': '!' + tabObj.isShowRemoveIconWhere,
-									})
-									.append($('<i/>').addClass('icon-star'))
-							);
-					} else {
-						rowDiv.find('.form-table-body').append(
-							$('<button/>')
-								.addClass('btn-icon saveGroup updateGroup')
-								.attr({
-									type: 'button',
-									'v-on:click': tabObj.removeRowFunc,
-								})
-								.append($('<i/>').addClass('icon-minus-circle'))
-						);
-					}
-
-					tabObj.detailList.forEach(function (detailObj, detailIndex) {
-						var regExpType = detailObj.regExpType? detailObj.regExpType : 'default';
-						var maxLength = getRegExpInfo(regExpType).maxLength;
-						
-						var appendTag = null;
-
-						if ('text' == detailObj.type) {
-							var dataInfoArr = detailObj.mappingDataInfo.split('.');								
-							dataInfoArr.splice(1, 0, 'letter'); 
-							
-							var regExpDataInfo = dataInfoArr.join('.');
-							var regExpInputInfo = {
-								key : detailObj.mappingDataInfo,
-								regExp:  getRegExpInfo(regExpType).regExp,
-							}
-							
-							appendTag = $('<div/>').addClass(detailObj.readonly? 'detail-content-common' : 'detail-content-regExp')
-										.append(
-											$('<input/>').addClass(detailObj.readonly? 'form-control readonly' : 'regExp-text view-disabled')
-											.attr({
-												'v-model': detailObj.mappingDataInfo,
-												maxlength: maxLength,
-												readonly: detailObj.readonly,
-												'v-on:input': !detailObj.readonly && regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ', elm)' : null
-											})
-										)	
-					
-						if(!detailObj.readonly) {
-							appendTag.append(
-						  			$('<span/>').addClass('letterLength')
-									.append($('<span/>').text('('))
-									.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-									.append($('<span/>').text('/' + maxLength + ')'))
-							  	);
-						}
-						
-						} else if ('search' == detailObj.type) {
-							appendTag = $('<div/>')
-								.addClass('input-group-append')
-								.width('100%')
-								.append(
-									$('<input/>').addClass('form-control').attr({
-										type: detailObj.type,
-										'v-model': detailObj.mappingDataInfo.vModel,
-										readonly: true,
-										disabled: true,
-									})
-								)
-								.append(
-									$('<button/>')
-										.addClass('btn saveGroup updateGroup')
-										.attr({
-											'v-on:click': 'openModal(' + JSON.stringify(detailObj.mappingDataInfo) + ', index)',
-										})
-										.css({
-											'margin-left': '3px',
-										})
-										.append($('<i/>').addClass('icon-srch'))
-										.append(searchBtn)
-								)
-								.append(
-									$('<button/>')
-										.addClass('btn saveGroup updateGroup')
-										.attr({
-											'v-on:click': detailObj.mappingDataInfo.vModel + ' = null;',
-										})
-										.css({
-											'margin-left': '3px',
-											'min-width': '0px',
-											'padding-left': '0.5rem',
-										})
-										.append(
-											$('<i/>').addClass('icon-reset').css({
-												'margin-right': '0px',
-											})
-										)
-								);
-							
-							if(detailObj.clickEvt) {
-								appendTag.attr({'v-on:click': detailObj.clickEvt});
-								appendTag.children('input[type=search]').addClass('underlineTxt');
-								appendTag.css({cursor: 'pointer'});
-							}
-						} else if ('customModal' == detailObj.type) {
-							appendTag = $('<div/>')
-							.addClass('input-group-append ')
-							.width('100%')
-							.append(
-								$('<input/>').addClass('form-control').attr({
-									type: detailObj.type,
-									'v-model': detailObj.mappingDataInfo.vModel,
-									readonly: true,
-									disabled: true,
-								})
-							)
-							.append(
-								$('<button/>')
-									.addClass('btn saveGroup updateGroup')
-									.attr({
-										'v-on:click': 'openCustomModal(' + JSON.stringify(detailObj.mappingDataInfo) + ', index)',
-									})
-									.css({
-										'margin-left': '3px',
-									})
-									.append($('<i/>').addClass('icon-srch'))
-									.append(searchBtn)
-							)
-							.append(
-								$('<button/>')
-									.addClass('btn saveGroup updateGroup')
-									.attr({
-										'v-on:click': detailObj.mappingDataInfo.vModel + ' = null;',
-									})
-									.css({
-										'margin-left': '3px',
-										'min-width': '0px',
-										'padding-left': '0.5rem',
-									})
-									.append(
-										$('<i/>').addClass('icon-reset').css({
-											'margin-right': '0px',
-										})
-									)
-							);
-						} else if ('select' == detailObj.type) {
-							appendTag = $('<select/>')
-								.attr({
-									'v-model': detailObj.mappingDataInfo.selectModel,
-									'v-on:change': detailObj.changeEvt,
-								})
-								.addClass('form-control view-disabled')
-								.append(
-									$('<option/>').attr({
-										'v-for': detailObj.mappingDataInfo.optionFor,
-										'v-bind:value': detailObj.mappingDataInfo.optionValue,
-										'v-text': detailObj.mappingDataInfo.optionText,										
-									})
-								);
-						} else if ('datalist' == detailObj.type) {
-							var dataInfoArr = detailObj.mappingDataInfo.vModel.split('.');								
-							dataInfoArr.splice(1, 0, 'letter'); 
-							
-							var regExpDataInfo = dataInfoArr.join('.');
-							var regExpInputInfo = {
-								key : detailObj.mappingDataInfo.vModel,
-								regExp:  getRegExpInfo(regExpType).regExp,
-							}
-						
-							appendTag = $('<div/>').addClass('detail-content-regExp')
-										.append(
-											$('<input/>').addClass('regExp-text view-disabled ')
-											.attr({
-												'v-model': detailObj.mappingDataInfo.vModel,
-												maxlength: maxLength,
-												'v-on:input': regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ', elm)' : null,
-												'v-on:change': detailObj.changeEvt,
-												'list' : detailObj.mappingDataInfo.dataListId,
-											})
-										)
-								  		.append(
-								  			$('<span/>').addClass('letterLength')
-											.append($('<span/>').text('('))
-											.append($('<span/>').attr({ 'v-text': regExpDataInfo }))
-											.append($('<span/>').text('/' + maxLength + ')'))
-										)
-										.append(
-											$('<datalist/>')
-											.attr({
-												id: detailObj.mappingDataInfo.dataListId,
-											})
-											.append(
-												$('<option/>').attr({
-													'v-for': detailObj.mappingDataInfo.dataListFor,
-													'v-text': detailObj.mappingDataInfo.dataListText,
-												})
-											)
-										);
-						} else if ('singleDaterange' == detailObj.type) {
-							appendTag = $('<input/>')
-								.addClass('form-control view-disabled input-date')
-								.attr({
-									'v-bind:id': "'" + detailObj.mappingDataInfo.id + "' + index",
-									'v-model': detailObj.mappingDataInfo.vModel,
-									'data-drops': detailObj.mappingDataInfo.dataDrops ? detailObj.mappingDataInfo.dataDrops : 'up',
-									autocomplete: 'off',
-								})
-								.show();
-						}
-
-						$('#' + tabObj.id)
-							.find('.form-table-head')
-							.append($('<label/>').addClass('col').text(detailObj.name));
-						$('#' + tabObj.id)
-							.find('.form-table-body')
-							.append($('<div/>').addClass('col').append(appendTag));
-					});
-				} else if ('tree' == tabObj.type) {
-					rowDiv.append(
-						$('<div/>')
-							.addClass('table-responsive')
-							.append(
-								$('<div/>').attr({
-									id: tabObj.id + '_tree',
-								})
-							)
-					);
-				} else if ('custom' == tabObj.type) {
-					var appendDiv = tabObj.noRowClass ? tabDiv : rowDiv;
-
-					if (tabObj.noRowClass) tabDiv.empty();
-
-					appendDiv.append(tabObj.getDetailArea());
-				}
+				if ('basic' == type) basicTabType(tabObj, rowDiv, tabDiv);
+				else if ('property' == type) propertyTabType(tabObj, rowDiv);
+				else if ('tree' == type) treeTabType(tabObj, rowDiv);
+				else if ('custom' == type) customTabType(tabObj, rowDiv, tabDiv);
 			});
 
 			$('.nav-item-origin').remove();
@@ -1229,7 +1374,7 @@ function getCreatePageObj() {
 		};
 
 		this.openModal = function (openModalParam, regExpInfo) {
-			var url = prefixUrl + '/igate/page/common/custom' + openModalParam.url + '?popupId=' + viewName + 'ModalSearch';
+			var url = prefixUrl + '/api/page/customPage' + openModalParam.url + '?popupId=' + viewName + 'ModalSearch';
 			
 			var modalTitle = openModalParam.modalTitle;
 			var callBackFuncName = openModalParam.callBackFuncName;
@@ -1478,7 +1623,7 @@ function panelOpen(o, object, callBackFunc) {
 				if (0 < selectedInfoTitle.length) {
 					selectedInfoTitle = selectedInfoTitle.trim();
 					
-					if (selectedInfoTitle.endsWith(',')) {
+					if (endsWith(selectedInfoTitle, ',')) {
 						selectedInfoTitle = selectedInfoTitle.substring(0, selectedInfoTitle.length - 1);
 					}
 					
@@ -1571,377 +1716,350 @@ function panelClose(o) {
 }
 
 function getMakeGridObj() {
-	var elementId = null;
-	var searchUri = null;
-	var searchGrid = null;
-	var isModal = null;
-	var windowName = null;
+	var grid = null;
+	var gridOptions = null;
+	var searchUrl = null;
+	var totalCntUrl = null;
+	var isModalGrid = false;
+	var isGridView = false;
 
+	var paging = null;
+	var totalCnt = 0;
+	var dataList = [];
+	var pageNo = 1;
+	
+	var searchObj = null;
+	var searchCallback = null;
+
+	var stdSortColName = null;
+	var stdSortColType = null;
+	var isServerPaging = false;
+	var serverPagingDataArr = [];
+	
+	var listObjectAreaId = null;
+	
 	function makeGridObj() {
-		this.getSearchGrid = function () {
-			return searchGrid;
-		};
+		this.setConfig = function (options, paramIsModalGrid, formatterData) {
+			searchUrl = options.searchUrl;
+			totalCntUrl = options.totalCntUrl;
+			paging = options.paging;
+			isModalGrid = paramIsModalGrid;
+			
+			gridOptions = makeGridOptions(options, formatterData);
 
-		this.setConfig = function (instanceSettings) {
-			elementId = instanceSettings.elementId;
-			searchUri = instanceSettings.searchUri;
-			isModal = instanceSettings.isModal;
-
-			tui.Grid.applyTheme('clean', {
-				row: {
-					hover: {
-						background: '#f5f6fb',
-					},
-				},
-			});
-
-			tui.Grid.setLanguage('en', {
-				display: {
-					noData: 'No Data.',
-				},
-			});
-
-			var settings = {
-				el: document.getElementById(elementId),
-				columnOptions: {
-					resizable: true,
-				},
-				usageStatistics: false,
-				rowHeaders: instanceSettings.rowHeaders,
-				header: {
-					height: 32,
-					align: 'center',
-				},
-				onGridMounted: function (evt) {
-					if (instanceSettings.onGridMounted) {
-						instanceSettings.onGridMounted(evt);
-					}
-
-					$('#' + elementId)
-						.find('.tui-grid-column-resize-handle')
-						.removeAttr('title');
-				},
-				onGridUpdated: function (evt) {
-					if (instanceSettings.onGridUpdated) {
-						instanceSettings.onGridUpdated(evt);
-					}
-
-					var resetColumnWidths = [];
-
-					searchGrid.getColumns().forEach(function (columnInfo) {
-						if (!columnInfo.copyOptions) return;
-
-						if (columnInfo.copyOptions.widthRatio) {
-							resetColumnWidths.push($('#' + elementId).width() * (columnInfo.copyOptions.widthRatio / 100));
-						}
-					});
-
-					if (0 < resetColumnWidths.length) searchGrid.resetColumnWidths(resetColumnWidths);
-				},
-				scrollX: false,
-				scrollY: true,
-			};
-
-			$.extend(settings, instanceSettings);
-
-			settings.columns.forEach(function (column) {
-				if (!column.formatter) {
-					column.escapeHTML = true;
-				}
-
-				if (column.width && -1 < String(column.width).indexOf('%')) {
-					if (!column.copyOptions) column.copyOptions = {};
-
-					column.copyOptions.widthRatio = column.width.replace('%', '');
-
-					delete column.width;
-				}
-			});
-
-			searchGrid = new tui.Grid(settings);
-
-			searchGrid.on('mouseover', function (ev) {
-				if ('cell' != ev.targetType) return;
-
-				var overCellElement = $(searchGrid.getElement(ev.rowKey, ev.columnName));
-				overCellElement.attr('title', overCellElement.text());
-			});
-
-			if ('undefined' != typeof settings.onClick) {
-				if (instanceSettings.rowHeaders && -1 < instanceSettings.rowHeaders.indexOf('checkbox')) {
-					searchGrid.on('click', function (ev) {
-						if ('rowHeader' == ev.targetType) {
-							setTimeout(function () {
-								if (-1 != searchGrid.getCheckedRowKeys().indexOf(ev.rowKey)) {
-									searchGrid.addRowClassName(ev.rowKey, 'row-selected');
-								} else {
-									searchGrid.removeRowClassName(ev.rowKey, 'row-selected');
-								}
-							}, 0);
-						} else {
-							settings.onClick(searchGrid.getRow(ev.rowKey), ev);
-						}
-					});
-
-					searchGrid.on('checkAll', function (ev) {
-						if (!searchGrid.store.data.rawData) return;
-
-						if (0 == searchGrid.store.data.rawData.length) return;
-
-						searchGrid.store.data.rawData.forEach(function (data) {
-							searchGrid.addRowClassName(data.rowKey, 'row-selected');
-						});
-					});
-
-					searchGrid.on('uncheckAll', function (ev) {
-						if (!searchGrid.store.data.rawData) return;
-
-						if (0 == searchGrid.store.data.rawData.length) return;
-
-						searchGrid.store.data.rawData.forEach(function (data) {
-							searchGrid.removeRowClassName(data.rowKey, 'row-selected');
-						});
-					});
-				} else {
-					searchGrid.on('click', function (ev) {
-						if (ev.rowKey != null) {
-							searchGrid.store.data.rawData.forEach(function (data) {
-								searchGrid.removeRowClassName(data.rowKey, 'row-selected');
-							});
-
-							searchGrid.addRowClassName(ev.rowKey, 'row-selected');
-
-							settings.onClick(searchGrid.getRow(ev.rowKey), ev);
-						}
-					});
-				}
-			} else {
-				if (instanceSettings.rowHeaders && -1 < instanceSettings.rowHeaders.indexOf('checkbox')) {
-					searchGrid.on('click', function (ev) {
-						if ('rowHeader' == ev.targetType) {
-							setTimeout(function () {
-								if (-1 != searchGrid.getCheckedRowKeys().indexOf(ev.rowKey)) {
-									searchGrid.addRowClassName(ev.rowKey, 'row-selected');
-								} else {
-									searchGrid.removeRowClassName(ev.rowKey, 'row-selected');
-								}
-							}, 0);
-						} else {
-							if (-1 != searchGrid.getCheckedRowKeys().indexOf(ev.rowKey)) {
-								searchGrid.uncheck(ev.rowKey);
-								searchGrid.removeRowClassName(ev.rowKey, 'row-selected');
-							} else {
-								searchGrid.check(ev.rowKey);
-								searchGrid.addRowClassName(ev.rowKey, 'row-selected');
-							}
-						}
-					});
-
-					searchGrid.on('checkAll', function (ev) {
-						if (!searchGrid.store.data.rawData) return;
-
-						if (0 == searchGrid.store.data.rawData.length) return;
-
-						searchGrid.store.data.rawData.forEach(function (data) {
-							searchGrid.addRowClassName(data.rowKey, 'row-selected');
-						});
-					});
-
-					searchGrid.on('uncheckAll', function (ev) {
-						if (!searchGrid.store.data.rawData) return;
-
-						if (0 == searchGrid.store.data.rawData.length) return;
-
-						searchGrid.store.data.rawData.forEach(function (data) {
-							searchGrid.removeRowClassName(data.rowKey, 'row-selected');
-						});
-					});
-				} else {
-					searchGrid.on('click', function (ev) {
-						if (ev.rowKey != null) {
-							searchGrid.store.data.rawData.forEach(function (data) {
-								searchGrid.removeRowClassName(data.rowKey, 'row-selected');
-							});
-
-							searchGrid.addRowClassName(ev.rowKey, 'row-selected');
-						}
-					});
-				}
-			}
-
-			if ('undefined' != typeof settings.onDblClick) {
-				searchGrid.on('dblclick', function (ev) {
-					settings.onDblClick(searchGrid.getRow(ev.rowKey), ev);
-				});
-			}
-
-			if (isModal) {
-				windowName = (function () {
-					var S4 = function () {
-						return Math.floor(mathRandom() * 0x10000).toString(16);
+			if(paging) {
+				isServerPaging = 'serverPaging' === paging.side;
+				
+				if (paging.isUse) {
+					gridOptions.pageOptions = {
+						useClient: true
 					};
+				}
+			};
+			
+            grid = new tui.Grid(gridOptions);
+            
+            if (paging && paging.isUse) {
+				grid.on('beforePageMove', function(info) {
+					
+					pageNo = Number(info.page);
+					
+					if (isServerPaging) {						
+						getDataList(function() {
+							searchCallback({
+								totalCnt: numberWithComma(dataList.length),
+							});
+						});
+					}
+				});
 
-					return 'GUID-' + (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4());
-				})();
-			}
+				grid.on('afterPageMove', function() {
+					if (isModalGrid) {
+						grid.refreshLayout();	
+					} else {
+						window.resizeFunc();	
+					}
+				});            	
+            }
+            
+            grid.on('click', function(info) {
+            	if ('columnHeader' !== info.targetType) return;
+            	
+            	var columns = info.instance.getSortState().columns;
+            	
+            	stdSortColName = columns[0].columnName;
+				stdSortColType = columns[0].ascending;
+				
+				if (paging.isUse && isServerPaging) {
+					// reset data & sort
+					getDataList(function() {
+						searchCallback({
+							totalCnt: numberWithComma(dataList.length),
+						});
+					});
+				} else {
+					// sort
+					var sortColumnList = getSortColumnList();
+					var sortColumnNameList = Array.from(sortColumnList.sortColumnNameList);
+					var sortColumnTypeList = Array.from(sortColumnList.sortColumnTypeList);
+
+					if (0 === sortColumnNameList.length) return;
+					
+					for (let idx = 1; idx < sortColumnNameList.length; idx++) {
+						// 연관 칼럼 정렬
+						grid.sort(sortColumnNameList[idx], sortColumnTypeList[idx], true);
+					}
+				}
+			});  
 		};
 
 		this.noDataHidePage = function (listAreaId) {
-			if ('none' == $('#' + listAreaId).children('.empty').css('display'))
+			if ('none' === $('#' + listAreaId).children('.empty').css('display'))
 				return;
+			
+			listObjectAreaId = listAreaId;
 
-			$('#' + listAreaId).children('.empty').hide();
-			$('#' + listAreaId).children('.table-responsive').show();
-			$('#' + listAreaId).find("[showLater='true']").show();
+			$('#' + listObjectAreaId).children('.empty').hide();
+			$('#' + listObjectAreaId).children('.table-responsive').show();
 		};
 
-		this.search = function (vueSearchObj, callback) {
-			submit(
-				JsonImngObj.serialize(
-					$.extend(
-						{
-							_pageSize: vueSearchObj.pageSize,
-						},
-						vueSearchObj.object
-					)
-				),
-				function (result) {
-					if (isModal)
-						setTimeout(function () {
-							searchGrid.refreshLayout();
-							resizeSearchGridPagination(elementId);
-						}, 0);
-					else resizeSearchGrid();
+		this.search = function (obj, callback) {
+			pageNo = 1;
+			sortColumnName = null;
+			sortDirection = null;
 
-					if (callback) {
-						callback(result);
+			dataList = [];
+			
+			searchObj = JSON.parse(JSON.stringify(obj));
+			searchCallback = callback;
+			
+			if(totalCntUrl) {
+				getTotalCnt(getDataList.bind(null, function() {					
+					if(!searchCallback) return;
+					
+					$('[afterload]').css('display', 'flex');
+					
+					searchCallback({ 
+						currentCnt: numberWithComma(dataList.length), 
+						totalCnt: numberWithComma(totalCnt)
+					});
+				}));				
+			} else {
+				getDataList(function(res) {
+					$('[afterload] #currentCnt').css('display', 'none');
+					$('[afterload]').css('display', 'flex');
+					
+					if(!searchCallback) return;
+					
+					searchCallback($.extend(true, {
+						totalCnt: numberWithComma(dataList.length)
+					}, res))
+				});
+			}
+		};
+		
+		this.importData = function(obj, callback) {
+			searchObj = JSON.parse(JSON.stringify(obj));
+			searchCallback = callback;
+			
+			getDataList(function() {
+				if(!searchCallback) return;
+				
+				searchCallback({
+					currentCnt: numberWithComma(dataList.length)
+				});
+			});
+		};
+		
+		this.getSearchGrid = function () {
+			return grid;
+		}
+		
+		function getTotalCnt(callback) {
+			(new HttpReq(totalCntUrl)).read(searchObj, function(res) {
+				
+				var menuId = selectedMenuPathIdList[selectedMenuPathIdList.length - 1];
+				var maxListCount = constants.grid.maxListCount[menuId];
+				
+				if(maxListCount && Number(res.object) > maxListCount) {
+					window._alert({
+                    	type: 'warn',
+                    	message: searchCriteriaLabel(maxListCount)
+                    });
+					
+					if(!isGridView) {
+						$('#' + listObjectAreaId).children('.empty').show();
+						$('#' + listObjectAreaId).children('.table-responsive').hide();						
 					}
+				} else {
+					totalCnt = Number(res.object);
+					
+					if(!isGridView) isGridView = true;
+					
+					callback();	
 				}
-			);
-		};
+			}, false);
+		}		
+		
+		function getDataList(callback) {
+			var sortColumnList = getSortColumnList();		
+			var sortColumnNameList = Array.from(sortColumnList.sortColumnNameList);
+			var sortColumnTypeList = Array.from(sortColumnList.sortColumnTypeList);
+			
+			var param = { object: searchObj, limit: null, next: null, reverseOrder: false };		
+			
+			if (paging && paging.isUse) {
+				if ('client' === paging.side) {
+					param.limit = totalCnt;
+				} else if ('server' === paging.side) {
+					if(constants.grid && constants.grid.pageOptions) {
+						var serverOptions = constants.grid.pageOptions[paging.serverOptions ? paging.serverOptions : 'default'];
+						
+						param.limit = serverOptions.limit;
+						param.reverseOrder = serverOptions.ascending;						
+					}
 
-		function submit(param, callback) {
-			if (isModal) {
-				param += '&NEW-WINDOW-ID=' + windowName;
+					if (0 < dataList.length) {
+						param.next = dataList[dataList.length - 1];
+					}
+				} else if ('serverPaging' === paging.side) {
+					delete param.next;
+					delete param.reverseOrder;
+
+					param.limit = searchObj.pageSize;
+					param.pageNo = pageNo;
+					param.sortColumnInfo = { nameList : sortColumnNameList, reverseList : sortColumnTypeList }
+
+					if (null === serverPagingDataArr || totalCnt !== serverPagingDataArr.length) {
+						serverPagingDataArr = Array.from({ length: totalCnt }, function() { return {} });
+					}
+				}				
+			} else {
+				if (paging && 'serverPaging' === paging.side) {
+					delete param.next;
+					delete param.reverseOrder;
+
+					param.pageNo = pageNo;
+					param.sortColumnInfo = { nameList : [], typeList : [] }
+				}
 			}
 			
-			new HttpReq(searchUri).read(param, function (result) {
-				setGridPaging(result);
-
-				if (callback) callback(result);
-			}, true);
-		}
-
-		function page(param, callback) {
-			submit(param, callback);
-		}
-
-		function setGridPaging(result) {
-			if ('ok' != result.result) return;
-
-			if ('undefined' != typeof result.object.page) {
-				searchGrid.resetData(JsonImngObj.planarize(result.object.page));
-			} else if ('undefined' != typeof result.object) {
-				searchGrid.resetData(JsonImngObj.planarize(result.object));
-			} else {
-				searchGrid.resetData([]);
-			}
-
-			$('#' + elementId).find('.ImngSearchGridPagination').remove();
-			$('#' + elementId).append($('<ul/>').addClass('ImngSearchGridPagination pagination'));
-
-			if ('undefined' != typeof result.object.prev) {
-				var prevLi = $('<li/>').addClass('page-item');
-
-				prevLi.append(
-					$('<a/>')
-						.addClass('page-link page-link-prev')
-						.attr({
-							href: 'javascript:void(0);',
-							name: 'prev',
-						})
-						.data('page_param', '_pageNo=' + result.object.prev.pageNo + '&' + result.object.prev.keyURI)
-						.append($('<i/>').addClass('icon-left'))
-				);
-
-				$('#' + elementId)
-					.find('.ImngSearchGridPagination')
-					.append(prevLi);
-			}
-
-			if ('undefined' != typeof result.object.pages) {
-				for (var i = 0; i < result.object.pages.length; i++) {
-					var pageItemLi = $('<li/>').addClass('page-item');
-
-					if (result.object.pages[i].current) {
-						pageItemLi.append(
-							$('<a/>')
-								.addClass('page-link active')
-								.attr({
-									href: 'javascript:void(0);',
-								})
-								.text(result.object.pages[i].pageNo)
-						);
-					} else {
-						pageItemLi.append(
-							$('<a/>')
-								.addClass('page-link')
-								.attr({
-									href: 'javascript:void(0);',
-									name: 'pageNum',
-								})
-								.data('page_param', '_pageNo=' + result.object.pages[i].pageNo + '&' + result.object.pages[i].keyURI)
-								.text(result.object.pages[i].pageNo)
-						);
+			(new HttpReq(searchUrl)).read(param, function(res) {
+				
+					var sortColumnList = getSortColumnList();		
+					var sortColumnNameList = Array.from(sortColumnList.sortColumnNameList);
+					var sortColumnTypeList = Array.from(sortColumnList.sortColumnTypeList);
+					
+					var pageState = null; 
+					
+					var isUse = paging && paging.isUse;
+					
+					if (isUse) {
+						pageState = {
+							page: pageNo,
+							perPage: Number(searchObj.pageSize)
+						};
 					}
-
-					$('#' + elementId)
-						.find('.ImngSearchGridPagination')
-						.append(pageItemLi);
-				}
-			}
-
-			if ('undefined' != typeof result.object.next) {
-				var nextLi = $('<li/>').addClass('page-item');
-
-				nextLi.append(
-					$('<a/>')
-						.addClass('page-link page-link-next')
-						.attr({
-							href: 'javascript:void(0);',
-							name: 'next',
-						})
-						.data('page_param', '_pageNo=' + result.object.next.pageNo + '&' + result.object.next.keyURI)
-						.append($('<i/>').addClass('icon-right'))
-				);
-
-				$('#' + elementId)
-					.find('.ImngSearchGridPagination')
-					.append(nextLi);
-			}
-
-			resizeSearchGridPagination(elementId);
-
-			$('#' + elementId)
-				.find('.ImngSearchGridPagination')
-				.find('[name=pageNum], [name=prev], [name=next]')
-				.on('click', function () {
-					page($(this).data('page_param'), function () {
-						if (isModal) {
-							setTimeout(function () {
-								searchGrid.refreshLayout();
-								resizeSearchGridPagination(elementId);
-							}, 0);
+					
+					if (isUse && isServerPaging) {
+						//serverPaging
+						pageState.totalCount = totalCnt;
+						
+						var startRowIdx = (pageNo - 1) * Number(searchObj.pageSize);
+						
+						res.object.forEach(function(info, idx) {
+							serverPagingDataArr[startRowIdx + idx] = parseFlattenObj(info);
+						});
+						
+						dataList = serverPagingDataArr.slice();
+						
+						if(0 < sortColumnNameList.length) {
+							sortColumnNameList.forEach(function(sortColumnName, idx) {
+								grid.resetData(serverPagingDataArr, {
+									pageState: pageState,
+									sortState: { columnName: sortColumnName, ascending: sortColumnTypeList[idx], multiple: true }
+								});
+							});
 						} else {
-							resizeSearchGrid();
+							grid.resetData(serverPagingDataArr, { pageState: pageState });
 						}
-					});
-				});
+					} else {
+						// isUse가 false일 때
+						// client, server
+						dataList = dataList.concat(res.object.map(function(info) { 
+							return parseFlattenObj(info);
+						}));
+						
+						if (isUse) pageState.totalCount = dataList.length;
+						
+						var resetDataList = $.extend(true, {}, dataList);
+						
+						grid.resetData(dataList, { pageState: pageState });
+						
+						sortColumnNameList.forEach(function(sortColumnName, idx) {
+							grid.sort(sortColumnName, sortColumnTypeList[idx], true);
+						});
+					}
+					
+					if (isModalGrid) {
+						grid.refreshLayout();	
+					} else {
+						window.resizeFunc();	
+					}
+					
+					if(callback) callback(res);
+				},
+				true
+			);
+		}
+		
+		function getSortColumnList() {
+			/*
+				기준 칼럼 
+				1. 정렬버튼이 클릭된 특정 컬럼
+				2. js에서 입력된 SortColumn
 
-			$('#' + elementId)
-				.find('.tui-pagination')
-				.off('click')
-				.on('click', resizeSearchGrid);
+				칼럼 정렬 타입
+				desc : true, asc: false
+			*/
+			var sortColumnNameList = [];
+			var sortColumnTypeList = [];
+		
+			var sortableColumnList = gridOptions.columns.filter(function(info){ return info.sortable });
+
+			// 기준 컬럼 정렬
+			var stdColName = stdSortColName ? stdSortColName : gridOptions.sortColumn;
+			var stdColNameInfo = sortableColumnList.find(function(info){ return info.name === stdColName });
+			
+			if (!stdColNameInfo) return { sortColumnNameList: sortColumnNameList, sortColumnTypeList : sortColumnTypeList };
+			
+			var sortingType = stdColNameInfo.sortingType? stdColNameInfo.sortingType : 'asc';
+			var sortWithColumn = stdColNameInfo.sortWithColumn? stdColNameInfo.sortWithColumn : [];
+			var sortWithColumnType = stdColNameInfo.sortWithColumnType? stdColNameInfo.sortWithColumnType : [];
+			
+			var stdColType = null !== stdSortColType ? stdSortColType : 'asc' === sortingType;
+			
+			// 연관 컬럼 정렬
+			var withColumnNames = [];
+			var withColumnTypes = [];
+			
+			sortWithColumn.forEach(function(columnName, idx) {
+				if (sortableColumnList.some(function(info){ return info.name === columnName })) {
+					withColumnNames.push(columnName);
+					withColumnTypes.push(sortWithColumnType[idx]);
+				}
+			});
+				
+			//merge
+			sortColumnNameList.push(stdColName);			
+			sortColumnTypeList.push(stdColType);
+			
+			sortColumnNameList = sortColumnNameList.concat(withColumnNames);
+			sortColumnTypeList = sortColumnTypeList.concat(withColumnTypes.map(function(withSortType) {
+				return (stdSortColType ? 'asc' : 'desc') === withSortType
+			}));
+			
+			return { sortColumnNameList : sortColumnNameList, sortColumnTypeList : sortColumnTypeList };
 		}
 	}
 

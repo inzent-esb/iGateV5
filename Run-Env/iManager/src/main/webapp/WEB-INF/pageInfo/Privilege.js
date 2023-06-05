@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/common/privilege/object.json",
+	cudUrl: '/api/entity/privilege/object',
 	search: {
 		load: true,
 		list: [
@@ -16,9 +16,11 @@ const info = {
 				vModel: "privilegeType",
 				label: this.$t("common.type"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.Privilege.Type",
+						pk: {
+							propertyId: 'List.Privilege.Type'
+						},
 						orderByKey: true
 					},
 					optionListName: "privilegeTypeList",
@@ -55,8 +57,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/common/privilege/search.json",
-		totalCntUrl: "/common/privilege/rowCount.json",
+		url: '/api/entity/privilege/search',
+		totalCntUrl: '/api/entity/privilege/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -118,9 +120,11 @@ const info = {
 								label: this.$t("common.type"),
 								isRequired: true,
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Privilege.Type",
+										pk: {
+											propertyId: 'List.Privilege.Type'
+										},
 										orderByKey: true
 									},
 									optionListName: "privilegeTypeList",

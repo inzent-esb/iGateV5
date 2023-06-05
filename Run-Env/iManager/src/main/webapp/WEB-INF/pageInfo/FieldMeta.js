@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/fieldMeta/object.json",
+	cudUrl: '/api/entity/fieldMeta/object',
 	search: {
 		load: true,
 		list: [
@@ -29,9 +29,11 @@ const info = {
 				vModel: "fieldType",
 				label: this.$t("common.type"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.FieldMeta.FieldType",
+						pk: {
+							propertyId: 'List.FieldMeta.FieldType'
+						},
 						orderByKey: true
 					},
 					optionListName: "fieldTypeList",
@@ -68,8 +70,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/fieldMeta/search.json",
-		totalCntUrl: "/igate/fieldMeta/rowCount.json",
+		url: '/api/entity/fieldMeta/search',
+		totalCntUrl: '/api/entity/fieldMeta/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -195,9 +197,11 @@ const info = {
 								vModel: "fieldType",
 								label: this.$t("common.type"),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.FieldMeta.FieldType",
+										pk: {
+											propertyId: 'List.FieldMeta.FieldType'
+										},
 										orderByKey: true
 									},
 									optionListName: "fieldTypeList",
@@ -227,11 +231,13 @@ const info = {
 								label: "Require",
 								val: "N",
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Yn",
+										pk: {
+											propertyId: 'List.Yn'
+										},
 										orderByKey: true
-									},
+									},									
 									optionListName: "ynList",
 									optionFor: "option in ynList",
 									optionValue: "option.pk.propertyKey",
@@ -244,11 +250,13 @@ const info = {
 								label: "Hidden",
 								val: "N",
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Yn",
+										pk: {
+											propertyId: 'List.Yn'
+										},
 										orderByKey: true
-									},
+									},									
 									optionListName: "ynList",
 									optionFor: "option in ynList",
 									optionValue: "option.pk.propertyKey",

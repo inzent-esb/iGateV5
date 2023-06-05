@@ -1,12 +1,9 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/safMessage/object.json",
+	cudUrl: '/api/entity/safMessage/object',
 	updateStatusFunc: function (row, mod) {
 		return {
-			url:
-				"ready" === mod
-					? "/igate/safMessage/updateReady.json"
-					: "/igate/safMessage/updateCancel.json",
+			url: "/api/entity/safMessage/control?command=" + ("retry" === mod? "retry" : "cancel"),
 			params: {},
 			columnName: "safStatus"
 		};
@@ -69,8 +66,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/service/searchPopup.json",
-						totalCntUrl: "/igate/service/rowCount.json",
+						url: '/api/entity/service/search',
+						totalCntUrl: '/api/entity/service/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -114,9 +111,11 @@ const info = {
 				vModel: "safStatus",
 				label: this.$t("head.status"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.SafMessage.Status",
+						pk: {
+							propertyId: 'List.SafMessage.Status'
+						},
 						orderByKey: true
 					},
 					optionListName: "safStatusList",
@@ -166,8 +165,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/interface/searchPopup.json",
-						totalCntUrl: "/igate/interface/rowCount.json",
+						url: '/api/entity/interface/search',
+						totalCntUrl: '/api/entity/interface/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -221,14 +220,44 @@ const info = {
 	button: {
 		list: [
 			{ id: "initialize", isUse: true },
-			{ id: "updateCancel", isUse: true },
-			{ id: "updateReady", isUse: true },
+			{ id: "updateCancel", isUse: function(gridInfo) {
+				if (null === gridInfo) return true;
+				
+				var isUse = true;
+				
+				var checkedRows = gridInfo.getCheckedRows();
+
+				for (var i = 0; i < checkedRows.length; i++) {
+					if ('R' === checkedRows[i].safStatus) {
+						isUse = false;
+						break;
+					}
+				}
+				
+				return isUse;				
+			}},
+			{ id: "updateRetry", isUse: function(gridInfo) {
+				if (null === gridInfo) return true;
+				
+				var isUse = true;
+				
+				var checkedRows = gridInfo.getCheckedRows();
+
+				for (var i = 0; i < checkedRows.length; i++) {
+					if ('A' === checkedRows[i].safStatus) {
+						isUse = false;
+						break;
+					}
+				}
+				
+				return isUse;
+			}},
 			{ id: "newTab", isUse: true }
 		]
 	},
 	grid: {
-		url: "/igate/safMessage/search.json",
-		totalCntUrl: "/igate/safMessage/rowCount.json",
+		url: '/api/entity/safMessage/search',
+		totalCntUrl: '/api/entity/safMessage/count',
 		paging: {
 			isUse: true,
 			side: "server"

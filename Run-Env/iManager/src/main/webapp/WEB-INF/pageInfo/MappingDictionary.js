@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/mappingDictionary/object.json",
+	cudUrl: '/api/entity/mappingDictionary/object',
 	search: {
 		load: true,
 		list: [
@@ -39,8 +39,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/mappingDictionary/search.json",
-		totalCntUrl: "/igate/mappingDictionary/rowCount.json",
+		url: '/api/entity/mappingDictionary/search',
+		totalCntUrl: '/api/entity/mappingDictionary/count',
 		paging: {
 			isUse: true,
 			side: "server"

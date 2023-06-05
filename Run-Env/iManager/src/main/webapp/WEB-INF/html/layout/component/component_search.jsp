@@ -15,7 +15,7 @@
 			<div class="col" id="list-select">
 				<label class="form-control-label"> 
 				<b class="control-label"><fmt:message>head.listCount</fmt:message></b> 
-					<input type="text" class="form-control view-disabled" list="listCount" v-model="pageSize" v-on:input="pageSizeInput" v-on:keyup.enter="pageSizeEnter($event)" v-on:blur="pageSizeBlur"> 
+					<input type="text" class="form-control view-disabled" list="listCount" v-model="object.pageSize" v-on:input="pageSizeInput" v-on:keyup.enter="pageSizeEnter($event)" v-on:blur="pageSizeBlur"> 
 					<datalist id="listCount">
 						<option v-for="listCount in [10,100,1000]">{{listCount}}</option>
 					</datalist>

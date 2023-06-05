@@ -6,7 +6,7 @@ var ResultImngObj = {
 		
 		window._alert({
 			type: 'warn',
-			message: error,
+			message: error
 		});
 	},
 
@@ -98,12 +98,12 @@ var ResultImngObj = {
 
 	resultClearHandler: function () {
 		$('#accordionResult').children('.collapse-item').remove();
-	},
+	}
 };
 
 var SearchImngObj = {
 	searchGrid: null,
-	searchUri: null,
+	searchUrl: null,
 	viewMode: null,
 	popupResponse: null,
 	popupResponsePosition: null,
@@ -111,7 +111,7 @@ var SearchImngObj = {
 
 	initSearchImngObj: function () {
 		SearchImngObj.searchGrid = null;
-		SearchImngObj.searchUri = null;
+		SearchImngObj.searchUrl = null;
 		SearchImngObj.viewMode = null;
 		SearchImngObj.popupResponse = null;
 		SearchImngObj.popupResponsePosition = null;
@@ -120,39 +120,15 @@ var SearchImngObj = {
 
 	clicked: function (loadParam) {
 		if (!loadParam) return;
+		
+		if (!window.vmMain) return;
 
-		if ('Popup' == SearchImngObj.viewMode) {
-			if (loadParam._checked === null) {
-				if (-1 != SearchImngObj.searchGrid.getCheckedRowKeys().indexOf(loadParam.rowKey)) {
-					SearchImngObj.searchGrid.uncheck(loadParam.rowKey);
-					SearchImngObj.searchGrid.removeRowClassName(loadParam.rowKey, 'row-selected');
-				} else {
-					SearchImngObj.searchGrid.check(loadParam.rowKey);
-					SearchImngObj.searchGrid.addRowClassName(loadParam.rowKey, 'row-selected');
-				}
-			} else {
-				parent[SearchImngObj.popupResponse](SearchImngObj.popupResponsePosition, loadParam);
-				parent.DialogImngObj.modalClose();
-			}
-		} else {
-			if (window.vmMain !== undefined) {
-				loadParam.viewMode = window.vmMain.viewMode;
-				SearchImngObj.load($.param(loadParam));
-			}
-
-			if (loadParam._checked === null) {
-				if (-1 != SearchImngObj.searchGrid.getCheckedRowKeys().indexOf(loadParam.rowKey)) {
-					SearchImngObj.searchGrid.uncheck(loadParam.rowKey);
-					SearchImngObj.searchGrid.removeRowClassName(loadParam.rowKey, 'row-selected');
-				} else {
-					SearchImngObj.searchGrid.check(loadParam.rowKey);
-					SearchImngObj.searchGrid.addRowClassName(loadParam.rowKey, 'row-selected');
-				}
-			}
-		}
+		loadParam.viewMode = window.vmMain.viewMode;
+		
+		SearchImngObj.load(parseHierarchyObj(loadParam));
 	},
 	load: function (data) {
-	    new HttpReq(SaveImngObj.objectUri).read(data, function (result) {
+	    new HttpReq(SaveImngObj.objectUrl).read(data, function (result) {
 	        var vmMain = window.vmMain;
 	        vmMain.viewMode = result.viewMode;
 	        vmMain.object = result.object;
@@ -186,14 +162,14 @@ var SearchImngObj = {
 
 	        if (vmMain.goDetailPanel) vmMain.goDetailPanel();
 	    });
-	},
+	}
 };
 
 var SaveImngObj = {
-	objectUri: null,
+	objectUrl: null,
 
 	setConfig: function (instanceSettings) {
-		SaveImngObj.objectUri = instanceSettings.objectUri;
+		SaveImngObj.objectUrl = instanceSettings.objectUrl;
 	},
 
 	submit: function (uri, data, message, callback, modalMode) {
@@ -203,7 +179,7 @@ var SaveImngObj = {
 			window._alert({
 				type: 'normal',
 				message: message,
-				backdropMode: modalMode,
+				backdropMode: modalMode
 			});			
 			
 			if('DELETE' !== data._method) panelOpen('done');
@@ -229,17 +205,17 @@ var SaveImngObj = {
 
 	insertSubmit: function (data, message, callback) {
 		data._method = 'PUT';
-		SaveImngObj.submit(SaveImngObj.objectUri, data, message, callback);
+		SaveImngObj.submit(SaveImngObj.objectUrl, data, message, callback);
 	},
 
 	updateSubmit: function (data, message, callback) {
 		data._method = 'POST';
-		SaveImngObj.submit(SaveImngObj.objectUri, data, message, callback);
+		SaveImngObj.submit(SaveImngObj.objectUrl, data, message, callback);
 	},
 
 	deleteSubmit: function (data, message, callback) {
 		data._method = 'DELETE';
-		SaveImngObj.submit(SaveImngObj.objectUri, data, message, callback);
+		SaveImngObj.submit(SaveImngObj.objectUrl, data, message, callback);
 	},
 
 	insert: function (message, callback) {
@@ -289,22 +265,38 @@ var SaveImngObj = {
 				if (vmMain.saving) vmMain.saving();
 
 				this.deleteSubmit(object, message, callback);
-			}.bind(this),
+			}.bind(this)
 		});
-	},
+	}
 };
 
 var ControlImngObj = {
-	controlUri: null,
+	controlUrl: null,
+	dumpUrl: null,
 
 	setConfig: function(instanceSettings) {
-	  ControlImngObj.controlUri = instanceSettings.controlUri;
+	  ControlImngObj.controlUrl = instanceSettings.controlUrl;
+	  ControlImngObj.dumpUrl = instanceSettings.dumpUrl;
 	},
 	control: function(command, data, callback) {
-		new HttpReq(ControlImngObj.controlUri + "?" + $.param({ command : command })).update(data, callback, true);
+		if ('dump' === command) {
+			new HttpReq(this.dumpUrl).read(JSON.parse(JSON.stringify(data)), callback, true);		
+		} else {
+			var queryParam = { command : command };
+			var param = JSON.parse(JSON.stringify(data));
+			
+			if(data && data.instance) {
+				queryParam.instance = data.instance;
+				delete data.instance;
+			}
+			
+			new HttpReq(this.controlUrl + "?" + $.param(queryParam)).create(param, callback, true);			
+		}
 	},
 	gridControl: function(command, controlParams) {
+		
 		var checkedRows = SearchImngObj.searchGrid.getCheckedRows();
+		var searchUrl = SearchImngObj.searchUrl;
 		
 		if(checkedRows.length == 0) {
 			window._alert({ type: 'normal', message: noSelect});
@@ -313,20 +305,37 @@ var ControlImngObj = {
 		
 		window.$startSpinner();
 		
-		getGridControlResult(0)
+		getGridControlResult.call(this, 0);
 		
 		function getGridControlResult(idx) {
 			var item = checkedRows[idx];
 			
 			SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', running);
+
+			var queryParam = { command : command };
+			var controlParam = controlParams? controlParams(item) : {};
+			var param = JSON.parse(JSON.stringify(controlParam));
 			
-			var url = ControlImngObj.controlUri + "?" + $.param({ command : command });
-			 
-			 new HttpReq(url).update(controlParams(item), function (result) {
+			if(param && param.instance) {
+				queryParam.instance = param.instance;
+				delete param.instance;
+			}
+
+			var url = this.controlUrl + "?" + $.param(queryParam);
+			
+			 new HttpReq(url).create(param, function (result) {
 				 if('ok' === result.result) {
 					 if (result.response[0].success) {
-						 SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', command + " was successed") ;
-						 SearchImngObj.searchGrid.setValue(item.rowKey, 'status', result.object.status);						  
+						 
+						 new HttpReq(searchUrl).read({ limit: null, next: null, object: controlParam, reverseOrder: false }, function(result) {
+							 if(result.object) {
+								 SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', command + " was successed") ;
+								 SearchImngObj.searchGrid.setValue(item.rowKey, 'status', result.object[0].status);
+							 } else {
+								 SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', loadDataWarn) ;
+							 }			  							 
+						 });
+						 
 					 } else {
 						 SearchImngObj.searchGrid.setValue(item.rowKey, 'processResult', result.response[0].response) ;
 					 }
@@ -335,16 +344,20 @@ var ControlImngObj = {
 				 }
 				 
 				 if(idx == checkedRows.length - 1) window.$stopSpinner();
-				 else getGridControlResult(idx+1);				 
-			 });
+				 else getGridControlResult.call(this, idx+1);			 
+			 }.bind(this));
 		};
 	},
 	dump : function() {
-		this.control('dump', JsonImngObj.serialize(window.vmMain.pk)) ;
+		this.control('dump', window.vmMain.pk, function(result) {
+			ResultImngObj.resultResponseHandler(result);
+		}) ;
 	},
 	load : function() {
-		this.control('dump', JsonImngObj.serialize(window.vmMain.pk)) ;
-	},
+		this.control('load', window.vmMain.pk, function(result) {
+			ResultImngObj.resultResponseHandler(result);
+		}) ;
+	}
 };
 
 var JsonImngObj = {
@@ -400,31 +413,19 @@ var JsonImngObj = {
 		}
 
 		return newObject;
-	},
+	}
 };
 
-var PropertyImngObj = {
-	contextRoot: null,
+var MigrationImngObj = {
+    makeSubmit: function (url, data, message, callback, modalMode) {
+        new HttpReq(url).create({ targetIds: data }, function (result) {
+            ResultImngObj.resultResponseHandler(result);
 
-	setConfig: function (settings) {
-		this.contextRoot = settings.contextRoot;
-	},
+            window._alert({ type: 'warn', message: message });
 
-	getProperty: function (propertyId, propertyKey, callback) {
-		$.get(PropertyImngObj.contextRoot + '/common/property/object.json', {
-			'pk.propertyId': propertyId,
-			'pk.propertyKey': propertyKey,
-		}).done(function (result) {
-			callback(result.object);
-		});
-	},
+            callback(result);
 
-	getProperties: function (propertyName, orderByKey, callback) {
-		$.get(PropertyImngObj.contextRoot + '/common/property/properties.json', {
-			propertyId: propertyName,
-			orderByKey: orderByKey,
-		}).done(function (result) {
-			callback(result.object);
-		});
-	},
+            $('#Make-tab').tab('show');
+        });
+    }
 };
