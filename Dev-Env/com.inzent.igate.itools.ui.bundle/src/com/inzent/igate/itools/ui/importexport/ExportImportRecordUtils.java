@@ -1,10 +1,10 @@
 package com.inzent.igate.itools.ui.importexport ;
 
+import java.io.ByteArrayInputStream ;
 import java.io.File ;
 import java.io.FileInputStream ;
 import java.io.FileOutputStream ;
 import java.io.IOException ;
-import java.io.InputStream ;
 import java.io.OutputStreamWriter ;
 import java.text.SimpleDateFormat ;
 import java.util.Date;
@@ -117,9 +117,9 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     Map<String, Object> resultMap = new HashMap<String, Object>() ;
 
     String fileName = path + File.separator + String.format("%s.%s", record.getRecordId(), MetaConstants.FILE_EXTENDER_EXCEL) ;
-    try (InputStream is = Configuration.getTemplate("Model_Define.xlsx"))
+    try
     {
-      Workbook workbook = WorkbookFactory.create(is) ;
+      Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(Configuration.getTemplate("Model_Define.xlsx"))) ;
 
       exportExcelSheet(workbook, workbook.getSheetAt(0), record) ;
 

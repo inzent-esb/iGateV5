@@ -163,6 +163,8 @@ public class Startup implements IStartup
         return OperationUtils.getFigureImageDescriptor(OperationUtils.IMAGE_THROW) ;
       case "While" :
         return OperationUtils.getFigureImageDescriptor(OperationUtils.IMAGE_WHILE) ;
+      default:          
+          break ;
       }
 
     default :
