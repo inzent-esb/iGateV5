@@ -111,7 +111,7 @@ public class MarshallerEimsController extends AbstractEimsController
       for (int idx = 0 ; serviceNode.size() > idx ; idx++)
       {
         Service service = JsonMarshaller.unmarshal(serviceNode.get(idx), Service.class) ;
-        serviceService.unformalize(service, new MapBindingResult(new HashMap(), "service"), new ExtendedModelMap()) ;
+        serviceService.unformalize(service, new MapBindingResult(new HashMap(), "service")/*, new ExtendedModelMap()*/) ;
         objects.add(service) ;
       }
     }
@@ -123,7 +123,7 @@ public class MarshallerEimsController extends AbstractEimsController
       for (int idx = 0 ; interfaceNode.size() > idx ; idx++)
       {
         Interface interfaceMeta = JsonMarshaller.unmarshal(interfaceNode.get(idx), Interface.class) ;
-        interfaceService.unformalize(interfaceMeta, new MapBindingResult(new HashMap(), "interface"), new ExtendedModelMap()) ;
+        interfaceService.unformalize(interfaceMeta, new MapBindingResult(new HashMap(), "interface")/*, new ExtendedModelMap()*/) ;
         objects.add(interfaceMeta) ;
       }
     }

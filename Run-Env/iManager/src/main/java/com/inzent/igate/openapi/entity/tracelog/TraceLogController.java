@@ -2,23 +2,24 @@
  * This program and the accompanying materials are made
  * available under the terms of the Inzent MCA License v1.0
  * which accompanies this distribution.
- * 
+ *
  * Contributors:
  *     Inzent Corporation - initial API and implementation
  *******************************************************************************/
-package com.inzent.igate.imanager.tracelog ;
+package com.inzent.igate.openapi.entity.tracelog ;
 
-import org.springframework.beans.factory.annotation.Autowired ;
-import org.springframework.stereotype.Service ;
+import org.springframework.stereotype.Controller ;
+import org.springframework.web.bind.annotation.RequestMapping ;
 
+import com.inzent.igate.openapi.entity.tracelog.AbstractTraceLogController ;
 import com.inzent.igate.repository.log.TraceLog ;
 
-@Service
-public class TraceLogService extends AbstractTraceLogService<TraceLog>
+@Controller
+@RequestMapping(AbstractTraceLogController.URI)
+public class TraceLogController extends AbstractTraceLogController<TraceLog>
 {
-  @Autowired
-  public void setTraceLogRepository(TraceLogRepository traceLogRepository)
+  public TraceLogController()
   {
-    setRepository(traceLogRepository) ;
+    super(TraceLog.class) ;
   }
 }

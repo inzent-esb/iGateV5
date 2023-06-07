@@ -1,55 +1,67 @@
-package com.inzent.igate.imanager.tracelog;
+package com.inzent.igate.openapi.entity.tracelog ;
 
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.sql.Timestamp;
-import java.util.List;
+import java.io.FileInputStream ;
+import java.io.OutputStream ;
+import java.net.URLEncoder ;
+import java.sql.Timestamp ;
+import java.util.List ;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest ;
+import javax.servlet.http.HttpServletResponse ;
 
-import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.time.FastDateFormat ;
+import org.apache.poi.ss.usermodel.Cell ;
+import org.apache.poi.ss.usermodel.CellStyle ;
+import org.apache.poi.ss.usermodel.FillPatternType ;
+import org.apache.poi.ss.usermodel.Font ;
+import org.apache.poi.ss.usermodel.HorizontalAlignment ;
+import org.apache.poi.ss.usermodel.IndexedColors ;
+import org.apache.poi.ss.usermodel.Row ;
+import org.apache.poi.ss.usermodel.Sheet ;
+import org.apache.poi.ss.usermodel.VerticalAlignment ;
+import org.apache.poi.ss.usermodel.Workbook ;
+import org.apache.poi.ss.usermodel.WorkbookFactory ;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle ;
+import org.apache.poi.xssf.usermodel.XSSFColor ;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook ;
+import org.springframework.stereotype.Component ;
+import org.springframework.web.multipart.MultipartFile ;
 
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.inzent.igate.repository.log.TraceLog;
-import com.inzent.imanager.message.MessageGenerator;
+import com.fasterxml.jackson.core.JsonEncoding ;
+import com.inzent.igate.imanager.EntityExportImportBean ;
+import com.inzent.igate.repository.log.TraceLog ;
+import com.inzent.imanager.message.MessageGenerator ;
 
-@Service
-public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
+@Component
+public class TraceLogExportImport implements EntityExportImportBean<TraceLog>
+{
+  @Override
+  public void exportList(HttpServletRequest request, HttpServletResponse response, TraceLog entity, List<TraceLog> list) throws Exception
+  {
+    String fileName = "TraceLog_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx";
 
-	@Override
-	public void downloadFile(HttpServletRequest request, HttpServletResponse response, TraceLog entity,
-			List<TraceLog> entityList) throws Exception {
-		
-		String fileName = "TraceLog_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx";
+    response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''"
+            + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
+    response.setContentType("application/octet-stream");
 
-		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''"
-				+ URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
-		response.setContentType("application/octet-stream");
+    generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/List_TraceLog.xlsx"), entity, list);
 
-		generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/List_TraceLog.xlsx"), entity, entityList);
+    response.flushBuffer();
+  }
 
-		response.flushBuffer();
-		
-	}
-	
+  @Override
+  public void exportObject(HttpServletRequest request, HttpServletResponse response, TraceLog entity) throws Exception
+  {
+    throw new UnsupportedOperationException() ;
+  }
+
+  @Override
+  public TraceLog importObject(MultipartFile multipartFile) throws Exception
+  {
+    throw new UnsupportedOperationException() ;
+  }
+
 	public void generateDownload(OutputStream outputStream, String templateFile, TraceLog entity,
 			List<TraceLog> entityList) throws Exception {
 		Row row = null;
@@ -64,7 +76,6 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 			
 			// Cell 스타일 지정.
 			CellStyle cellStyle_Base = getBaseCellStyle(workbook);
-			CellStyle cellStyle_Info = getInfoCellStyle(workbook);
 			
 			// From
 			values = entity.getFromLogDateTime().toString().substring(0, 19);
@@ -163,7 +174,6 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 			cell.setCellValue(values);
 			
 			// 조회리스트 입력
-			long sum = 0;
 			int i = 9;
 			for(TraceLog data : entityList) {
 				row = writeSheet.createRow(i);
@@ -223,7 +233,6 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 				cell = row.createCell(c += 1);
 				cell.setCellValue(values);
 				
-				sum++;
 				i++;
 			}
 			
@@ -361,5 +370,4 @@ public class TraceLogDownloadExcel implements TraceLogDownloadBean<TraceLog> {
 		font.setColor(color);
 		return font;
 	}
-
 }

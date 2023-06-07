@@ -6,13 +6,14 @@
  * Contributors:
  *     Inzent Corporation - initial API and implementation
  *******************************************************************************/
-package com.inzent.igate.imanager.exceptionlog ;
+package com.inzent.igate.openapi.entity.tracelog ;
 
 import org.springframework.stereotype.Service ;
 
-import com.inzent.igate.repository.log.ExceptionLog ;
+import com.inzent.igate.openapi.entity.tracelog.AbstractTraceLogService ;
+import com.inzent.igate.repository.log.TraceLog ;
 
 @Service
-public class ExceptionLogService extends AbstractExceptionLogService<ExceptionLog>
+public class TraceLogService extends AbstractTraceLogService<TraceLog>
 {
 }

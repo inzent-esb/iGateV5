@@ -1,4 +1,4 @@
-package com.inzent.igate.imanager.calendar ;
+package com.inzent.igate.openapi.entity.calendar ;
 
 import java.io.IOException ;
 import java.text.DecimalFormat ;
@@ -13,14 +13,14 @@ import org.apache.poi.ss.usermodel.Row ;
 import org.apache.poi.ss.usermodel.Sheet ;
 import org.apache.poi.ss.usermodel.Workbook ;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook ;
-import org.springframework.stereotype.Service ;
+import org.springframework.stereotype.Component ;
 import org.springframework.web.multipart.MultipartFile ;
 
 import com.inzent.igate.repository.meta.Calendar ;
 import com.inzent.igate.repository.meta.CalendarHoliday ;
 import com.inzent.igate.repository.meta.CalendarHolidayPK ;
 
-@Service
+@Component
 public class CalendarUploadBeanImpl implements CalendarUploadBean
 {
   @Override
@@ -50,13 +50,19 @@ public class CalendarUploadBeanImpl implements CalendarUploadBean
 
     int rows = worksheet.getPhysicalNumberOfRows() ;
 
+    Calendar calendar = new Calendar() ;
+    CalendarHoliday holiday = new CalendarHoliday() ;
+    CalendarHolidayPK holidayPk = new CalendarHolidayPK() ;
+    List<CalendarHoliday> holidayList = new LinkedList<>() ;
+    
     // 현재 템플릿에서는 3번째 row 부터 값을 입력하므로 2로 지정 ( 해당 부분은 템플릿 디자인 수정시 수정해야할 필요가 있음 )
     for (int rowindex = 2 ; rowindex < rows ; rowindex++)
     {
-      Calendar calendar = new Calendar() ;
-      CalendarHoliday holiday = new CalendarHoliday() ;
-      CalendarHolidayPK holidayPk = new CalendarHolidayPK() ;
-      List<CalendarHoliday> holidayList = new LinkedList<>() ;
+      calendar = new Calendar() ;
+      holiday = new CalendarHoliday() ;
+      holidayPk = new CalendarHolidayPK() ;
+      holidayList = new LinkedList<>() ;
+      
       String regex = "^[a-zA-Z0-9_]*$" ; // ID 체크 정규식 
       String pattern = "^[0-9][0-9][0-9][0-9][0-1][0-9][0-3][0-9]$" ; // 휴일 일자 체크 정규식
       

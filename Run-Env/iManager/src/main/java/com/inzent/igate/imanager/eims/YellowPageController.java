@@ -198,22 +198,19 @@ public class YellowPageController extends AbstractEimsController
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
     case "File" :
-        interfaceMeta.setInterfaceType("File") ;
-        interfaceMeta.setScheduleType(Interface.SCHEDULE_TRIGGERED) ;
-        break; 
-    case "Online" :
-        interfaceMeta.setInterfaceType("Online") ;
-        interfaceMeta.setScheduleType(Interface.SCHEDULE_ONLINE) ;
-        break ;        
+      interfaceMeta.setInterfaceType("File") ;
+      interfaceMeta.setScheduleType(Interface.SCHEDULE_TRIGGERED) ;
+      break ;
+
     case "Table" :
-        interfaceMeta.setInterfaceType("Table") ;
-        interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
-        break ;        
+      interfaceMeta.setInterfaceType("Table") ;
+      interfaceMeta.setScheduleType(Interface.SCHEDULE_BATCHED) ;
+      break ;
+
+    case "Online" :
     default :
       interfaceMeta.setInterfaceType("Online") ;
       interfaceMeta.setScheduleType(Interface.SCHEDULE_ONLINE) ;
-      // interfaceMeta.setCronExpression(cronExpression) ;
-      // interfaceMeta.setCalendarId(calendarId) ;
       break ;
     }
 
@@ -398,14 +395,14 @@ public class YellowPageController extends AbstractEimsController
     switch ((String) properties.remove(PROPERTY_TYPE))
     {
     case "File" :
-        service.setServiceType("File") ;
-        break ;
-    case "Online" :
-        service.setServiceType("Online") ;
-        break ;
+      service.setServiceType("File") ;
+      break ;
+
     case "Table" :
-        service.setServiceType("Table") ;
-        break ;         
+      service.setServiceType("Table") ;
+      break ;
+
+    case "Online" :
     default :
       service.setServiceType("Online") ;
       break ;

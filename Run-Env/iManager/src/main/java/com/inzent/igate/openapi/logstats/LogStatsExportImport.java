@@ -6,9 +6,9 @@
  * Contributors:
  *     Inzent Corporation - initial API and implementation
  *******************************************************************************/
-package com.inzent.igate.imanager.logstats ;
+package com.inzent.igate.openapi.logstats ;
 
-import java.io.File ;
+import java.io.File;
 import java.io.FileInputStream ;
 import java.io.OutputStream ;
 import java.net.URLEncoder ;
@@ -22,7 +22,6 @@ import org.apache.commons.lang3.StringUtils ;
 import org.apache.commons.lang3.time.FastDateFormat ;
 import org.apache.commons.logging.Log ;
 import org.apache.commons.logging.LogFactory ;
-import org.apache.commons.text.WordUtils ;
 import org.apache.poi.ss.usermodel.BorderStyle ;
 import org.apache.poi.ss.usermodel.Cell ;
 import org.apache.poi.ss.usermodel.CellStyle ;
@@ -39,9 +38,11 @@ import org.apache.poi.ss.util.CellRangeAddress ;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle ;
 import org.apache.poi.xssf.usermodel.XSSFColor ;
 import org.springframework.stereotype.Component ;
+import org.springframework.web.multipart.MultipartFile ;
 
 import com.fasterxml.jackson.core.JsonEncoding ;
 import com.inzent.igate.imanager.CommonTools;
+import com.inzent.igate.imanager.EntityExportImportBean ;
 import com.inzent.igate.repository.log.LogStats ;
 import com.inzent.imanager.message.MessageGenerator;
 
@@ -54,37 +55,33 @@ import com.inzent.imanager.message.MessageGenerator;
  * @author jkh
  */
 @Component
-public class LogStatsDownloadExcel implements LogStatsDownloadBean
+public class LogStatsExportImport implements EntityExportImportBean<LogStats>
 {
   protected final Log logger = LogFactory.getLog(getClass()) ; 
-  
 
   @Override
-  public void downloadStats(HttpServletRequest request, HttpServletResponse response, String type, LogStats logStats, List<LogStats> logStatsList) throws Exception
+  public void exportList(HttpServletRequest request, HttpServletResponse response, LogStats entity, List<LogStats> list) throws Exception
   {
-    StringBuffer sb = new StringBuffer().append(WordUtils.capitalize(type)).append('_').append(getStatsTypeName(type, logStats)).append("_TranStats_") ;
-    
-    switch (type)
+    StringBuffer sb = new StringBuffer().append(getStatsTypeName(entity)).append("_TranStats_") ;
+
+    switch (entity.getStatsFilter())
     {
-    case LogStatsRepository.ONLINE_ADAPTER :
-    case LogStatsRepository.DB_ADAPTER :
-    case LogStatsRepository.FILE_ADAPTER :	
-      if (!StringUtils.isBlank(logStats.getPk().getAdapterId()))
-        sb.append('_').append(logStats.getPk().getAdapterId()) ;
+    case LogStatsRepository.FILTER_ADAPTER :
+      if (!StringUtils.isBlank(entity.getPk().getAdapterId()))
+        sb.append('_').append(entity.getPk().getAdapterId()) ;
       break ;
 
-    case LogStatsRepository.ONLINE_INTERFACE :
-    case LogStatsRepository.ONLINE_SERVICE :
-    case LogStatsRepository.DB_INTERFACE :
-    case LogStatsRepository.DB_SERVICE :
-    case LogStatsRepository.FILE_INTERFACE :
-    case LogStatsRepository.FILE_SERVICE :
-    	if (!StringUtils.isBlank(logStats.getPk().getInterfaceServiceId()))
-        sb.append('_').append(logStats.getPk().getInterfaceServiceId()) ;
+    case LogStatsRepository.FILTER_INTERFACE :
+    case LogStatsRepository.FILTER_SERVICE :
+      if (!StringUtils.isBlank(entity.getPk().getInterfaceServiceId()))
+        sb.append('_').append(entity.getPk().getInterfaceServiceId()) ;
+      break ;
+
+    default :
       break ;
     }
 
-    String[] dates = getDateTimeFormat(logStats) ;
+    String[] dates = getDateTimeFormat(entity) ;
     sb.append('_').append(dates[0]).append('-').append(dates[1]).append(".xlsx") ; 
 
     String fileName = sb.toString() ;
@@ -93,22 +90,86 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20")) ;
     response.setContentType("application/octet-stream") ;
     
-    switch(type)
+    switch (entity.getStatsClass())
     {
-    	case LogStatsRepository.DB_DAILY :
-    	case LogStatsRepository.DB_ADAPTER :
-    	case LogStatsRepository.DB_INTERFACE :
-    	case LogStatsRepository.DB_SERVICE :
-    		generateDownloadDB(response.getOutputStream(), type, request.getServletContext().getRealPath("/template/LogsStats" + WordUtils.capitalize(type) + ".xlsx"), logStats, logStatsList) ;    	    	
-        
-        break ;
-        default:
-        	generateDownload(response.getOutputStream(), type, request.getServletContext().getRealPath("/template/LogsStats" + WordUtils.capitalize(type) + ".xlsx"), logStats, logStatsList) ;    	
-        break;
+    case LogStatsRepository.CLASS_DB :
+      generateDownloadDB(response.getOutputStream(), request.getServletContext().getRealPath("/template/LogsStats" + entity.getStatsClass() + "_" + entity.getStatsFilter() + ".xlsx"), entity, list) ;
+      break ;
+
+    default :
+      generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/LogsStats" + entity.getStatsClass() + "_" + entity.getStatsFilter() + ".xlsx"), entity, list) ;
+      break ;
     }
 
-
     response.flushBuffer() ;
+  }
+
+  @Override
+  public void exportObject(HttpServletRequest request, HttpServletResponse response, LogStats entity) throws Exception
+  {
+    throw new UnsupportedOperationException() ;
+  }
+
+  @Override
+  public LogStats importObject(MultipartFile multipartFile) throws Exception
+  {
+    throw new UnsupportedOperationException() ;
+  }
+
+  protected String getStatsTypeName(LogStats entity)
+  {
+    switch (entity.getPk().getStatsType())
+    {
+    case LogStats.STATS_ONLINE_INTERFACE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.1.onlineInterface", "Online Interface") ;
+
+    case LogStats.STATS_ONLINE_SERVICE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.2.onlineService", "Online Service") ;
+
+    case LogStats.STATS_FILE_INTERFACE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.4.fileInterface", "File Interface") ;
+
+    case LogStats.STATS_FILE_SERVICE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.5.fileService", "File Service") ;
+
+    case LogStats.STATS_DB_INTERFACE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.7.dbInterface", "DB Interface") ;
+
+    case LogStats.STATS_DB_SERVICE :
+      return MessageGenerator.getMessage("igate.logStatistics.statsType.8.dbService", "DB Service") ;
+
+    default :
+      switch (entity.getStatsClass())
+      {
+      case LogStatsRepository.CLASS_ONLINE :
+        return MessageGenerator.getMessage("igate.logStatistics.statsType.0.online", "Online") ;
+
+      case LogStatsRepository.CLASS_FILE :
+        return MessageGenerator.getMessage("igate.logStatistics.statsType.3.file", "File") ;
+
+      case LogStatsRepository.CLASS_DB :
+        return MessageGenerator.getMessage("igate.logStatistics.statsType.6.db", "DB") ;
+
+      default :
+        return MessageGenerator.getMessage("head.all", "All") ;
+      }
+    }
+  }
+
+  protected String[] getDateTimeFormat(LogStats entity)
+  {
+    switch (entity.getSearchType())
+    {
+    case LogStatsRepository.SEARCH_MINUTE :
+      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd HH:mm").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd HH:mm").format(entity.getToDateTime()) } ;
+
+    case LogStatsRepository.SEARCH_HOUR :
+      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd HH:00").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd HH:59").format(entity.getToDateTime()) } ;
+
+    case LogStatsRepository.SEARCH_DAILY :
+    default :
+      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd").format(entity.getToDateTime()) } ;
+    }
   }
 
   /**
@@ -120,8 +181,8 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
    * @author jkh, 2020. 7. 10.
    * @throws Exception 
    */
-  protected void generateDownload(OutputStream outputStream, String type, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
-  {
+  protected void generateDownload(OutputStream outputStream, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
+  {  
     Workbook workbook ;
     try (FileInputStream fileInputStream = new FileInputStream(new File(templateFile)))
     {
@@ -129,12 +190,13 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     }
 
     boolean typeFlag = false;
-    switch(type)
+    switch(logStats.getStatsFilter())
     {
-    	case LogStatsRepository.ONLINE_ADAPTER:
-    	case LogStatsRepository.FILE_ADAPTER:
+    	case LogStatsRepository.FILTER_ADAPTER:
     		typeFlag = true;
     		break;
+    	default: 
+    	   	break;
     }
     Row row = null ;
     Cell cell = null ;
@@ -162,48 +224,47 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     cell.setCellValue(values) ;
 
     int nextCell = 1;
-    switch (type)
+    switch (logStats.getStatsFilter())
     {
-    case LogStatsRepository.ONLINE_DAILY:
-    case LogStatsRepository.ONLINE_ADAPTER :
-    case LogStatsRepository.FILE_DAILY:
-    case LogStatsRepository.FILE_ADAPTER :
+    case LogStatsRepository.FILTER_DAILY:
+    case LogStatsRepository.FILTER_ADAPTER :
       // 구분
-      values = getStatsTypeName(type, logStats) ;
+      values = getStatsTypeName(logStats) ;
       row = writeSheet.getRow(4) ;
       cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       nextCell += 2;
       break ;
+     default: 
+	   	break;
     }
     
     // 조회타입
-    values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
+    values = logStats.getSearchType().equals(LogStatsRepository.SEARCH_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCH_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
     row = writeSheet.getRow(4) ;
     cell = row.createCell(nextCell) ;
     cell.setCellStyle(cellStyle_Base) ;
     cell.setCellValue(values) ;
     nextCell+=2;
     
-    switch (type)
+    switch (logStats.getStatsFilter())
     {
-    case LogStatsRepository.ONLINE_ADAPTER :
-    case LogStatsRepository.FILE_ADAPTER :
+    case LogStatsRepository.FILTER_ADAPTER :
       values = logStats.getPk().getAdapterId() ;
       cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       break ;
-    case LogStatsRepository.ONLINE_INTERFACE :
-    case LogStatsRepository.ONLINE_SERVICE :
-    case LogStatsRepository.FILE_INTERFACE :
-    case LogStatsRepository.FILE_SERVICE :
+    case LogStatsRepository.FILTER_INTERFACE :
+    case LogStatsRepository.FILTER_SERVICE :
       values = logStats.getPk().getInterfaceServiceId() ;
       cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       break ;
+     default: 
+	   	break;
     }
 
     // 조회리스트 입력
@@ -219,19 +280,17 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
 
-      switch (type)
+      switch (logStats.getStatsFilter())
       {
-      case LogStatsRepository.ONLINE_DAILY :
-      case LogStatsRepository.FILE_DAILY :
-        values = getStatsTypeName(type, logStats2) ;
+      case LogStatsRepository.FILTER_DAILY :
+        values = getStatsTypeName(logStats2) ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
     	
     	break;  
-      case LogStatsRepository.ONLINE_ADAPTER :
-      case LogStatsRepository.FILE_ADAPTER :
-        values = getStatsTypeName(type, logStats2) ;
+      case LogStatsRepository.FILTER_ADAPTER :
+        values = getStatsTypeName(logStats2) ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
@@ -241,15 +300,15 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
         break ;
-      case LogStatsRepository.ONLINE_INTERFACE :
-      case LogStatsRepository.ONLINE_SERVICE :
-      case LogStatsRepository.FILE_INTERFACE :
-      case LogStatsRepository.FILE_SERVICE :
+      case LogStatsRepository.FILTER_INTERFACE :
+      case LogStatsRepository.FILTER_SERVICE :
         values = logStats2.getPk().getInterfaceServiceId() ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
         break ;
+      default: 
+  	   	break;
       }
 
       // request
@@ -284,12 +343,9 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
 		
-      switch (type)
+      switch (logStats.getStatsClass())
       {
-        case LogStatsRepository.FILE_DAILY : 
-        case LogStatsRepository.FILE_ADAPTER :
-        case LogStatsRepository.FILE_INTERFACE :
-        case LogStatsRepository.FILE_SERVICE :
+        case LogStatsRepository.CLASS_FILE : 
           // 평균 파일 크기
           values = CommonTools.numberWithComma(String.valueOf(getFileSize(logStats2.getFileSizeTotal()))) ;
           cell = row.createCell(c++) ;
@@ -301,6 +357,8 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
           cell.setCellStyle(cellStyle_Base) ;
           cell.setCellValue(values) ;
     	 break;
+        default: 
+    	   	break;
 
       }
       
@@ -359,7 +417,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
    * @author myj, 2022. 6. 14.
    * @throws Exception 
    */
-  protected void generateDownloadDB(OutputStream outputStream, String type, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
+  protected void generateDownloadDB(OutputStream outputStream, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
   {
     Workbook workbook ;
     try (FileInputStream fileInputStream = new FileInputStream(templateFile))
@@ -367,7 +425,7 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       workbook = WorkbookFactory.create(fileInputStream) ;
     }
 
-    boolean typeFlag = Objects.equals(type, LogStatsRepository.DB_ADAPTER) ;
+    boolean typeFlag = Objects.equals(logStats.getStatsFilter(), LogStatsRepository.FILTER_ADAPTER) ;
     Row row = null ;
     Cell cell = null ;
     String values = null ;
@@ -394,43 +452,47 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     cell.setCellValue(values) ;
 
     int nextCell = 1;
-    switch (type)
+    switch (logStats.getStatsFilter())
     {
-    case LogStatsRepository.DB_DAILY:
-    case LogStatsRepository.DB_ADAPTER :
+    case LogStatsRepository.FILTER_DAILY:
+    case LogStatsRepository.FILTER_ADAPTER :
       // 구분
-      values = getStatsTypeName(type, logStats) ;
+      values = getStatsTypeName(logStats) ;
       row = writeSheet.getRow(4) ;
       cell = row.createCell(1) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       nextCell += 2;
       break ;
+    default: 
+	   	break;
     }
 
     // 조회타입
-    values = logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCHTYPE_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
+    values = logStats.getSearchType().equals(LogStatsRepository.SEARCH_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCH_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
     row = writeSheet.getRow(4) ;
     cell = row.createCell(nextCell) ;
     cell.setCellStyle(cellStyle_Base) ;
     cell.setCellValue(values) ;
     nextCell += 2;
 
-    switch (type)
+    switch (logStats.getStatsFilter())
     {
-    case LogStatsRepository.DB_ADAPTER :
+    case LogStatsRepository.FILTER_ADAPTER :
       values = logStats.getPk().getAdapterId() ;
       cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       break ;
-    case LogStatsRepository.DB_INTERFACE :
-    case LogStatsRepository.DB_SERVICE :
+    case LogStatsRepository.FILTER_INTERFACE :
+    case LogStatsRepository.FILTER_SERVICE :
       values = logStats.getPk().getInterfaceServiceId() ;
       cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
       break ;
+    default: 
+	   	break;
     }
 
 	// 조회리스트 입력
@@ -446,17 +508,17 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
 
-      switch (type)
+      switch (logStats.getStatsFilter())
       {
-      case LogStatsRepository.DB_DAILY:
-        values = getStatsTypeName(type, logStats2) ;
+      case LogStatsRepository.FILTER_DAILY:
+        values = getStatsTypeName(logStats2) ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
         
         break;
-      case LogStatsRepository.DB_ADAPTER :
-        values = getStatsTypeName(type, logStats2) ;
+      case LogStatsRepository.FILTER_ADAPTER :
+        values = getStatsTypeName(logStats2) ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
@@ -466,13 +528,15 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
         break ;
-      case LogStatsRepository.DB_INTERFACE :
-      case LogStatsRepository.DB_SERVICE :
+      case LogStatsRepository.FILTER_INTERFACE :
+      case LogStatsRepository.FILTER_SERVICE :
         values = logStats2.getPk().getInterfaceServiceId() ;
         cell = row.createCell(c++) ;
         cell.setCellStyle(cellStyle_Base) ;
         cell.setCellValue(values) ;
         break ;
+      default: 
+  	   	break;
       }
 
       // request
@@ -596,69 +660,6 @@ public class LogStatsDownloadExcel implements LogStatsDownloadBean
     cell.setCellValue(values) ;
     
     workbook.write(outputStream) ;
-  }
-
-  public String[] getDateTimeFormat(LogStats entity)
-  {
-    switch (entity.getSearchType())
-    {
-    case LogStatsRepository.SEARCHTYPE_DAILY :
-      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd").format(entity.getToDateTime()) } ;
-
-    case LogStatsRepository.SEARCHTYPE_HOUR :
-      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd HH:00").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd HH:59").format(entity.getToDateTime()) } ;
-
-    default :
-      return new String[] { FastDateFormat.getInstance("yyyy-MM-dd HH:mm").format(entity.getFromDateTime()), FastDateFormat.getInstance("yyyy-MM-dd HH:mm").format(entity.getToDateTime()) } ;
-    }
-  }
-
-  public String getStatsTypeName(String type, LogStats entity)
-  {
-    switch (entity.getPk().getStatsType())
-    {
-    case LogStatsRepository.STATSDATATYPE_ONLINE_INTERFACE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.1.onlineInterface", "Online Interface") ;
-
-    case LogStatsRepository.STATSDATATYPE_ONLINE_SERVICE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.2.onlineService", "Online Service") ;
-
-    case LogStatsRepository.STATSDATATYPE_FILE_INTERFACE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.4.fileInterface", "File Interface") ;
-
-    case LogStatsRepository.STATSDATATYPE_FILE_SERVICE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.5.fileService", "File Service") ;
-
-    case LogStatsRepository.STATSDATATYPE_DB_INTERFACE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.7.dbInterface", "DB Interface") ;
-
-    case LogStatsRepository.STATSDATATYPE_DB_SERVICE :
-      return MessageGenerator.getMessage("igate.logStatistics.statsType.8.dbService", "DB Service") ;
-
-    default :
-      switch (type)
-      {
-      case LogStatsRepository.ONLINE_DAILY :
-      case LogStatsRepository.ONLINE_ADAPTER :
-      case LogStatsRepository.ONLINE_INTERFACE :
-      case LogStatsRepository.ONLINE_SERVICE :
-        return MessageGenerator.getMessage("igate.logStatistics.statsType.0.online", "Online") ;
-
-      case LogStatsRepository.FILE_DAILY :
-      case LogStatsRepository.FILE_ADAPTER :
-      case LogStatsRepository.FILE_INTERFACE :
-      case LogStatsRepository.FILE_SERVICE :
-        return MessageGenerator.getMessage("igate.logStatistics.statsType.3.file", "File") ;
-
-      case LogStatsRepository.DB_DAILY :
-      case LogStatsRepository.DB_ADAPTER :
-      case LogStatsRepository.DB_INTERFACE :
-      case LogStatsRepository.DB_SERVICE :
-        return MessageGenerator.getMessage("igate.logStatistics.statsType.6.db", "DB") ;
-      }
-
-      return MessageGenerator.getMessage("head.all", "All") ;
-    }
   }
 
   /**

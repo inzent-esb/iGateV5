@@ -1,4 +1,4 @@
-package com.inzent.igate.imanager.calendar ;
+package com.inzent.igate.openapi.entity.calendar ;
 
 import java.io.FileInputStream ;
 import java.io.OutputStream ;
@@ -22,13 +22,13 @@ import org.apache.poi.ss.usermodel.WorkbookFactory ;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle ;
 import org.apache.poi.xssf.usermodel.XSSFColor ;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook ;
-import org.springframework.stereotype.Service ;
+import org.springframework.stereotype.Component ;
 
 import com.inzent.igate.repository.meta.Calendar ;
 import com.inzent.igate.repository.meta.CalendarHoliday ;
 import com.inzent.imanager.message.MessageGenerator ;
 
-@Service
+@Component
 public class CalendarDownloadBeanImpl implements CalendarDownloadBean{
 
 	@Override
@@ -63,13 +63,14 @@ public class CalendarDownloadBeanImpl implements CalendarDownloadBean{
 			
 			// 조회리스트 입력
 			int i = 2 ; // 현재 템플릿에서는 3번째 row 부터 값이 있으므로 2로 지정 ( 해당 부분은 템플릿 디자인 수정시 수정해야할 필요가 있음 )
+			List<CalendarHoliday> holidayList = new LinkedList() ;
 			for (Calendar calendarInfo : entityList) 
 			{
 				row = writeSheet.createRow(i) ;
 				int c = 0 ;
 				int removeRow = 0 ; 
 				
-				List<CalendarHoliday> holidayList = new LinkedList() ;
+				holidayList = new LinkedList() ;
 				holidayList = calendarInfo.getCalendarHoliday() ;
 				
 				// 휴일 ID
@@ -98,6 +99,9 @@ public class CalendarDownloadBeanImpl implements CalendarDownloadBean{
 					case "N" :
 						saturday = "No" ;
 						break ;
+						
+					default:
+						break ;
 				}
 				
 				cell = row.createCell(++c) ;
@@ -111,6 +115,8 @@ public class CalendarDownloadBeanImpl implements CalendarDownloadBean{
 						break ;
 					case "N" :
 						sunday = "No" ;
+						break ;
+					default :
 						break ;
 				}
 				

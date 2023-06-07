@@ -1,53 +1,67 @@
-package com.inzent.igate.imanager.exceptionlog;
+package com.inzent.igate.openapi.entity.exceptionlog ;
 
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.sql.Timestamp;
-import java.util.List;
+import java.io.FileInputStream ;
+import java.io.OutputStream ;
+import java.net.URLEncoder ;
+import java.sql.Timestamp ;
+import java.util.List ;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest ;
+import javax.servlet.http.HttpServletResponse ;
 
-import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.time.FastDateFormat ;
+import org.apache.poi.ss.usermodel.Cell ;
+import org.apache.poi.ss.usermodel.CellStyle ;
+import org.apache.poi.ss.usermodel.FillPatternType ;
+import org.apache.poi.ss.usermodel.Font ;
+import org.apache.poi.ss.usermodel.HorizontalAlignment ;
+import org.apache.poi.ss.usermodel.IndexedColors ;
+import org.apache.poi.ss.usermodel.Row ;
+import org.apache.poi.ss.usermodel.Sheet ;
+import org.apache.poi.ss.usermodel.VerticalAlignment ;
+import org.apache.poi.ss.usermodel.Workbook ;
+import org.apache.poi.ss.usermodel.WorkbookFactory ;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle ;
+import org.apache.poi.xssf.usermodel.XSSFColor ;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook ;
+import org.springframework.stereotype.Component ;
+import org.springframework.web.multipart.MultipartFile ;
 
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.inzent.igate.imanager.CommonTools;
-import com.inzent.igate.repository.log.ExceptionLog;
-import com.inzent.imanager.message.MessageGenerator;
+import com.fasterxml.jackson.core.JsonEncoding ;
+import com.inzent.igate.imanager.CommonTools ;
+import com.inzent.igate.imanager.EntityExportImportBean ;
+import com.inzent.igate.repository.log.ExceptionLog ;
+import com.inzent.imanager.message.MessageGenerator ;
 
-@Service
-public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<ExceptionLog> {
+@Component
+public class ExceptionLogExportImport implements EntityExportImportBean<ExceptionLog>
+{
+  @Override
+  public void exportList(HttpServletRequest request, HttpServletResponse response, ExceptionLog entity, List<ExceptionLog> list) throws Exception
+  {
+    String fileName = "ExceptionLog_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx";
 
-	@Override
-	public void downloadFile(HttpServletRequest request, HttpServletResponse response, ExceptionLog entity, List<ExceptionLog> entityList) throws Exception {
-		
-		String fileName = "ExceptionLog_" + FastDateFormat.getInstance("yyyy-MM-dd hh:mm").format(new Timestamp(System.currentTimeMillis())) + ".xlsx";
+    response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
+    response.setContentType("application/octet-stream");
 
-		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
-		response.setContentType("application/octet-stream");
+    generateDownload(response, request.getServletContext().getRealPath("/template/List_ExceptionLog.xlsx"), entity, list);
 
-		generateDownload(response, request.getServletContext().getRealPath("/template/List_ExceptionLog.xlsx"), entity, entityList);
+    response.flushBuffer();
+  }
 
-		response.flushBuffer();
-	}
-	
+  @Override
+  public void exportObject(HttpServletRequest request, HttpServletResponse response, ExceptionLog entity) throws Exception
+  {
+    throw new UnsupportedOperationException() ;
+  }
+
+  @Override
+  public ExceptionLog importObject(MultipartFile multipartFile) throws Exception
+  {
+    throw new UnsupportedOperationException() ;
+  }
+
 	public void generateDownload(HttpServletResponse response  , String templateFile, ExceptionLog entity, List<ExceptionLog> entityList) throws Exception {
 		
 		try (OutputStream outputStream = response.getOutputStream();
@@ -58,7 +72,6 @@ public class ExceptionLogDownloadExcel implements ExceptionLogDownloadBean<Excep
 	        Row row = null ;
 	        Cell cell = null ;
 	        String values = null ;
-	        Object[] objects = null ;
 			
 			// Cell 스타일 지정.
 			CellStyle cellStyle_Base = getBaseCellStyle(workbook);
