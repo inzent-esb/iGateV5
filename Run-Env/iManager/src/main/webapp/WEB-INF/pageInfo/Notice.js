@@ -69,7 +69,7 @@ const info = {
 		},
 	},
 	detail: {
-		pk: ["pk.createTimestamp", "pk.noticeId", "userId"],
+		pk: ["pk.createTimestamp", "pk.noticeId"],
 		button: {
 			list: [
 				{ id: "insert", isUse: true },

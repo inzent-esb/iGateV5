@@ -6,11 +6,11 @@
 	<div class="sub-bar">
 		<div style="display: none;" afterload>
 			<div id="currentCnt" class="form-inline m-full" v-if="null !== currentCnt && currentCnt !== totalCnt" style="margin-right: 5px;">
-			<fmt:message key="head.currentCount"><fmt:param value="{{ currentCnt }}" /></fmt:message> /
-		</div>
-        <div id="totalCnt" class="form-inline m-full" v-if="null !== totalCnt">
-        	<fmt:message key="head.totalCount"><fmt:param value="{{ totalCnt }}" /></fmt:message>
-        </div>
+				<fmt:message key="head.currentCount"><fmt:param value="{{ currentCnt }}" /></fmt:message> /
+			</div>
+	        <div id="totalCnt" class="form-inline m-full" v-if="null !== totalCnt">
+	        	<fmt:message key="head.totalCount"><fmt:param value="{{ totalCnt }}" /></fmt:message>
+	        </div>
 		</div>
         
 		<div class="ml-auto form-inline m-full">

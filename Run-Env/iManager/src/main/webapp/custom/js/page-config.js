@@ -1837,7 +1837,7 @@ function getMakeGridObj() {
 				getTotalCnt(getDataList.bind(null, function() {					
 					if(!searchCallback) return;
 					
-					$('[afterload]').css('display', 'flex');
+					$('#' + listObjectAreaId + ' [afterload]').css('display', 'flex');
 					
 					searchCallback({ 
 						currentCnt: numberWithComma(dataList.length), 
@@ -1846,8 +1846,8 @@ function getMakeGridObj() {
 				}));				
 			} else {
 				getDataList(function(res) {
-					$('[afterload] #currentCnt').css('display', 'none');
-					$('[afterload]').css('display', 'flex');
+					$('#' + listObjectAreaId + ' [afterload] #currentCnt').css('display', 'none');
+					$('#' + listObjectAreaId + ' [afterload]').css('display', 'flex');
 					
 					if(!searchCallback) return;
 					
@@ -1878,6 +1878,7 @@ function getMakeGridObj() {
 		function getTotalCnt(callback) {
 			(new HttpReq(totalCntUrl)).read(searchObj, function(res) {
 				
+				var selectedMenuPathIdList = JSON.parse(sessionStorage.getItem('selectedMenuPathIdList'));
 				var menuId = selectedMenuPathIdList[selectedMenuPathIdList.length - 1];
 				var maxListCount = constants.grid.maxListCount[menuId];
 				
