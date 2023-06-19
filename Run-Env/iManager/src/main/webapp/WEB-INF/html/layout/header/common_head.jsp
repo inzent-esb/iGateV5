@@ -38,8 +38,14 @@ var scriptInfoArr = [
  	{'url': "/js/utils.js"},
  	{'url': "/js/modal.js"},
  	{'url': "/js/daterangepicker_custom.js"},
+ 	
+ 	{'url': "/js/jquery-ui-timepicker-addon.min.js"},
+ 	{'url': "/js/jquery-ui-timepicker-addon-i18n.min.js"},
+ 	{'url': "/js/jquery-ui-timepicker-addon-i18n-ext.js"},
+ 	
+ 	
  	{'url': "/js/page-config.js"},
- 	{'url': "/js/page-actions.js"},
+ 	{'url': "/js/page-actions.js"}
 ];
 
 if(0 == $('script[src$="' + scriptInfoArr[0].url + '"]').length) {	
@@ -59,6 +65,20 @@ function makeScript(idx) {
 		if (idx === scriptInfoArr.length - 1) {
 			$('[data-ready]').each(function(index, element) {
 				element.dispatchEvent(new CustomEvent('ready'));
+				
+				tui.Grid.applyTheme('clean', {
+					row: {
+						hover: {
+							background: '#f5f6fb',
+						},
+					},
+				});
+
+				tui.Grid.setLanguage('en', {
+					display: {
+						noData: 'No Data.',
+					},
+				});					
 			});
 			
 			if (2 == $('[data-ready]').children('.ct-header, .ct-content').length) {

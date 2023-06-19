@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/interfaceRecognize/object.json",
+	cudUrl: '/api/entity/interfaceRecognize/object',
 	search: {
 		load: true,
 		list: [
@@ -48,8 +48,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/adapter/searchPopup.json",
-						totalCntUrl: "/igate/adapter/rowCount.json",
+						url: '/api/entity/adapter/search',
+						totalCntUrl: '/api/entity/adapter/count',						
 						paging: {
 							isUse: true,
 							side: "server"
@@ -141,8 +141,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/interface/searchPopup.json",
-						totalCntUrl: "/igate/interface/rowCount.json",
+						url: '/api/entity/interface/search',
+						totalCntUrl: '/api/entity/interface/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -202,8 +202,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/interfaceRecognize/search.json",
-		totalCntUrl: "/igate/interfaceRecognize/rowCount.json",
+		url: '/api/entity/interfaceRecognize/search',
+		totalCntUrl: '/api/entity/interfaceRecognize/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -232,19 +232,15 @@ const info = {
 
 	detail: {
 		pk: ["pk.adapterId", "pk.telegramValue"],
-		controlUrl: "/igate/interfaceRecognize/control.json",
 		controlParams: function (detailData) {
-			return {
-				"pk.adapterId": detailData["pk.adapterId"],
-				"pk.telegramValue": detailData["pk.telegramValue"]
-			};
+			return detailData;
 		},
 		button: {
 			list: [
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true }
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/interfaceRecognize/dump' }
 			]
 		},
 		tabList: [

@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/adapterControl/object.json",
+	cudUrl: '/api/entity/adapterControl/object',
 	search: {
 		list: [
 			{
@@ -8,7 +8,13 @@ const info = {
 				vModel: "instanceId",
 				label: this.$t("igate.instance") + " " + this.$t("head.id"),
 				optionInfo: {
-					url: "/igate/instance/list.json",
+					url: "/api/entity/instance/search",
+					params: {
+						object: {},
+						limit: null,
+						next: null,
+						reverseOrder: false
+					},					
 					optionListName: "instanceList",
 					optionFor: "option in instanceList",
 					optionValue: "option.instanceId",
@@ -82,8 +88,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/adapter/searchPopup.json",
-						totalCntUrl: "/igate/adapter/rowCount.json",
+						url: '/api/entity/adapter/search',
+						totalCntUrl: '/api/entity/adapter/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -152,7 +158,7 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/adapterControl/searchSnapshot.json",
+		url: '/api/entity/adapter/snapshot',
 		totalCntUrl: null,
 		paging: {
 			isUse: false,
@@ -335,7 +341,7 @@ const info = {
 		}
 	},
 	detail: {
-		controlUrl: "/igate/adapterControl/control.json",
+		controlUrl: "/api/entity/adapter/control",
 		controlParams: function (param) {
 			return {
 				instance: param.instanceId,

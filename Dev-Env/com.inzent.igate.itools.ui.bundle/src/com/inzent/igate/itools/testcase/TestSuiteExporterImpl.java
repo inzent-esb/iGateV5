@@ -1,8 +1,8 @@
 package com.inzent.igate.itools.testcase ;
 
+import java.io.ByteArrayInputStream ;
 import java.io.File ;
 import java.io.FileOutputStream ;
-import java.io.InputStream ;
 import java.util.ArrayList ;
 import java.util.List ;
 
@@ -164,82 +164,79 @@ public class TestSuiteExporterImpl extends TestSuiteExporter
       nFail = nTotal - nSucess;
     }
     
-    try (InputStream is = Configuration.getTemplate("TestSuiteResult_Excel.xlsx"))
+    workbook = WorkbookFactory.create(new ByteArrayInputStream(Configuration.getTemplate("TestSuiteResult_Excel.xlsx"))) ;
+
+    File newExcel = new File(path) ;
+    Sheet writeSheet = workbook.getSheetAt(0) ;
+
+    String value = null ;         
+    CellStyle cellStyle_info = getInfoCellStyle(workbook);
+
+    //===== 엑셀 2번째 줄 값 설정 =====
+    // 제목 
+    CellStyle cellStyle_title = getTitileCellStyle(workbook);
+    value = String.format("%s( %s )", testSuite.getTestSuiteId(), testSuite.getTestSuiteDesc());
+    row = writeSheet.getRow(1) ;
+    for(int index = 0 ; index < 7 ;index ++)
     {
-      workbook = WorkbookFactory.create(is) ;
+      cell = row.getCell(index) ;
+      cell.setCellStyle(cellStyle_title) ;
+      if(index ==0)
+        cell.setCellValue(value) ;
+    }
 
-      File newExcel = new File(path) ;
-      Sheet writeSheet = workbook.getSheetAt(0) ;
+    //===== 엑셀 4번째 줄 값 설정 =====
+    // 테스트 결과
+    if (TestCaseValidateConstants.TEST_SUITE_RESULTS.containsKey(testSuite.getTestSuiteStatus()))
+      value = StringUtils.trimToEmpty((String) TestCaseValidateConstants.TEST_SUITE_RESULTS.get(testSuite.getTestSuiteStatus()).getValue());
+    else
+      value = Character.toString(testSuite.getTestSuiteStatus());
+    
+    row = writeSheet.getRow(3) ;
+    cell = row.getCell(1) ;
+    cell.setCellStyle(cellStyle_info) ;
+    cell.setCellValue(value) ;
 
-      String value = null ;         
-      CellStyle cellStyle_info = getInfoCellStyle(workbook);
+    // 테스트 수행자
+    value = testSuite.getTestUserId();
+    cell = row.getCell(3) ;
+    cell.setCellStyle(cellStyle_info) ;
+    cell.setCellValue(value) ;
 
-      //===== 엑셀 2번째 줄 값 설정 =====
-      // 제목 
-      CellStyle cellStyle_title = getTitileCellStyle(workbook);
-      value = String.format("%s( %s )", testSuite.getTestSuiteId(), testSuite.getTestSuiteDesc());
-      row = writeSheet.getRow(1) ;
-      for(int index = 0 ; index < 7 ;index ++)
-      {
-        cell = row.getCell(index) ;
-        cell.setCellStyle(cellStyle_title) ;
-        if(index ==0)
-          cell.setCellValue(value) ;
-      }
+    // 테스트 일시
+    value = testSuite.getTestDateTime();
+    cell = row.getCell(5) ;
+    cell.setCellStyle(cellStyle_info) ;
+    cell.setCellValue(value) ;
 
-      //===== 엑셀 4번째 줄 값 설정 =====
-      // 테스트 결과
-      if (TestCaseValidateConstants.TEST_SUITE_RESULTS.containsKey(testSuite.getTestSuiteStatus()))
-        value = StringUtils.trimToEmpty((String) TestCaseValidateConstants.TEST_SUITE_RESULTS.get(testSuite.getTestSuiteStatus()).getValue());
-      else
-        value = Character.toString(testSuite.getTestSuiteStatus());
-      
-      row = writeSheet.getRow(3) ;
-      cell = row.getCell(1) ;
-      cell.setCellStyle(cellStyle_info) ;
-      cell.setCellValue(value) ;
+    //===== 엑셀 5번째 줄 값 설정 =====
+    // 총 건수
+    value =  Integer.toString(nTotal);
+    row = writeSheet.getRow(4) ;
+    cell = row.getCell(1) ;
+    cell.setCellStyle(cellStyle_info) ;
+    cell.setCellValue(value) ;
 
-      // 테스트 수행자
-      value = testSuite.getTestUserId();
-      cell = row.getCell(3) ;
-      cell.setCellStyle(cellStyle_info) ;
-      cell.setCellValue(value) ;
+    // 성공 건수
+    value =  Integer.toString(nSucess);
+    cell = row.getCell(3) ;
+    cell.setCellStyle(cellStyle_info) ;
+    cell.setCellValue(value) ;
 
-      // 테스트 일시
-      value = testSuite.getTestDateTime();
-      cell = row.getCell(5) ;
-      cell.setCellStyle(cellStyle_info) ;
-      cell.setCellValue(value) ;
+    // 실패 건수
+    value =  Integer.toString(nFail);
+    cell = row.getCell(5) ;
+    cell.setCellStyle(cellStyle_info) ;
+    cell.setCellValue(value) ;
 
-      //===== 엑셀 5번째 줄 값 설정 =====
-      // 총 건수
-      value =  Integer.toString(nTotal);
-      row = writeSheet.getRow(4) ;
-      cell = row.getCell(1) ;
-      cell.setCellStyle(cellStyle_info) ;
-      cell.setCellValue(value) ;
+    if(testCaseResultList.size() > 0)
+      exportExcelTestResults(workbook, writeSheet, testCaseResultList, 6) ;
+    
 
-      // 성공 건수
-      value =  Integer.toString(nSucess);
-      cell = row.getCell(3) ;
-      cell.setCellStyle(cellStyle_info) ;
-      cell.setCellValue(value) ;
-
-      // 실패 건수
-      value =  Integer.toString(nFail);
-      cell = row.getCell(5) ;
-      cell.setCellStyle(cellStyle_info) ;
-      cell.setCellValue(value) ;
-
-      if(testCaseResultList.size() > 0)
-        exportExcelTestResults(workbook, writeSheet, testCaseResultList, 6) ;
-      
-
-      try (FileOutputStream fileOutputStream = new FileOutputStream(newExcel))
-      {
-        workbook.write(fileOutputStream) ;
-        fileOutputStream.close() ;
-      }
+    try (FileOutputStream fileOutputStream = new FileOutputStream(newExcel))
+    {
+      workbook.write(fileOutputStream) ;
+      fileOutputStream.close() ;
     }
   }
 

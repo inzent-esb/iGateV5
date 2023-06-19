@@ -1,25 +1,25 @@
 package com.custom.session.http ;
 
-import org.apache.http.client.config.RequestConfig ;
-import org.apache.http.client.methods.HttpRequestBase ;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase ;
+import org.apache.hc.client5.http.config.RequestConfig ;
 
 import com.inzent.igate.adapter.AdapterParameter ;
 import com.inzent.igate.connector.OutBoundConnector ;
 import com.inzent.igate.message.HttpConstants ;
 import com.inzent.igate.message.ValueObject ;
 import com.inzent.igate.session.SessionPool ;
-import com.inzent.igate.session.http.HttpComponents4Session;
+import com.inzent.igate.session.http.HttpComponentsSession;
 import com.inzent.igate.session.http.ThinHttpClientSession ;
 
-public class AppianClientSession extends HttpComponents4Session
+public class AppianClientSession extends HttpComponentsSession
 {
-  public AppianClientSession(OutBoundConnector connector, SessionPool sessionPool, AdapterParameter adapterParameter)
+  public AppianClientSession(OutBoundConnector connector, SessionPool sessionPool, AdapterParameter adapterParameter) throws Exception
   {
     super(connector, sessionPool, adapterParameter) ;
   }
 
   @Override
-  protected HttpRequestBase makeRequest(AdapterParameter adapterParameter, RequestConfig.Builder builder) throws Exception
+  protected HttpUriRequestBase makeRequest(AdapterParameter adapterParameter, RequestConfig.Builder builder) throws Exception
   {
     ValueObject valueObject ;
     if (adapterParameter.getRequestData() instanceof ValueObject)

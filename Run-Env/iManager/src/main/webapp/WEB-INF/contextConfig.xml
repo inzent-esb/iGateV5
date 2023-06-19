@@ -11,53 +11,200 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.6.xsd"
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.8.xsd"
 	default-lazy-init="false">
 
-	<bean class="com.inzent.imanager.controller.HttpSession" scope="session">
-		<aop:scoped-proxy proxy-target-class="true" />
-	</bean>
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/custom/**" location="/custom/" />
+	<mvc:resources mapping="/img/**" location="/img/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/manual/**" location="/manual/" />
+	<mvc:resources mapping="/template/**" location="/template/" />
+	<mvc:resources mapping="/*.*" location="/" />
+	<mvc:resources mapping="/WEB-INF/html" location="/WEB-INF/html" />
 
-	<bean name="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	<mvc:view-resolvers>
+		<mvc:jsp prefix="/WEB-INF/html/"/>
+	</mvc:view-resolvers>
 
-	<bean id="jsonViewResolver" class="com.inzent.imanager.view.JsonViewResolver" />
-
-	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="contentNegotiationManager">
-			<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-				<property name="mediaTypes">
-					<map>
-						<entry key="json" value="application/json" />
-					</map>
-				</property>
-			</bean>
-		</property>
-		<property name="viewResolvers">
-			<list>
-				<ref bean="jsonViewResolver" />
-			</list>
-		</property>
-	</bean>
-
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="contentType" value="text/html; charset=UTF-8" />
-		<property name="prefix" value="/WEB-INF/html/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
 
+	<bean id="batchLogService" class="com.inzent.imanager.service.LogEntityService">
+		<property name="entityRepository" ref="batchLogRepository" />
+	</bean>
+
+	<bean id="calendarRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.Calendar" />
+	</bean>
+
+	<bean id="calendarService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="calendar" />
+		<constructor-arg value="1" />
+
+		<property name="metaEntityRepository" ref="calendarRepository" />
+	</bean>
+
+	<bean id="exceptionCodeRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.ExceptionCode" />
+	</bean>
+
+	<bean id="exceptionCodeService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="exceptionCode" />
+		<constructor-arg value="3" />
+
+		<property name="metaEntityRepository" ref="exceptionCodeRepository" />
+	</bean>
+
+	<bean id="externalLineRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.ExternalLine" />
+	</bean>
+
+	<bean id="externalLineService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="externalLineRepository" />
+	</bean>
+
+	<bean id="fieldMetaService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="fieldMetaRepository" />
+	</bean>
+
+	<bean id="interfaceRecognizeService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="interfaceRecognize" />
+		<constructor-arg value="1" />
+
+		<property name="metaEntityRepository" ref="interfaceRecognizeRepository" />
+	</bean>
+
+	<bean id="javaProjectRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.JavaProject" />
+	</bean>
+
+	<bean id="javaProjectService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="javaProjectRepository" />
+	</bean>
+
+	<bean id="jobResultService" class="com.inzent.imanager.service.LogEntityService">
+		<property name="entityRepository" ref="jobResultRepository" />
+	</bean>
+
+	<bean id="mappingDictionaryRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.MappingDictionary" />
+	</bean>
+
+	<bean id="mappingDictionaryService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="mappingDictionaryRepository" />
+	</bean>
+
+	<bean id="mappingRuleService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="mappingRule" />
+		<constructor-arg value="3" />
+
+		<property name="metaEntityRepository" ref="mappingRuleRepository" />
+	</bean>
+
+	<bean id="menuBookmarkRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.imanager.repository.meta.MenuBookmark" />
+	</bean>
+
+	<bean id="menuBookmarkService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="menuBookmarkRepository" />
+	</bean>
+
+	<bean id="messageService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="messageRepository" />
+	</bean>
+
+	<bean id="metaHistoryService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="metaHistoryRepository" />
+	</bean>
+
+	<bean id="monitorComponentRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.MonitorComponent" />
+	</bean>
+
+	<bean id="monitorContainerService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="monitorContainerRepository" />
+	</bean>
+
+	<bean id="noticeRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.imanager.repository.meta.Notice" />
+	</bean>
+
+	<bean id="noticeService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="noticeRepository" />
+	</bean>
+
+	<bean id="onlineHeaderMappingPolicyService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="onlineHeaderMappingPolicy" />
+		<constructor-arg value="3" />
+
+		<property name="metaEntityRepository" ref="onlineHeaderMappingPolicyRepository" />
+	</bean>
+
+	<bean id="standardCodeRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.StandardCode" />
+	</bean>
+
+	<bean id="standardCodeService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="standardCode" />
+		<constructor-arg value="1" />
+
+		<property name="metaEntityRepository" ref="standardCodeRepository" />
+	</bean>
+
+	<bean id="servicePolicyService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="servicePolicy" />
+		<constructor-arg value="1" />
+
+		<property name="metaEntityRepository" ref="servicePolicyRepository" />
+	</bean>
+
+	<bean id="serviceRecognizeService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="serviceRecognize" />
+		<constructor-arg value="1" />
+
+		<property name="metaEntityRepository" ref="serviceRecognizeRepository" />
+	</bean>
+
+	<bean id="testCaseService" class="com.inzent.imanager.service.LogEntityService">
+		<property name="entityRepository" ref="testCaseRepository" />
+	</bean>
+
+	<bean id="testSuiteService" class="com.inzent.imanager.service.LogEntityService">
+		<property name="entityRepository" ref="testSuiteRepository" />
+	</bean>
+
+	<bean id="threadPoolRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.ThreadPool" />
+	</bean>
+
+	<bean id="threadPoolService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="threadPool" />
+		<constructor-arg value="0" />
+
+		<property name="metaEntityRepository" ref="threadPoolRepository" />
+	</bean>
+
+	<bean id="transactionContextRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.TransactionContext" />
+	</bean>
+
+	<bean id="transactionContextService" class="com.inzent.igate.imanager.CachedMetaEntityService">
+		<constructor-arg value="transactionContext" />
+		<constructor-arg value="1" />
+
+		<property name="metaEntityRepository" ref="transactionContextRepository" />
+	</bean>
+
 	<context:component-scan base-package="com.inzent.imanager">
-		<context:exclude-filter type="regex" expression="com.inzent.imanager.common.property.PropertyService" />
+		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.property.PropertyService" />
 	</context:component-scan>
 	<context:component-scan base-package="com.inzent.igate" />
 
 	<tx:annotation-driven />
 
-	<mvc:annotation-driven>
-		<mvc:path-matching suffix-pattern="true" />
-	</mvc:annotation-driven>
+	<mvc:annotation-driven />
 
 	<security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
 

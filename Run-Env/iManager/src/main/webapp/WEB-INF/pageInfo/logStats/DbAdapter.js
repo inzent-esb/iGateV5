@@ -1,4 +1,4 @@
 const info = {
 	type: "custom",
-	url: "/logStats/db/adapter.html"
+	url: "/logStats/db/adapter"
 };

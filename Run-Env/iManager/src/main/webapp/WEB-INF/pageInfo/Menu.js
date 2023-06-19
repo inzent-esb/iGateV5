@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/common/menu/object.json",
+	cudUrl: '/api/entity/menu/object',
 	search: {
 		load: true,
 		list: [
@@ -58,9 +58,11 @@ const info = {
 								vModel: "privilegeType",
 								label: this.$t("common.type"),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Privilege.Type",
+										pk: {
+											propertyId: 'List.Privilege.Type'
+										},
 										orderByKey: true
 									},
 									optionListName: "privilegeType",
@@ -86,7 +88,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/common/privilege/searchPopup.json",
+						url: '/api/entity/privilege/search',
+						totalCntUrl: '/api/entity/privilege/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -150,8 +153,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/common/menu/search.json",
-		totalCntUrl: "/common/menu/rowCount.json",
+		url: '/api/entity/menu/search',
+		totalCntUrl: '/api/entity/menu/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -240,9 +243,11 @@ const info = {
 								label: this.$t("common.menu.openWindow"),
 								val: "N",
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Yn",
+										pk: {
+											propertyId: 'List.Yn'
+										},
 										orderByKey: true
 									},
 									optionListName: "openWindowList",
@@ -290,10 +295,11 @@ const info = {
 												vModel: "privilegeType",
 												label: this.$t("common.type"),
 												optionInfo: {
-													url: "/common/property/properties.json",
+													url: '/api/page/properties',
 													params: {
-														propertyId:
-															"List.Privilege.Type",
+														pk: {
+															propertyId: 'List.Privilege.Type'
+														},
 														orderByKey: true
 													},
 													optionListName:
@@ -328,7 +334,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/common/privilege/searchPopup.json",
+										url: '/api/entity/privilege/search',
+										totalCntUrl: '/api/entity/privilege/count',
 										paging: {
 											isUse: true,
 											side: "server"

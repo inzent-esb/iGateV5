@@ -1,4 +1,4 @@
 const info = {
 	type: "custom",
-	url: "/migration/service/Service.html"
+	url: "/migration/service/service"
 };

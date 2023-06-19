@@ -1,16 +1,13 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/reservedSchedule/object.json",
+	cudUrl: '/api/entity/reservedSchedule/object',
 	updateStatusFunc: function (row, mod) {
 		return {
-			url:
-				"ready" === mod
-					? "/igate/reservedSchedule/updateReady.json"
-					: "/igate/reservedSchedule/updateCancel.json",
+			url: "/api/entity/reservedSchedule/control?command=" + ("retry" === mod? "retry" : "cancel"),
 			params: {},
 			columnName: "executeStatus"
 		};
-	},
+	},	
 	search: {
 		load: true,
 		list: [
@@ -31,9 +28,11 @@ const info = {
 				vModel: "pk.scheduleType",
 				label: this.$t("common.type"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.ReservedSchedule.ScheduleType",
+						pk: {
+							propertyId: 'List.ReservedSchedule.ScheduleType'
+						},
 						orderByKey: true
 					},
 					optionListName: "scheduleTypes",
@@ -67,10 +66,11 @@ const info = {
 								label: this.$t("common.type"),
 								val: "T",
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.Instance.InstanceType",
+										pk: {
+											propertyId: 'List.Instance.InstanceType'
+										},
 										orderByKey: true
 									},
 									optionListName: "instanceTypes",
@@ -98,8 +98,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/instance/searchPopup.json",
-						totalCntUrl: "/igate/instance/rowCount.json",
+						url: '/api/entity/instance/search',
+						totalCntUrl: '/api/entity/instance/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -173,9 +173,11 @@ const info = {
 				vModel: "executeStatus",
 				label: this.$t("igate.reservedSchedule.execute.status"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.ReservedSchedule.ExecuteStatus",
+						pk: {
+							propertyId: 'List.ReservedSchedule.ExecuteStatus'
+						},
 						orderByKey: true
 					},
 					optionListName: "executeStatus",
@@ -223,7 +225,7 @@ const info = {
 				}
 			},
 			{
-				id: "updateReady",
+				id: "updateRetry",
 				isUse: function (gridInfo) {
 					if (null === gridInfo) return true;
 
@@ -255,8 +257,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/reservedSchedule/search.json",
-		totalCntUrl: "/igate/reservedSchedule/rowCount.json",
+		url: '/api/entity/reservedSchedule/search',
+		totalCntUrl: '/api/entity/reservedSchedule/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -369,10 +371,11 @@ const info = {
 								label: this.$t("common.type"),
 								isPK: true,
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.ReservedSchedule.ScheduleType",
+										pk: {
+											propertyId: 'List.ReservedSchedule.ScheduleType'
+										},
 										orderByKey: true
 									},
 									optionListName: "scheduleTypes",
@@ -388,10 +391,11 @@ const info = {
 									"igate.reservedSchedule.execute.status"
 								),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.ReservedSchedule.ExecuteStatus",
+										pk: {
+											propertyId: 'List.ReservedSchedule.ExecuteStatus'
+										},
 										orderByKey: true
 									},
 									optionListName: "executeStatus",
@@ -439,8 +443,11 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								clickEvt: function (component) {
-									if (!component.getData().exceptionId)
-										return;
+									var info = validateOpenNewTabUrl(location.href);
+									
+									if (!info.isValidate) return false;
+									
+									if (!component.getData().exceptionId) return;
 
 									localStorage.removeItem(
 										"selectedMenuPathIdListNewTab"
@@ -466,7 +473,7 @@ const info = {
 										})
 									);
 
-									window.open(location.href);
+									window.open(info.url);
 								}
 							}
 						]

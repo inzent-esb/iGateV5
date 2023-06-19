@@ -38,6 +38,10 @@ var totalCountLabel = function(value) {
 };
 var noSelect = "<fmt:message>head.selectError</fmt:message>";
 var running = "<fmt:message>common.running</fmt:message>";
+var searchCriteriaLabel = function(value) {
+	return '<fmt:message key="igate.add.search.criteria"><fmt:param value="'+ value +'"/></fmt:message>'
+};
+var failMsg = "<fmt:message>head.fail.notice</fmt:message>";
 	
 /* time Names */
 var timeHour = "<fmt:message>igate.hours.before</fmt:message>";

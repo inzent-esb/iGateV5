@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/jobResult/object.json",
+	cudUrl: '/api/entity/jobResult/object',
 	search: {
 		load: true,
 		list: [
@@ -45,9 +45,11 @@ const info = {
 								vModel: "jobType",
 								label: this.$t("common.type"),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Job.JobType",
+										pk: {
+											propertyId: 'List.Job.JobType'
+										},
 										orderByKey: true
 									},
 									optionListName: "jobTypes",
@@ -73,8 +75,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/job/searchPopup.json",
-						totalCntUrl: "/igate/job/rowCount.json",
+						url: '/api/entity/job/search',
+						totalCntUrl: '/api/entity/job/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -94,11 +96,11 @@ const info = {
 									header: this.$t("common.type"),
 									formatter: function (value) {
 										if (value.row.jobType == "R")
-											return "<fmt:message>igate.job.type.reserve</fmt:message>";
+											return this.$t("igate.job.type.reserve");
 										else if (value.row.jobType == "S")
-											return "<fmt:message>igate.job.type.schdule</fmt:message>";
+											return this.$t("igate.job.type.schdule");
 										else if (value.row.jobType == "M")
-											return "<fmt:message>igate.job.type.manual</fmt:message>";
+											return this.$t("igate.job.type.manual");
 									}
 								},
 								{
@@ -138,10 +140,11 @@ const info = {
 								label: this.$t("common.type"),
 								val: "T",
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId:
-											"List.Instance.InstanceType",
+										pk: {
+											propertyId: 'List.Instance.InstanceType'
+										},
 										orderByKey: true
 									},
 									optionListName: "instanceTypes",
@@ -169,8 +172,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/instance/searchPopup.json",
-						totalCntUrl: "/igate/instance/rowCount.json",
+						url: '/api/entity/instance/search',
+						totalCntUrl: '/api/entity/instance/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -238,9 +241,11 @@ const info = {
 				vModel: "successYn",
 				label: this.$t("igate.jobResult.successYn"),
 				optionInfo: {
-					url: "/common/property/properties.json",
+					url: '/api/page/properties',
 					params: {
-						propertyId: "List.Yn",
+						pk: {
+							propertyId: 'List.Yn'
+						},
 						orderByKey: true
 					},
 					optionListName: "successYns",
@@ -269,8 +274,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/jobResult/search.json",
-		totalCntUrl: "/igate/jobResult/rowCount.json",
+		url: '/api/entity/jobResult/search',
+		totalCntUrl: '/api/entity/jobResult/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -357,9 +362,11 @@ const info = {
 								vModel: "successYn",
 								label: this.$t("igate.jobResult.successYn"),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.Yn",
+										pk: {
+											propertyId: 'List.Yn'
+										},
 										orderByKey: true
 									},
 									optionListName: "successYns",
@@ -407,6 +414,10 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								clickEvt: function (component) {
+									var info = validateOpenNewTabUrl(location.href);
+									
+									if (!info.isValidate) return false;
+									
 									localStorage.removeItem(
 										"selectedMenuPathIdListNewTab"
 									);
@@ -428,7 +439,7 @@ const info = {
 										})
 									);
 
-									window.open(location.href);
+									window.open(info.url);
 								}
 							}
 						]

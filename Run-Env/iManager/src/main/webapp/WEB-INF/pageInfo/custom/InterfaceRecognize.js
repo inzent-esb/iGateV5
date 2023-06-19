@@ -1,4 +1,4 @@
 const info = {
 	type: "custom",
-	url: "/interfaceRecognize/InterfaceRecognize.html"
+	url: "/interfaceRecognize/interfaceRecognize"
 };

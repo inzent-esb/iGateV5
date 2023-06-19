@@ -18,15 +18,14 @@ import org.springframework.beans.factory.annotation.Qualifier ;
 import org.springframework.transaction.TransactionStatus ;
 import org.springframework.transaction.support.TransactionCallback ;
 import org.springframework.transaction.support.TransactionTemplate ;
-import org.springframework.ui.ExtendedModelMap ;
 import org.springframework.web.bind.annotation.RequestMapping ;
 import org.springframework.web.bind.annotation.RequestMethod ;
 
-import com.inzent.igate.imanager.interfacerecognize.InterfaceRecognizeService ;
-import com.inzent.igate.imanager.interfaces.InterfaceService ;
-import com.inzent.igate.imanager.mapping.MappingService ;
-import com.inzent.igate.imanager.record.RecordService ;
-import com.inzent.igate.imanager.service.ServiceService ;
+import com.inzent.igate.imanager.CachedMetaEntityService ;
+import com.inzent.igate.openapi.entity.interfaces.InterfaceService ;
+import com.inzent.igate.openapi.entity.mapping.MappingService ;
+import com.inzent.igate.openapi.entity.record.RecordService ;
+import com.inzent.igate.openapi.entity.service.ServiceService ;
 import com.inzent.igate.repository.meta.Interface ;
 import com.inzent.igate.repository.meta.InterfaceRecognize ;
 import com.inzent.igate.repository.meta.RecognizePK ;
@@ -67,7 +66,8 @@ public abstract class AbstractEimsController
   protected MappingService mappingService ;
 
   @Autowired
-  protected InterfaceRecognizeService interfaceRecognizeService ;
+  @Qualifier("interfaceRecognizeService")
+  protected CachedMetaEntityService<RecognizePK, InterfaceRecognize> interfaceRecognizeService ;
 
   /**
    * Parameter의 interfaceId를 조회하여 전문 생성하는 메서드
@@ -181,15 +181,6 @@ public abstract class AbstractEimsController
               if (null != sourceInterface)
               {
                 interfaceService.evict(sourceInterface) ;
-                for (com.inzent.igate.repository.meta.InterfaceService is : sourceInterface.getInterfaceServices())
-                {
-                  if (null != is.getRequestMappingObject())
-                    mappingService.evict(is.getRequestMappingObject()) ;
-
-                  if (null != is.getResponseMappingObject())
-                    mappingService.evict(is.getResponseMappingObject()) ;
-                }
-
                 runnables.add(interfaceService.update(interfaceMeta, sourceInterface)) ;
               }
               else
@@ -233,9 +224,9 @@ public abstract class AbstractEimsController
           try
           {
             if (null != sourceRecord)
-              recordService.afterUpdated(record, sourceRecord, new ExtendedModelMap()) ;
+              recordService.afterUpdated(record, sourceRecord) ;
             else
-              recordService.afterInserted(record, new ExtendedModelMap()) ;
+              recordService.afterInserted(record) ;
           }
           catch (Throwable t)
           {
@@ -254,9 +245,9 @@ public abstract class AbstractEimsController
           try
           {
             if (null != sourceService)
-              serviceService.afterUpdated(service, sourceService, new ExtendedModelMap()) ;
+              serviceService.afterUpdated(service, sourceService) ;
             else
-              serviceService.afterInserted(service, new ExtendedModelMap()) ;
+              serviceService.afterInserted(service) ;
           }
           catch (Throwable t)
           {
@@ -275,9 +266,9 @@ public abstract class AbstractEimsController
           try
           {
             if (null != sourceInterface)
-              interfaceService.afterUpdated(interfaceMeta, sourceInterface, new ExtendedModelMap()) ;
+              interfaceService.afterUpdated(interfaceMeta, sourceInterface) ;
             else
-              interfaceService.afterInserted(interfaceMeta, new ExtendedModelMap()) ;
+              interfaceService.afterInserted(interfaceMeta) ;
           }
           catch (Throwable t)
           {
@@ -296,9 +287,9 @@ public abstract class AbstractEimsController
           try
           {
             if (null != sourceInterfaceRecognize)
-              interfaceRecognizeService.afterUpdated(interfaceRecognize, sourceInterfaceRecognize, new ExtendedModelMap()) ;
+              interfaceRecognizeService.afterUpdated(interfaceRecognize, sourceInterfaceRecognize) ;
             else
-              interfaceRecognizeService.afterInserted(interfaceRecognize, new ExtendedModelMap()) ;
+              interfaceRecognizeService.afterInserted(interfaceRecognize) ;
           }
           catch (Throwable t)
           {
@@ -380,7 +371,7 @@ public abstract class AbstractEimsController
         {
           try
           {
-            interfaceService.afterDeleted(interfaceMeta, new ExtendedModelMap()) ;
+            interfaceService.afterDeleted(interfaceMeta) ;
           }
           catch (Throwable t)
           {
@@ -394,7 +385,7 @@ public abstract class AbstractEimsController
         {
           try
           {
-            serviceService.afterDeleted(service, new ExtendedModelMap()) ;
+            serviceService.afterDeleted(service) ;
           }
           catch (Throwable t)
           {
@@ -408,7 +399,7 @@ public abstract class AbstractEimsController
         {
           try
           {
-            recordService.afterDeleted(record, new ExtendedModelMap()) ;
+            recordService.afterDeleted(record) ;
           }
           catch (Throwable t)
           {

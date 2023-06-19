@@ -1,4 +1,4 @@
 const info = {
 	type: "custom",
-	url: "/migration/interface/Interface.html"
+	url: "/migration/interface/interface"
 };

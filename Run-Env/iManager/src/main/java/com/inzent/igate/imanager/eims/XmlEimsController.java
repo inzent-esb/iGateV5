@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired ;
 import org.springframework.stereotype.Controller ;
 import org.springframework.web.bind.annotation.RequestMapping ;
 
-import com.inzent.igate.imanager.adapter.AdapterService ;
+import com.inzent.igate.openapi.entity.adapter.AdapterService ;
 import com.inzent.igate.repository.meta.Field ;
 import com.inzent.igate.repository.meta.FieldPK ;
 import com.inzent.igate.repository.meta.Interface ;
@@ -47,7 +47,7 @@ import com.inzent.igate.repository.meta.Service ;
 import com.inzent.igate.repository.meta.ServiceProperty ;
 import com.inzent.igate.repository.meta.ServicePropertyPK ;
 import com.inzent.igate.util.PropertyUtils ;
-import com.inzent.imanager.common.property.PropertyService ;
+import com.inzent.imanager.openapi.property.PropertyService ;
 
 /**
  * <code>XmlEimsController</code>

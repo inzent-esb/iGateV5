@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/javaProject/object.json",
+	cudUrl: '/api/entity/javaProject/object',
 	search: {
 		load: true,
 		list: [
@@ -46,8 +46,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/javaProject/search.json",
-		totalCntUrl: "/igate/javaProject/rowCount.json",
+		url: '/api/entity/javaProject/search',
+		totalCntUrl: '/api/entity/javaProject/count',		
 		paging: {
 			isUse: true,
 			side: "server"
@@ -77,7 +77,6 @@ const info = {
 	},
 	detail: {
 		pk: ["projectId"],
-		controlUrl: "/igate/javaProject/control.json",
 		controlParams: function (detailData) {
 			return {
 				projectId: detailData.projectId
@@ -87,8 +86,7 @@ const info = {
 			list: [
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
-				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true }
+				{ id: "delete", isUse: true }
 			]
 		},
 		tabList: [
@@ -117,9 +115,11 @@ const info = {
 								isRequired: true,
 								label: this.$t("common.type"),
 								optionInfo: {
-									url: "/common/property/properties.json",
+									url: '/api/page/properties',
 									params: {
-										propertyId: "List.JavaProject.Type",
+										pk: {
+											propertyId: 'List.JavaProject.Type'
+										},
 										orderByKey: true
 									},
 									optionListName: "projectTypes",

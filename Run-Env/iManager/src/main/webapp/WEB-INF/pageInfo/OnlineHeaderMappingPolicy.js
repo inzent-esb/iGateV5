@@ -1,6 +1,6 @@
 const info = {
 	type: "basic",
-	cudUrl: "/igate/onlineHeaderMappingPolicy/object.json",
+	cudUrl: '/api/entity/onlineHeaderMappingPolicy/object',
 	search: {
 		load: true,
 		list: [
@@ -57,8 +57,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/adapter/searchPopup.json",
-						totalCntUrl: "/igate/adapter/rowCount.json",
+						url: '/api/entity/adapter/search',
+						totalCntUrl: '/api/entity/adapter/count',						
 						paging: {
 							isUse: true,
 							side: "server"
@@ -155,8 +155,8 @@ const info = {
 						list: [{ id: "initialize", isUse: true }]
 					},
 					grid: {
-						url: "/igate/adapter/searchPopup.json",
-						totalCntUrl: "/igate/adapter/rowCount.json",
+						url: '/api/entity/adapter/search',
+						totalCntUrl: '/api/entity/adapter/count',
 						paging: {
 							isUse: true,
 							side: "server"
@@ -221,8 +221,8 @@ const info = {
 		]
 	},
 	grid: {
-		url: "/igate/onlineHeaderMappingPolicy/search.json",
-		totalCntUrl: "/igate/onlineHeaderMappingPolicy/rowCount.json",
+		url: '/api/entity/onlineHeaderMappingPolicy/search',
+		totalCntUrl: '/api/entity/onlineHeaderMappingPolicy/count',
 		paging: {
 			isUse: true,
 			side: "server"
@@ -254,7 +254,6 @@ const info = {
 	},
 	detail: {
 		pk: ["pk.interfaceAdapterId", "pk.serviceAdapterId"],
-		controlUrl: "/igate/onlineHeaderMappingPolicy/control.json",
 		controlParams: function (detailData) {
 			return {
 				"pk.interfaceAdapterId": detailData["pk.interfaceAdapterId"],
@@ -266,7 +265,7 @@ const info = {
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true }
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/onlineHeaderMappingPolicy/dump' }
 			]
 		},
 		tabList: [
@@ -340,9 +339,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/adapter/searchPopup.json",
-										totalCntUrl:
-											"/igate/adapter/rowCount.json",
+										url: '/api/entity/adapter/search',
+										totalCntUrl: '/api/entity/adapter/count',											
 										paging: {
 											isUse: true,
 											side: "server"
@@ -454,9 +452,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/adapter/searchPopup.json",
-										totalCntUrl:
-											"/igate/adapter/rowCount.json",
+										url: '/api/entity/adapter/search',
+										totalCntUrl: '/api/entity/adapter/count',											
 										paging: {
 											isUse: true,
 											side: "server"
@@ -546,9 +543,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/mapping/searchPopup.json",
-										totalCntUrl:
-											"/igate/mapping/rowCount.json",
+										url: '/api/entity/mapping/search',
+										totalCntUrl: '/api/entity/mapping/count',											
 										paging: {
 											isUse: true,
 											side: "server"
@@ -622,9 +618,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/mapping/searchPopup.json",
-										totalCntUrl:
-											"/igate/mapping/rowCount.json",
+										url: '/api/entity/mapping/search',
+										totalCntUrl: '/api/entity/mapping/count',											
 										paging: {
 											isUse: true,
 											side: "server"
@@ -698,9 +693,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/mapping/searchPopup.json",
-										totalCntUrl:
-											"/igate/mapping/rowCount.json",
+										url: '/api/entity/mapping/search',
+										totalCntUrl: '/api/entity/mapping/count',											
 										paging: {
 											isUse: true,
 											side: "server"
@@ -774,9 +768,8 @@ const info = {
 										]
 									},
 									grid: {
-										url: "/igate/mapping/searchPopup.json",
-										totalCntUrl:
-											"/igate/mapping/rowCount.json",
+										url: '/api/entity/mapping/search',
+										totalCntUrl: '/api/entity/mapping/count',											
 										paging: {
 											isUse: true,
 											side: "server"
