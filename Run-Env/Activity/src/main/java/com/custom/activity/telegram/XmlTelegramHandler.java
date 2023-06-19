@@ -62,7 +62,7 @@ public class XmlTelegramHandler extends AbstractTelegramHandler implements Custo
 
     header = ((Document) (object instanceof ValueObject ? ((ValueObject) object).get(HttpConstants.BODY) : object)).getRootElement().element(HEADER_ID).element(STANDARD_HEADER_ID) ;
     
-    transactionContextBean.setValue(LANG_CD, header.elementText(LANG_CD_FIELD)) ;
+    //transactionContextBean.setValue(LANG_CD, header.elementText(LANG_CD_FIELD)) ;
   }
 
   @Override

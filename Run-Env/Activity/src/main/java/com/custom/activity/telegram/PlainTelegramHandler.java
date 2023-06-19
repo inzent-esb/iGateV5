@@ -106,6 +106,6 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   @Override
   protected void analyze(AdapterParameter adapterParameter, boolean request) throws IGateException
   {
-	  transactionContextBean.setValue(LANG_CD, StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()), LANG_CD_FIELD_OFFSET, LANG_CD_FIELD_LENGTH, adapterParameter.getAdapter().getCharset()) ) ;
+	  //transactionContextBean.setValue(LANG_CD, StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()), LANG_CD_FIELD_OFFSET, LANG_CD_FIELD_LENGTH, adapterParameter.getAdapter().getCharset()) ) ;
   }
 }
