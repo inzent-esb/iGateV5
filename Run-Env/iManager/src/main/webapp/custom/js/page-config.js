@@ -1731,8 +1731,7 @@ function getMakeGridObj() {
 	var searchObj = null;
 	var searchCallback = null;
 
-	var stdSortColName = null;
-	var stdSortColType = null;
+	var sortColumnName = null;
 	var isServerPaging = false;
 	var serverPagingDataArr = [];
 	
@@ -1740,6 +1739,8 @@ function getMakeGridObj() {
 	
 	function makeGridObj() {
 		this.setConfig = function (options, paramIsModalGrid, formatterData) {
+			options = constants.grid.gridOptionFunc(options);
+			
 			searchUrl = options.searchUrl;
 			totalCntUrl = options.totalCntUrl;
 			paging = options.paging;
@@ -1761,15 +1762,23 @@ function getMakeGridObj() {
             
             if (paging && paging.isUse) {
 				grid.on('beforePageMove', function(info) {
-					
 					pageNo = Number(info.page);
 					
 					if (isServerPaging) {						
 						getDataList(function() {
 							searchCallback({
+								currentCnt: numberWithComma(dataList.length),
 								totalCnt: numberWithComma(dataList.length),
 							});
 						});
+					} else {
+						if ('server' === paging.side) {
+							if (pageNo > Math.ceil(grid.getData().length / searchObj.pageSize)) {
+								getDataList(function() {
+									paging.setCurrentCnt(grid.getData().length);
+								});
+							}
+						}
 					}
 				});
 
@@ -1787,14 +1796,18 @@ function getMakeGridObj() {
             	
             	var columns = info.instance.getSortState().columns;
             	
-            	stdSortColName = columns[0].columnName;
-				stdSortColType = columns[0].ascending;
+				if (!columns) return;
+
+				if (0 === columns.length) return;
+				
+            	sortColumnName = columns[0].columnName;
 				
 				if (paging.isUse && isServerPaging) {
 					// reset data & sort
 					getDataList(function() {
 						searchCallback({
-							totalCnt: numberWithComma(dataList.length),
+							currentCnt: numberWithComma(dataList.length),
+							totalCnt: numberWithComma(dataList.length)
 						});
 					});
 				} else {
@@ -1805,7 +1818,7 @@ function getMakeGridObj() {
 
 					if (0 === sortColumnNameList.length) return;
 					
-					for (let idx = 1; idx < sortColumnNameList.length; idx++) {
+					for (var idx = 1; idx < sortColumnNameList.length; idx++) {
 						// 연관 칼럼 정렬
 						grid.sort(sortColumnNameList[idx], sortColumnTypeList[idx], true);
 					}
@@ -1852,23 +1865,11 @@ function getMakeGridObj() {
 					if(!searchCallback) return;
 					
 					searchCallback($.extend(true, {
+						currentCnt: numberWithComma(dataList.length),
 						totalCnt: numberWithComma(dataList.length)
 					}, res))
 				});
 			}
-		};
-		
-		this.importData = function(obj, callback) {
-			searchObj = JSON.parse(JSON.stringify(obj));
-			searchCallback = callback;
-			
-			getDataList(function() {
-				if(!searchCallback) return;
-				
-				searchCallback({
-					currentCnt: numberWithComma(dataList.length)
-				});
-			});
 		};
 		
 		this.getSearchGrid = function () {
@@ -1878,7 +1879,7 @@ function getMakeGridObj() {
 		function getTotalCnt(callback) {
 			(new HttpReq(totalCntUrl)).read(searchObj, function(res) {
 				
-				var selectedMenuPathIdList = JSON.parse(sessionStorage.getItem('selectedMenuPathIdList'));
+                var selectedMenuPathIdList = JSON.parse(sessionStorage.getItem('selectedMenuPathIdList'));
 				var menuId = selectedMenuPathIdList[selectedMenuPathIdList.length - 1];
 				var maxListCount = constants.grid.maxListCount[menuId];
 				
@@ -1913,12 +1914,13 @@ function getMakeGridObj() {
 				if ('client' === paging.side) {
 					param.limit = totalCnt;
 				} else if ('server' === paging.side) {
-					if(constants.grid && constants.grid.pageOptions) {
-						var serverOptions = constants.grid.pageOptions[paging.serverOptions ? paging.serverOptions : 'default'];
-						
-						param.limit = serverOptions.limit;
-						param.reverseOrder = serverOptions.ascending;						
-					}
+					var rtnPageOption = constants.grid.pageOptionFunc(searchUrl);
+					
+					var limit = rtnPageOption.limit;
+					var ascending = rtnPageOption.ascending;
+					
+					param.limit = limit;
+					param.reverseOrder = !ascending;
 
 					if (0 < dataList.length) {
 						param.next = dataList[dataList.length - 1];
@@ -1929,7 +1931,7 @@ function getMakeGridObj() {
 
 					param.limit = searchObj.pageSize;
 					param.pageNo = pageNo;
-					param.sortColumnInfo = { nameList : sortColumnNameList, reverseList : sortColumnTypeList }
+					param.sortColumnInfo = { nameList : sortColumnNameList, reverseList : sortColumnTypeList.map(function(columnType) { return !columnType }) }
 
 					if (null === serverPagingDataArr || totalCnt !== serverPagingDataArr.length) {
 						serverPagingDataArr = Array.from({ length: totalCnt }, function() { return {} });
@@ -1946,121 +1948,124 @@ function getMakeGridObj() {
 			}
 			
 			(new HttpReq(searchUrl)).read(param, function(res) {
+				var sortColumnList = getSortColumnList();		
+				var sortColumnNameList = Array.from(sortColumnList.sortColumnNameList);
+				var sortColumnTypeList = Array.from(sortColumnList.sortColumnTypeList);
+					
+				var pageState = null; 
+					
+				var isUse = paging && paging.isUse;
 				
-					var sortColumnList = getSortColumnList();		
-					var sortColumnNameList = Array.from(sortColumnList.sortColumnNameList);
-					var sortColumnTypeList = Array.from(sortColumnList.sortColumnTypeList);
+				if (isUse) {
+					pageState = {
+						page: pageNo,
+						perPage: Number(searchObj.pageSize)
+					};
+				}
 					
-					var pageState = null; 
-					
-					var isUse = paging && paging.isUse;
-					
-					if (isUse) {
-						pageState = {
-							page: pageNo,
-							perPage: Number(searchObj.pageSize)
-						};
-					}
-					
-					if (isUse && isServerPaging) {
-						//serverPaging
-						pageState.totalCount = totalCnt;
+				if (isUse && isServerPaging) {
+					//serverPaging
+					pageState.totalCount = totalCnt;
 						
-						var startRowIdx = (pageNo - 1) * Number(searchObj.pageSize);
+					var startRowIdx = (pageNo - 1) * Number(searchObj.pageSize);
 						
-						res.object.forEach(function(info, idx) {
-							serverPagingDataArr[startRowIdx + idx] = parseFlattenObj(info);
-						});
+					res.object.forEach(function(info, idx) {
+						serverPagingDataArr[startRowIdx + idx] = parseFlattenObj(info);
+					});
 						
-						dataList = serverPagingDataArr.slice();
+					dataList = serverPagingDataArr.slice();
 						
-						if(0 < sortColumnNameList.length) {
-							sortColumnNameList.forEach(function(sortColumnName, idx) {
-								grid.resetData(serverPagingDataArr, {
-									pageState: pageState,
-									sortState: { columnName: sortColumnName, ascending: sortColumnTypeList[idx], multiple: true }
-								});
-							});
-						} else {
-							grid.resetData(serverPagingDataArr, { pageState: pageState });
-						}
-					} else {
-						// isUse가 false일 때
-						// client, server
-						dataList = dataList.concat(res.object.map(function(info) { 
-							return parseFlattenObj(info);
-						}));
-						
-						if (isUse) pageState.totalCount = dataList.length;
-						
-						var resetDataList = $.extend(true, {}, dataList);
-						
-						grid.resetData(dataList, { pageState: pageState });
-						
+					if(0 < sortColumnNameList.length) {
 						sortColumnNameList.forEach(function(sortColumnName, idx) {
-							grid.sort(sortColumnName, sortColumnTypeList[idx], true);
+							grid.resetData(serverPagingDataArr, {
+								pageState: pageState,
+								sortState: { columnName: sortColumnName, ascending: sortColumnTypeList[idx], multiple: true }
+							});
 						});
-					}
-					
-					if (isModalGrid) {
-						grid.refreshLayout();	
 					} else {
-						window.resizeFunc();	
+						grid.resetData(serverPagingDataArr, { pageState: pageState });
 					}
+				} else {
+					// isUse가 false일 때
+					// client, server
+					dataList = dataList.concat(res.object.map(function(info) { 
+						return parseFlattenObj(info);
+					}));
+						
+					if (isUse) pageState.totalCount = 'server' === paging.side? totalCnt : dataList.length;
+						
+					var resetDataList = $.extend(true, {}, dataList);
+						
+					grid.resetData(dataList, { pageState: pageState });
+						
+					sortColumnNameList.forEach(function(sortColumnName, idx) {
+						grid.sort(sortColumnName, sortColumnTypeList[idx], true);
+					});
+				}
 					
-					if(callback) callback(res);
-				},
-				true
-			);
+				if (isModalGrid) {
+					grid.refreshLayout();	
+				} else {
+					window.resizeFunc();	
+				}
+				
+				if(callback) callback(res);
+			}, true);
 		}
 		
 		function getSortColumnList() {
-			/*
-				기준 칼럼 
-				1. 정렬버튼이 클릭된 특정 컬럼
-				2. js에서 입력된 SortColumn
-
-				칼럼 정렬 타입
-				desc : true, asc: false
-			*/
+			var column = grid.getSortState().columns[0];
+			
 			var sortColumnNameList = [];
 			var sortColumnTypeList = [];
-		
-			var sortableColumnList = gridOptions.columns.filter(function(info){ return info.sortable });
 
-			// 기준 컬럼 정렬
-			var stdColName = stdSortColName ? stdSortColName : gridOptions.sortColumn;
-			var stdColNameInfo = sortableColumnList.find(function(info){ return info.name === stdColName });
-			
-			if (!stdColNameInfo) return { sortColumnNameList: sortColumnNameList, sortColumnTypeList : sortColumnTypeList };
-			
-			var sortingType = stdColNameInfo.sortingType? stdColNameInfo.sortingType : 'asc';
-			var sortWithColumn = stdColNameInfo.sortWithColumn? stdColNameInfo.sortWithColumn : [];
-			var sortWithColumnType = stdColNameInfo.sortWithColumnType? stdColNameInfo.sortWithColumnType : [];
-			
-			var stdColType = null !== stdSortColType ? stdSortColType : 'asc' === sortingType;
-			
-			// 연관 컬럼 정렬
-			var withColumnNames = [];
-			var withColumnTypes = [];
-			
-			sortWithColumn.forEach(function(columnName, idx) {
-				if (sortableColumnList.some(function(info){ return info.name === columnName })) {
-					withColumnNames.push(columnName);
-					withColumnTypes.push(sortWithColumnType[idx]);
-				}
-			});
+			var isDefaultSort = 'sortKey' === column.columnName;
+
+			if (isDefaultSort && ('undefined' === typeof gridOptions.sortColumn || null !== sortColumnName)) {
+				return {
+					sortColumnNameList: sortColumnNameList,
+					sortColumnTypeList: sortColumnTypeList
+				};
+			}
+
+			if (0 < gridOptions.columns.filter(function(column) { return column.sortable }).length) {
+				var columnInfo = gridOptions.columns.filter(function(columnInfo) {
+					if (isDefaultSort) {
+						return gridOptions.sortColumn === columnInfo.name;
+					} else {
+						return columnInfo.name === column.columnName;
+					}					
+				})[0];
 				
-			//merge
-			sortColumnNameList.push(stdColName);			
-			sortColumnTypeList.push(stdColType);
-			
-			sortColumnNameList = sortColumnNameList.concat(withColumnNames);
-			sortColumnTypeList = sortColumnTypeList.concat(withColumnTypes.map(function(withSortType) {
-				return (stdSortColType ? 'asc' : 'desc') === withSortType
-			}));
-			
-			return { sortColumnNameList : sortColumnNameList, sortColumnTypeList : sortColumnTypeList };
+				var name = columnInfo.name;
+				var sortingType = columnInfo.sortingType;
+				var sortWithColumn = columnInfo.sortWithColumn;
+				var sortWithColumnType = columnInfo.sortWithColumnType;
+
+				sortColumnNameList.push(name);
+				sortColumnTypeList.push(isDefaultSort ? (sortingType ? 'asc' === sortingType : true) : column.ascending);
+
+				var isReverse = isDefaultSort
+					? false
+					: ('undefined' === typeof sortingType ? true : 'asc' === sortingType ? true : false) !== sortColumnTypeList[0];
+
+				if (sortWithColumn) {
+					sortWithColumn.forEach(function(sortWithColumnName, idx) {
+						sortColumnNameList.push(sortWithColumnName);
+
+						var ascending = sortWithColumnType && sortWithColumnType[idx] ? 'asc' === sortWithColumnType[idx] : true;
+
+						if (isReverse) ascending = !ascending;
+
+						sortColumnTypeList.push(ascending);
+					});
+				}
+			}
+
+			return {
+				sortColumnNameList: sortColumnNameList,
+				sortColumnTypeList: sortColumnTypeList
+			};		
 		}
 	}
 

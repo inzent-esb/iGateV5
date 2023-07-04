@@ -161,15 +161,11 @@
 		<header class="sub-bar">
 			<h3 class="sub-bar-text"><fmt:message>head.errorInfo</fmt:message></h3>
 		</header>
-		<div class="row frm-row">
+		<div class="row frm-row" style="margin-bottom: 0">
 			<div class="col-lg-6">
 				<div class="form-group">
 					<label class="control-label"><fmt:message>head.exception.code</fmt:message></label>
 					<input type="text" class="form-control view-disabled" v-model="object.exceptionCode" disabled>
-				</div>
-				<div class="form-group">
-					<label class="control-label"><fmt:message>head.exception.message</fmt:message></label>
-					<input type="text" class="form-control view-disabled" v-model="object.exceptionMessage" disabled>
 				</div>
 			</div>
 			<div class="col-lg-6">
@@ -177,6 +173,14 @@
 					<label class="control-label"><fmt:message>head.timeoutYn</fmt:message></label>
 					<input type="text" v-if="object.timeoutYn==='Y'" class="form-control view-disabled" value="<fmt:message>head.yes</fmt:message>" disabled> 
 					<input type="text" v-else class="form-control view-disabled"  class="form-control view-disabled" value="<fmt:message>head.no</fmt:message>" disabled>
+				</div>
+			</div>
+		</div>
+		<div class="row frm-row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<label class="control-label"><fmt:message>head.exception.message</fmt:message></label>
+					<textarea class="form-control view-disabled" v-model="object.exceptionMessage" disabled style="height: 45px;"></textarea>
 				</div>
 			</div>
 		</div>

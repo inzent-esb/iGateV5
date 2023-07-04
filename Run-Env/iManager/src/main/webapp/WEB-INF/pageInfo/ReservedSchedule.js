@@ -261,7 +261,7 @@ const info = {
 		totalCntUrl: '/api/entity/reservedSchedule/count',
 		paging: {
 			isUse: true,
-			side: "server"
+			side: "server"		
 		},
 		options: {
 			rowHeaders: ["checkbox"],

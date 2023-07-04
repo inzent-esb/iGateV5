@@ -137,7 +137,6 @@
 			    downloadBtn: viewer,
 			    totalCnt: viewer,
 			    currentCnt: viewer,
-			    importDataBtn: viewer
 			});
 
 			createPageObj.mainConstructor();
@@ -448,11 +447,6 @@
 							            	vmList.totalCnt = info.totalCnt;
 							            });
 							        },
-							        importData: function() {
-							        	vmList.makeGridObj.importData(this.object, function(info) {
-							        		vmList.currentCnt = info.currentCnt;
-							        	});			        	
-							        },
 			                        initSearchArea: function (searchCondition) {
 			                            if (searchCondition) {
 			                                for (var key in searchCondition) {
@@ -515,9 +509,6 @@
 			                        initSearchArea: function () {
 			                            window.vmSearch.initSearchArea();
 			                        },
-			                        importData: function() {
-							        	window.vmSearch.importData();
-							        },
 			                        downloadFile: function () {
 			                        	downloadFileFunc({ 
 						        			url : '/api/entity/interface/download',  
@@ -535,7 +526,10 @@
 			    			            totalCntUrl: '/api/entity/interface/count',
 			    			    		paging: {
 			    			    			isUse: true,
-			    			    			side: "server"
+			    			    			side: "server",
+			    			    			setCurrentCnt: function(currentCnt) {
+			    			    			    this.currentCnt = currentCnt
+			    			    			}.bind(this)			    			    			
 			    			    		},			                        	
 			                            columns: [
 			                                {

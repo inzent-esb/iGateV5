@@ -1113,3 +1113,11 @@ span.ellipsis {
 	height: 100%; 
 	border: none;
 }
+
+.tui-first, .tui-last {
+	display: none !important; 
+} 
+
+.tui-prev {
+	border: 1px solid #ddd !important;
+}

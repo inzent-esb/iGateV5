@@ -87,7 +87,6 @@ const info = {
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true, dumpUrl: '/api/entity/javaProject/dump' }
 			]
 		},
 		tabList: [

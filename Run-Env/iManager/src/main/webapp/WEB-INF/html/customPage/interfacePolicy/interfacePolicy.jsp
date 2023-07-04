@@ -76,7 +76,6 @@
 			    addBtn: editor,
 			    totalCnt: viewer,
 			    currentCnt: viewer,
-			    importDataBtn: viewer
 			});
 
 			createPageObj.mainConstructor();
@@ -201,11 +200,6 @@
 					            	vmList.totalCnt = info.totalCnt;
 					            });
 					        },
-					        importData: function() {
-					        	vmList.makeGridObj.importData(this.object, function(info) {
-					        		vmList.currentCnt = info.currentCnt;
-					        	});			        	
-					        },
 			                initSearchArea: function (searchCondition) {
 			                    if (searchCondition) {
 			                        for (var key in searchCondition) {
@@ -256,9 +250,6 @@
 					        initSearchArea: function () {
 					            window.vmSearch.initSearchArea();
 					        },
-					        importData: function() {
-					        	window.vmSearch.importData();
-					        }
 					    }),
 			            mounted: function () {
 			                this.makeGridObj = getMakeGridObj();
@@ -269,7 +260,10 @@
 					            totalCntUrl: '/api/entity/interfacePolicy/count',
 					    		paging: {
 					    			isUse: true,
-					    			side: "server"
+					    			side: "server",
+					    			setCurrentCnt: function(currentCnt) {
+					    			    this.currentCnt = currentCnt
+					    			}.bind(this)					    			
 					    		},
 			                    columns: [
 			                        {
