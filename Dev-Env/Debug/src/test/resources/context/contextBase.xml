@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"
+	default-lazy-init="false">
+
+	<!-- Data Sources -->
+	<jee:jndi-lookup id="metaDataSource" jndi-name="#{systemProperties['igate.datasource.meta']?:'igateMeta'}" />
+	<jee:jndi-lookup id="logDataSource" jndi-name="#{systemProperties['igate.datasource.log']?:'igateLog'}" />
+
+	<!-- Hibernate Session -->
+	<bean id="metaSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="metaDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">#{systemProperties['igate.dialect.meta']}</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.jdbc.batch_size">-1</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.inzent.imanager.repository.meta</value>
+				<value>com.inzent.igate.repository.meta</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="logSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="logDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">#{systemProperties['igate.dialect.log']}</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.jdbc.batch_size">-1</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.inzent.igate.repository.log</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="logBatchSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="logDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">#{systemProperties['igate.dialect.log']}</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.jdbc.batch_size">#{systemProperties['igate.datasource.log.batchSize']?:'1000'}</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.inzent.igate.repository.log</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Hibernate Template -->
+	<bean id="metaTemplate" class="com.inzent.imanager.dao.ExtendedHibernateTemplate">
+		<property name="sessionFactory" ref="metaSessionFactory" />
+	</bean>
+
+	<bean id="logTemplate" class="com.inzent.imanager.dao.ExtendedHibernateTemplate">
+		<property name="sessionFactory" ref="logSessionFactory" />
+	</bean>
+
+	<bean id="logBatchTemplate" class="com.inzent.imanager.dao.ExtendedHibernateTemplate">
+		<property name="sessionFactory" ref="logBatchSessionFactory" />
+	</bean>
+
+	<!-- Hibernate Transaction Manager -->
+	<bean id="metaTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="metaSessionFactory" />
+		<qualifier value="metaTransaction" />
+	</bean>
+
+	<bean id="logTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="logSessionFactory" />
+		<qualifier value="logTransaction" />
+	</bean>
+
+	<bean id="logBatchTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="logBatchSessionFactory" />
+		<qualifier value="logBatchTransaction" />
+	</bean>
+
+	<!-- Hibernate Transaction Template -->
+	<bean id="metaTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<constructor-arg ref="metaTransactionManager" />
+	</bean>
+
+	<bean id="logTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<constructor-arg ref="logTransactionManager" />
+	</bean>
+
+	<bean id="logBatchTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<constructor-arg ref="logBatchTransactionManager" />
+	</bean>
+
+	<context:annotation-config />
+
+	<bean id="mbeanServer" class="java.lang.management.ManagementFactory" factory-method="getPlatformMBeanServer" />
+
+	<bean class="com.inzent.igate.context.ScaleOutInitializer">
+		<property name="server" ref="mbeanServer" />
+	</bean>
+	
+	<bean id="messageSource" class="com.inzent.igate.util.message.MessageSource" />
+
+	<bean class="com.inzent.imanager.message.MessageGenerator" />
+
+	<bean id="iGateInstance" class="com.inzent.igate.context.IGateRuntimeInstance" />
+
+	<bean class="com.inzent.igate.util.logging.LogWatchDog" />
+
+</beans>

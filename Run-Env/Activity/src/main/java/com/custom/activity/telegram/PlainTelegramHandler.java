@@ -68,7 +68,11 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
     super.initializeInterfaceRequest(adapterParameter) ;
 
     // 회기 테트스를 위한 코드
-    transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
+    if(!adapterParameter.getAdapter().getAdapterId().startsWith(PRE_FIX_STD) || 
+        !isInterfaceResponseSync(adapterParameter, getMessageId(adapterParameter, true)))
+    {      
+      transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
+    }
   }
 
   @Override
@@ -106,6 +110,6 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   @Override
   protected void analyze(AdapterParameter adapterParameter, boolean request) throws IGateException
   {
-	  transactionContextBean.setValue(LANG_CD, StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()), LANG_CD_FIELD_OFFSET, LANG_CD_FIELD_LENGTH, adapterParameter.getAdapter().getCharset()) ) ;
+	  //transactionContextBean.setValue(LANG_CD, StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()), LANG_CD_FIELD_OFFSET, LANG_CD_FIELD_LENGTH, adapterParameter.getAdapter().getCharset()) ) ;
   }
 }

@@ -60,8 +60,8 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
     adapterParameter.setConverted(object) ;
 
     header = ((JsonNode) (object instanceof ValueObject ? ((ValueObject) object).get(HttpConstants.BODY) : object)).path(HEADER_ID).path(STANDARD_HEADER_ID) ;
-    
-    transactionContextBean.setValue(LANG_CD, header.path(LANG_CD_FIELD).asText()) ;
+        
+    //transactionContextBean.setValue(LANG_CD, header.path(LANG_CD_FIELD).asText()) ;
   }
 
   @Override
@@ -89,7 +89,11 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
     super.initializeInterfaceRequest(adapterParameter) ;
 
     // 회기 테트스를 위한 코드
-    transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
+    if(!adapterParameter.getAdapter().getAdapterId().startsWith(PRE_FIX_STD) || 
+        !isInterfaceResponseSync(adapterParameter, getMessageId(adapterParameter, true)))
+    {      
+      transactionContextBean.setValue(IP_ADDRESS, adapterParameter.getRemoteAddr()) ;
+    }
   }
 
   @Override
