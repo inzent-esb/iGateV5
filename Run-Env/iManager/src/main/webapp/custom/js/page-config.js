@@ -1739,7 +1739,7 @@ function getMakeGridObj() {
 	
 	function makeGridObj() {
 		this.setConfig = function (options, paramIsModalGrid, formatterData) {
-			options = constants.grid.gridOptionFunc(options);
+			options = constants.grid.gridOptionFunc(options, paramIsModalGrid);
 			
 			searchUrl = options.searchUrl;
 			totalCntUrl = options.totalCntUrl;

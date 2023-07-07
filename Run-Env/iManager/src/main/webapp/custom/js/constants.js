@@ -20,7 +20,7 @@ var constants = {
 	isUseTheme: true,
 	
 	grid : {
-		gridOptionFunc: function(gridOptions) {
+		gridOptionFunc: function(gridOptions, isModal) {
 			//var url = gridOptions.url? gridOptions.url : gridOptions.searchUrl;
 
 			/*
