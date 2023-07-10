@@ -255,10 +255,7 @@ const info = {
 	detail: {
 		pk: ["pk.interfaceAdapterId", "pk.serviceAdapterId"],
 		controlParams: function (detailData) {
-			return {
-				"pk.interfaceAdapterId": detailData["pk.interfaceAdapterId"],
-				"pk.serviceAdapterId": detailData["pk.serviceAdapterId"]
-			};
+			return detailData;
 		},
 		button: {
 			list: [
