@@ -5,12 +5,9 @@ import javax.persistence.Table ;
 
 import org.hibernate.annotations.Proxy ;
 
-import com.inzent.imanager.repository.ReverseOrder ;
-
 @Entity
 @Table(name = "IGT_EXCEPTION_LOG")
 @Proxy(lazy = false)
-@ReverseOrder
 public class ExceptionLog extends AbstractExceptionLog
 {
   private static final long serialVersionUID = 2068016941595993412L ;

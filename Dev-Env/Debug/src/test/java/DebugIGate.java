@@ -38,7 +38,7 @@ public class DebugIGate
   @Test
   public void degugInterface() throws Exception
   {
-    AdapterParameter adapterParameter = DebugUtils.executeInterface("I_TER", DebugUtils.getRequestData("IF_TER_COM_0010"), true) ;
+    AdapterParameter adapterParameter = DebugUtils.executeInterface("I_TER", DebugUtils.getRequestData("IF_TER_COM_0010"), null) ;
 
     MessageConverter messageConverter = MessageBeans.SINGLETON.createMessageConverter(adapterParameter.getAdapter(), adapterParameter.getResponseData()) ;
 
