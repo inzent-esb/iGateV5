@@ -555,8 +555,9 @@ const info = {
 		},
 		tabList: [
 			{
-				type: "basic",
+				type: "bundle",
 				label: this.$t("head.basic.info"),
+				url: "/fileRepository/DetailBasic",
 				content: [
 					[
 						[
@@ -571,13 +572,13 @@ const info = {
 								formatter: function (value) {
 									switch (value) {
 										case "R": {
-											return "Recv";
+											return this.$t("head.recv");
 										}
 										case "S": {
-											return "Send";
+											return this.$t("head.send");
 										}
 									}
-								}
+								}.bind(this)
 							},
 							{
 								type: "text",

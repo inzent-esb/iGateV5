@@ -41,7 +41,10 @@ function HttpReq(url) {
                         } else {
                             window._alert({
                             	type: 'warn',
-                            	message: result.error.map(function(info) { return  info.message || info.className; }).join(',')
+                            	isXSSMode: false,
+                            	message: result.error.map(function(info) { 
+                            		return info.className ?  info.className + '<hr>' + info.message : info.message
+                            	}).join(',')
                             });                        	
                         }
                         

@@ -78,7 +78,6 @@
 			createPageObj.setMainButtonList({
 				totalCnt: viewer,
 			    currentCnt: viewer,
-			    importDataBtn: viewer,
 			    newTabBtn: viewer,
 			    searchInitBtn: viewer,
 			    reorderBtn: editor,
@@ -255,11 +254,6 @@
 						            	vmList.totalCnt = info.totalCnt;
 						            });
 						        },
-						        importData: function() {
-						        	vmList.makeGridObj.importData(this.object, function(info) {
-						        		vmList.currentCnt = info.currentCnt;
-						        	});			        	
-						        },
 		                        initSearchArea: function (searchCondition) {
 		                            if (searchCondition) {
 		                                for (var key in searchCondition) {
@@ -301,9 +295,6 @@
 						        initSearchArea: function () {
 						            window.vmSearch.initSearchArea();
 						        },
-						        importData: function() {
-						        	window.vmSearch.importData();
-						        },
 								reorder: function() {
 									new HttpReq('/api/entity/interfaceRestriction/reorder').update(null, function(result) {
 										if ('ok' === result.result) window.vmSearch.search();
@@ -319,7 +310,10 @@
 						            totalCntUrl: '/api/entity/interfaceRestriction/count',
 						    		paging: {
 						    			isUse: true,
-						    			side: "server"
+						    			side: "server",
+						    			setCurrentCnt: function(currentCnt) {
+						    			    this.currentCnt = currentCnt
+						    			}.bind(this)						    			
 						    		},
 		                            columns: [
 		                                {

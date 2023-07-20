@@ -19,26 +19,34 @@ var ResultImngObj = {
 			var object = $('.collapse-item-origin').clone();
 			object.attr('class', 'collapse-item');
 
-			var field = '';
+			var message = '';
 
-			if (item.field) field = 'Field(' + item.field + ') : ';
+			if (item.className)  message = item.className;
+			else if (item.field) message = 'Field(' + item.field + ') : ' + item.message;
+			else 				 message = item.message;
 
 			object.children('button').children('i.iconb-compt.mr-2').removeClass().addClass('iconb-danger mr-2');
 			object
 				.children('button')
 				.children('span')
-				.text(field + item.message);
+				.text(message);
 
-			if (item.stackTrace) {
-				object.children('button').attr('data-target', '#collapseResult' + index);
-				object
-					.children('div')
-					.attr('id', 'collapseResult' + index)
-					.children('.collapse-content')
-					.append($('<pre/>').text(item.stackTrace));
-			} else {
-				object.children('.collapse').remove();
-			}
+			var collapseMsg = '';
+			
+			if (item.className)       collapseMsg = item.message;
+			else if (item.response)   collapseMsg = item.response;
+			else if (item.stackTrace) collapseMsg = item.stackTrace;
+			
+			object.children('button').attr('data-target', '#collapseResult' + index);
+			object
+				.children('div')
+				.attr('id', 'collapseResult' + index)
+				.children('.collapse-content')
+				.append($('<pre/>').text(collapseMsg));
+
+			if(collapseMsg.length === 0) {
+	            object.find('.collapse .collapse-content').remove();
+	        }
 
 			$('#accordionResult').append(object);
 		});
@@ -75,16 +83,20 @@ var ResultImngObj = {
 						.children('span')
 						.text(item.instanceId + ' was failed.');
 				}
-
-				if (item.response) {
-					object.children('button').attr('data-target', '#collapseResult' + index);
-					object
-						.children('div')
-						.attr('id', 'collapseResult' + index)
-						.children('.collapse-content')
-						.append($('<pre/>').text(item.response));
-				} else {
-					object.children('.collapse').remove();
+				
+				var message = '';
+				
+				if(item.response) message = item.response;
+				
+				object.children('button').attr('data-target', '#collapseResult' + index);
+				object
+					.children('div')
+					.attr('id', 'collapseResult' + index)
+					.children('.collapse-content')
+					.append($('<pre/>').text(item.response));
+				
+				if (message.length === 0) {
+					object.find('.collapse .collapse-content').remove();
 				}
 
 				$('#accordionResult').append(object);
@@ -184,7 +196,7 @@ var SaveImngObj = {
 			
 			if('DELETE' !== data._method) panelOpen('done');
 			
-			if (callback) callback();
+			if (callback) callback(result);
 		};
 
 		var httpReq = new HttpReq(uri);
@@ -229,7 +241,7 @@ var SaveImngObj = {
 
 		if (vmMain.saving) vmMain.saving();
 
-		this.insertSubmit(object, message);
+		this.insertSubmit(object, message, callback);
 	},
 
 	update: function (message, callback) {
@@ -242,7 +254,7 @@ var SaveImngObj = {
 
 		if (vmMain.saving) vmMain.saving();
 
-		this.updateSubmit(object, message);
+		this.updateSubmit(object, message, callback);
 	},
 
 	remove: function (confirm, message, callback) {

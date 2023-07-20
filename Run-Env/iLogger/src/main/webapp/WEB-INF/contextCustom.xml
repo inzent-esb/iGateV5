@@ -16,7 +16,7 @@
 
 	<bean class="com.inzent.igate.tracelog.CryptoDataSerializer" />
 
-	<bean class="com.custom.tracelog.CustomTraceLogStatisticsBean" />
+	<bean id="traceLogStatistics" class="com.custom.tracelog.CustomTraceLogStatisticsBean" />
 
 	<bean class="com.custom.tracelog.CustomTraceLogDbFile" />
 

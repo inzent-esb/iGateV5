@@ -67,7 +67,6 @@
 		    searchInitBtn: true,
 		    totalCnt: true,
 		    currentCnt: true,
-		    importDataBtn: true
 		});
 
 		createPageObj.mainConstructor();
@@ -98,11 +97,6 @@
 		            	vmList.totalCnt = info.totalCnt;
 		            });
 	            },
-	            importData: function() {
-		        	vmList.makeGridObj.importData(this.object, function(info) {
-		        		vmList.currentCnt = info.currentCnt;
-		        	});			        	
-		        },
 	            initSearchArea: function () {
 	                this.object.pageSize = 10;
 	                this.object.connectorId = null;
@@ -142,9 +136,6 @@
 	            initSearchArea: function () {
 	                vmSearch.initSearchArea();
 	            },
-	            importData: function() {
-		        	vmSearch.importData();
-		        }
 	        },
 	        mounted: function () {
 	            this.makeGridObj = getMakeGridObj();
@@ -155,7 +146,10 @@
 		            totalCntUrl: '/api/entity/connector/count',
 		            paging: {
 		    			isUse: true,
-		    			side: "server"
+		    			side: "server",
+		    			setCurrentCnt: function(currentCnt) {
+		    			    this.currentCnt = currentCnt
+		    			}.bind(this)		    			
 		    		},
 	                columns: [
 	                    {

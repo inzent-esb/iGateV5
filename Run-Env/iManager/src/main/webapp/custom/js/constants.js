@@ -20,15 +20,47 @@ var constants = {
 	isUseTheme: true,
 	
 	grid : {
-		// only server type
-		pageOptions: {
-			notice: {
-				limit: 100,
-				ascending: false
-			},
-			default: {
-				limit: 100,
-				ascending: false			
+		gridOptionFunc: function(gridOptions, isModal) {
+			//var url = gridOptions.url? gridOptions.url : gridOptions.searchUrl;
+
+			/*
+			if ('/api/entity/record/search' === url) {
+				gridOptions.paging.side = 'serverPaging';
+				gridOptions.url = '/api/entity/record/page';
+				
+				gridOptions.options.columns[0].sortable = true;
+				gridOptions.options.columns[0].sortingType = "desc";
+				
+				gridOptions.options.columns[2].sortable = true;
+				gridOptions.options.columns[2].sortingType = "desc";
+			}
+			*/
+			
+			/*
+			if ('/api/entity/serviceRecognize/search' === url) {
+				gridOptions.paging.side = 'serverPaging';
+				gridOptions.searchUrl = '/api/entity/serviceRecognize/page';
+				
+				gridOptions.columns[1].sortable = true;
+				gridOptions.columns[1].sortingType = "desc";
+				
+				gridOptions.sortColumn = "pk.telegramValue";
+			}
+			*/
+			
+			return gridOptions;
+		},
+		pageOptionFunc: function(searchUrl) {
+			var limit = 100;
+			var ascending = true;
+			
+			if ('/api/entity/metaHistory/search' === searchUrl || '/api/entity/exceptionLog/search' === searchUrl || '/api/entity/notice/search' === searchUrl) {
+				ascending = false;
+			}
+			
+			return {
+				limit: limit,
+				ascending: ascending
 			}
 		},
 		maxListCount: {

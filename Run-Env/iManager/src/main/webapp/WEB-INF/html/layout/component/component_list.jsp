@@ -44,8 +44,7 @@
 			<a id="updateCancelBtn"	href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="updateCancel" style="display: none;" title="<fmt:message>head.cancel</fmt:message>"><fmt:message>head.cancel</fmt:message></a>
 			<a id="searchInitBtn" 	href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="initSearchArea" style="display: none;" title="<fmt:message>head.initialize</fmt:message>"><i class="icon-reset"></i><span class="hide"><fmt:message>head.initialize</fmt:message></span></a>
 			<a id="addBtn"		    href="javascript:void(0);" class="btn btn-m btn-primary"  				v-on:click="goSavePanel" style="display: none;" title="<fmt:message>head.insert</fmt:message>"><i class="icon-plus"></i><span class="hide"><fmt:message>head.insert</fmt:message></span></a>
-			<a id="reorderBtn"      href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="reorder" style="display: none;" 	title="<fmt:message>igate.transactionRestriction.reOrder</fmt:message>"><fmt:message>igate.transactionRestriction.reOrder</fmt:message></a>
-			<a id="importDataBtn"   href="javascript:void(0);" class="btn btn-m"						    v-on:click="importData" style="display: none;" v-if="null !== currentCnt && null !== totalCnt && currentCnt !== totalCnt"><i class="icon-list"></i><span class="hide"><fmt:message>head.importData</fmt:message></span></a>			
+			<a id="reorderBtn"      href="javascript:void(0);" class="btn btn-m" 		      				v-on:click="reorder" style="display: none;" 	title="<fmt:message>igate.transactionRestriction.reOrder</fmt:message>"><fmt:message>igate.transactionRestriction.reOrder</fmt:message></a>			
 		</div>
 	</div>
 

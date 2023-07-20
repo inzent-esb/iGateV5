@@ -89,8 +89,18 @@ function getUUID() {
 }
 
 function removeStorage() {
-	localStorage.clear();
-	sessionStorage.clear();
+	clearStorage(localStorage, function(key) {
+		return 'ckSaveUserId' === key || 'saveUserId' === key;
+	});
+	
+	clearStorage(sessionStorage);
+}
+
+function clearStorage(storage, continueFunc) {
+	for (var key in storage) {
+		if (continueFunc && continueFunc(key)) continue;
+		storage.removeItem(key);
+	}
 }
 
 function getFileSize(fileSize){

@@ -48,7 +48,7 @@
         <Column label="HttpType" align="center" width="100" name="FieldHttpType" editType="select" availableValue="none= ,uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="none" extened="true"/>
         <Column label="XmlType" align="center" width="100" name="SchemaType" editType="select" availableValue="none= ,attribute=Attribute,element=Element,cdata=CData,elementcdata=Elementcdata" availableDefaultValue="none" extened="true"/>
         <Column label="XmlName" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
-        
+        <Column label="FieldJsonName" align="left" width="100" name="FieldJsonName" editType="edit" extened="true"/>
         <Column label="HttpQueryName" align="left" width="100" name="FieldHttpName" editType="edit" extened="true"/>
         <!-- 확장속성 필요 시 주석해제
         <Column label="XmlNS" align="left" width="100" name="xmlns" editType="edit" extened="true"/>

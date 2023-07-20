@@ -37,7 +37,7 @@ const info = {
 		totalCntUrl: "/api/entity/notice/count",
 		paging: {
 			isUse: true,
-			side: "client"
+			side: "server"
 		},
 		options: {
 			columns: [
@@ -45,7 +45,6 @@ const info = {
 					header: this.$t("igate.notice.title"),
 					name: "noticeTitle",
 					width: "5%",
-					sortable: true,
 				},
 				{
 					header: this.$t("igate.notice.writer"),
@@ -57,15 +56,11 @@ const info = {
 					name: "pk.createTimestamp",
 					width: "30%",
 					align: "center",
-					sortable: true,
-					sortWithColumn: ['noticeTitle'],
-					sortWithColumnType: ['desc'],
 					formatter: function (obj) {
 						return !obj.value? obj.value : obj.value.substring(0, 19);
 					}
 				}
 			],
-			sortColumn: "pk.createTimestamp",
 		},
 	},
 	detail: {
