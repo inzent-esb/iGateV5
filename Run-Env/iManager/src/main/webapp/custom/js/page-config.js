@@ -648,8 +648,9 @@ function getCreatePageObj() {
 				}			
 				
 				if (detailContentObj.clickEvt) {
-					detailContentObj.object.children('.input-group').children('input[type=text]').attr({ 'v-on:click': 'clickEvt(' + String(detailContentObj.clickEvt) + ')' });
-					detailContentObj.object.children('.input-group').children('input[type=text]').addClass('underlineTxt');
+					detailContentObj.object.children('.input-group').children('input[type=text]').wrap('<span style="flex: 1 1 auto;"></span>')
+					detailContentObj.object.children('.input-group').children('span').attr({ 'v-on:click': 'clickEvt(' + String(detailContentObj.clickEvt) + ')' });
+					detailContentObj.object.children('.input-group').children('span').children('input[type=text]').addClass('underlineTxt');
 					detailContentObj.object.children('.input-group').css({ cursor: 'pointer' });						
 				}
 			}

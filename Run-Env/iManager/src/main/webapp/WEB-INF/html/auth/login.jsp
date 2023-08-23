@@ -9,6 +9,7 @@
 </head>
 <body>	
 	<div id="login" class="login wrap" data-ready>
+		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>		
 		<header id="hd">
 			<h1 class="logo text-hide">
 				<a href="javascript:void(0);">
