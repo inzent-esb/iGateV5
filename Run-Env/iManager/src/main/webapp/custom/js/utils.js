@@ -416,6 +416,8 @@ function uploadFileFunc(uploadObj) {
 
 function licExpirationModal() {
 	new HttpReq("/api/page/licenseExpiration").read(null, function(result) {
+		if(0 === result.object.deadlineInfo.length) return;
+		
 		var hostIdRegExp = getRegExpInfo('id');
 		var today = moment().format('YYYY-MM-DD 00:00:00');
 		var maxDate = moment().add(result.object.licExpSearchDay, 'd').format('YYYY-MM-DD 23:59:59');
