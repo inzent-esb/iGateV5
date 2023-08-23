@@ -222,7 +222,13 @@ const info = {
 							this.$t("common.privilege") +
 							" " +
 							this.$t("head.id"),
-						readonly: true
+						readonly: true,
+						clickEvt: function (component) {
+							openNewTab('303050', function() {
+								localStorage.removeItem("searchObj");
+								localStorage.setItem("searchObj", JSON.stringify({"privilegeId": component.getData()['pk.privilegeId'] }));
+							});
+						}
 					}
 				]
 			}

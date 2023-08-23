@@ -192,7 +192,12 @@
 			                        type: 'textEvt',
 			                        mappingDataInfo: 'object.transactionId',
 			                        name: '<fmt:message>igate.exceptionLog.transactionId</fmt:message>',
-			                        clickEvt: 'clickTransactionId({"transactionId" : object.transactionId})',
+			                        clickEvt: function() {
+			                        	openNewTab('103020', function() {	
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"transactionId": window.vmMain.object.transactionId}));
+			                        	});
+			                        },
 			                        regExpType: 'id'
 			                    },
 			                    {
@@ -205,13 +210,25 @@
 			                        type: 'text',
 			                        mappingDataInfo: 'object.interfaceId',
 			                        name: '<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>',
-			                        regExpType: 'id'
+			                        regExpType: 'id',
+			                        clickEvt: function() {
+			                        	openNewTab('101050', function() {	
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"interfaceId": window.vmMain.object.interfaceId}));
+			                        	}); 
+			                        }
 			                    },
 			                    {
 			                        type: 'text',
 			                        mappingDataInfo: 'object.serviceId',
 			                        name: '<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>',
-			                        regExpType: 'id'
+			                        regExpType: 'id',
+			                        clickEvt: function() {
+			                        	openNewTab('101030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"serviceId": window.vmMain.object.serviceId}));
+			                        	});
+			                        }
 			                    }
 			                ]
 			            },
@@ -222,19 +239,37 @@
 			                        type: 'text',
 			                        mappingDataInfo: 'object.adapterId',
 			                        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
-			                        regExpType: 'id'
+			                        regExpType: 'id',
+			                        clickEvt: function() {
+			                        	openNewTab('202030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmMain.object.adapterId}));
+			                        	});
+			                        }
 			                    },
 			                    {
 			                        type: 'text',
 			                        mappingDataInfo: 'object.connectorId',
 			                        name: '<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>',
-			                        regExpType: 'id'
+			                        regExpType: 'id',
+			                        clickEvt: function() {
+			                        	openNewTab('202020', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"connectorId": window.vmMain.object.connectorId}));
+			                        	});
+			                        }
 			                    },
 			                    {
 			                        type: 'text',
 			                        mappingDataInfo: 'object.activityId',
 			                        name: '<fmt:message>igate.activity</fmt:message> <fmt:message>head.id</fmt:message>',
-			                        regExpType: 'id'
+			                        regExpType: 'id',
+			                        clickEvt: function() {
+			                        	openNewTab('102060', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"activityId": window.vmMain.object.activityId}));
+			                        	});
+			                        }
 			                    }
 			                ]
 			            },
@@ -597,7 +632,10 @@
 			        }
 			    },
 			    methods: {
-			        loaded: function () {
+			    	clickEvt: function(strFunc) {
+			    		strFunc();
+			    	},
+			    	loaded: function () {
 			            window.vmExceptionStack.object.exceptionStack = this.object.exceptionStack;
 			        },
 			        goDetailPanel: function () {
@@ -636,12 +674,6 @@
 			                this.object.connectorId = null;
 			                this.object.activityId = null;
 			            }
-			        },
-			        clickTransactionId: function (transactionInfo) {
-			            localStorage.setItem('searchObj', JSON.stringify(transactionInfo));
-			            localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['100000', '103000', '103020']));
-
-			            window.open(location.href);
 			        }
 			    }
 			});

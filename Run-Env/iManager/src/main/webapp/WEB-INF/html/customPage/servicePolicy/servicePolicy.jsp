@@ -98,7 +98,13 @@
 			                            callBackFuncName: 'setSearchAdapterId'
 			                        },
 			                        isPk: true,
-			                        regExpType: 'id'
+			                        regExpType: 'id',
+			                        clickEvt: function() {
+			                        	openNewTab('202030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmMain.object.pk.adapterId}));
+			                        	}); 
+			                        }
 			                    },
 			                    {
 			                        type: 'select',
@@ -121,7 +127,13 @@
 			                            vModel: 'object.activityId',
 			                            callBackFuncName: 'setSearchActivityId'
 			                        },
-			                        isRequired: true
+			                        isRequired: true,
+			                        clickEvt: function() {
+			                        	openNewTab('102060', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"activityId": window.vmMain.object.activityId}));
+			                        	}); 
+			                        }
 			                    }
 			                ]
 			            }
@@ -317,6 +329,9 @@
 			            }
 			        },
 			        methods: {
+			        	clickEvt: function(strFunc) {
+				    		strFunc();
+				    	},
 			            inputEvt: function (info) {
 			                setLengthCnt.call(this, info);
 			            },

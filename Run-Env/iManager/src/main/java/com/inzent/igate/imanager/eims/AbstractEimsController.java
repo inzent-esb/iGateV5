@@ -193,8 +193,10 @@ public abstract class AbstractEimsController
                 interfaceRecognizes.add(interfaceRecognize) ;
 
                 InterfaceRecognize sourceInterfaceRecognize = interfaceRecognizeService.get(interfaceRecognize.getPk()) ;
-                if (null != sourceInterfaceRecognize)
+                if (null != sourceInterfaceRecognize) {
+                  interfaceRecognizeService.evict(sourceInterfaceRecognize);
                   interfaceRecognizeService.update(interfaceRecognize, sourceInterfaceRecognize) ;
+                }
                 else
                   interfaceRecognizeService.insert(interfaceRecognize) ;
 

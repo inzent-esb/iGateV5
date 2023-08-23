@@ -61,22 +61,22 @@ function getRegExpInfo(type) {
 }
 
 function setLengthCnt(info) {
-   var keyList = info.key.split('.').slice(1);
+	var keyList = info.key.split('').slice(0);
+	
+	var regExp = info.regExp;
+	var object = this.object? this.object : this;
+	var objectLetter = this.letter;
    
-   var regExp = info.regExp;
-   var object = this.object? this.object : this;
-   var objectLetter = this.letter;
-   
-   keyList.forEach(function(key, index) {
-      key = key.toString();
+	keyList.forEach(function(key, index) {
+		key = key.toString();
       
-      if(index !== keyList.length - 1) {
-         object = object[key];
-         objectLetter = objectLetter[key];
-      } else {      
-         object[key] = object[key]? object[key].replace(new RegExp(regExp, 'g'), '') : '';
-         objectLetter[key] = object[key]? object[key].length : 0;
-      }
+		if(index !== keyList.length - 1) {
+			object = object[key];
+			objectLetter = objectLetter[key];
+		} else {      
+			object[key] = object[key]? object[key].replace(new RegExp(regExp, 'g'), '') : '';
+			objectLetter[key] = object[key]? object[key].length : 0;
+		}
    });
 }
 
@@ -178,7 +178,8 @@ function makeGridOptions(gridOptions, formatterData) {
 			return [];
 		},
 		scrollX: false,
-		data: []
+		data: [],
+		usageStatistics: false
 	};
 	
 	options = $.extend(true, options, gridOptions);
@@ -389,8 +390,8 @@ function uploadFileFunc(uploadObj) {
             req.setRequestHeader('X-iManager-Method', 'POST');
             
             req.withCredentials = true;
-           
-            console.log(uploadData)
+            
+            console.log(uploadData);
             
             var formData = new FormData();
 			formData.enctype = 'multipart/form-data';
@@ -401,7 +402,7 @@ function uploadFileFunc(uploadObj) {
             req.onload = function (event) {
                 window.$stopSpinner();
                 
-                console.log(callback)
+                console.log(callback);
                 
                 if(callback) callback(req);
             };
@@ -411,4 +412,212 @@ function uploadFileFunc(uploadObj) {
 			return;
 		}
 	});
+}
+
+function licExpirationModal() {
+	new HttpReq("/api/page/licenseExpiration").read(null, function(result) {
+		var hostIdRegExp = getRegExpInfo('id');
+		var today = moment().format('YYYY-MM-DD 00:00:00');
+		var maxDate = moment().add(result.object.licExpSearchDay, 'd').format('YYYY-MM-DD 23:59:59');
+		
+		var modalHtml = '';
+		
+		modalHtml += '<div id="licExpirationCt">';
+		modalHtml += '	<div class="ct-header">';
+		modalHtml += '		<div id="collapse-filter" class="collapse collapse-filter">';
+		modalHtml += '			<div class="filter no-gutters">';
+		modalHtml += '				<div class="col">';
+		modalHtml += '					<label class="form-control-label reset">';
+		modalHtml += '						<b class="control-label">' + licenseId;
+		modalHtml += '							<span class="letterLength">({{letter.hostId}}/{{hostIdRegExp.maxLength}})</span>';
+		modalHtml += '						</b>';
+		modalHtml += '						<span style="cursor: auto;">';
+		modalHtml += '							<input type="text" id="hostId" v-model="object.hostId" placeholder="' + searchId + '" :maxlength="hostIdRegExp.maxLength" v-on:input="inputEvt" v-on:keyup.enter="search" class="form-control" style="width:80%;" afterload>';
+		modalHtml += '						</span>';
+		modalHtml += '						<i class="icon-close" v-on:click="resetId"></i>';
+		modalHtml += '					</label>';
+		modalHtml += '				</div>';
+		modalHtml += '				<div class="col">';
+		modalHtml += '					<label class="form-control-label">';
+		modalHtml += '						<b class="control-label">' + From + '</b>';
+		modalHtml += '						<input type="text" id="fromDateTime" v-model="object.fromDateTime" class="form-control reportrange-text" style="border-color: transparent;">';
+		modalHtml += '					</label>';
+		modalHtml += '				</div>';
+		modalHtml += '				<div class="col">';
+		modalHtml += '					<label class="form-control-label">';
+		modalHtml += '						<b class="control-label">' + To + '</b>';
+		modalHtml += '						<input type="text" id="toDateTime" v-model="object.toDateTime" class="form-control reportrange-text" style="border-color: transparent;">';
+		modalHtml += '					</label>';
+		modalHtml += '				</div>';
+		modalHtml += '				<div class="col" id="list-select">';
+		modalHtml += '					<label class="form-control-label">';
+		modalHtml += '						<b class="control-label">' + listCount + '</b>';
+		modalHtml += '						<input type="text" class="form-control view-disabled"  list="listCount" v-model="object.pageSize" v-on:input="pageSizeInput" v-on:keyup.enter="pageSizeEnter($event)" v-on:blur="pageSizeBlur">';
+		modalHtml += '						<datalist id="listCount">';
+		modalHtml += '							<option v-for="listCount in [10,100,1000]">{{listCount}}</option>';
+		modalHtml += '						</datalist>';
+		modalHtml += '					</label>';
+		modalHtml += '				</div>';
+		modalHtml += '				<div class="col-auto">';
+		modalHtml += '					<button type="button" class="btn btn-primary" v-on:click="search" style="z-index: 1">';
+		modalHtml += '						<i class="icon-srch"></i>' + searchBtn;
+		modalHtml += '					</button>';
+		modalHtml += '				</div>';
+		modalHtml += '			</div>';
+		modalHtml += '		</div>';
+		modalHtml += '	</div>';
+		modalHtml += '	<div class="ct-content">';
+		modalHtml += '		<div class="sub-bar">';
+		modalHtml += '			<div id="totalCnt" class="form-inline m-full" afterload> {{totalCountLabel(totalCnt)}} </div>';
+		modalHtml += '			<div class="ml-auto form-inline m-full">';
+		modalHtml += '				<a id="searchInitBtn" href="javascript:void(0);" title=' + initialize + ' v-on:click="initialize" class="btn btn-m">';
+		modalHtml += '					<i class="icon-reset"></i>';
+		modalHtml += '					<span class="hide">' + initialize + '</span>';
+		modalHtml += '				</a>';
+		modalHtml += '			</div>';
+		modalHtml += '		</div>';
+		modalHtml += '		<div class="table-responsive">';
+		modalHtml += '			<div id="licExpGrid"></div>';
+		modalHtml += '		</div>';
+		modalHtml += '	</div>';
+		modalHtml += '</div>';
+		
+		openModal({
+			name:'licenseExpiration',
+			title: licenseExpiration,
+			width: '1000px',
+			bodyHtml: modalHtml,
+			shownCallBackFunc: function() {
+				var vmLicenseExpiration = new Vue({
+					el: document.getElementById('licExpirationCt'),
+					data: {
+						object: {
+							hostId: null,
+							fromDateTime: today,
+							toDateTime: maxDate,
+							pageSize: 10
+						},
+						letter: {
+							hostId: 0,
+						},
+						totalCnt: 0,
+						makeGridObj: null,
+						hostIdRegExp: getRegExpInfo('id'),
+						searchData: result.object.deadlineInfo
+					},
+					mounted: function() {
+						this.initDatePicker();
+						
+						this.makeGridObj = getMakeGridObj();
+												
+				        this.makeGridObj.setConfig({
+							el: document.getElementById('licExpGrid'),
+							searchUrl: '/api/page/licenseExpiration',
+							data: result.object.deadlineInfo,
+							width: 'auto',
+							bodyHeight: 350,
+							paging: {
+				    			isUse: true,
+				    			side: "client",					    			
+				    		},
+				    		columns: [
+				                {
+				                	header: licenseId,
+	                            	name: 'id',
+	                            	width: '33%'
+				                },
+				                {
+				                	header: licenseExpiration,
+	                            	name: 'expiration',
+	                            	align: 'center',
+	                            	width: '33%',
+	                            	sortable: true,
+	                            	sortingType: 'desc',
+	                            	formatter: function(data) {
+	                            		return moment(data.value).format('YYYY-MM-DD 23:59:59');
+	                            	},                             
+				                },
+				                {
+				                	header: licenseDesc,
+	                            	name: 'desc',
+	                            	width: '33%'
+				                },
+				            ]
+						}, true) ;
+				        				        
+				        this.search();
+					},
+					methods: $.extend(true, {}, searchMethodOption, {
+				        pageSizeEnter: function (e) {
+				            e.target.blur();
+				            this.search();
+				        },
+				        pageSizeBlur: function () {
+				        	return (this.object.pageSize = 10 > this.object.pageSize ? 10 : this.object.pageSize);
+				        },
+				        inputEvt: function (info) {
+				        	this.object.hostId = $('#hostId').val().replace(new RegExp(hostIdRegExp.regExp, 'g'), '');					
+				            this.letter.hostId = this.object.hostId.length;
+				        },
+				        initDatePicker: function() {
+				        	var fromDateTime = $('#fromDateTime');
+	    		            var toDateTime = $('#toDateTime');
+
+	    		            fromDateTime.customDateRangePicker('from', function(fromDateTime) {
+	    		            	this.object.fromDateTime = fromDateTime;
+	    		                
+	    		                toDateTime.customDateRangePicker('to', function(toDateTime) {
+	    		                	this.object.toDateTime = toDateTime;
+	    		                }.bind(this), {
+	    		                    startDate: this.object.toDateTime,
+	    		                    maxDate: maxDate
+	    		                });		            		
+	    		            }.bind(this), {
+	    		                startDate: this.object.fromDateTime,
+	    		                maxDate: maxDate
+	    		            });
+				        },
+				    	search: function () {
+				    		var grid = this.makeGridObj.getSearchGrid();
+				    		var calcDate = 1000 * 60 * 60 * 24 ;
+				    						    						    		
+				    		var newGridList = JSON.parse(JSON.stringify(this.searchData.filter(function(info) {
+				    			var expiration = new Date(moment(info.expiration).format('YYYY-MM-DD 23:59:59'));				    							    			
+				    			var toDateInExp = (new Date(this.object.toDateTime).getTime() - expiration.getTime()) / calcDate;
+				    			var fromDateInExp = (expiration.getTime() - new Date(this.object.fromDateTime).getTime()) / calcDate;
+				    							   
+				    			return this.object.hostId ? (0 === info.id.indexOf(this.object.hostId)) && toDateInExp >= 0 && fromDateInExp >= 0
+				    										: toDateInExp >= 0 && fromDateInExp >= 0
+				    		}.bind(this))));
+				    		
+				    		this.totalCnt = newGridList.length ;
+				    						    				
+				    		grid.resetData(newGridList);
+				    		
+				    		grid.sort('expiration', false);
+				        },
+				        initialize: function() {
+				        	this.object.hostId = null;
+				        	this.object.fromDateTime = today;
+				        	this.object.toDateTime = maxDate;
+				        	this.object.pageSize = 10;
+				        	
+				        	this.letter.hostId = 0;
+				        	
+				        	this.initDatePicker();
+				        },
+				        resetId: function () {
+				        	this.object.hostId = null;
+				        	this.letter.hostId = 0;
+				        }
+				    })
+				}) ;
+			}
+		}) ;
+		
+		$('#licenseExpirationModalSearch').on('hidden.bs.modal', function() {
+			$('.daterangepicker').remove();
+		})
+	}) ;
+	
 }

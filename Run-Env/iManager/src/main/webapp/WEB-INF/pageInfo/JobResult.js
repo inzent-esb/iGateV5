@@ -355,7 +355,13 @@ const info = {
 									this.$t("igate.job") +
 									" " +
 									this.$t("head.id"),
-								isPK: true
+								isPK: true,
+								clickEvt: function (component) {
+									openNewTab('204010', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"jobId": component.getData()['pk.jobId'], "_pageSize": "10" }));
+									});
+								}
 							},
 							{
 								type: "select",
@@ -414,32 +420,10 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								clickEvt: function (component) {
-									var info = validateOpenNewTabUrl(location.href);
-									
-									if (!info.isValidate) return false;
-									
-									localStorage.removeItem(
-										"selectedMenuPathIdListNewTab"
-									);
-									localStorage.removeItem("searchObj");
-
-									localStorage.setItem(
-										"selectedMenuPathIdListNewTab",
-										JSON.stringify([
-											"100000",
-											"103000",
-											"103010"
-										])
-									);
-									localStorage.setItem(
-										"searchObj",
-										JSON.stringify({
-											"pk.exceptionId":
-												component.getData().exceptionId
-										})
-									);
-
-									window.open(info.url);
+									openNewTab('103010', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"pk.exceptionId": component.getData().exceptionId}));
+									});
 								}
 							}
 						]

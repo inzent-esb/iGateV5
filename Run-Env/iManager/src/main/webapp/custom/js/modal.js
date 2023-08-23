@@ -75,16 +75,23 @@ function openModal(modalParam) {
 	var callBackFunc = modalParam.callBackFunc;
 	var isMultiCheck = modalParam.isMultiCheck;
 	var modalSize = '';
+	var styleArr = [];
 
-	if (modalParam && modalParam.size) {
-		var size = modalParam.size;
-		modalSize = 'small' === size ? '-sm' : 'extraLarge' === size ? '-xl' : 'large' === size ? '-lg' : '';
-		modalSize = modalSize.trim().length > 0 ? 'modal' + modalSize : '';
+	if (modalParam) {
+		if (modalParam.size) {
+			var size = modalParam.size;
+			modalSize = 'small' === size ? '-sm' : 'extraLarge' === size ? '-xl' : 'large' === size ? '-lg' : '';
+			modalSize = modalSize.trim().length > 0 ? 'modal' + modalSize : '';			
+		}
+
+		if (modalParam.width) {
+			styleArr.push('max-width: ' + modalParam.width);
+		}
 	}
 
 	var modalHtml = '';
 	modalHtml += '<div id="' + modalParam.name + 'ModalSearch"  class="customType modal fade" tabindex="-1" role="dialog">';
-	modalHtml += '    <div class="modal-dialog modal-dialog-centered ' + modalSize + ' modal-dialog-scrollable">';
+	modalHtml += '    <div class="modal-dialog modal-dialog-centered ' + modalSize + ' modal-dialog-scrollable"' + ((styleArr.length > 0) ? 'style="' + styleArr.join(';') + '"' : ' ') + '>';
 	modalHtml += '        <div class="modal-content">';
 	modalHtml += '            <div class="modal-header">';
 	modalHtml += '                <h2 class="modal-title">' + modalParam.title + '</h2>';

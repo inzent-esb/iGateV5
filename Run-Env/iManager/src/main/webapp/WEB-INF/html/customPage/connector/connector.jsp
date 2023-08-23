@@ -178,7 +178,13 @@
 			                            vModel: 'object.adapterId',
 			                            callBackFuncName: 'setAdapterId'
 			                        },
-			                        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>'
+			                        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
+			                        clickEvt: function() {
+			                        	openNewTab('202030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmMain.object.adapterId}));
+			                        	}); 
+			                        }
 			                    },
 			                    {
 			                        type: 'search',
@@ -188,7 +194,13 @@
 			                            vModel: 'object.threadPoolId',
 			                            callBackFuncName: 'setThreadPoolId'
 			                        },
-			                        name: '<fmt:message>igate.threadPool</fmt:message> <fmt:message>head.id</fmt:message>'
+			                        name: '<fmt:message>igate.threadPool</fmt:message> <fmt:message>head.id</fmt:message>',
+			                        clickEvt: function() {
+			                        	openNewTab('302040', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"threadPoolId": window.vmMain.object.threadPoolId, "_pageSize": "10"}));
+			                        	}); 
+			                        }
 			                    }
 			                ]
 			            },
@@ -268,7 +280,13 @@
 			                type: 'text',
 			                mappingDataInfo: 'elm.pk.adapterId',
 			                name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
-			                readonly: true
+			                readonly: true,
+			                clickEvt: function() {			                	
+			                	openNewTab('202030', function() {			                        		
+	                        		localStorage.removeItem("searchObj");
+									localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmConnectorAdapters.connectorAdapters[index].pk.adapterId}));
+	                        	});
+			                }
 			            }
 			        ]
 			    },
@@ -520,6 +538,9 @@
 			            }
 			        },
 			        methods: {
+			        	clickEvt: function(strFunc) {
+				    		strFunc();
+				    	},
 			            inputEvt: function (info) {
 			                setLengthCnt.call(this, info);
 			            },
@@ -780,6 +801,9 @@
 			        connectorAdapters: []
 			    },
 			    methods: {
+			    	clickEvt: function(strFunc) {
+			    		strFunc();
+			    	},
 			        addConnectorAdapter: function () {
 			            this.openModal({
 			                url: '/modal/adapterModal',

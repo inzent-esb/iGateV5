@@ -187,6 +187,12 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								isPK: true,
+								clickEvt: function (component) {
+									openNewTab('202030', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"adapterId": component.getData()['pk.adapterId'] }));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.adapter"),
 									search: {

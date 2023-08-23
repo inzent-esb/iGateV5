@@ -3,12 +3,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="imc" uri="http://www.inzent.com/imanager/tags/core"%>
 <html>
 <head>
 <%@ include file="/WEB-INF/html/layout/header/common_head.jsp"%>
 </head>
-<body>
+<body>	
 	<div id="login" class="login wrap" data-ready>
 		<header id="hd">
 			<h1 class="logo text-hide">
@@ -43,7 +42,7 @@
 			</p>
 		</div>
 	</div>
-	
+		
 	<script type="text/javascript">
 	document.querySelector('#login').addEventListener('ready', function(evt) {
 		initLoginArea();
@@ -93,6 +92,8 @@
 					}
 					return;
 				}
+				
+				licExpirationModal();
 				
 				var accessToken = jqXHR.getResponseHeader('X-iManager-Access');
 				var refreshToken = jqXHR.getResponseHeader('X-iManager-Refresh');

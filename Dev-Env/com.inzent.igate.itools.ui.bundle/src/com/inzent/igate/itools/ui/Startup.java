@@ -111,8 +111,6 @@ public class Startup implements IStartup
 
     MappingUtils.validationMappingInstance = new ValidationMappingStandard() ;
 
-    MappingUtils.autoMapping = new AutoMappingImpl();
-
     RecordUtils.exportHandler = new RecordExportHandlerImpl() ;
 
     RecordUtils.importHandler = new RecordImportHandlerImpl() ;

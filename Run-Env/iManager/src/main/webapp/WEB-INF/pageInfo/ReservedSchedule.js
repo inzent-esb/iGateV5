@@ -443,37 +443,10 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								clickEvt: function (component) {
-									var info = validateOpenNewTabUrl(location.href);
-									
-									if (!info.isValidate) return false;
-									
-									if (!component.getData().exceptionId) return;
-
-									localStorage.removeItem(
-										"selectedMenuPathIdListNewTab"
-									);
-									localStorage.removeItem("searchObj");
-
-									localStorage.setItem(
-										"selectedMenuPathIdListNewTab",
-										JSON.stringify([
-											"100000",
-											"103000",
-											"103010"
-										])
-									);
-									localStorage.setItem(
-										"searchObj",
-										JSON.stringify({
-											"pk.exceptionId":
-												component.getData().exceptionId,
-											fromExceptionDateTime:
-												component.$parent.getData()
-													.exceptionDateTime
-										})
-									);
-
-									window.open(info.url);
+									openNewTab('103010', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"pk.exceptionId": component.getData().exceptionId}));
+									});
 								}
 							}
 						]

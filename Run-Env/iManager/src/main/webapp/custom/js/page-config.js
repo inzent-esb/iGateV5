@@ -419,6 +419,12 @@ function getCreatePageObj() {
 								'v-on:input': detailContentObj.regExpType? 'inputEvt(' + JSON.stringify(regExpInputInfo)  + ')' : null
 							})
 							.show();
+						
+						if (detailContentObj.clickEvt) {
+							detailContentObj.object.children('.input-group').attr({ 'v-on:click': 'clickEvt(' + String(detailContentObj.clickEvt) + ')' });
+							detailContentObj.object.children('.input-group').children('input[type=text]').addClass('underlineTxt');
+							detailContentObj.object.children('.input-group').css({ cursor: 'pointer' });
+						}
 					}
 					
 					
@@ -467,8 +473,8 @@ function getCreatePageObj() {
 
 						if ('search' != type && 'cron' != type) {
 							object.children('.input-group').children('.input-group-append').remove();
-						}
-
+						}	
+						
 						colDiv.append(object);
 					});
 				});
@@ -505,7 +511,7 @@ function getCreatePageObj() {
 				});
 
 				if (detailContentObj.clickEvt) {
-					detailContentObj.object.children('.input-group').attr({ 'v-on:click': detailContentObj.clickEvt });
+					detailContentObj.object.children('.input-group').attr({ 'v-on:click': 'clickEvt(' + String(detailContentObj.clickEvt) + ')' });
 					detailContentObj.object.children('.input-group').children('input[type=text]').addClass('underlineTxt');
 					detailContentObj.object.children('.input-group').css({ cursor: 'pointer' });
 				}
@@ -639,9 +645,15 @@ function getCreatePageObj() {
 						.attr({
 							'v-on:click': detailContentObj.mappingDataInfo.vModel + '= null;' + 'window.vmMain.$forceUpdate();'
 						});
+				}			
+				
+				if (detailContentObj.clickEvt) {
+					detailContentObj.object.children('.input-group').children('input[type=text]').attr({ 'v-on:click': 'clickEvt(' + String(detailContentObj.clickEvt) + ')' });
+					detailContentObj.object.children('.input-group').children('input[type=text]').addClass('underlineTxt');
+					detailContentObj.object.children('.input-group').css({ cursor: 'pointer' });						
 				}
 			}
-			
+						
 			function singleDateBasicType(detailContentObj) {
 				detailContentObj.object
 					.children('.input-group')
@@ -1114,6 +1126,12 @@ function getCreatePageObj() {
 							.append($('<span/>').text('/' + detailContentObj.maxLength + ')'))
 					  	);
 				}
+				
+				if(detailContentObj.clickEvt) {
+					detailContentObj.appendTag.attr({ 'v-on:click': 'clickEvt(' + String(detailContentObj.clickEvt) + ')' });
+					detailContentObj.appendTag.children('input').addClass('underlineTxt');
+					detailContentObj.appendTag.css({cursor: 'pointer'});
+				}
 								
 				return detailContentObj.appendTag;
 			}
@@ -1161,7 +1179,7 @@ function getCreatePageObj() {
 					);
 				
 				if(detailContentObj.clickEvt) {
-					detailContentObj.appendTag.attr({'v-on:click': detailContentObj.clickEvt});
+					detailContentObj.appendTag.attr({ 'v-on:click': 'clickEvt(' + String(detailContentObj.clickEvt) + ')' });
 					detailContentObj.appendTag.children('input[type=search]').addClass('underlineTxt');
 					detailContentObj.appendTag.css({cursor: 'pointer'});
 				}
@@ -1756,7 +1774,7 @@ function getMakeGridObj() {
 						useClient: true
 					};
 				}
-			};
+			};			
 			
             grid = new tui.Grid(gridOptions);
             
@@ -1881,7 +1899,7 @@ function getMakeGridObj() {
 				
                 var selectedMenuPathIdList = JSON.parse(sessionStorage.getItem('selectedMenuPathIdList'));
 				var menuId = selectedMenuPathIdList[selectedMenuPathIdList.length - 1];
-				var maxListCount = constants.grid.maxListCount[menuId];
+				var maxListCount = constants.grid.maxListCount[menuId.replace('_bookmark', '')];
 				
 				if(maxListCount && Number(res.object) > maxListCount) {
 					window._alert({

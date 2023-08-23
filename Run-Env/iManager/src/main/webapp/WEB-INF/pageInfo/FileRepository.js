@@ -596,7 +596,13 @@ const info = {
 									this.$t("igate.adapter") +
 									" " +
 									this.$t("head.id"),
-								isPK: true
+								isPK: true,
+								clickEvt: function (component) {
+									openNewTab('202030', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"adapterId": component.getData()['pk.adapterId']}));
+									});
+								}
 							},
 							{
 								type: "text",
@@ -624,7 +630,13 @@ const info = {
 								label:
 									this.$t("head.transaction") +
 									" " +
-									this.$t("head.id")
+									this.$t("head.id"),
+								clickEvt: function (component) {
+									openNewTab('103020', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"transactionId": component.getData().transactionId}));
+									});
+								}
 							},
 							{
 								type: "text",
