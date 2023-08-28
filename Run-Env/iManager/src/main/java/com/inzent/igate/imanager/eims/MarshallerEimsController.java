@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse ;
 
 import org.apache.commons.lang3.StringUtils ;
 import org.springframework.stereotype.Controller ;
-import org.springframework.ui.ExtendedModelMap ;
 import org.springframework.validation.MapBindingResult ;
 import org.springframework.web.bind.annotation.RequestMapping ;
 
@@ -111,7 +110,7 @@ public class MarshallerEimsController extends AbstractEimsController
       for (int idx = 0 ; serviceNode.size() > idx ; idx++)
       {
         Service service = JsonMarshaller.unmarshal(serviceNode.get(idx), Service.class) ;
-        serviceService.unformalize(service, new MapBindingResult(new HashMap(), "service")/*, new ExtendedModelMap()*/) ;
+        serviceService.unformalize(service, new MapBindingResult(new HashMap(), "service")) ;
         objects.add(service) ;
       }
     }
@@ -123,7 +122,7 @@ public class MarshallerEimsController extends AbstractEimsController
       for (int idx = 0 ; interfaceNode.size() > idx ; idx++)
       {
         Interface interfaceMeta = JsonMarshaller.unmarshal(interfaceNode.get(idx), Interface.class) ;
-        interfaceService.unformalize(interfaceMeta, new MapBindingResult(new HashMap(), "interface")/*, new ExtendedModelMap()*/) ;
+        interfaceService.unformalize(interfaceMeta, new MapBindingResult(new HashMap(), "interface")) ;
         objects.add(interfaceMeta) ;
       }
     }
