@@ -76,7 +76,7 @@ function makeScript(idx) {
 
 				tui.Grid.setLanguage('en', {
 					display: {
-						noData: 'No Data.',
+						noData: '<fmt:message>igate.noData</fmt:message>',
 					},
 				});					
 			});

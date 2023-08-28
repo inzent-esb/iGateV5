@@ -93,7 +93,13 @@
 			                        },
 			                        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        warning: '<fmt:message>igate.serviceRecognize.changeWarn</fmt:message>',
-			                        isPk: true
+			                        isPk: true,
+			                        clickEvt: function() {			                        	
+			                        	openNewTab('202030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmMain.object.pk.adapterId}));
+			                        	}); 
+			                        }
 			                    },
 			                    {
 			                        type: 'text',
@@ -111,7 +117,13 @@
 			                            callBackFuncName: 'setSearchServiceId'
 			                        },
 			                        name: '<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>',
-			                        isRequired: true
+			                        isRequired: true,
+			                        clickEvt: function() {			                        	
+			                        	openNewTab('101030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"serviceId": window.vmMain.object.serviceId}));
+			                        	}); 
+			                        }
 			                    }
 			                ]
 			            }
@@ -292,6 +304,9 @@
 			        }
 			    },
 			    methods: {
+			    	clickEvt: function(strFunc) {
+			    		strFunc();
+			    	},
 			        inputEvt: function (info) {
 			            setLengthCnt.call(this, info);
 			        },
@@ -348,6 +363,7 @@
 			    $('.modal').remove();
 			    $('.modal-backdrop').remove();
 			    $('#ct').find('script').remove();
+			    
 			});
 		});	
 	</script>

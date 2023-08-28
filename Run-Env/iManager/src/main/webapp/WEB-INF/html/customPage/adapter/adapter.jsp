@@ -173,6 +173,12 @@
 			                            modalTitle: '<fmt:message>igate.activity</fmt:message>',
 			                            vModel: 'object.telegramHandler',
 			                            callBackFuncName: 'setSearchTelegramHandlerId'
+			                        },
+			                        clickEvt: function() {
+			                        	openNewTab('102060', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"activityId": window.vmMain.object.telegramHandler}));
+			                        	}); 
 			                        }
 			                    },
 			                    {
@@ -183,6 +189,12 @@
 			                            modalTitle: '<fmt:message>igate.record</fmt:message>',
 			                            vModel: 'object.requestStructure',
 			                            callBackFuncName: 'setSearchRequestStructureId'
+			                        },
+			                        clickEvt: function() {
+			                        	openNewTab('101010', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"recordId": window.vmMain.object.requestStructure}));
+			                        	}); 
 			                        }
 			                    },
 			                    {
@@ -193,6 +205,12 @@
 			                            modalTitle: '<fmt:message>igate.record</fmt:message>',
 			                            vModel: 'object.responseStructure',
 			                            callBackFuncName: 'setSearchResponseStructureId'
+			                        },
+			                        clickEvt: function() {
+			                        	openNewTab('101010', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"recordId": window.vmMain.object.responseStructure}));
+			                        	}); 
 			                        }
 			                    }
 			                ]
@@ -239,6 +257,12 @@
 			                    modalTitle: '<fmt:message>igate.operation</fmt:message>',
 			                    vModel: 'elm.operationId',
 			                    callBackFuncName: 'setOperationId'
+			                },
+			                clickEvt: function() {
+			                	openNewTab('102070', function() {			                        		
+	                        		localStorage.removeItem("searchObj");
+									localStorage.setItem("searchObj", JSON.stringify({"operationId": window.vmAdapterOperations.adapterOperations[index].operationId}));
+	                        	}); 
 			                }
 			            },
 			            {
@@ -259,7 +283,13 @@
 			                    modalTitle: '<fmt:message>igate.calendar</fmt:message>',
 			                    vModel: 'elm.calendarId',
 			                    callBackFuncName: 'setCalendarId'
-			                }
+			                },
+			                clickEvt: function() {
+			                	openNewTab('302060', function() {			                        		
+	                        		localStorage.removeItem("searchObj");
+									localStorage.setItem("searchObj", JSON.stringify({"calendarId": window.vmAdapterOperations.adapterOperations[index].calendarId}));
+	                        	}); 
+	                        }
 			            },
 			            {
 			                type: 'select',
@@ -594,6 +624,9 @@
 					        }
 					    },
 					    methods: {
+					    	clickEvt: function(strFunc) {
+					    		strFunc();
+					    	},
 					        changeAdapterType: function () {
 					        	// telegram handler
 					            new HttpReq('/api/page/properties').read({ pk : { propertyId: 'Telegram.Adapter.' + this.object.adapterType }, orderByKey: true },
@@ -733,6 +766,9 @@
 					        evtNameArr: ['request.extract', 'process.open', 'process.close', 'process.pause', 'process.resume']
 					    },
 					    methods: {
+					    	clickEvt: function(strFunc) {
+					    		strFunc();
+					    	},
 					        addOperation: function () {
 					            this.adapterOperations.push({
 					                operationId: null,
@@ -1539,10 +1575,10 @@
 			            window.open("${prefixUrl}/manual/External Guide.htm", '_blank', 'height=886, width=785,resizable=yes, toolbar=no, menubar=no, location=no, scrollbars=yes, status=no');
 			        },
 			        start: function () {
-			            ControlImngObj.control('start', $.param({ adapterId: window.vmMain.object.adapterId, instance: null }, null));
+			        	ControlImngObj.control('start', { adapterId: window.vmMain.object.adapterId, instance: null });
 			        },
 			        stop: function () {
-			            ControlImngObj.control('stop', $.param({ adapterId: window.vmMain.object.adapterId, instance: null }, null));
+			        	ControlImngObj.control('stop', { adapterId: window.vmMain.object.adapterId, instance: null });
 			        }
 			    })
 			});

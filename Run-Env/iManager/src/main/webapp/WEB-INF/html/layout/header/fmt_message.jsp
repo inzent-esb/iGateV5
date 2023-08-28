@@ -51,4 +51,15 @@ var timeSecond = "<fmt:message>igate.seconds.before</fmt:message>";
 /* message */
 var messageSessionExpired = "<fmt:message>igate.session.expired</fmt:message>";
 
+/* From To */
+var From = "<fmt:message>head.from</fmt:message>";
+var To = "<fmt:message>head.to</fmt:message>";
+
+/* License */
+var searchId = "<fmt:message>head.searchId</fmt:message>";
+var listCount = "<fmt:message>head.listCount</fmt:message>";
+var initialize = "<fmt:message>head.initialize</fmt:message>";
+var licenseId = "<fmt:message>head.id</fmt:message>";
+var licenseExpiration = "<fmt:message>common.license.expiration</fmt:message>";
+var licenseDesc = "<fmt:message>common.desc</fmt:message>";
 </script>

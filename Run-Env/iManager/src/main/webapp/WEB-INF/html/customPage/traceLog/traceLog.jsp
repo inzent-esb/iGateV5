@@ -614,7 +614,8 @@
 			    		},
 			    		openWindows: [],
 			    		panelMode: null,
-			    		refGridData : null
+			    		refGridData : null,
+			    		hasClickEvt: true,
 			    	},
 			    	computed: {
 			    		pk: function() {
@@ -663,9 +664,32 @@
 			        	initDetailArea: function(object) {
 			        		if(object) this.object = object;
 						},
-						clickExceptionInfo: function(exceptionInfo) {
-			            	localStorage.setItem('searchObj', JSON.stringify(exceptionInfo));
-			            	localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['100000', '103000', '103010']));
+						clickEvt: function(data) {			            	
+							var menuId = [];
+							
+							switch(data) {
+								case 'transactionId':
+									menuId = ['100000', '103000', '103010'];
+									break;
+								case 'adapterId':
+									menuId = ['200000', '202000', '202030'];
+									break;
+								case 'connectorId':
+									menuId = ['200000', '202000', '202020'];
+									break;
+								case 'interfaceId':
+									menuId = ['100000', '101000', '101050'];
+									break;
+								case 'serviceId':
+									menuId = ['100000', '101000', '101030'];
+									break;
+							};
+							
+							var clickData = {};
+							clickData[data] = this.object[data];
+							
+			            	localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(menuId));
+			            	localStorage.setItem('searchObj', JSON.stringify(clickData));
 			            	
 			            	window.open(location.href);
 			            }

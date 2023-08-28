@@ -282,6 +282,12 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								isPK: true,
+								clickEvt: function (component) {
+									openNewTab('202030', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"adapterId": component.getData()['pk.interfaceAdapterId']}));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.adapter"),
 									search: {
@@ -395,6 +401,12 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								isPK: true,
+								clickEvt: function (component) {
+									openNewTab('202030', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"adapterId": component.getData()['pk.serviceAdapterId']}));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.adapter"),
 									search: {
@@ -506,6 +518,12 @@ const info = {
 								label: this.$t(
 									"igate.onlineHeaderMappingPolicy.requestMappingId"
 								),
+								clickEvt: function (component) {
+									openNewTab('101020', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().requestMappingId}));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.mapping"),
 									search: {
@@ -581,6 +599,12 @@ const info = {
 								label: this.$t(
 									"igate.onlineHeaderMappingPolicy.responseMappingId"
 								),
+								clickEvt: function (component) {
+									openNewTab('101020', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().responseMappingId}));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.mapping"),
 									search: {
@@ -656,6 +680,12 @@ const info = {
 								label: this.$t(
 									"igate.onlineHeaderMappingPolicy.replyMappingId"
 								),
+								clickEvt: function (component) {
+									openNewTab('101020', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().replyMappingId}));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.mapping"),
 									search: {
@@ -731,6 +761,12 @@ const info = {
 								label: this.$t(
 									"igate.onlineHeaderMappingPolicy.createMappingId"
 								),
+								clickEvt: function (component) {
+									openNewTab('101020', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().createMappingId}));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.mapping"),
 									search: {

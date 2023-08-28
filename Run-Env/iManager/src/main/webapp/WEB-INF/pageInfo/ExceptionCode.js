@@ -315,6 +315,12 @@ const info = {
 								label: this.$t("igate.standardCode"),
 								placeholder: this.$t("head.searchCode"),
 								isRequired: true,
+								clickEvt: function (component) {
+									openNewTab('102020', function() {
+										localStorage.removeItem("searchObj");
+										localStorage.setItem("searchObj", JSON.stringify({"pk.standardCode": component.getData().standardCode, "_pageSize": "10" }));
+									});
+								},
 								modalInfo: {
 									title: this.$t("igate.standardCode"),
 									search: {

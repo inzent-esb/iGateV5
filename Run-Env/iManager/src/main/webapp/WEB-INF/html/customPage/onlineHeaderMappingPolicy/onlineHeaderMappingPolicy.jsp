@@ -85,7 +85,13 @@
 			                            vModel: 'object.pk.interfaceAdapterId',
 			                            callBackFuncName: 'setSearchInterfaceAdapterId'
 			                        },
-			                        isPk: true
+			                        isPk: true,
+			                        clickEvt: function() {
+			                        	openNewTab('202030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmMain.object.pk.interfaceAdapterId}));
+			                        	}); 
+			                        }
 			                    },
 			                    {
 			                        type: 'search',
@@ -96,7 +102,13 @@
 			                            vModel: 'object.pk.serviceAdapterId',
 			                            callBackFuncName: 'setSearchServiceAdapterId'
 			                        },
-			                        isPk: true
+			                        isPk: true,
+			                        clickEvt: function() {
+			                        	openNewTab('202030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmMain.object.pk.serviceAdapterId}));
+			                        	}); 
+			                        }
 			                    }
 			                ]
 			            },
@@ -111,6 +123,12 @@
 			                            modalTitle: '<fmt:message>igate.mapping</fmt:message>',
 			                            vModel: 'object.requestMappingId',
 			                            callBackFuncName: 'setSearchRequestMappingId'
+			                        },
+			                        clickEvt: function() {
+			                        	openNewTab('101020', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.requestMappingId}));
+			                        	}); 
 			                        }
 			                    },
 			                    {
@@ -121,6 +139,12 @@
 			                            modalTitle: '<fmt:message>igate.mapping</fmt:message>',
 			                            vModel: 'object.responseMappingId',
 			                            callBackFuncName: 'setSearchResponseMappingId'
+			                        },
+			                        clickEvt: function() {
+			                        	openNewTab('101020', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.responseMappingId}));
+			                        	}); 
 			                        }
 			                    },
 			                    {
@@ -131,6 +155,12 @@
 			                            modalTitle: '<fmt:message>igate.mapping</fmt:message>',
 			                            vModel: 'object.replyMappingId',
 			                            callBackFuncName: 'setSearchReplyMappingId'
+			                        },
+			                        clickEvt: function() {
+			                        	openNewTab('101020', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.replyMappingId}));
+			                        	}); 
 			                        }
 			                    },
 			                    {
@@ -141,6 +171,12 @@
 			                            modalTitle: '<fmt:message>igate.mapping</fmt:message>',
 			                            vModel: 'object.createMappingId',
 			                            callBackFuncName: 'setSearchCreateMappingId'
+			                        },
+			                        clickEvt: function() {
+			                        	openNewTab('101020', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.createMappingId}));
+			                        	}); 
 			                        }
 			                    }
 			                ]
@@ -315,6 +351,9 @@
 			        }
 			    },
 			    methods: {
+			    	clickEvt: function(strFunc) {
+			    		strFunc();
+			    	},
 			        inputEvt: function (info) {
 			            setLengthCnt.call(this, info);
 			        },
