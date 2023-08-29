@@ -87,7 +87,7 @@
 					} else if (-1 < data.error[0].className.indexOf('AccountExpiredException')) {
 						$("#error").text('<fmt:message>common.expired.account</fmt:message>').show();
 					} else if (-1 < data.error[0].className.indexOf('LockedException')) {
-						$("#error").text('<fmt:message>common.exceeded.loginAttempts</fmt:message>').show();
+						$("#error").text('<fmt:message>common.restricted.login</fmt:message>').show();
 					} else {
 						$("#error").text('<fmt:message>common.id.password.entered.incorrectly</fmt:message>').show();	
 					}
