@@ -87,7 +87,7 @@
 					} else if (-1 < data.error[0].className.indexOf('AccountExpiredException')) {
 						$("#error").text('<fmt:message>common.expired.account</fmt:message>').show();
 					} else if (-1 < data.error[0].className.indexOf('LockedException')) {
-						$("#error").text('<fmt:message>common.restricted.login</fmt:message>').show();
+                        $("#error").text('<fmt:message>common.restricted.login</fmt:message>').show();
 					} else {
 						$("#error").text('<fmt:message>common.id.password.entered.incorrectly</fmt:message>').show();	
 					}
@@ -101,6 +101,7 @@
 				
 				localStorage.setItem('accessToken', 'Bearer ' + accessToken);
 				localStorage.setItem('refreshToken', refreshToken);
+				localStorage.setItem('tokenExpiration', data.object);
 				
 			    <c:choose>
 		        	<c:when test="${not empty _client_mode && 'c' == _client_mode}">

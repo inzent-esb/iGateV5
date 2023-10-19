@@ -7,7 +7,7 @@
 	<%@ include file="/WEB-INF/html/layout/header/common_head.jsp"%>
 </head>
 <body>
-	<div id="notice" data-ready>
+	<div id="activityModal" data-ready>
 		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
@@ -188,7 +188,7 @@
 		                        name: 'activityType',
 		                        header: '<fmt:message>common.type</fmt:message>',
 		                        align: 'center',
-		                        width: '15%',
+		                        width: '20%',
 		                        formatter: function (value) {
 		                            switch (value.row.activityType) {
 		                                case 'F':
@@ -237,6 +237,10 @@
 		            this.makeGridObj.setConfig(gridData, true);
 		        }
 		    });
+		    
+			document.querySelector('#activityModal').addEventListener('resize', function(evt) {
+				resizeModalSearchGrid(vmList.makeGridObj.getSearchGrid());
+			});		    
 		});
 	});
 	</script>	

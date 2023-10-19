@@ -109,12 +109,14 @@ const info = {
 								{
 									name: "operationId",
 									header: this.$t("head.id"),
-									align: "left"
+									align: "left",
+									width: "50%"
 								},
 								{
 									name: "operationName",
 									header: this.$t("head.name"),
-									align: "left"
+									align: "left",
+									width: "50%"
 								}
 							]
 						}
@@ -212,7 +214,8 @@ const info = {
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
 				{ id: "execute", isUse: true },
-				{ id: "interrupt", isUse: true }
+				{ id: "interrupt", isUse: true },
+				{ id: 'reference', isUse: true, className: 'com.inzent.igate.repository.meta.Job' }
 			]
 		},
 		tabList: [

@@ -88,7 +88,16 @@ function openModal(modalParam) {
 			styleArr.push('max-width: ' + modalParam.width);
 		}
 	}
-
+	
+	var buttonList = modalParam.buttonList;
+	var customBtnHtml = '';
+	
+	if(buttonList){
+		for(var i=0; i < buttonList.length; i++) {
+			customBtnHtml += '<button type="button" class="btn btn-primary" id="' + buttonList[i].customBtnId + '">' + buttonList[i].customBtn + '</button>';
+		}	
+	}	
+	
 	var modalHtml = '';
 	modalHtml += '<div id="' + modalParam.name + 'ModalSearch"  class="customType modal fade" tabindex="-1" role="dialog">';
 	modalHtml += '    <div class="modal-dialog modal-dialog-centered ' + modalSize + ' modal-dialog-scrollable"' + ((styleArr.length > 0) ? 'style="' + styleArr.join(';') + '"' : ' ') + '>';
@@ -101,7 +110,8 @@ function openModal(modalParam) {
 	modalHtml += 			      modalParam.bodyHtml;
 	modalHtml += '            </div>';
 	modalHtml += '            <div class="modal-footer">';
-	modalHtml += '                <button type="button" class="btn btn-primary" id="modalConfirm" style="display:none;">' + okBtn + '</button>';
+	modalHtml +=                  customBtnHtml;
+	modalHtml += '				  <button type="button" class="btn btn-primary" id="modalCustomBtn" style="display: none;"></button>';
 	modalHtml += '                <button type="button" class="btn" data-dismiss="modal" id="modalClose">' + closeBtn + '</button>';
 	modalHtml += '            </div>';
 	modalHtml += '        </div>';
@@ -124,7 +134,15 @@ function openModal(modalParam) {
 		modalParam.spinnerMode? modalParam.spinnerMode : null, 
 		modalParam.shownCallBackFunc? modalParam.shownCallBackFunc : null
 	);
-
+	
+	$(viewModalName).find('button.btn-primary').on('click', function(e) {
+		for(var i=0; i < buttonList.length; i++) {
+			if(buttonList[i].customBtnId === e.target.id) buttonList[i].customBtnAction();
+		}		
+	});
+	
+	$(viewModalName).find('button')
+	
 	$(viewModalName).on('shown.bs.modal', function (e) {
 		window.$stopSpinner();
 	});

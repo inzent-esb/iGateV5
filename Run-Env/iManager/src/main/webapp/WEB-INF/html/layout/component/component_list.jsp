@@ -73,6 +73,20 @@ var listMethodOption = {
         window.open(info.url);
     },
     newTabSearchGrid: function () {
+    	if (localStorage.getItem('searchObj')) {
+		    var searchObj = JSON.parse(localStorage.getItem('searchObj'));
+		    
+		    localStorage.removeItem('searchObj');
+		    
+			var obj = {};
+			
+			for(var key in window.vmSearch.object) {
+				obj[key] = searchObj[key] ? searchObj[key] : window.vmSearch.object[key];
+			}
+			
+		    localStorage.setItem(this.$el.id + '-newTabSearchCondition',JSON.stringify({object: obj}));
+		}
+    	
         if (!localStorage.getItem(this.$el.id + '-newTabSearchCondition')) return false;
 
         var newTabSearchCondition = JSON.parse(localStorage.getItem(this.$el.id + '-newTabSearchCondition'));

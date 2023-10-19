@@ -137,7 +137,8 @@
 			    goModBtn: editor,
 			    saveBtn: editor,
 			    updateBtn: editor,
-			    goAddBtn: editor
+			    goAddBtn: editor,
+			    referenceBtn: viewer
 			});
 
 			createPageObj.panelConstructor();
@@ -353,7 +354,11 @@
 
 			new Vue({
 			    el: '#panel-footer',
-			    methods: $.extend(true, {}, panelMethodOption)
+			    methods: $.extend(true, {}, panelMethodOption, {
+			    	goReferenceModal: function() {
+			    		panelMethodOption.goReferenceModal(window.vmMain.object, 'com.inzent.igate.repository.meta.ServiceRecognize');
+			    	}
+			    })
 			});
 
 			this.addEventListener('destroy', function (evt) {

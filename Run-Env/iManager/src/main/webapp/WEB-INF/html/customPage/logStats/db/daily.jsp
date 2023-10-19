@@ -218,6 +218,13 @@
 			                },
 			                initDatePicker: function () {
 			                    var dateFormat = 'D' === this.object.searchType ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+			                    
+			                    var agent = navigator.userAgent.toLowerCase();
+			                    
+			                    if ((navigator.appName == 'Netscape' && -1 != agent.indexOf('trident')) || -1 != agent.indexOf('msie')) {
+			                    	dateFormat = dateFormat.replace(/-/gi, '/');
+			                    }
+			                    
 			                    var date = new Date(this.object.fromDateTime ? this.object.fromDateTime : Date.now());
 
 			                    date.setHours(0);
@@ -338,14 +345,14 @@
 			                            name: 'pk.logDateTime',
 			                            header: '<fmt:message>head.transaction</fmt:message>' + ' ' + '<fmt:message>head.date</fmt:message>',
 			                            align: 'center',
-			                            width: '10%',
+			                            width: '20%',
 			                            sortable: true
 			                        },
 			                        {
 			                            name: 'pk.statsType',
 			                            header: '<fmt:message>igate.logStatistics.classification</fmt:message>',
 			                            align: 'center',
-			                            width: '10%',
+			                            width: '16%',
 			                            formatter: function (info) {
 			                                if ('I' === info.value) return '<fmt:message>head.online.interface</fmt:message>';
 			                                else if ('O' === info.value) return '<fmt:message>head.online.service</fmt:message>';
@@ -359,7 +366,7 @@
 			                            name: 'requestCount',
 			                            header: '<fmt:message>igate.logStatistics.requestCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.requestCount);
@@ -369,7 +376,7 @@
 			                            name: 'successCount',
 			                            header: '<fmt:message>igate.logStatistics.successCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.successCount);
@@ -379,7 +386,7 @@
 			                            name: 'exceptionCount',
 			                            header: '<fmt:message>igate.logStatistics.exceptionCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.exceptionCount);
@@ -389,7 +396,7 @@
 			                            name: 'messageSuccessCount',
 			                            header: '<fmt:message>igate.logStatistics.successCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.messageSuccessCount);
@@ -399,7 +406,7 @@
 			                            name: 'messageExceptionCount',
 			                            header: '<fmt:message>igate.logStatistics.exceptionCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.messageExceptionCount);
@@ -409,7 +416,7 @@
 			                            name: 'dbRequestRowCount',
 			                            header: '<fmt:message>igate.logStatistics.totalCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.dbRequestRowCount);
@@ -419,7 +426,7 @@
 			                            name: 'dbSuccessRowCount',
 			                            header: '<fmt:message>igate.logStatistics.successCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.dbSuccessRowCount);
@@ -429,7 +436,7 @@
 			                            name: 'dbExceptionRowCount',
 			                            header: '<fmt:message>igate.logStatistics.exceptionCount</fmt:message>',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '5%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.dbExceptionRowCount);
@@ -439,7 +446,7 @@
 			                            name: 'responseTotal',
 			                            header: '<fmt:message>igate.logStatistics.responseTotal</fmt:message>' + ' (ms)',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '12%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.responseTotal);
@@ -449,7 +456,7 @@
 			                            name: 'responseMax',
 			                            header: '<fmt:message>igate.logStatistics.responseMax</fmt:message>' + ' (ms)',
 			                            align: 'right',
-			                            width: '10%',
+			                            width: '12%',
 			                            sortable: true,
 			                            formatter: function (info) {
 			                                return numberWithComma(info.row.responseMax);

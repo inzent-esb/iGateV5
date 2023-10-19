@@ -49,14 +49,14 @@
 <script type="text/javascript">
 var searchMethodOption = {
 	pageSizeInput: function () {
-        return (this.object.pageSize = this.object.pageSize.replace(/constants.regExpList.pageSize/g, ''));
+        this.object.pageSize = this.object.pageSize.replace(/constants.regExpList.pageSize/g, '');
     },
     pageSizeEnter: function (e) {
         e.target.blur();
-        window.vmSearch.search();
+        this.search();
     },
     pageSizeBlur: function () {
-        return (this.object.pageSize = 10 > window.vmSearch.object.pageSize ? 10 : window.vmSearch.object.pageSize);
+        this.object.pageSize = 10 > this.object.pageSize ? 10 : this.object.pageSize;
     },
     collapseFilter: function () {
         setTimeout(function () {

@@ -447,22 +447,22 @@
 			                    {
 			                        name: 'connectorId',
 			                        header: '<fmt:message>head.id</fmt:message>',
-			                        width: '30%'
+			                        width: '15%'
 			                    },
 			                    {
 			                        name: 'connectorName',
 			                        header: '<fmt:message>head.name</fmt:message>',
-			                        width: '40%'
+			                        width: '20%'
 			                    },
 			                    {
 			                        name: 'adapterId',
 			                        header: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
-			                        width: '30%'
+			                        width: '15%'
 			                    },
 			                    {
 			                        name: 'connectorType',
 			                        header: '<fmt:message>common.type</fmt:message>',
-			                        width: '30%',
+			                        width: '20%',
 			                        align: 'center',
 			                        formatter: function (info) {
 			                            var findConnectorType = window.vmSearch.connectorTypeList.find(function (typeInfo) {
@@ -474,7 +474,7 @@
 			                    {
 			                        name: 'connectorDesc',
 			                        header: '<fmt:message>head.description</fmt:message>',
-			                        width: '40%'
+			                        width: '30%'
 			                    }
 			                ],
 	                        onGridMounted: function(evt) {

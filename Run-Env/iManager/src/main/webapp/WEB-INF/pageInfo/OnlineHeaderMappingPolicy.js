@@ -68,31 +68,36 @@ const info = {
 								{
 									name: "adapterId",
 									header: this.$t("head.id"),
-									align: "left"
+									align: "left",
+									width: "20%"	
 								},
 								{
 									name: "adapterName",
 									header: this.$t("head.name"),
-									align: "left"
+									align: "left",
+									width: "20%"
 								},
 								{
 									name: "adapterDesc",
 									header: this.$t("head.description"),
-									align: "left"
+									align: "left",
+									width: "20%"
 								},
 								{
 									name: "requestStructure",
 									header: this.$t(
 										"igate.adapter.structure.request"
 									),
-									align: "left"
+									align: "left",
+									width: "20%"
 								},
 								{
 									name: "responseStructure",
 									header: this.$t(
 										"igate.adapter.structure.response"
 									),
-									align: "left"
+									align: "left",
+									width: "20%"
 								}
 							]
 						}
@@ -166,31 +171,32 @@ const info = {
 								{
 									name: "adapterId",
 									header: this.$t("head.id"),
-									align: "left"
+									align: "left",
+									width: "20%"
 								},
 								{
 									name: "adapterName",
 									header: this.$t("head.name"),
-									align: "left"
+									align: "left",
+									width: "20%"
 								},
 								{
 									name: "adapterDesc",
 									header: this.$t("head.description"),
-									align: "left"
+									align: "left",
+									width: "20%"
 								},
 								{
 									name: "requestStructure",
-									header: this.$t(
-										"igate.adapter.structure.request"
-									),
-									align: "left"
+									header: this.$t("igate.adapter.structure.request"),
+									align: "left",
+									width: "20%"
 								},
 								{
 									name: "responseStructure",
-									header: this.$t(
-										"igate.adapter.structure.response"
-									),
-									align: "left"
+									header: this.$t("igate.adapter.structure.response"),
+									align: "left",
+									width: "20%"
 								}
 							]
 						}
@@ -237,7 +243,8 @@ const info = {
 						this.$t("igate.adapter") +
 						" " +
 						this.$t("head.id"),
-					align: "left"
+					align: "left",
+					width: "50%"
 				},
 				{
 					name: "pk.serviceAdapterId",
@@ -247,7 +254,8 @@ const info = {
 						this.$t("igate.adapter") +
 						" " +
 						this.$t("head.id"),
-					align: "left"
+					align: "left",
+					width: "50%"
 				}
 			]
 		}
@@ -262,7 +270,8 @@ const info = {
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
 				{ id: "delete", isUse: true },
-				{ id: "dump", isUse: true, dumpUrl: '/api/entity/onlineHeaderMappingPolicy/dump' }
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/onlineHeaderMappingPolicy/dump' },
+				{ id: 'reference', isUse: true, className: 'com.inzent.igate.repository.meta.OnlineHeaderMappingPolicy' }
 			]
 		},
 		tabList: [
@@ -353,35 +362,40 @@ const info = {
 												{
 													name: "adapterId",
 													header: this.$t("head.id"),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "adapterName",
 													header: this.$t(
 														"head.name"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "adapterDesc",
 													header: this.$t(
 														"head.description"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "requestStructure",
 													header: this.$t(
 														"igate.adapter.structure.request"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "responseStructure",
 													header: this.$t(
 														"igate.adapter.structure.response"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												}
 											]
 										}
@@ -472,35 +486,40 @@ const info = {
 												{
 													name: "adapterId",
 													header: this.$t("head.id"),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "adapterName",
 													header: this.$t(
 														"head.name"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "adapterDesc",
 													header: this.$t(
 														"head.description"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "requestStructure",
 													header: this.$t(
 														"igate.adapter.structure.request"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												},
 												{
 													name: "responseStructure",
 													header: this.$t(
 														"igate.adapter.structure.response"
 													),
-													align: "left"
+													align: "left",
+													width: "20%"
 												}
 											]
 										}
@@ -569,21 +588,24 @@ const info = {
 												{
 													name: "mappingId",
 													header: this.$t("head.id"),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingName",
 													header: this.$t(
 														"head.name"
 													),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingDesc",
 													header: this.$t(
 														"head.description"
 													),
-													align: "left"
+													align: "left",
+													width: "40%"
 												}
 											]
 										}
@@ -650,21 +672,24 @@ const info = {
 												{
 													name: "mappingId",
 													header: this.$t("head.id"),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingName",
 													header: this.$t(
 														"head.name"
 													),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingDesc",
 													header: this.$t(
 														"head.description"
 													),
-													align: "left"
+													align: "left",
+													width: "40%"
 												}
 											]
 										}
@@ -731,21 +756,24 @@ const info = {
 												{
 													name: "mappingId",
 													header: this.$t("head.id"),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingName",
 													header: this.$t(
 														"head.name"
 													),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingDesc",
 													header: this.$t(
 														"head.description"
 													),
-													align: "left"
+													align: "left",
+													width: "40%"
 												}
 											]
 										}
@@ -812,21 +840,24 @@ const info = {
 												{
 													name: "mappingId",
 													header: this.$t("head.id"),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingName",
 													header: this.$t(
 														"head.name"
 													),
-													align: "left"
+													align: "left",
+													width: "30%"
 												},
 												{
 													name: "mappingDesc",
 													header: this.$t(
 														"head.description"
 													),
-													align: "left"
+													align: "left",
+													width: "40%"
 												}
 											]
 										}

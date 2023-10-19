@@ -283,7 +283,7 @@
 	    			                    name: 'instanceId',
 	    			                    header: '<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>',
 	    			                    align: 'left',
-	    			                    width: '8%'
+	    			                    width: '7%'
 	    			                },
 	    			                {
 	    			                    name: 'status',
@@ -316,51 +316,59 @@
 	    			                            backgroundColor = '#4e464f';
 	    			                            fontColor = 'white';
 	    			                        }
+	    			                        
+	    			                        var titleArr = [];
+	    			                        
+	    			                        if (info.row.statusCause) {
+	    			                        	info.row.statusCause.split('\n').forEach(function(msg) {
+	    			                        		titleArr.push(escapeHtml(msg));
+	    			                        	});
+	    			                        }
 
-	    			                        return '<div style="width:100%; height:100%; background-color:' + backgroundColor + ';color:' + fontColor + ';">' + info.row.status.toString() + '</div>';
+	    			                        return '<div title="' + titleArr.join('\n') + '" style="width:100%; height:100%; background-color:' + backgroundColor + ';color:' + fontColor + ';">' + info.row.status.toString() + '</div>';
 	    			                    }
 	    			                },
 	    			                {
 	    			                    name: 'adapterId',
 	    			                    header: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 	    			                    align: 'left',
-	    			                    width: '10%'
+	    			                    width: '7%'
 	    			                },
 	    			                {
 	    			                    name: 'connectorId',
 	    			                    header: '<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>',
 	    			                    align: 'left',
-	    			                    width: '10%'
+	    			                    width: '11%'
 	    			                },
 	    			                {
 	    			                    name: 'connectorName',
 	    			                    header: '<fmt:message>igate.connector</fmt:message> <fmt:message>head.name</fmt:message>',
 	    			                    align: 'left',
-	    			                    width: '11%'
+	    			                    width: '10%'
 	    			                },
 	    			                {
 	    			                    name: 'socketAddress',
 	    			                    header: 'Socket Address',
 	    			                    align: 'left',
-	    			                    width: '8%'
+	    			                    width: '10%'
 	    			                },
 	    			                {
 	    			                    name: 'socketPort',
 	    			                    header: 'Socket Port',
 	    			                    align: 'center',
-	    			                    width: '6%'
+	    			                    width: '5%'
 	    			                },
 	    			                {
 	    			                    name: 'connectorDesc',
 	    			                    header: '<fmt:message>igate.connector</fmt:message> <fmt:message>head.description</fmt:message>',
 	    			                    align: 'left',
-	    			                    width: '11%'
+	    			                    width: '10%'
 	    			                },
 	    			                {
 	    			                    name: 'sessionCount',
 	    			                    header: '<fmt:message>igate.connectorControl.create</fmt:message>',
 	    			                    align: 'right',
-	    			                    width: '5%',
+	    			                    width: '3%',
 	    			                    formatter: function (info) {
 	    			                        return numberWithComma(info.row.sessionCount);
 	    			                    }
@@ -378,7 +386,7 @@
 	    			                    name: 'sessionMaxCount',
 	    			                    header: '<fmt:message>igate.connectorControl.max</fmt:message>',
 	    			                    align: 'right',
-	    			                    width: '5%',
+	    			                    width: '3%',
 	    			                    formatter: function (info) {
 	    			                        if (info.row.sessionMaxCount == '2147483647') return 'MAX';
 	    			                        else return numberWithComma(info.row.sessionMaxCount);
@@ -388,7 +396,7 @@
 	    			                    name: 'threadCount',
 	    			                    header: '<fmt:message>igate.connectorControl.create</fmt:message>',
 	    			                    align: 'right',
-	    			                    width: '5%',
+	    			                    width: '3%',
 	    			                    formatter: function (info) {
 	    			                        return numberWithComma(info.row.threadCount);
 	    			                    }
@@ -397,7 +405,7 @@
 	    			                    name: 'threadInuse',
 	    			                    header: '<fmt:message>igate.connectorControl.inuse</fmt:message>',
 	    			                    align: 'right',
-	    			                    width: '5%',
+	    			                    width: '3%',
 	    			                    formatter: function (info) {
 	    			                        return numberWithComma(info.row.threadInuse);
 	    			                    }
@@ -406,7 +414,7 @@
 	    			                    name: 'threadMax',
 	    			                    header: '<fmt:message>igate.connectorControl.max</fmt:message>',
 	    			                    align: 'right',
-	    			                    width: '5%',
+	    			                    width: '3%',
 	    			                    formatter: function (info) {
 	    			                        if (info.row.threadMax == '2147483647') return 'MAX';
 	    			                        else return numberWithComma(info.row.threadMax);
@@ -416,7 +424,7 @@
 	    			                    name: 'processResult',
 	    			                    header: '<fmt:message>head.process.result</fmt:message>',
 	    			                    defaultValue: ' ',
-	    			                    width: '10%'
+	    			                    width: '15%'
 	    			                }
 	    			            ],
 	    			            onGridMounted: function (evt) {

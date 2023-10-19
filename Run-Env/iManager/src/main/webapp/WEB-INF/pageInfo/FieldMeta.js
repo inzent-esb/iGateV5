@@ -135,7 +135,8 @@ const info = {
 			list: [
 				{ id: "insert", isUse: true },
 				{ id: "update", isUse: true },
-				{ id: "delete", isUse: true }
+				{ id: "delete", isUse: true },
+				{ id: 'reference', isUse: true, className: 'com.inzent.igate.repository.meta.FieldMeta' }
 			]
 		},
 		tabList: [

@@ -151,7 +151,10 @@ const info = {
 			return detailData;
 		},
 		button: {
-			list: [{ id: "dump", isUse: true, dumpUrl: '/api/entity/query/dump' }]
+			list: [
+				{ id: "dump", isUse: true, dumpUrl: '/api/entity/query/dump' },
+				{ id: 'reference', isUse: true, className: 'com.inzent.igate.repository.meta.Query' }
+			]
 		},
 		tabList: [
 			{

@@ -266,13 +266,13 @@
 			                        name: 'pk.adapterId',
 			                        header: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        align: 'left',
-			                        width: '40%'
+			                        width: '35%'
 			                    },
 			                    {
 			                        name: 'pk.serviceType',
 			                        header: '<fmt:message>common.type</fmt:message>',
 			                        align: 'center',
-			                        width: '20%',
+			                        width: '30%',
 			                        formatter: function (info) {
 			                            return serviceTypes.filter(function (type) {
 			                                return info.value === type.pk.propertyKey;
@@ -283,7 +283,7 @@
 			                        name: 'activityId',
 			                        header: '<fmt:message>igate.activity.id</fmt:message>',
 			                        align: 'left',
-			                        width: '40%'
+			                        width: '35%'
 			                    }
 			                ],
 	                        onGridMounted: function(evt) {

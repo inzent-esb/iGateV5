@@ -73,20 +73,21 @@
 			
 			<footer id="panel-footer" class="panel-footer sub-bar">
 				<div class="ml-auto">				
-					<a href="javascript:void(0);" id="guideBtn"    	   class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="guide"		title="<fmt:message>igate.connector.guide</fmt:message>"><fmt:message>igate.connector.guide</fmt:message></a>
-					<a href="javascript:void(0);" id="externalGuideBtn"class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="externalGuide"title="<fmt:message>igate.external.guide</fmt:message>"><fmt:message>igate.external.guide</fmt:message></a>
-					<a href="javascript:void(0);" id="dumpBtn"   	   class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="dump"		 	title="<fmt:message>head.dump</fmt:message>"><fmt:message>head.dump</fmt:message></a>
-					<a href="javascript:void(0);" id="startBtn"        class="viewGroup btn btn-m"    				    style="display: none;" 	  v-on:click="start" 		title="<fmt:message>head.execute</fmt:message>"><i class="icon-play"></i><fmt:message>head.execute</fmt:message></a>			
-					<a href="javascript:void(0);" id="stopBtn"    	   class="btn viewGroup" 	    		           	style="display: none;"    v-on:click="stop"		 	title="<fmt:message>head.stop</fmt:message>"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
-					<a href="javascript:void(0);" id="stopForceBtn"    class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="stopForce" 	title="<fmt:message>head.stop.force</fmt:message>"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>
-					<a href="javascript:void(0);" id="interruptBtn"    class="viewGroup btn btn-m"    				 	style="display: none;" 	  v-on:click="interrupt" 	title="<fmt:message>head.interrupt</fmt:message>"><fmt:message>head.interrupt</fmt:message></a>
-					<a href="javascript:void(0);" id="blockBtn" 	   class="viewGroup btn btn-m"    				 	style="display: none;" 	  v-on:click="block"		title="<fmt:message>head.block</fmt:message>"><fmt:message>head.block</fmt:message></a>
-					<a href="javascript:void(0);" id="unblockBtn" 	   class="viewGroup btn btn-m"   				 	style="display: none;" 	  v-on:click="unblock" 		title="<fmt:message>head.unblock</fmt:message>"><fmt:message>head.unblock</fmt:message></a>					
-					<a href="javascript:void(0);" id="removeBtn"       class="btn viewGroup removeBtn" 		  		   	style="display: none;"    v-on:click="removeInfo"	title="<fmt:message>head.delete</fmt:message>"><i class="icon-delete"></i><fmt:message>head.delete</fmt:message></a>
-					<a href="javascript:void(0);" id="goModBtn"        class="btn viewGroup goModBtn" 		  		   	style="display: none;"    v-on:click="goModifyPanel"title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>						
-					<a href="javascript:void(0);" id="saveBtn"         class="btn btn-primary saveGroup saveBtn" 	   	style="display: none;"    v-on:click="saveInfo"		title="<fmt:message>head.insert</fmt:message>"><fmt:message>head.insert</fmt:message></a>
-					<a href="javascript:void(0);" id="updateBtn"       class="btn btn-primary updateGroup updateBtn"   	style="display: none;"    v-on:click="updateInfo"	title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>
-					<a href="javascript:void(0);" id="goAddBtn"        class="btn btn-primary viewGroup goAddBtn" 	 	style="display: none;"    v-on:click="goAddInfo" 	title="<fmt:message>head.insert</fmt:message>"><i class="icon-plus"></i><fmt:message>head.insert</fmt:message> (<fmt:message>head.copy</fmt:message>)</a>		
+					<a href="javascript:void(0);" id="referenceBtn"    class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="goReferenceModal"	title="<fmt:message>head.referenceTreeInfo</fmt:message>"><i class="icon-result"></i><fmt:message>head.referenceTreeInfo</fmt:message></a>
+					<a href="javascript:void(0);" id="guideBtn"    	   class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="guide"			title="<fmt:message>igate.connector.guide</fmt:message>"><fmt:message>igate.connector.guide</fmt:message></a>
+					<a href="javascript:void(0);" id="externalGuideBtn"class="btn viewGroup saveGroup updateGroup"	    style="display: none;"    v-on:click="externalGuide"	title="<fmt:message>igate.external.guide</fmt:message>"><fmt:message>igate.external.guide</fmt:message></a>
+					<a href="javascript:void(0);" id="dumpBtn"   	   class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="dump"		 		title="<fmt:message>head.dump</fmt:message>"><fmt:message>head.dump</fmt:message></a>
+					<a href="javascript:void(0);" id="startBtn"        class="viewGroup btn btn-m"    				    style="display: none;" 	  v-on:click="start" 			title="<fmt:message>head.execute</fmt:message>"><i class="icon-play"></i><fmt:message>head.execute</fmt:message></a>			
+					<a href="javascript:void(0);" id="stopBtn"    	   class="btn viewGroup" 	    		           	style="display: none;"    v-on:click="stop"		 		title="<fmt:message>head.stop</fmt:message>"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
+					<a href="javascript:void(0);" id="stopForceBtn"    class="btn viewGroup"    		        	   	style="display: none;"    v-on:click="stopForce" 		title="<fmt:message>head.stop.force</fmt:message>"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>
+					<a href="javascript:void(0);" id="interruptBtn"    class="viewGroup btn btn-m"    				 	style="display: none;" 	  v-on:click="interrupt" 		title="<fmt:message>head.interrupt</fmt:message>"><fmt:message>head.interrupt</fmt:message></a>
+					<a href="javascript:void(0);" id="blockBtn" 	   class="viewGroup btn btn-m"    				 	style="display: none;" 	  v-on:click="block"			title="<fmt:message>head.block</fmt:message>"><fmt:message>head.block</fmt:message></a>
+					<a href="javascript:void(0);" id="unblockBtn" 	   class="viewGroup btn btn-m"   				 	style="display: none;" 	  v-on:click="unblock" 			title="<fmt:message>head.unblock</fmt:message>"><fmt:message>head.unblock</fmt:message></a>					
+					<a href="javascript:void(0);" id="removeBtn"       class="btn viewGroup removeBtn" 		  		   	style="display: none;"    v-on:click="removeInfo"		title="<fmt:message>head.delete</fmt:message>"><i class="icon-delete"></i><fmt:message>head.delete</fmt:message></a>
+					<a href="javascript:void(0);" id="goModBtn"        class="btn viewGroup goModBtn" 		  		   	style="display: none;"    v-on:click="goModifyPanel"	title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>						
+					<a href="javascript:void(0);" id="saveBtn"         class="btn btn-primary saveGroup saveBtn" 	   	style="display: none;"    v-on:click="saveInfo"			title="<fmt:message>head.insert</fmt:message>"><fmt:message>head.insert</fmt:message></a>
+					<a href="javascript:void(0);" id="updateBtn"       class="btn btn-primary updateGroup updateBtn"   	style="display: none;"    v-on:click="updateInfo"		title="<fmt:message>head.update</fmt:message>"><i class="icon-edit"></i><fmt:message>head.update</fmt:message></a>
+					<a href="javascript:void(0);" id="goAddBtn"        class="btn btn-primary viewGroup goAddBtn" 	 	style="display: none;"    v-on:click="goAddInfo" 		title="<fmt:message>head.insert</fmt:message>"><i class="icon-plus"></i><fmt:message>head.insert</fmt:message> (<fmt:message>head.copy</fmt:message>)</a>		
 				</div>
 			</footer>
 			
@@ -210,7 +211,377 @@ var panelMethodOption = {
 		$('[data-ready]').each(function (index, element) {
 			element.dispatchEvent(new CustomEvent('resize'));
 		});		
-   	}
+   	},
+	goReferenceModal: function(referenceParam, className) {
+		var resourceTypeList = {
+			'com.inzent.igate.repository.meta.FieldMeta': {
+				label: '<fmt:message>igate.fieldMeta</fmt:message>',
+				dataId: 'fieldId'
+			},
+			'com.inzent.igate.repository.meta.Adapter': {
+				label: '<fmt:message>igate.adapter</fmt:message>',
+				dataId: 'adapterId',
+				menuId: '202030',
+				searchData: 'adapterId'
+			},
+			'com.inzent.igate.repository.meta.Interface': {
+				label: '<fmt:message>igate.interface</fmt:message>',
+				dataId: 'interfaceId',
+				menuId: '101050',
+				searchData: 'interfaceId'
+			},
+			'com.inzent.igate.repository.meta.InterfacePolicy': {
+				label: '<fmt:message>igate.interfacePolicy</fmt:message>',
+				isPkData: true,
+				dataId: 'adapterId',
+				menuId: '202030',
+				searchData: 'adapterId'
+			},
+			'com.inzent.igate.repository.meta.InterfaceRecognize': {
+				label: '<fmt:message>igate.interfaceRecognize</fmt:message>',
+				isPkData: true,
+				dataId: 'adapterId',
+				menuId: '101060',
+				searchData: 'pk.adapterId'
+			},
+			'com.inzent.igate.repository.meta.Job': {
+				label: '<fmt:message>igate.job</fmt:message>',
+				dataId: 'jobId',
+				menuId: '204010',
+				searchData: 'jobId'
+			},
+			'com.inzent.igate.repository.meta.Mapping': {
+				label: '<fmt:message>igate.mapping</fmt:message>',
+				dataId: 'mappingId',
+				menuId: '101020',
+				searchData: 'mappingId'
+			},
+			'com.inzent.igate.repository.meta.OnlineHeaderMappingPolicy': {
+				label: '<fmt:message>igate.onlineHeaderMappingPolicy</fmt:message>',
+				isPkData: true,
+				dataId: ['interfaceAdapterId', 'serviceAdapterId'],
+				menuId: '203010',
+				searchData: ['pk.interfaceAdapterId', 'pk.serviceAdapterId'],
+				searchLabel: ['<fmt:message>igate.interface</fmt:message>', '<fmt:message>igate.service</fmt:message>']
+			},
+			'com.inzent.igate.repository.meta.Operation': {
+				label: '<fmt:message>igate.operation</fmt:message>',
+				dataId: 'operationId',
+				menuId: '102070',
+				searchData: 'operationId'
+			},
+			'com.inzent.igate.repository.meta.Query': {
+				label: '<fmt:message>igate.query</fmt:message>',
+				dataId: 'queryId',
+				menuId: '101070',
+				searchData: 'queryId'
+			},
+			'com.inzent.igate.repository.meta.Record': {
+				label: '<fmt:message>igate.modelRecord</fmt:message>',
+				dataId: 'recordId',
+				menuId: '101010',
+				searchData: 'recordId'
+			},
+			'com.inzent.igate.repository.log.ReplyEmulate': {
+				label: '<fmt:message>igate.service.replyemulate</fmt:message>',
+				isPkData: true,
+				dataId: 'replyId'
+			},
+			'com.inzent.igate.repository.meta.Service': {
+				label: '<fmt:message>igate.service</fmt:message>',
+				dataId: 'serviceId',
+				menuId: '101030',
+				searchData: 'serviceId'
+			},
+			'com.inzent.igate.repository.meta.ServicePolicy': {
+				label: '<fmt:message>igate.servicePolicy</fmt:message>',
+				isPkData: true,
+				dataId: 'adapterId',
+				menuId: '202030',
+				searchData: 'adapterId'
+			},
+			'com.inzent.igate.repository.meta.ServiceRecognize': {
+				label: '<fmt:message>igate.serviceRecognize</fmt:message>',
+				isPkData: true,
+				dataId: 'adapterId',
+				menuId: '101040',
+				searchData: 'pk.adapterId'
+			},
+			'com.inzent.igate.repository.log.TestCase': {
+				label: '<fmt:message>igate.testcase</fmt:message>',
+				isPkData: true,
+				dataId: 'testCaseId'
+			},
+			'com.inzent.igate.repository.log.TestSuite': {
+				label: '<fmt:message>igate.testsuite</fmt:message>',
+				dataId: 'testSuiteId'
+			}
+		};
+				
+		var modalHtml = '';
+		
+		modalHtml += '	<div id="referenceTreeInfoCt">';
+		modalHtml += '		<div class="table-responsive">';
+		modalHtml += '			<div id="referenceGrid"></div>';
+		modalHtml += '		</div>';
+		modalHtml += '	</div>';
+		
+		var vmLicenseExpiration = null;
+		
+		openModal({
+			name: 'referenceTreeInfo',
+			title: '<fmt:message>head.referenceTreeInfo</fmt:message>',
+			width: '900px',
+			bodyHtml: modalHtml,
+			buttonList: [
+				{
+					customBtnId: 'exportBtn',
+					customBtn: '<fmt:message>head.excel.output</fmt:message>',
+					customBtnAction: function() {
+						if (null === vmLicenseExpiration) return;
+						
+						var grid = vmLicenseExpiration.makeGridObj.getSearchGrid();
+						
+						var headerInfo = {};
+																		
+						grid.getColumns().forEach(function(column) {
+							if (column.hidden) return;
+							
+							headerInfo[column.name] = column.header;
+						})
+						
+						var workbook = XLSX.utils.book_new();
+						
+						var exportData = grid.getData();	
+						
+						var sheetData = exportData.map(function(data) {
+							var className = resourceTypeList[data.className].label;
+							var resourceName = data.resourceName;
+							var updateUserId = data.updateUserId;
+							var updateTimestamp = data.updateTimestamp;
+							
+							return { 
+								className: className, 
+								resourceName: resourceName, 
+								updateUserId: updateUserId, 
+								updateTimestamp: updateTimestamp 
+							}
+						});
+																		
+						sheetData.unshift(headerInfo)
+						
+						var firstSheet = XLSX.utils.json_to_sheet( sheetData, { header: Object.keys(headerInfo), skipHeader: true });
+							
+						firstSheet['!cols'] = [{ wpx: 120 }, { wpx: 250 }, { wpx: 150 }, { wpx: 150 }];
+						
+						XLSX.utils.book_append_sheet(workbook, firstSheet, '<fmt:message>head.referenceTreeInfo</fmt:message>');
+
+						XLSX.writeFile(workbook, 'Reference_' + moment(new Date()).format('YYYYMMDD_HHmmss') + '.xlsx');
+					}
+				}
+			],
+			shownCallBackFunc: function(btnList) {
+				vmLicenseExpiration = new Vue({
+					el: document.getElementById('referenceTreeInfoCt'),
+					data: {
+						makeGridObj: null
+					},
+					mounted: function() {						
+						this.makeGridObj = getMakeGridObj();
+						this.makeGridObj.setConfig({
+							el: document.getElementById('referenceGrid'),
+							data: [],
+							width: '900px',
+							bodyHeight: 500,
+							treeColumnOptions: {
+								name: 'className'
+							},
+							columns: [
+								{
+									name: 'resourceObject',
+									hidden: true
+								},
+								{
+									name: 'className',
+									header: '<fmt:message>head.publishLog.resource.type</fmt:message>',
+									width: '25%',
+									formatter: function(val) {
+										return resourceTypeList[val.row.className].label;
+									}
+								},
+								{
+									name: 'resourceName',
+									header: '<fmt:message>head.name</fmt:message>',
+									width: '35%',
+									formatter: function(val) {
+										var resourceName = '';
+										
+										if (resourceTypeList[val.row.className].searchLabel) {
+											resourceTypeList[val.row.className].searchLabel.forEach(function(label, idx) {
+												resourceName += '<span>' + label + '</span> <span' + 0 === val.row.rowKey ? '' : 'class="link-new-tab"' + '>' + escapeHtml(val.row.resourceName.split(',')[idx]) + '</span>';
+											})
+										} else {
+											var spanStyle = 0 === val.row.rowKey || 0 === val.row.className.indexOf('com.inzent.igate.repository.log') ? '': 'class="link-new-tab"' 
+											
+											resourceName = '<span ' + spanStyle + '>' + escapeHtml(val.row.resourceName) + '</span>'
+										}
+										
+										return resourceName;
+									}
+								},
+								{
+									name: 'updateTimestamp',
+									header: '<fmt:message>igate.notice.created.date</fmt:message>',
+									width: '20%',
+									align: 'center'
+								},
+								{
+									name: 'updateUserId',
+									header: '<fmt:message>igate.notice.writer</fmt:message>',
+									width: '20%'
+								}
+							],
+							onGridUpdated: function(evt) {
+				            	setTimeout(function() {
+				            		evt.instance.expand(0, false);				            		
+				            	}, 0)
+							},
+							onGridMounted: function(evt) {
+				            	evt.instance.on('click', function(evt) {
+				            		if(!evt.nativeEvent.target.classList.contains('link-new-tab')) return;
+				            		
+				            		var rowInfo = evt.instance.getRow(evt.rowKey);
+				            		var resourceInfo = resourceTypeList[rowInfo.className];
+				            		
+				            		var multiResourceName = null;
+									var multiResourceIdx = null;
+				            		
+									
+									if (-1 !== rowInfo.resourceName.indexOf(',')) {
+										rowInfo.resourceName.split(',').forEach(function(data, idx) {
+											if (data === evt.nativeEvent.target.innerText) {
+												multiResourceName = data;
+												multiResourceIdx = idx;
+											}
+										});
+									}
+									
+									var obj = {};
+									
+									obj[null !== multiResourceIdx ? resourceInfo.searchData[multiResourceIdx] : resourceInfo.searchData] =
+										null !== multiResourceIdx ? multiResourceName : rowInfo.resourceName;
+									obj['_pageSize'] = '10';
+									
+									openNewTab(resourceInfo.menuId, function() {
+										localStorage.removeItem('searchObj');
+										localStorage.removeItem('detailObj');
+										
+										localStorage.setItem('searchObj', JSON.stringify(obj));
+										localStorage.setItem('detailObj', JSON.stringify(rowInfo.resourceObject));
+				            		});      		
+				            	});
+				            	
+				            	evt.instance.on('expand', function(evt) {
+				            		resize();
+				            	});
+				            	
+				            	evt.instance.on('collapse', function(evt) {
+				            		resize();
+				            	});
+				            }
+						}, true)
+						
+						var grid = this.makeGridObj.getSearchGrid();
+						
+						setTimeout(function() {
+							new HttpReq('/api/reference/entity').read({'object': referenceParam, 'className': className }, function (res) {
+								
+								if('ok' !== res.result) {
+									window._alert({ type: 'warn', message: res.error[0].message });
+									return;
+								}
+								
+								var resData = res.object ;
+								
+						        grid.resetData([initTreeData(resData)]);
+							});
+						}, 0);
+					},
+				});
+			}
+		})
+		
+		var setResourceName = function(record, parentName) {
+			var resourceTypeData = resourceTypeList[record.className];
+
+			return 'object' === typeof resourceTypeData.dataId
+				? Object.values(record.object.pk).join(',')
+				: record.className.startsWith('com.inzent.igate.repository.log')
+				? parentName + '@' + record.object.pk[resourceTypeData.dataId]
+				: resourceTypeData.isPkData
+				? record.object.pk[resourceTypeData.dataId]
+				: record.object[resourceTypeData.dataId];
+		};
+		
+		var initTreeData = function(record, parentName) {
+			var treeData = {
+					resourceObject: record.object,
+					className: record.className,
+					resourceName: setResourceName(record, parentName),
+					updateUserId: record.object.updateUserId ? record.object.updateUserId : '-',
+					updateTimestamp: record.object.updateTimestamp ? changeDateFormat(record.object.updateTimestamp) : '-'
+				};
+			
+			if (record.referencing && 0 < record.referencing.length) {
+				treeData._children = [];
+
+				record.referencing.forEach(function(field) {
+					var subTreeData = {
+						resourceObject: field.object,
+						className: field.className,
+						resourceName: setResourceName(field, treeData.resourceName),
+						updateUserId: field.object.updateUserId ? field.object.updateUserId : '-',
+						updateTimestamp: field.object.updateTimestamp ? changeDateFormat(field.object.updateTimestamp) : '-'
+					};
+					
+
+ 					if (field.referencing && 0 < field.referencing.length) {
+						if (!subTreeData._children) {
+							subTreeData._children = [];
+						}
+
+						field.referencing.forEach(function(reference ) {
+							subTreeData._children.splice(subTreeData._children, 0, initTreeData(reference, subTreeData.resourceName))
+						});
+					}
+
+					treeData._children.splice(treeData._children.length, 0, subTreeData);
+				});
+			}
+			
+			return treeData ;
+		}
+   	
+		var resize = function() {
+			setTimeout(function () {
+				var grid = vmLicenseExpiration.makeGridObj.getSearchGrid();
+				
+				if (!this.grid) return;
+				
+				var modalBody = document.querySelector('.modal-body');
+
+				var modalBodyComputedStyle = getComputedStyle(modalBody);
+
+				var modalBodyPaddingLeft = getNumFromStr(modalBodyComputedStyle.getPropertyValue('padding-left'));
+				var modalBodyPaddingRight = getNumFromStr(modalBodyComputedStyle.getPropertyValue('padding-right'));
+				var modalBodyPaddingTop = getNumFromStr(modalBodyComputedStyle.getPropertyValue('padding-top'));
+				var modalBodyPaddingBottom = getNumFromStr(modalBodyComputedStyle.getPropertyValue('padding-bottom'));
+
+				this.grid.setWidth(modalBody.clientWidth - modalBodyPaddingLeft - modalBodyPaddingRight);
+				this.grid.setHeight(modalBody.clientHeight - modalBodyPaddingTop - modalBodyPaddingBottom);
+                  }, 0);
+		}
+	}
 };
 
 document.querySelector('#panel').addEventListener('detailReady', detailReady);

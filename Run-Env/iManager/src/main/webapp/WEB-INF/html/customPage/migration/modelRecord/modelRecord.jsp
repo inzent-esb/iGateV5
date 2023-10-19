@@ -421,7 +421,7 @@
 					                    name: 'recordId',
 					                    header: '<fmt:message>head.id</fmt:message>',
 					                    align: 'left',
-					                    width: '20%'
+					                    width: '15%'
 					                },
 					                {
 					                    name: 'recordName',
@@ -443,19 +443,19 @@
 					                    name: 'recordGroup',
 					                    header: '<fmt:message>head.group</fmt:message>',
 					                    align: 'left',
-					                    width: '15%'
+					                    width: '20%'
 					                },
 					                {
 					                    name: 'privilegeId',
 					                    header: '<fmt:message>common.privilege</fmt:message> <fmt:message>head.id</fmt:message>',
 					                    align: 'left',
-					                    width: '15%'
+					                    width: '10%'
 					                },
 					                {
 					                    name: 'recordDesc',
 					                    header: '<fmt:message>head.description</fmt:message>',
 					                    align: 'left',
-					                    width: '20%'
+					                    width: '25%'
 					                }
 					            ]
 					        });

@@ -7,7 +7,7 @@
 	<%@ include file="/WEB-INF/html/layout/header/common_head.jsp"%>
 </head>
 <body>
-	<div id="notice" data-ready>
+	<div id="threadPoolModal" data-ready>
 		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
@@ -185,6 +185,10 @@
 		            }		            
 		        }, true);
 		    }
+		});
+		
+		document.querySelector('#threadPoolModal').addEventListener('resize', function(evt) {
+			resizeModalSearchGrid(vmList.makeGridObj.getSearchGrid());
 		});
 	});
 	</script>	

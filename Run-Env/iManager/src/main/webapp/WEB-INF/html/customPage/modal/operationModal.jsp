@@ -175,6 +175,10 @@
 			        }, true);
 		        }
 		    });
+		    
+			document.querySelector('#operationModal').addEventListener('resize', function(evt) {
+				resizeModalSearchGrid(vmList.makeGridObj.getSearchGrid());
+			});		    
 		});
 	});
 	</script>	

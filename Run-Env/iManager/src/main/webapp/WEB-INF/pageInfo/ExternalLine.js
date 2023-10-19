@@ -58,19 +58,19 @@ const info = {
 					name: "externalLineId",
 					header: this.$t("head.id"),
 					align: "left",
-					width: "40%"
+					width: "30%"
 				},
 				{
 					name: "externalLineName",
 					header: this.$t("head.name"),
 					align: "left",
-					width: "60%"
+					width: "30%"
 				},
 				{
 					name: "externalLineDesc",
 					header: this.$t("head.description"),
 					align: "left",
-					width: "60%"
+					width: "40%"
 				}
 			]
 		}
@@ -273,17 +273,20 @@ const info = {
 										{
 											name: "connectorId",
 											header: this.$t("head.id"),
-											align: "left"
+											align: "left",
+											width: "30%"
 										},
 										{
 											name: "connectorName",
 											header: this.$t("head.name"),
-											align: "left"
+											align: "left",
+											width: "30%"
 										},
 										{
 											name: "connectorDesc",
 											header: this.$t("head.description"),
-											align: "left"
+											align: "left",
+											width: "40%"
 										}
 									]
 								}

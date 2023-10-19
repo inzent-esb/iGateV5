@@ -536,19 +536,19 @@
 			                                    name: 'interfaceName',
 			                                    header: '<fmt:message>head.name</fmt:message>',
 			                                    align: 'left',
-			                                    width: '20%'
+			                                    width: '15%'
 			                                },
 			                                {
 			                                    name: 'adapterId',
 			                                    header: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 			                                    align: 'left',
-			                                    width: '15%'
+			                                    width: '10%'
 			                                },
 			                                {
 			                                    name: 'interfaceType',
 			                                    header: '<fmt:message>common.type</fmt:message>',
 			                                    align: 'center',
-			                                    width: '15%',
+			                                    width: '10%',
 			                                    formatter: function (info) {
 			                                        var rtnValue = null;
 
@@ -588,13 +588,13 @@
 			                                    name: 'interfaceGroup',
 			                                    header: '<fmt:message>head.group</fmt:message>',
 			                                    align: 'left',
-			                                    width: '15%'
+			                                    width: '10%'
 			                                },
 			                                {
 			                                    name: 'privilegeId',
 			                                    header: '<fmt:message>common.privilege</fmt:message> <fmt:message>head.id</fmt:message>',
 			                                    align: 'left',
-			                                    width: '15%'
+			                                    width: '10%'
 			                                },
 			                                {
 			                                    name: 'interfaceDesc',

@@ -267,28 +267,28 @@ const info = {
 			columns: [
 				{
 					name: "pk.createDateTime",
-					header:
-						this.$t("igate.connectorControl.create") +
-						" " +
-						this.$t("head.date"),
+					header: this.$t("igate.connectorControl.create") + " " + this.$t("head.date"),
 					align: "center",
+					width: "20%",
 					formatter: function (obj) {
 						return obj.value.substring(0, 19);
 					}
 				},
 				{
 					name: "transactionId",
-					header:
-						this.$t("head.transaction") + " " + this.$t("head.id")
+					header: this.$t("head.transaction") + " " + this.$t("head.id"),
+					width: "20%"
 				},
 				{
 					name: "serviceId",
-					header: this.$t("igate.service") + " " + this.$t("head.id")
+					header: this.$t("igate.service") + " " + this.$t("head.id"),
+					width: "15%"
 				},
 				{
 					name: "safStatus",
 					header: this.$t("igate.saf") + " " + this.$t("head.status"),
 					align: "center",
+					width: "10%",
 					formatter: function (value) {
 						switch (value.row.safStatus) {
 							case "R": {
@@ -311,12 +311,13 @@ const info = {
 				},
 				{
 					name: "interfaceId",
-					header:
-						this.$t("igate.interface") + " " + this.$t("head.id")
+					header: this.$t("igate.interface") + " " + this.$t("head.id"),
+					width: "15%"
 				},
 				{
 					name: "pk.safId",
-					header: this.$t("igate.saf") + " " + this.$t("head.id")
+					header: this.$t("igate.saf") + " " + this.$t("head.id"),
+					width: "20%"
 				}
 			]
 		}

@@ -281,17 +281,20 @@
 			                        {
 			                            name: 'pk.adapterId',
 			                            header: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
-			                            align: 'left'
+			                            align: 'left',
+			                            width: '35%'
 			                        },
 			                        {
 			                            name: 'pk.interfaceType',
 			                            header: '<fmt:message>common.type</fmt:message>',
-			                            align: 'center'
+			                            align: 'center',
+			                            width: '30%'
 			                        },
 			                        {
 			                            name: 'operationId',
 			                            header: '<fmt:message>igate.operation.id</fmt:message>',
-			                            align: 'left'
+			                            align: 'left',
+			                            width: '35%'
 			                        }
 			                    ],
 		                        onGridMounted: function(evt) {

@@ -98,11 +98,13 @@ const info = {
 							columns: [
 								{
 									header: this.$t("head.id"),
-									name: "privilegeId"
+									name: "privilegeId",
+									width: '30%'
 								},
 								{
 									header: this.$t("common.type"),
 									name: "privilegeType",
+									width: '30%',
 									formatter: function (value) {
 										return value.row.privilegeType == "S"
 											? this.$t(
@@ -115,7 +117,8 @@ const info = {
 								},
 								{
 									header: this.$t("head.description"),
-									name: "privilegeDesc"
+									name: "privilegeDesc",
+									width: '40%'
 								}
 							]
 						}
@@ -184,7 +187,7 @@ const info = {
 				{
 					header: this.$t("common.privilege"),
 					name: "menuPrivilegeId",
-					width: "20%"
+					width: "10%"
 				},
 				{
 					header: this.$t("common.menu.parent"),
@@ -344,12 +347,12 @@ const info = {
 											columns: [
 												{
 													header: this.$t("head.id"),
-													name: "privilegeId"
+													name: "privilegeId",
+													width: '30%',
 												},
 												{
-													header: this.$t(
-														"common.type"
-													),
+													header: this.$t("common.type"),
+													width: '30%',
 													name: "privilegeType",
 													formatter: function (
 														value
@@ -366,10 +369,9 @@ const info = {
 													}
 												},
 												{
-													header: this.$t(
-														"head.description"
-													),
-													name: "privilegeDesc"
+													header: this.$t("head.description"),
+													name: "privilegeDesc",
+													width: '40%'
 												}
 											]
 										}

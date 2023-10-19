@@ -406,13 +406,13 @@
 				                    name: 'mappingId',
 				                    header: '<fmt:message>head.id</fmt:message>',
 				                    align: 'left',
-				                    width: '20%'
+				                    width: '25%'
 				                },
 				                {
 				                    name: 'mappingName',
 				                    header: '<fmt:message>head.name</fmt:message>',
 				                    align: 'left',
-				                    width: '20%'
+				                    width: '25%'
 				                },
 				                {
 				                    name: 'mappingGroup',

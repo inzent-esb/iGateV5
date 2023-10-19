@@ -78,7 +78,7 @@ const info = {
 				{
 					header: this.$t("head.update.timestamp"),
 					name: "pk.modifyDateTime",
-					width: "25%",
+					width: "20%",
 					align: "center",
 					formatter: function (obj) {
 						return obj.value.substring(0, 19);
@@ -87,17 +87,23 @@ const info = {
 				{
 					header: this.$t("common.metaHistory.entityName"),
 					name: "entityName",
-					width: "25%"
+					width: "20%"
 				},
 				{
 					header: this.$t("common.metaHistory.entityId"),
 					name: "entityId",
-					width: "25%"
+					width: "20%"
+				},
+				{
+					header: "Entity Version",
+					name: "entityVersion",
+					width: "10%",
+					align: 'right'
 				},
 				{
 					header: this.$t("common.metaHistory.modifyType"),
 					name: "modifyType",
-					width: "25%",
+					width: "20%",
 					align: "center",
 					formatter: function (value) {
 						var modifyType = value.row.modifyType;
@@ -111,7 +117,12 @@ const info = {
 							? this.$t("head.update")
 							: "";
 					}
-				}
+				},
+				{
+					header: this.$t("head.update.userId"),
+					name: "updateUserId",
+					width: "10%"
+				},
 			]
 		}
 	},
@@ -188,6 +199,11 @@ const info = {
 								type: "text",
 								vModel: "entityId",
 								label: this.$t("common.metaHistory.entityId")
+							},
+							{
+								type: "text",
+								vModel: "entityVersion",
+								label: 'Entity Version',
 							},
 							{
 								type: "text",

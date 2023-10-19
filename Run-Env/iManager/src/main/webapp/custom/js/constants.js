@@ -15,16 +15,36 @@ var constants = {
 		default: { maxLength: 100, regExp: '' }
 	},
 	logInTime: 300000,
+	
+	motionDetectTime: 1000,
+	autoLogoutTime: 1200000,
+	
 	//escape: 27, space: 32
 	modalCloseKeyCode: [27, 32],
 	isUseTheme: true,
 	
+	search: {
+		searchListFunc: function(menuId, searchList) {
+			/* 웹서비스 제외
+			ex) 'basic' === type
+			if ('103010' === menuId) {
+				searchList[2].label = 'UUID';
+			}
+			
+			ex) 'custom' === type
+			if ('103020' === menuId) {
+				searchList[2].name = 'UUID';
+			}*/
+						
+			return searchList;
+		}
+	},
+	
 	grid : {
-		gridOptionFunc: function(gridOptions, isModal) {
-			//var url = gridOptions.url? gridOptions.url : gridOptions.searchUrl;
-
+		gridOptionFunc: function(menuId, gridOptions) {
 			/*
-			if ('/api/entity/record/search' === url) {
+			 ex) 'basic' === type
+			 if ('101010' === menuId) {
 				gridOptions.paging.side = 'serverPaging';
 				gridOptions.url = '/api/entity/record/page';
 				
@@ -34,10 +54,9 @@ var constants = {
 				gridOptions.options.columns[2].sortable = true;
 				gridOptions.options.columns[2].sortingType = "desc";
 			}
-			*/
 			
-			/*
-			if ('/api/entity/serviceRecognize/search' === url) {
+			ex) 'custom' === type
+			if ('101040' === menuId) {
 				gridOptions.paging.side = 'serverPaging';
 				gridOptions.searchUrl = '/api/entity/serviceRecognize/page';
 				
@@ -45,16 +64,16 @@ var constants = {
 				gridOptions.columns[1].sortingType = "desc";
 				
 				gridOptions.sortColumn = "pk.telegramValue";
-			}
-			*/
+			}*/
 			
 			return gridOptions;
 		},
-		pageOptionFunc: function(searchUrl) {
+		pageOptionFunc: function(menuId) {
 			var limit = 100;
 			var ascending = true;
 			
-			if ('/api/entity/metaHistory/search' === searchUrl || '/api/entity/exceptionLog/search' === searchUrl || '/api/entity/notice/search' === searchUrl) {
+			// 에러로그, 조작이력, 공지사항
+			if ('103010' === menuId || '303020' === menuId || '303010' === menuId) {
 				ascending = false;
 			}
 			
@@ -79,35 +98,34 @@ var constants = {
 	},
 	
 	detail: {
-		101010: {
-			selectedInfoTitleKey: ['recordId', 'recordDesc']
+		tabListFunc: function(menuId, tabList) {
+			/* 웹서비스, SAP 서비스, SAP 인터페이스, 어댑터 위자드, 어댑터, 커넥터, 배치작업 제외 		
+			ex) 'basic' === type
+			if ('303030' === menuId) {
+				var basicInfo = tabList[0].content;
+				
+				basicInfo[0][0][0].label = window.$t('head.test');
+			}
+			
+			ex) 'custom' === type
+			if ('101040' === menuId) {
+				var basicInfo = tabList[0].detailList[0];
+				basicInfo.detailSubList[0].name = window.$t('head.test');
+			}*/
+			
+			return tabList;
 		},
-		101070: {
-			selectedInfoTitleKey: ['queryId', 'queryDesc']
-		},
-		102070: {
-			selectedInfoTitleKey: ['operationId', 'operationDesc']
-		},
-		101050: {
-			selectedInfoTitleKey: ['interfaceId', 'interfaceDesc']
-		},
-		202030: {
-			selectedInfoTitleKey: ['adapterId', 'adapterName']
-		},
-		202020: {
-			selectedInfoTitleKey: ['connectorId', 'connectorName']
-		},
-		302020: {
-			selectedInfoTitleKey: ['threadPoolId', 'threadPoolDesc']
-		},
-		302030: {
-			selectedInfoTitleKey: ['calendarId', 'calendarDesc']
-		},
-		303070: {
-			selectedInfoTitleKey: ['menuId', 'menuUrl']
-		},
-		303080: {
-			selectedInfoTitleKey: ['noticeTitle']
+		selectedInfoTitleKey: {
+			101010: ['recordId', 'recordDesc'],
+			101070: ['queryId', 'queryDesc'],
+			101050: ['interfaceId', 'interfaceDesc'],
+			102070: ['operationId', 'operationDesc'],
+			202020: ['connectorId', 'connectorName'],
+			202030: ['adapterId', 'adapterName'],
+			302020: ['threadPoolId', 'threadPoolDesc'],
+			302030: ['calendarId', 'calendarDesc'],
+			303070: ['menuId', 'menuUrl'],
+			303080: ['noticeTitle']
 		}
 	},
 	
@@ -119,4 +137,6 @@ var constants = {
 	
 	//"yyyyMMddHHmmss" or "HHmmss"
 	serviceRestrictionDateFormat: 'HHmmss',
+	
+	isDetailExpand: false
 };

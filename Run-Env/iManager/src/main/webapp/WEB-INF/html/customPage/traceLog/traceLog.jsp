@@ -525,7 +525,7 @@
 									name: 'requestTimestamp',
 									header: '<fmt:message>igate.traceLog.requestTimestamp</fmt:message>',
 									align: 'center',
-									width: '12%',
+									width: '15%',
 									formatter: function(obj) {
 										return changeDateFormat(obj.value);
 									}
@@ -533,49 +533,49 @@
 			              		{
 									name: "transactionId",
 									header: "<fmt:message>head.transaction</fmt:message> <fmt:message>head.id</fmt:message>",
-									width: '10%'
+									width: '15%'
 								},
 								{
 									name: "logCode",
 									header: "<fmt:message>head.log</fmt:message> <fmt:message>head.classification</fmt:message>",
 									align: 'center',
-									width: '6%'
+									width: '5%'
 								},
 								{
 									name: "adapterId",
 									header: "<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>",
-									width: '8%'
+									width: '5%'
 								},
 								{
 									name: "interfaceId",
 									header: "<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>",
-									width: '12%'
+									width: '10%'
 								},
 								{
 									name: "serviceId",
 									header: "<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>",
-									width: '12%'
+									width: '10%'
 								},
 								{
 									name: "instanceId",
 									header: "<fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message>",
-									width: '6%'
+									width: '5%'
 								},								
 								{
 									name: "externalTransaction",
 									header: "<fmt:message>igate.externalTransaction</fmt:message>",
-									width: '12%'
+									width: '10%'
 								},
 								{
 									name: "externalMessage",
 									header: "<fmt:message>igate.externalMessage</fmt:message>",
-									width: '12%'
+									width: '15%'
 								},
 								{
 									name: 'responseCode',
 									header: '<fmt:message>igate.traceLog.responseCode</fmt:message>',
 									align: 'center',
-									width: '12%'
+									width: '10%'
 								},
 								{
 									name: "partitionId",
@@ -1201,10 +1201,17 @@
 		    	methods: $.extend(true, {}, panelMethodOption)
 		    });	
 		    
-		    this.addEventListener('resize', function(evt) {
-		    	if(!traceLogTreeGrid) return;
+		    this.addEventListener('resize', function(evt) {		    	
+		    	var traceLogBasicGrid = window.vmMain.makeBasicInfoGridObj.getSearchGrid();
+		    	var panelWidth = $('#panel').find('.panel-body').width();
 		    	
-		    	traceLogTreeGrid.setWidth($('#panel').find('.panel-body').width());	
+		    	if(traceLogBasicGrid) {
+			    	traceLogBasicGrid.setWidth(panelWidth);			    		
+		    	}
+		    	
+		    	if(traceLogTreeGrid) {
+			    	traceLogTreeGrid.setWidth(panelWidth);			    		
+		    	}
 		    });
 		    
 			this.addEventListener('destroy', function(evt) {

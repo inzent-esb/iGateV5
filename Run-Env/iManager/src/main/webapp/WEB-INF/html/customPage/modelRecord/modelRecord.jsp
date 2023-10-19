@@ -361,7 +361,7 @@
 					                    name: 'recordId',
 					                    header: '<fmt:message>head.id</fmt:message>',
 					                    align: 'left',
-					                    width: '20%'
+					                    width: '15%'
 					                },
 					                {
 					                    name: 'recordName',
@@ -395,7 +395,7 @@
 					                    name: 'recordDesc',
 					                    header: '<fmt:message>head.description</fmt:message>',
 					                    align: 'left',
-					                    width: '30%'
+					                    width: '25%'
 					                }
 					            ],
 					            onGridMounted: function(evt) {

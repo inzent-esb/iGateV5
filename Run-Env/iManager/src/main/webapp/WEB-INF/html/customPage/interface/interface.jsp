@@ -536,7 +536,7 @@
 			                                    name: 'interfaceId',
 			                                    header: '<fmt:message>head.id</fmt:message>',
 			                                    align: 'left',
-			                                    width: '10%'
+			                                    width: '15%'
 			                                },
 			                                {
 			                                    name: 'interfaceName',
@@ -548,13 +548,13 @@
 			                                    name: 'adapterId',
 			                                    header: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 			                                    align: 'left',
-			                                    width: '20%'
+			                                    width: '10%'
 			                                },
 			                                {
 			                                    name: 'interfaceType',
 			                                    header: '<fmt:message>common.type</fmt:message>',
 			                                    align: 'center',
-			                                    width: '10%',
+			                                    width: '7%',
 			                                    formatter: function (info) {
 			                                        var rtnValue = null;
 
@@ -600,7 +600,7 @@
 			                                    name: 'privilegeId',
 			                                    header: '<fmt:message>common.privilege</fmt:message>',
 			                                    align: 'left',
-			                                    width: '15%'
+			                                    width: '8%'
 			                                },
 			                                {
 			                                    name: 'interfaceDesc',

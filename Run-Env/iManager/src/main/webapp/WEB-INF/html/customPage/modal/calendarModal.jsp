@@ -7,7 +7,7 @@
 	<%@ include file="/WEB-INF/html/layout/header/common_head.jsp"%>
 </head>
 <body>
-	<div id="calendar" data-ready>
+	<div id="calendarModal" data-ready>
 		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
@@ -158,9 +158,13 @@
 			                $('#' + popupId).find('#modalClose').trigger('click');		            		
 		            	})
 		            }
-		        });
+		        }, true);
 		    }
 		});
+		
+		document.querySelector('#calendarModal').addEventListener('resize', function(evt) {
+			resizeModalSearchGrid(vmList.makeGridObj.getSearchGrid());
+		});		
 	});
 	</script>	
 </body>

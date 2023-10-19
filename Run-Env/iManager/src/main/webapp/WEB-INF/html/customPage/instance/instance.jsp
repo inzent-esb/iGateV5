@@ -304,13 +304,13 @@
 		                                name: 'instanceId',
 		                                header: '<fmt:message>head.id</fmt:message>',
 		                                align: 'left',
-		                                width: '45%'
+		                                width: '40%'
 		                            },
 		                            {
 		                                name: 'instanceType',
 		                                header: '<fmt:message>common.type</fmt:message>',
 		                                align: 'center',
-		                                width: '10%',
+		                                width: '20%',
 		                                formatter: function (value) {
 		                                    switch (value.row.instanceType) {
 		                                        case 'T': {
@@ -331,7 +331,7 @@
 		                            {
 		                                name: 'instanceNode',
 		                                header: '<fmt:message>igate.instance.node</fmt:message>',
-		                                width: '45%'
+		                                width: '40%'
 		                            }
 		                        ],
 		                        onGridMounted: function(evt) {

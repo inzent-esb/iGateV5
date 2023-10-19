@@ -328,31 +328,31 @@
 			                    name: 'mappingId',
 			                    header: '<fmt:message>head.id</fmt:message>',
 			                    align: 'left',
-			                    width: '24%'
+			                    width: '20%'
 			                },
 			                {
 			                    name: 'mappingName',
 			                    header: '<fmt:message>head.name</fmt:message>',
 			                    align: 'left',
-			                    width: '24%'
+			                    width: '25%'
 			                },
 			                {
 			                    name: 'mappingGroup',
 			                    header: '<fmt:message>head.group</fmt:message>',
 			                    align: 'left',
-			                    width: '12%'
+			                    width: '15%'
 			                },
 			                {
 			                    name: 'privilegeId',
 			                    header: '<fmt:message>common.privilege</fmt:message>',
 			                    align: 'left',
-			                    width: '10%'
+			                    width: '15%'
 			                },
 			                {
 			                    name: 'mappingDesc',
 			                    header: '<fmt:message>head.description</fmt:message>',
 			                    align: 'left',
-			                    width: '30%'
+			                    width: '25%'
 			                }
 			            ],
 			            onGridMounted: function(evt) {

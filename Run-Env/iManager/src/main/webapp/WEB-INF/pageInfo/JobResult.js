@@ -85,15 +85,18 @@ const info = {
 							columns: [
 								{
 									name: "jobId",
-									header: this.$t("head.id")
+									header: this.$t("head.id"),
+									width: "25%"
 								},
 								{
 									name: "jobDesc",
-									header: this.$t("head.description")
+									header: this.$t("head.description"),
+									width: "25%"
 								},
 								{
 									name: "jobType",
 									header: this.$t("common.type"),
+									width: "25%",
 									formatter: function (value) {
 										if (value.row.jobType == "R")
 											return this.$t("igate.job.type.reserve");
@@ -105,7 +108,8 @@ const info = {
 								},
 								{
 									name: "cronExpression",
-									header: this.$t("igate.job.cronExpression")
+									header: this.$t("igate.job.cronExpression"),
+									width: "25%"
 								}
 							]
 						}
@@ -286,7 +290,7 @@ const info = {
 					name: "pk.scheduledDateTime",
 					header: this.$t("igate.jobResult.scheduledDateTime"),
 					align: "center",
-					width: "26%",
+					width: "30%",
 					formatter: function (obj) {
 						return obj.value.substring(0, 19);
 					}
@@ -294,13 +298,13 @@ const info = {
 				{
 					name: "pk.jobId",
 					header: this.$t("igate.job") + " " + this.$t("head.id"),
-					width: "27%"
+					width: "25%"
 				},
 				{
 					name: "pk.instanceId",
 					header:
 						this.$t("igate.instance") + " " + this.$t("head.id"),
-					width: "26%"
+					width: "25%"
 				},
 				{
 					name: "successYn",

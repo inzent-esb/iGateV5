@@ -44,17 +44,17 @@ const info = {
 				{
 					header: this.$t("igate.notice.title"),
 					name: "noticeTitle",
-					width: "5%",
+					width: "80%",
 				},
 				{
 					header: this.$t("igate.notice.writer"),
 					name: "userId",
-					width: "30%"
+					width: "10%"
 				},
 				{
 					header: this.$t("igate.notice.reg.date"),
 					name: "pk.createTimestamp",
-					width: "30%",
+					width: "10%",
 					align: "center",
 					formatter: function (obj) {
 						return !obj.value? obj.value : obj.value.substring(0, 19);

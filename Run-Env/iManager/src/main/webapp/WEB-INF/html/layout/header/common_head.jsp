@@ -9,7 +9,7 @@
 <c:set var="serverName" value="<%= request.getServerName() %>" />
 <c:set var="serverPort" value="<%= request.getServerPort() %>" />
 <c:set var="contextPath" value="<%= request.getContextPath() %>" />
-<c:set var="prefixUrl" value="http://${serverName}:${serverPort}${contextPath}" />
+<c:set var="prefixUrl" value="//${serverName}:${serverPort}${contextPath}" />
 <c:set var="prefixFileUrl" value="${prefixUrl}/custom" /> <%-- css/fonts/img/js 경로 --%>
 
 <link rel="stylesheet" type="text/css" href="${prefixFileUrl}/css/common-external.css">
@@ -38,12 +38,12 @@ var scriptInfoArr = [
  	{'url': "/js/utils.js"},
  	{'url': "/js/modal.js"},
  	{'url': "/js/daterangepicker_custom.js"},
+ 	{'url': "/js/xlsx.full.min.js"},
  	
  	{'url': "/js/jquery-ui-timepicker-addon.min.js"},
  	{'url': "/js/jquery-ui-timepicker-addon-i18n.min.js"},
  	{'url': "/js/jquery-ui-timepicker-addon-i18n-ext.js"},
- 	
- 	
+ 	 	
  	{'url': "/js/page-config.js"},
  	{'url': "/js/page-actions.js"}
 ];

@@ -140,16 +140,12 @@ const info = {
 								},
 								{
 									name: "requestStructure",
-									header: this.$t(
-										"igate.adapter.structure.request"
-									),
+									header: this.$t("igate.adapter.structure.request"),
 									width: "20%"
 								},
 								{
 									name: "responseStructure",
-									header: this.$t(
-										"igate.adapter.structure.response"
-									),
+									header: this.$t("igate.adapter.structure.response"),
 									width: "20%"
 								}
 							]
@@ -440,11 +436,9 @@ const info = {
 			columns: [
 				{
 					name: "createDateTime",
-					header:
-						this.$t("igate.connectorControl.create") +
-						" " +
-						this.$t("head.date"),
+					header: this.$t("igate.connectorControl.create") + " " + this.$t("head.date"),
 					align: "center",
+					width: "10%",
 					formatter: function (obj) {
 						return obj.value.substring(0, 19);
 					}
@@ -453,7 +447,7 @@ const info = {
 					name: "pk.fileMode",
 					header: this.$t("head.file") + " " + this.$t("head.mode"),
 					align: "center",
-					width: "6%",
+					width: "5%",
 					formatter: function (value) {
 						switch (value.row["pk.fileMode"]) {
 							case "R": {
@@ -467,12 +461,14 @@ const info = {
 				},
 				{
 					name: "pk.fileName",
-					header: this.$t("head.file") + " " + this.$t("head.name")
+					header: this.$t("head.file") + " " + this.$t("head.name"),
+					width: "20%"
 				},
 				{
 					name: "fileStatus",
 					header: this.$t("head.file") + " " + this.$t("head.status"),
 					align: "center",
+					width: "10%",
 					formatter: function (value) {
 						var fileStatus = "";
 						var fileStatusList = value.formatterData.fileStatusList;
@@ -493,30 +489,29 @@ const info = {
 				{
 					name: "pk.fileDate",
 					header: this.$t("head.file") + " " + this.$t("head.date"),
-					align: "center"
+					align: "center",
+					width: "10%"
 				},
 				{
 					name: "pk.adapterId",
-					header: this.$t("igate.adapter") + " " + this.$t("head.id")
+					header: this.$t("igate.adapter") + " " + this.$t("head.id"),
+					width: "10%"
 				},
 				{
 					name: "interfaceServiceId",
-					header:
-						this.$t("igate.interface") +
-						" " +
-						this.$t("igate.service") +
-						" " +
-						this.$t("head.id")
+					header: this.$t("igate.interface") + " " + this.$t("igate.service") + " " + this.$t("head.id"),
+					width: "15%"
 				},
 				{
 					name: "transactionId",
-					header:
-						this.$t("head.transaction") + " " + this.$t("head.id")
+					header: this.$t("head.transaction") + " " + this.$t("head.id"),
+					width: "15%"
 				},
 				{
 					name: "fileLength",
 					header: this.$t("head.file") + " " + this.$t("head.length"),
 					align: "right",
+					width: "5%",
 					formatter: function (info) {
 						const number = info.row.fileLength;
 						return number

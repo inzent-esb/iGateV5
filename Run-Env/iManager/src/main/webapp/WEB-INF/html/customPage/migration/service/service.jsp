@@ -539,7 +539,7 @@
 					                    name: 'serviceId',
 					                    header: '<fmt:message>head.id</fmt:message>',
 					                    align: 'left',
-					                    width: '20%'
+					                    width: '15%'
 					                },
 					                {
 					                    name: 'serviceName',
@@ -567,7 +567,7 @@
 					                    name: 'adapterId',
 					                    header: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 					                    align: 'left',
-					                    width: '15%'
+					                    width: '10%'
 					                },
 					                {
 					                    name: 'serviceGroup',
@@ -579,7 +579,7 @@
 					                    name: 'privilegeId',
 					                    header: '<fmt:message>common.privilege</fmt:message> <fmt:message>head.id</fmt:message>',
 					                    align: 'left',
-					                    width: '15%'
+					                    width: '10%'
 					                },
 					                {
 					                    name: 'serviceDesc',

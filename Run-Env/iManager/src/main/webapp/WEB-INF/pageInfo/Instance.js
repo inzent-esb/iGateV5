@@ -68,13 +68,13 @@ const info = {
 					name: "instanceId",
 					header: this.$t("head.id"),
 					align: "left",
-					width: "45%"
+					width: "40%"
 				},
 				{
 					name: "instanceType",
 					header: this.$t("common.type"),
 					align: "center",
-					width: "10%",
+					width: "20%",
 					formatter: function (value) {
 						switch (value.row.instanceType) {
 							case "T": {
@@ -95,7 +95,7 @@ const info = {
 				{
 					name: "instanceNode",
 					header: this.$t("igate.instance.node"),
-					width: "45%"
+					width: "40%"
 				}
 			]
 		}

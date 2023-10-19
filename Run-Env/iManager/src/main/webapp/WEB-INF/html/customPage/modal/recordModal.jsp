@@ -7,7 +7,7 @@
 	<%@ include file="/WEB-INF/html/layout/header/common_head.jsp"%>
 </head>
 <body>
-	<div id="record" data-ready>
+	<div id="recordModal" data-ready>
 		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_list.jsp"%>
@@ -148,6 +148,10 @@
 		        }, true);
 		    }
 		});
+		
+		document.querySelector('#recordModal').addEventListener('resize', function(evt) {
+			resizeModalSearchGrid(vmList.makeGridObj.getSearchGrid());
+		});		
 	});
 	</script>	
 </body>
