@@ -3,7 +3,7 @@ package com.custom.tracelog ;
 import com.inzent.igate.repository.log.TraceLog ;
 import com.inzent.igate.tracelog.TraceLogDbFile ;
 
-public class CustomTraceLogDbFile extends TraceLogDbFile<TraceLog>
+public class CustomTraceLogDbFile extends TraceLogProcessor<TraceLog>
 {
   public CustomTraceLogDbFile()
   {
