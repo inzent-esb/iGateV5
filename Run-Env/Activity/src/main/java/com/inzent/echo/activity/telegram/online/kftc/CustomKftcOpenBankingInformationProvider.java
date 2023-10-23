@@ -25,12 +25,16 @@ public class CustomKftcOpenBankingInformationProvider extends KftcOpenBankingInf
     ValueObject valueObject_custom = (ValueObject) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()) ;
     
     logger.debug("## analyze request :["  + request + "]") ;
-    logger.debug("## analyze valueObject :["  + valueObject_custom + "]") ;
+    logger.debug("## analyze valueObject_custom :["  + valueObject_custom + "]") ;
     logger.debug("## analyze uri :["  + (String) valueObject_custom.get(HttpConstants.URI) + "]") ;
     logger.debug("## analyze uri/oauth: ["  + ((String) valueObject_custom.get(HttpConstants.URI)).startsWith("/oauth") + "]") ;
     
     super.analyze(adapterParameter, request) ;
     
+    logger.debug("## analyze ==============================================================================") ;
+    logger.debug("## analyze valueObject :["  + valueObject + "]") ;
+    logger.debug("## analyze uri :["  + (String) valueObject.get(HttpConstants.URI) + "]") ;
+    logger.debug("## analyze uri/oauth: ["  + ((String) valueObject.get(HttpConstants.URI)).startsWith("/oauth") + "]") ;
     if (!((String) valueObject.get(HttpConstants.URI)).startsWith("/oauth"))
     {
     	logger.debug("## analyze if jsonNode:["  + jsonNode + "]") ;
