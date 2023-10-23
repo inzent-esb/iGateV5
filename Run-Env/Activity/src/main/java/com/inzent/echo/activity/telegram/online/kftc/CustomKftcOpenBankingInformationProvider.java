@@ -1,6 +1,5 @@
 package com.inzent.echo.activity.telegram.online.kftc ;
 
-import com.fasterxml.jackson.databind.JsonNode ;
 import com.inzent.igate.activity.adapter.online.kftc.KftcOpenBankingInformationProvider ;
 import com.inzent.igate.adapter.AdapterParameter ;
 import com.inzent.igate.context.TransactionContextBean ;
@@ -11,9 +10,6 @@ import com.inzent.igate.repository.meta.Activity ;
 
 public class CustomKftcOpenBankingInformationProvider extends KftcOpenBankingInformationProvider
 {
-  protected ValueObject valueObject ;
-  protected JsonNode jsonNode ;
-
   public CustomKftcOpenBankingInformationProvider(Activity activity)
   {
     super(activity) ;
