@@ -462,7 +462,7 @@ function getCreatePageObj() {
 								placeholder: detailSubObj.placeholder,
 								combiList: detailSubObj.combiList,
 								changeEvt: detailSubObj.changeEvt,
-								clickEvt: detailSubObj.clickEvt,
+								clickEvt: window.isTools? null : detailSubObj.clickEvt,
 								btnClickEvt: detailSubObj.btnClickEvt,
 								cryptType: detailSubObj.cryptType,
 						};

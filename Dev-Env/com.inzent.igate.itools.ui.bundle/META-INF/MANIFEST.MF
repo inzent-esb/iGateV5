@@ -2,20 +2,20 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: iGate iTools Ui
 Bundle-SymbolicName: com.inzent.igate.itools.ui;singleton:=true
-Bundle-Version: 5.3.2.qualifier
+Bundle-Version: 5.4.0.qualifier
 Bundle-Activator: com.inzent.igate.itools.ui.UiActivator
 Bundle-Vendor: Inzent
-Require-Bundle: com.inzent.igate.itools;bundle-version="5.3.2",
- com.inzent.igate.itools.activity;bundle-version="5.3.2",
- com.inzent.igate.itools.core;bundle-version="5.3.2",
- com.inzent.igate.itools.help;bundle-version="5.3.2",
- com.inzent.igate.itools.interface;bundle-version="5.3.2",
- com.inzent.igate.itools.mapping;bundle-version="5.3.2",
- com.inzent.igate.itools.operation;bundle-version="5.3.2",
- com.inzent.igate.itools.record;bundle-version="5.3.2",
- com.inzent.igate.itools.service;bundle-version="5.3.2",
- com.inzent.igate.itools.query;bundle-version="5.3.2",
- com.inzent.itools;bundle-version="5.3.2",
+Require-Bundle: com.inzent.igate.itools;bundle-version="5.4.0",
+ com.inzent.igate.itools.activity;bundle-version="5.4.0",
+ com.inzent.igate.itools.core;bundle-version="5.4.0",
+ com.inzent.igate.itools.help;bundle-version="5.4.0",
+ com.inzent.igate.itools.interface;bundle-version="5.4.0",
+ com.inzent.igate.itools.mapping;bundle-version="5.4.0",
+ com.inzent.igate.itools.operation;bundle-version="5.4.0",
+ com.inzent.igate.itools.record;bundle-version="5.4.0",
+ com.inzent.igate.itools.service;bundle-version="5.4.0",
+ com.inzent.igate.itools.query;bundle-version="5.4.0",
+ com.inzent.itools;bundle-version="5.4.0",
  org.eclipse.core.runtime,
  org.eclipse.jdt.ui,
  org.eclipse.ui,

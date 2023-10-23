@@ -1121,3 +1121,7 @@ span.ellipsis {
 .tui-prev {
 	border: 1px solid #ddd !important;
 }
+
+.modal-backdrop.fade {
+	transition: none !important; 
+}
