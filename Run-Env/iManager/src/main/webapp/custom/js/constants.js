@@ -41,7 +41,7 @@ var constants = {
 	},
 	
 	grid : {
-		gridOptionFunc: function(menuId, gridOptions) {
+		gridOptionFunc: function(menuId, searchUrl, gridOptions) {
 			/*
 			 ex) 'basic' === type
 			 if ('101010' === menuId) {
@@ -68,12 +68,14 @@ var constants = {
 			
 			return gridOptions;
 		},
-		pageOptionFunc: function(menuId) {
+		pageOptionFunc: function(menuId, searchUrl) {
 			var limit = 100;
 			var ascending = true;
 			
 			// 에러로그, 조작이력, 공지사항
 			if ('103010' === menuId || '303020' === menuId || '303010' === menuId) {
+				ascending = false;
+			} else if (('101010' === menuId || '101030' === menuId || '101050' === menuId || '102040' === menuId) && '/api/entity/metaHistory/search' === searchUrl) {
 				ascending = false;
 			}
 			
