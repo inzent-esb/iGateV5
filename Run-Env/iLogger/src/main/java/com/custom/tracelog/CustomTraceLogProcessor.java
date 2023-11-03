@@ -3,9 +3,9 @@ package com.custom.tracelog ;
 import com.inzent.igate.repository.log.TraceLog ;
 import com.inzent.igate.tracelog.TraceLogProcessor ;
 
-public class CustomTraceLogRdbFile extends TraceLogProcessor<TraceLog>
+public class CustomTraceLogProcessor extends TraceLogProcessor<TraceLog>
 {
-  public CustomTraceLogRdbFile()
+  public CustomTraceLogProcessor()
   {
     super(TraceLog.class) ;
   }

@@ -20,8 +20,8 @@
 
 	<bean id="traceLogIndex" class="com.inzent.igate.tracelog.TraceLogRdbIndex" />
 
-	<bean id="traceLogStatistics" class="com.custom.tracelog.CustomTraceLogStatisticsBean" />
+	<bean id="traceLogStatistics" class="com.custom.tracelog.CustomTraceLogStatistics" />
 
-	<bean class="com.custom.tracelog.CustomTraceLogRdbFile" />
+	<bean class="com.custom.tracelog.CustomTraceLogProcessor" />
 
 </beans>
