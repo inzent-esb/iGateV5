@@ -78,18 +78,6 @@ public class CustomReplyEmulater extends ReplyEmulater
    * REP(\HDR_COM\GIT_CNT_C , 1, aa )
    **/
   protected final static String OPTION_REPLACE = "REP";
-
-  public static ReplyEmulate getReplyEmulateObj(ReplyEmulatePK replyEmulatePK) throws IGateException
-  {
-    ReplyEmulate replyEmulate = null;
-    try {
-      if(null != instance )
-        replyEmulate = instance.getReplyEmulate(replyEmulatePK) ;
-    }catch (Exception e) {
-      replyEmulate = null;
-    }
-    return replyEmulate;
-  }
   
   @Override
   public boolean doMakeReply(AdapterParameter adapterParameter, Service service, Record request) throws IGateException 
