@@ -29,7 +29,10 @@ public class CustomMessageBuilder extends MessageBuilder implements CustomMessag
   @Override
   public Record mappingResponseHeader(Record target, Record[] source, Interface interfaceMeta, Service serviceMeta, Log log) throws IGateException
   {
-    return mappingMessagePart(super.mappingResponseHeader(target, source, interfaceMeta, serviceMeta, log), source, log) ;
+    if (interfaceMeta.getAdapterId().startsWith(PRE_FIX_STD))
+      return mappingMessagePart(super.mappingResponseHeader(target, source, interfaceMeta, serviceMeta, log), source, log) ;
+    else
+      return super.mappingResponseHeader(target, source, interfaceMeta, serviceMeta, log);
   }
 
   @Override
