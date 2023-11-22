@@ -37,7 +37,8 @@
 		<websocket:handshake-handler ref="handshakeHandler" />
 	</websocket:handlers>
 
-	<bean id="replyEmulater" class="com.inzent.igate.replyemulating.ReplyEmulater">
+	<!-- <bean id="replyEmulater" class="com.inzent.igate.replyemulating.ReplyEmulater">  -->
+	<bean id="replyEmulater" class="com.custom.replyemulating.CustomReplyEmulater">
 		<property name="packagesToScan">
 			<array>
 				<value>com.custom.replyemulating</value>
