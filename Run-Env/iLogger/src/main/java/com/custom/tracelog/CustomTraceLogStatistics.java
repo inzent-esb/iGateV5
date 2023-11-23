@@ -7,6 +7,6 @@ public class CustomTraceLogStatistics extends TraceLogStatisticsRDB2RDB
 {
   public CustomTraceLogStatistics()
   {
-    super(TraceLog.class) ;
+    super() ;
   }
 }
