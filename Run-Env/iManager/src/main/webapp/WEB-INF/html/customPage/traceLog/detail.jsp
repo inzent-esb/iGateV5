@@ -200,19 +200,25 @@
 		<div class="row frm-row">
 			<div class="col-lg-6">
 				<div class="form-group">
+					<label class="control-label"><fmt:message>head.log</fmt:message> <fmt:message>head.date</fmt:message></label>
+					<input type="text" class="form-control view-disabled" v-model="object.pk.logDateTime" disabled>
+				</div>
+				<div class="form-group">
 					<label class="control-label"><fmt:message>head.log</fmt:message> <fmt:message>head.id</fmt:message></label>
 					<input type="text" class="form-control view-disabled" v-model="object.logId" disabled>
 				</div>
 				<div class="form-group">
-					<label class="control-label"><fmt:message>head.log</fmt:message> <fmt:message>head.date</fmt:message></label>
-					<input type="text" class="form-control view-disabled" v-model="object.logDateTime" disabled>
+					<label class="control-label"><fmt:message>head.log</fmt:message> <fmt:message>igate.instance</fmt:message> <fmt:message>head.id</fmt:message></label>
+					<div class="input-group viewGroup">
+						<input type="text" class="form-control view-disabled" v-model="object.logInstanceId" disabled>
+					</div>
 				</div>
+			</div>
+			<div class="col-lg-6">
 				<div class="form-group">
 					<label class="control-label"><fmt:message>head.file</fmt:message> <fmt:message>head.name</fmt:message></label>
 					<input type="text" class="form-control view-disabled" v-model="object.fileName" disabled>
 				</div>
-			</div>
-			<div class="col-lg-6">
 				<div class="form-group">
 					<label class="control-label"><fmt:message>head.file</fmt:message> <fmt:message>head.offset</fmt:message></label>
 					<input type="text" class="form-control view-disabled" v-model="object.fileOffset" disabled>
@@ -220,7 +226,7 @@
 				<div class="form-group">
 					<label class="control-label"><fmt:message>head.file</fmt:message> <fmt:message>head.size</fmt:message></label>
 					<div class="input-group viewGroup">
-						<input type="text" class="form-control view-disabled" v-model="object.bodySize">
+						<input type="text" class="form-control view-disabled" v-model="object.bodySize" disabled>
 					</div>
 				</div>
 			</div>

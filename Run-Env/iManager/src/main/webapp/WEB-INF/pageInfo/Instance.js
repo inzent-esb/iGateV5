@@ -168,7 +168,7 @@ const info = {
 										pk: {
 											propertyId: 'List.LogLevel'
 										},
-										orderByKey: true
+										orderByKey: false
 									},
 									optionListName: "instanceLoglevels",
 									optionFor: "option in instanceLoglevels",

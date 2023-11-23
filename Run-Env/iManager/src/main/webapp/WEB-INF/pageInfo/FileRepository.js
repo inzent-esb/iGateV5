@@ -663,17 +663,19 @@ const info = {
 									this.$t("igate.instance") +
 									" " +
 									this.$t("head.id")
-							}
-						],
-						[
+							},
 							{
 								type: "text",
 								vModel: "fileRemoteName",
 								label:
 									this.$t("head.file") +
 									" " +
-									this.$t("head.id")
-							},
+									this.$t("igate.fileRepository.remote") +
+									" " +
+									this.$t("head.name")
+							}
+						],
+						[	
 							{
 								type: "text",
 								vModel: "filePath",

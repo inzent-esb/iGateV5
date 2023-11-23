@@ -94,14 +94,14 @@
 					return;
 				}
 				
-				licExpirationModal();
-				
 				var accessToken = jqXHR.getResponseHeader('X-iManager-Access');
 				var refreshToken = jqXHR.getResponseHeader('X-iManager-Refresh');
 				
 				localStorage.setItem('accessToken', 'Bearer ' + accessToken);
 				localStorage.setItem('refreshToken', refreshToken);
 				localStorage.setItem('tokenExpiration', data.object);
+				
+				licExpirationModal();
 				
 			    <c:choose>
 		        	<c:when test="${not empty _client_mode && 'c' == _client_mode}">

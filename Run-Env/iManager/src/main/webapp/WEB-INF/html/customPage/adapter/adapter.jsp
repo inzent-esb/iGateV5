@@ -257,12 +257,6 @@
 			                    modalTitle: '<fmt:message>igate.operation</fmt:message>',
 			                    vModel: 'elm.operationId',
 			                    callBackFuncName: 'setOperationId'
-			                },
-			                clickEvt: function() {
-			                	openNewTab('102070', function() {			                        		
-	                        		localStorage.removeItem("searchObj");
-									localStorage.setItem("searchObj", JSON.stringify({"operationId": window.vmAdapterOperations.adapterOperations[index].operationId}));
-	                        	}); 
 			                }
 			            },
 			            {

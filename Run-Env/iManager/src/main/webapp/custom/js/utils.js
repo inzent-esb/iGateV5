@@ -279,13 +279,22 @@ function makeGridOptions(gridOptions, formatterData) {
                 });
                 
                 document.body.removeChild(span);
+                
+				var columns = JSON.parse(JSON.stringify(dblClickEvt.instance.getColumns()));
 
-                var columnWidths = dblClickEvt.instance.getColumns().map(function(column) { return column.baseWidth });
-                columnWidths[dblClickEvt.nativeEvent.target.dataset.columnIndex] = maxWidth + 20;
+				columns.forEach(function(column) {
+					if (column.hidden) return;
 
-                evt.instance.resetColumnWidths(columnWidths);
+					column.width = column.name === dblClickEvt.nativeEvent.target.dataset.columnName ? maxWidth : column.baseWidth;
+				});
 
-                evt.instance.refreshLayout();
+				var sortStateColumns = JSON.parse(JSON.stringify(evt.instance.store.data.sortState.columns));
+
+				evt.instance.setColumns(columns);
+
+				evt.instance.store.data.sortState.columns = sortStateColumns;
+
+				evt.instance.refreshLayout();                
             });            
         }        
         
@@ -314,8 +323,12 @@ function makeGridOptions(gridOptions, formatterData) {
 
 						columnInfo.width = (Number(containerEl.style.width.replace('px', '')) - 17 - evt.instance.el.querySelector('.tui-grid-lside-area').offsetWidth) * (columnInfo.copyOptions.widthRatio / 100);
 					});
+					
+					var sortStateColumns = JSON.parse(JSON.stringify(evt.instance.store.data.sortState.columns));
 
 					evt.instance.setColumns(columns);
+					
+					evt.instance.store.data.sortState.columns = sortStateColumns;
 				}
 
 				rafId = requestAnimationFrame(resizeObserver);

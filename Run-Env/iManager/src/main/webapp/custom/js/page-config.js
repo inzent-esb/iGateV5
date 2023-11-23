@@ -1188,13 +1188,7 @@ function getCreatePageObj() {
 								})
 							)
 					);
-				
-				if(detailContentObj.clickEvt) {
-					detailContentObj.appendTag.attr({ 'v-on:click': String(detailContentObj.clickEvt) });
-					detailContentObj.appendTag.children('input[type=search]').addClass('underlineTxt');
-					detailContentObj.appendTag.css({cursor: 'pointer'});
-				}
-				
+								
 				return detailContentObj.appendTag;
 			
 			}

@@ -607,8 +607,8 @@
 			    		viewMode: 'Open',
 			    		object: {
 			    			pk: {
-			    				logId: null,
-			    				logDateTime: null
+			    				logDateTime: null,
+			    				logId: null
 			    			},
 			    			selectedTraceSearch: null
 			    		},
@@ -620,8 +620,8 @@
 			    	computed: {
 			    		pk: function() {
 			    			return {
-			    				'pk.logId' : this.object.pk.exceptionDateTime,
-			                    'pk.logDateTime' : this.object.pk.exceptionId
+			    				'pk.logDateTime' : this.object.pk.exceptionId,
+			    				'pk.logId' : this.object.pk.exceptionDateTime			                    
 			    			};
 			    		}
 			    	},
@@ -837,62 +837,21 @@
 			    			}
 			            },
 						downloadFile: function() {
+							var param = JSON.parse(JSON.stringify(window.vmMain.object));
 							
-							validateAccessToken({
-		                		successCallBackFunc: function() {
-									window.$startSpinner();
-				                    
-		                			var req = new XMLHttpRequest();
-
-				                    req.open('POST', '${prefixUrl}/api/entity/traceLog/body', true);
-
-				                    req.setRequestHeader('Authorization', localStorage.getItem('accessToken'));
-				                    req.setRequestHeader('X-iManager-Method', 'GET');
-				                    
-				                    req.withCredentials = true;
-				                    req.responseType = 'blob';
-				                   
-				                    var param = JSON.parse(JSON.stringify(window.vmMain.object));
-				                    req.send(JSON.stringify(param));
-
-				                    req.onload = function (event) {
-				                        window.$stopSpinner();
-				                        
-				                        var blob = req.response;
-				                        
-				                        var file_name = '';
-				                        
-				                        if(param.transactionId) file_name += param.transactionId + '_';
-				                        if(param.messageId) file_name += param.messageId + '_';
-				                        
-				                        file_name += param.pk.logDateTime + '_' + param.pk.logId + ".dat";
-
-				                        if (blob.size <= 0) {
-				                            window._alert({
-				                                type: 'warn',
-				                                message: '<fmt:message>head.fail.notice</fmt:message>'
-				                            });
-				                            return;
-				                        }
-
-				                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-				                            window.navigator.msSaveOrOpenBlob(blob, file_name);
-				                        } else {
-				                            var link = document.createElement('a');
-				                            link.href = window.URL.createObjectURL(blob);
-				                            link.download = file_name;
-				                            link.click();
-				                            URL.revokeObjectURL(link.href);
-				                            link.remove();
-				                        }
-				                    };
-								},
-								errorCallBackFunc: function() {
-									window._alert({ type: 'warn', message: '<fmt:message>head.fail.notice</fmt:message>' });
-									return;
-								}
-		                	});
-						},			            
+							var file_name = '';
+	                        
+	                        if(param.transactionId) file_name += param.transactionId + '_';
+	                        if(param.messageId) file_name += param.messageId + '_';
+	                        
+	                        file_name += param.pk.logDateTime + '_' + param.pk.logId + ".dat";
+							
+	                        downloadFileFunc({ 
+			        			url : '/api/entity/traceLog/body',  
+			        			param : param,
+			        			fileName : file_name
+			        		});
+						},            
 			            createTestCase: function() {
 			            	var instanceList = null;
 			            	var interfaceInfo = null;
@@ -954,14 +913,62 @@
 				            	
 				            	createTestCaseTemplate.children('div').attr('id', 'createTestCaseCt');
 				            	
+				            	var vmTestCase = null;
+				            	
 				            	openModal({
 				            		name: 'createTestCase',
 				            		title: "<fmt:message>igate.traceLog.create.testCase</fmt:message>",
 				            		size: 'small',
 				            		bodyHtml: createTestCaseTemplate.html(),
 				            		isMultiCheck: true,
+				            		buttonList: [
+				        				{
+				        					customBtnId: 'confirmBtn',
+				        					customBtn: '<fmt:message>head.ok</fmt:message>',
+				        					customBtnAction: function() {
+				        						if (null === vmTestCase.object.pk.testCaseId || 0 === vmTestCase.object.pk.testCaseId.trim().length) {
+					            					_alert({
+					            						type: 'warn',
+					            						message: "<fmt:message>igate.traceLog.not.exist.testCase.id</fmt:message>"
+					            					});
+					            					
+													return;				            					
+					            				}
+				        											
+				        						if (null === vmTestCase.object.testInstance || 0 === vmTestCase.object.testInstance.trim().length) {
+					            					_alert({
+					            						type: 'warn',
+					            						message: "<fmt:message>igate.traceLog.not.exist.testInstance.id</fmt:message>"
+					            					});
+					            					
+													return;				            					
+					            				}
+				        						
+				        						new HttpReq('/api/entity/testCase/count').read({'pk.testCaseId': vmTestCase.object.pk.testCaseId, 'pk.interfaceId': vmTestCase.object.pk.interfaceId}, function(result) {
+					            					if(0 < Number(result.object)) {
+						            					_alert({
+						            						type: 'warn',
+						            						message: "<fmt:message>igate.traceLog.same.testCase</fmt:message>"
+						            					});
+						            					
+														return;	
+					            					}
+					            					
+					            					new HttpReq('/api/entity/traceLog/testCase').create({ 'log' : window.vmMain.object, 'testCase' : vmTestCase.object}, function() {
+						            					_alert({
+						            						type: 'compt',
+						            						message: "<fmt:message>igate.traceLog.created.testCase</fmt:message>",
+						            						callBackFunc: function() {
+						            							$('#createTestCaseModalSearch').find('#modalClose').trigger('click');
+						            						}
+						            					});												
+													}, true);
+					            				});
+				        					}
+				        				}
+				        			],
 				            		shownCallBackFunc: function() {
-				            			var vmTestCase = new Vue({
+				            			vmTestCase = new Vue({
 				            				el: '#createTestCaseCt',
 				            				data: {
 				            		    		letter: {
@@ -992,47 +999,6 @@
 				            		    			setLengthCnt.call(this, info);	
 				            		    		}			            					
 				            				}
-				            			});
-				            			
-				            			$('#modalConfirm').on('click', function() {
-				            				if (null === vmTestCase.object.pk.testCaseId || 0 === vmTestCase.object.pk.testCaseId.trim().length) {
-				            					_alert({
-				            						type: 'warn',
-				            						message: "<fmt:message>igate.traceLog.not.exist.testCase.id</fmt:message>"
-				            					});
-				            					
-												return;				            					
-				            				}
-				            				
-				            				if (null === vmTestCase.object.testInstance || 0 === vmTestCase.object.testInstance.trim().length) {
-				            					_alert({
-				            						type: 'warn',
-				            						message: "<fmt:message>igate.traceLog.not.exist.testInstance.id</fmt:message>"
-				            					});
-				            					
-												return;				            					
-				            				}
-				            				
-				            				new HttpReq('/api/entity/testCase/count').read({'pk.testCaseId': vmTestCase.object.pk.testCaseId, 'pk.interfaceId': vmTestCase.object.pk.interfaceId}, function(result) {
-				            					if(0 < Number(result.object)) {
-					            					_alert({
-					            						type: 'warn',
-					            						message: "<fmt:message>igate.traceLog.same.testCase</fmt:message>"
-					            					});
-					            					
-													return;	
-				            					}
-				            					
-												new HttpReq('/api/entity/traceLog/testCase').create({ 'log' : window.vmMain.object, 'testCase' : vmTestCase.object}, function() {
-					            					_alert({
-					            						type: 'compt',
-					            						message: "<fmt:message>igate.traceLog.created.testCase</fmt:message>",
-					            						callBackFunc: function() {
-					            							$('#createTestCaseModalSearch').find('#modalClose').trigger('click');
-					            						}
-					            					});												
-												}, true);				            					
-				            				});
 				            			});
 				            		}
 				            	});									
