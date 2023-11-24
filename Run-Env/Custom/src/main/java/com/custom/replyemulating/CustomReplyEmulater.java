@@ -1,24 +1,22 @@
 package com.custom.replyemulating;
 
-import java.util.List ;
+import com.inzent.igate.adapter.AdapterParameter;
+import com.inzent.igate.exception.IGateException;
+import com.inzent.igate.message.Field;
+import com.inzent.igate.message.Field.FieldType;
+import com.inzent.igate.message.MessageBeans;
+import com.inzent.igate.message.MessageConverter;
+import com.inzent.igate.message.Record;
+import com.inzent.igate.replyemulating.ReplyEmulater;
+import com.inzent.igate.repository.log.ReplyEmulatePK;
+import com.inzent.igate.repository.log.ReplyEmulateProperty;
+import com.inzent.igate.repository.meta.Service;
+import com.inzent.igate.util.Numeric;
+import com.inzent.igate.util.PatternUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import org.apache.commons.lang3.StringUtils ;
-import org.apache.commons.lang3.exception.ExceptionUtils ;
-
-import com.inzent.igate.adapter.AdapterParameter ;
-import com.inzent.igate.exception.IGateException ;
-import com.inzent.igate.message.Field ;
-import com.inzent.igate.message.Field.FieldType ;
-import com.inzent.igate.message.MessageBeans ;
-import com.inzent.igate.message.MessageConverter ;
-import com.inzent.igate.message.Record ;
-import com.inzent.igate.replyemulating.ReplyEmulater ;
-import com.inzent.igate.repository.log.ReplyEmulate ;
-import com.inzent.igate.repository.log.ReplyEmulatePK ;
-import com.inzent.igate.repository.log.ReplyEmulateProperty ;
-import com.inzent.igate.repository.meta.Service ;
-import com.inzent.igate.util.Numeric ;
-import com.inzent.igate.util.PatternUtils ;
+import java.util.List;
 
 public class CustomReplyEmulater extends ReplyEmulater
 {
@@ -36,27 +34,27 @@ public class CustomReplyEmulater extends ReplyEmulater
 
   /**
    * Field ID KeyWord
-   * 입력필드 데이터를 응답필드 데이터로  
+   * 입력필드 데이터를 응답필드 데이터로
    * 사용법 : IN or IN={필드경로}
-   *  IN           : 현재 필드와 동일한 위치의 입력 필드 값을 출력 필드 값으로 
+   *  IN           : 현재 필드와 동일한 위치의 입력 필드 값을 출력 필드 값으로
    *  IN={필드경로}  : IN=\HDR_COM\GIT_CNT_C   : 입력 {필드경로} 의 값을 출력 필드 값으로
    **/
   protected final static String OPTION_IN = "IN";
 
   /**
    * DATE Format KeyWord
-   * 입력필드 데이터를 응답필드 데이터로  
+   * 입력필드 데이터를 응답필드 데이터로
    * 사용법 : DATE or DATE={날짜 패턴}
-   *  DATE                                        :  yyyyMMddHHmmss 기본 14자리 
-   *  DATE=${YYYY}${MM}${DD}${HH}${MI}${SS}${sss}  
-   *  DATE=${MM}${DD}${HH}${MI}${SS}${sss} 
+   *  DATE                                        :  yyyyMMddHHmmss 기본 14자리
+   *  DATE=${YYYY}${MM}${DD}${HH}${MI}${SS}${sss}
+   *  DATE=${MM}${DD}${HH}${MI}${SS}${sss}
    **/
   protected final static String OPTION_DATE = "DATE";
 
   /**
    * Concat KeyWord
-   * 문자열 조합 
-   * 사용법 : CC={필드경로 or 문자열 } +{필드경로 or 문자열 } + ... 
+   * 문자열 조합
+   * 사용법 : CC={필드경로 or 문자열 } +{필드경로 or 문자열 } + ...
    * CC=\HDR_COM\GIT_CNT_C
    * CC=A+\HDR_COM\GIT_CNT_C+123
    **/
@@ -64,23 +62,23 @@ public class CustomReplyEmulater extends ReplyEmulater
 
   /**
    * Replace KeyWord
-   * 응답데이터의 Replace 기능 
+   * 응답데이터의 Replace 기능
    * 사용법 : REP(원본문자열, 변경위치, 변경문자열)
    *  - param1 : 응답으로 셋팅할 원본 문자열로 키워드 'IN' 또는 입력 필드명 사용
    *  - param2 : param1에서 변경할 offset 위치
    *  - param3 : offset 위치 부터 변경할 문자열 상수
-   *  
+   *
    * [제약사항]
    * param2(offset) + param3의 길이(변경할 상수 문자열) > param1(원본 문자열) 인 경우 원본 문자열 길이로 Fix 처리 (TRIM)
-   * 
+   *
    * ex)
    * REP(IN , 3, aa)
    * REP(\HDR_COM\GIT_CNT_C , 1, aa )
    **/
   protected final static String OPTION_REPLACE = "REP";
-  
+
   @Override
-  public boolean doMakeReply(AdapterParameter adapterParameter, Service service, Record request) throws IGateException 
+  public boolean doMakeReply(AdapterParameter adapterParameter, Service service, Record request) throws IGateException
   {
     Replyid = service.getProperty("emulate.reply.id", DEF_REPLYID);
 
@@ -89,14 +87,14 @@ public class CustomReplyEmulater extends ReplyEmulater
 
     MessageConverter messageConverterReq = null;
     MessageConverter messageConverterRes = null;
-    try 
+    try
     {
       // 대응답 처리 대상인 경우 : ReplyEmulating (true)
       boolean checkReply = super.doMakeReply(adapterParameter, service, request);
 
-      if (checkReply) 
+      if (checkReply)
       {
-        messageConverterReq = MessageBeans.SINGLETON.createMessageConverter(adapterParameter.getAdapter(), adapterParameter.getRequestData()) ;                 
+        messageConverterReq = MessageBeans.SINGLETON.createMessageConverter(adapterParameter.getAdapter(), adapterParameter.getRequestData()) ;
         if(messageConverterReq == null)
           return checkReply;
 
@@ -108,14 +106,14 @@ public class CustomReplyEmulater extends ReplyEmulater
         Record recordRes = messageConverterRes.parseServiceResponse(service, logger);
 
         // 가상응답 필드 별 옵션에 따른 패턴 별 값 세팅 처리 추가
-        setReplyFieldPatternValue( recordReq, recordRes , service.getServiceId() );                                     
+        setReplyFieldPatternValue( recordReq, recordRes , service.getServiceId() );
         messageConverterRes.composeServiceResponse(service, recordRes, logger);
 
         adapterParameter.setResponseData(messageConverterRes.getComposeValue());
         return true;
-      }           
-    } 
-    catch (Exception e) 
+      }
+    }
+    catch (Exception e)
     {
       logger.error(EMULATE_ERROR_MESSAGE + ExceptionUtils.getStackTrace(e), e);
       throw new IGateException(EMULATE_ERROR, EMULATE_ERROR_MESSAGE +  e.getMessage());
@@ -124,9 +122,9 @@ public class CustomReplyEmulater extends ReplyEmulater
   }
 
   /**
-   * 가상응답 속성의 패턴에 따라 가상응답 필드 값 세팅처리.  
+   * 가상응답 속성의 패턴에 따라 가상응답 필드 값 세팅처리.
    * @ param inRecord
-   * @ param outRecord    
+   * @ param outRecord
    * @ param serviceId
    * @ throws IGateException
    */
@@ -136,39 +134,39 @@ public class CustomReplyEmulater extends ReplyEmulater
       logger.debug("### setReplyFieldPatternValue /SATRT/ ServiceId[ " + serviceId  + "]");
 
     List<ReplyEmulateProperty> replyEmulatePropertyList
-    = this.getReplyEmulate(new ReplyEmulatePK(serviceId, Replyid)).getReplyEmulateProperty();
+        = this.getReplyEmulate(new ReplyEmulatePK(serviceId, Replyid)).getReplyEmulateProperty();
 
-    if (replyEmulatePropertyList != null && replyEmulatePropertyList.size() > 0) 
+    if (replyEmulatePropertyList != null && replyEmulatePropertyList.size() > 0)
     {
-      for (ReplyEmulateProperty replyEmulateProperty : replyEmulatePropertyList) 
+      for (ReplyEmulateProperty replyEmulateProperty : replyEmulatePropertyList)
       {
         String pattern = replyEmulateProperty.getFieldvalue();
 
-        if (pattern == null || pattern.trim().isEmpty()) 
+        if (pattern == null || pattern.trim().isEmpty())
           continue;
 
         Field field = null;
-        try 
+        try
         {
           if (outRecord.hasField(replyEmulateProperty.getPk().getFieldPath() ))
           {
             field = outRecord.getField(replyEmulateProperty.getPk().getFieldPath());
-          } 
-          else 
+          }
+          else
           {
             String fieldId = replyEmulateProperty.getPk().getFieldPath().substring(replyEmulateProperty.getPk().getFieldPath().lastIndexOf("\\")+1);
-            if (outRecord.hasField(fieldId)) 
+            if (outRecord.hasField(fieldId))
               field = outRecord.getField(fieldId);
-            else 
+            else
               continue;
           }
 
-          // 우선 순위에 대한 Validation 처리 
-          if (field.getValue() != null) 
+          // 우선 순위에 대한 Validation 처리
+          if (field.getValue() != null)
           {
-            if (field.getFieldType() == FieldType.String && StringUtils.isNotBlank((String)field.getValue())) 
+            if (field.getFieldType() == FieldType.String && StringUtils.isNotBlank((String)field.getValue()))
               continue;
-            else if (field.getFieldType() == FieldType.Numeric && ((Numeric) field.getValue()).toNumber().intValue() > 0) 
+            else if (field.getFieldType() == FieldType.Numeric && ((Numeric) field.getValue()).toNumber().intValue() > 0)
               continue;
           }
 
@@ -178,38 +176,38 @@ public class CustomReplyEmulater extends ReplyEmulater
             logger.debug("### setReplyFieldPatternValue : fieldPath[" +field.getPath() +"]");
           }
 
-          // 1. 요청전문의 필드 값 복사 기능 
+          // 1. 요청전문의 필드 값 복사 기능
           // IN={필드경로}
-          if (pattern.startsWith(OPTION_IN)) 
+          if (pattern.startsWith(OPTION_IN))
           {
-            setReplyFieldPatternIN(inRecord,field, pattern);                    
+            setReplyFieldPatternIN(inRecord,field, pattern);
           }
-          // 2. DATE 패턴 처리 
+          // 2. DATE 패턴 처리
           // DATE={YYYY}{YY}{MM}{DD}{HH}{MI}{SS}{sss}
-          else if (pattern.startsWith(OPTION_DATE)) 
+          else if (pattern.startsWith(OPTION_DATE))
           {
             setReplyFieldPatternDATE(inRecord,field, pattern);
           }
-          // 3. 요청전문의 필드 concat(문자 결합) 기능 
+          // 3. 요청전문의 필드 concat(문자 결합) 기능
           // CC={필드명}+{필드명}+...
-          else if (pattern.startsWith(OPTION_CONCAT)) 
+          else if (pattern.startsWith(OPTION_CONCAT))
           {
             setReplyFieldPatternCC(inRecord,field, pattern);
           }
-          // 4. 데이터 변환(Replace) 패턴 처리 
+          // 4. 데이터 변환(Replace) 패턴 처리
           // REP(IN , 3, A)
           // REP(필드경로 , 3 , A)
-          else if (pattern.startsWith(OPTION_REPLACE)) 
-          {                    
+          else if (pattern.startsWith(OPTION_REPLACE))
+          {
             setReplyFieldPatternREP(inRecord,field, pattern);
-          } 
-          else 
+          }
+          else
           {
             if(logger.isErrorEnabled())
               logger.error("CustomRplyEmulater Not Found Pattern ["+pattern+"]");
           }
         }
-        catch (Exception e) 
+        catch (Exception e)
         {
           if(logger.isErrorEnabled())
             logger.error("CustomRplyEmulater Setting Error !!!", e);
@@ -227,9 +225,9 @@ public class CustomReplyEmulater extends ReplyEmulater
       logger.debug("### setReplyFieldPattern[IN] /START/ OPTION_IN: pattern[" + pattern + "]");
 
     String inFiledPath = null;
-    if (pattern.indexOf('=') > 0 && pattern.indexOf('=') +1 < pattern.length()) 
+    if (pattern.indexOf('=') > 0 && pattern.indexOf('=') +1 < pattern.length())
       inFiledPath = pattern.substring(pattern.indexOf('=')+1);
-    else 
+    else
       inFiledPath = field.getPath();
 
     if( inRecord.hasField(inFiledPath) )
@@ -251,17 +249,17 @@ public class CustomReplyEmulater extends ReplyEmulater
       logger.debug("### setReplyFieldPattern[DATE] /START/ OPTION_DATE: pattern[" + pattern + "]");
 
     String value = null;
-    if (pattern.indexOf('=') > 0 && pattern.indexOf('=') +1 < pattern.length()) 
+    if (pattern.indexOf('=') > 0 && pattern.indexOf('=') +1 < pattern.length())
       value = PatternUtils.dateTimePattern(pattern.substring(pattern.indexOf('=')+1), System.currentTimeMillis());
-    else 
+    else
       value = PatternUtils.dateFormatStandard.format(System.currentTimeMillis());
 
-    if (value.length() > field.getLength()) 
+    if (value.length() > field.getLength())
       value = value.substring(0, field.getLength());
 
-    if (field.getFieldType() == FieldType.Numeric) 
+    if (field.getFieldType() == FieldType.Numeric)
       field.setValue(new Numeric(value));
-    else 
+    else
       field.setValue(value);
 
     if(logger.isDebugEnabled())
@@ -275,21 +273,21 @@ public class CustomReplyEmulater extends ReplyEmulater
       logger.debug("### setReplyFieldPattern[CC] /START/ OPTION_CONCAT: pattern[" + pattern + "]");
 
     String value = "";
-    if (pattern.indexOf('=') > 0 && pattern.indexOf('=') +1 < pattern.length()) 
+    if (pattern.indexOf('=') > 0 && pattern.indexOf('=') +1 < pattern.length())
     {
       String[] filedSplit = pattern.substring(pattern.indexOf('=')+1).split("\\+");
       if(logger.isDebugEnabled())
         logger.debug("### setReplyFieldPattern[CC] / filedSplit length : " + filedSplit.length);
-      for (String filePath : filedSplit) 
+      for (String filePath : filedSplit)
       {
         if(logger.isDebugEnabled())
           logger.debug("### setReplyFieldPattern[CC] / filePath : " + filePath);
-        if (inRecord.hasField(filePath) == true) 
+        if (inRecord.hasField(filePath) == true)
         {
           Field subField = inRecord.getField(filePath);
           value += subField.getValue();
-        } 
-        else 
+        }
+        else
         {
           value += filePath;
         }
@@ -297,9 +295,9 @@ public class CustomReplyEmulater extends ReplyEmulater
           logger.debug("### setReplyFieldPattern[CC] / value : " + value);
       }
     }
-    
+
     field.setValue(value);
-    
+
     if(logger.isDebugEnabled())
       logger.debug("### setReplyFieldPattern[CC] /END/ OPTION_CONCAT: value[" + field.getValue() +"]");
   }
@@ -335,17 +333,17 @@ public class CustomReplyEmulater extends ReplyEmulater
     }
 
     // CASE "IN"
-    if (OPTION_IN.equals(bStr)) 
+    if (OPTION_IN.equals(bStr))
     {
       bStr = (String)inRecord.getField(field.getPath()).getValue();
     }
     // CASE Field path
-    else if (inRecord.hasField(bStr)) 
+    else if (inRecord.hasField(bStr))
     {
       bStr = (String)inRecord.getField(bStr).getValue();
     }
     // CASE Undefined Field ID
-    else 
+    else
     {
       if(logger.isErrorEnabled())
         logger.error("CustomRplyEmulater Undefined Field ID Error (Invalid Field Path : " + bStr + ")");

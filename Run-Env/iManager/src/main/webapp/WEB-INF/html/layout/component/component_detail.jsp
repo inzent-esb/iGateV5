@@ -418,7 +418,7 @@ var panelMethodOption = {
 										
 										if (resourceTypeList[val.row.className].searchLabel) {
 											resourceTypeList[val.row.className].searchLabel.forEach(function(label, idx) {
-												resourceName += '<span>' + label + '</span> <span' + 0 === val.row.rowKey ? '' : 'class="link-new-tab"' + '>' + escapeHtml(val.row.resourceName.split(',')[idx]) + '</span>';
+												resourceName += '<span' + 0 === val.row.rowKey ? '' : 'class="link-new-tab"' + '>' + label + '<fmt:message>igate.adapter</fmt:message>' + escapeHtml(val.row.resourceName.split(',')[idx]) + '</span>';
 											})
 										} else {
 											var spanStyle = 0 === val.row.rowKey || 0 === val.row.className.indexOf('com.inzent.igate.repository.log') ? '': 'class="link-new-tab"' 
@@ -452,31 +452,20 @@ var panelMethodOption = {
 				            		
 				            		var rowInfo = evt.instance.getRow(evt.rowKey);
 				            		var resourceInfo = resourceTypeList[rowInfo.className];
-				            		
-				            		var multiResourceName = null;
-									var multiResourceIdx = null;
-				            		
+				            										
+									var searchResourceData = { _pageSize: '10' };
 									
 									if (-1 !== rowInfo.resourceName.indexOf(',')) {
 										rowInfo.resourceName.split(',').forEach(function(data, idx) {
-											if (data === evt.nativeEvent.target.innerText) {
-												multiResourceName = data;
-												multiResourceIdx = idx;
-											}
+											searchResourceData[resourceInfo.searchData[idx]] = data.trim();
 										});
-									}
-									
-									var obj = {};
-									
-									obj[null !== multiResourceIdx ? resourceInfo.searchData[multiResourceIdx] : resourceInfo.searchData] =
-										null !== multiResourceIdx ? multiResourceName : rowInfo.resourceName;
-									obj['_pageSize'] = '10';
+									} else searchResourceData[resourceInfo.searchData] = rowInfo.resourceName;
 									
 									openNewTab(resourceInfo.menuId, function() {
 										localStorage.removeItem('searchObj');
 										localStorage.removeItem('detailObj');
 										
-										localStorage.setItem('searchObj', JSON.stringify(obj));
+										localStorage.setItem('searchObj', JSON.stringify(searchResourceData));
 										localStorage.setItem('detailObj', JSON.stringify(rowInfo.resourceObject));
 				            		});      		
 				            	});
