@@ -21,11 +21,7 @@
 	<bean id="traceLogIndex" class="com.inzent.igate.tracelog.TraceLogIndexRDB" />
 
 	<bean id="traceLogStatistics" class="com.inzent.igate.tracelog.TraceLogStatisticsRDB2RDB" />
-<!--
-	<bean id="traceLogIndex" class="com.inzent.igate.tracelog.TraceLogIndexMongoDB" />
 
-	<bean id="traceLogStatistics" class="com.inzent.igate.tracelog.TraceLogStatisticsMongoDB2MongoDB" />
--->
 	<bean class="com.custom.tracelog.CustomTraceLogProcessor" />
 
 </beans>
