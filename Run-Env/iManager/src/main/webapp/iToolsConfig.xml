@@ -13,6 +13,42 @@
     </MappingRule>
   </Mapping>
 
+  <Operation>
+    <OperationTemplates>
+      <OperationTemplate type="A" transaction="online" event="request.read" name="AOP_Online_Request_Read.xml">요청 수신</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="request.write" name="AOP_Online_Request_Write.xml">요청 송신</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="request.broadcast" name="AOP_Online_Request_Broadcast.xml">요청 배포</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="response.read" name="AOP_Online_Response_Read.xml">응답 수신</OperationTemplate>
+      <OperationTemplate type="A" transaction="online" event="response.write" name="AOP_Online_Response_Write.xml">응답 송신</OperationTemplate>
+
+      <OperationTemplate type="A" transaction="file" event="extract" name="AOP_File_Extract.xml">파일 추출</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="extract" name="AOP_File_Get.xml">(s)FTP Get</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.read" name="AOP_File_Center.xml">파일 센터</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.read" name="AOP_File_Receive.xml">파일 수신</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.write" name="AOP_File_Push.xml">파일 배포</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.write" name="AOP_File_Put.xml">(s)FTP Put</OperationTemplate>
+      <OperationTemplate type="A" transaction="file" event="request.write" name="AOP_File_Send.xml">파일 송신</OperationTemplate>
+      
+      <!-- DB 배치 AOP 추가 -->
+      <OperationTemplate type="A" transaction="database" event="request.extract" name="AOP_Table_Extract.xml">DB 추출</OperationTemplate>
+      <OperationTemplate type="A" transaction="database" event="request.write" name="AOP_Table_Load.xml">DB 배포</OperationTemplate>
+
+      <OperationTemplate type="I" name="IOP_Online_Normal.xml">온라인 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online_Composite.xml">동기(BID) 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online_Broadcast.xml">배포 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online_External.xml">대외 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_File_Normal.xml">파일 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Table_Normal.xml">DB 인터페이스</OperationTemplate>
+      
+      <!-- Mix IOP 추가 -->
+      <OperationTemplate type="I" name="IOP_Table2Online.xml">DB2Online 인터페이스</OperationTemplate>      
+      <OperationTemplate type="I" name="IOP_Table2File.xml">DB2File 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_Online2Table.xml">Online2DB 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_File2Online.xml">File2Online 인터페이스</OperationTemplate>
+      <OperationTemplate type="I" name="IOP_File2Table.xml">File2Table 인터페이스</OperationTemplate>
+    </OperationTemplates>
+  </Operation>
+
   <Record>
     <GroupHeaders>
       <GroupHeader label="기본정보" expandable="false">
@@ -46,9 +82,9 @@
         <Column label="TableExclude" align="center" width="100" name="table.exclude" editType="checkbox" extened="true"/>
         <Column label="TableCommand" align="center" width="100" name="table.command" editType="checkbox" extened="true"/>
         <Column label="HttpType" align="center" width="100" name="FieldHttpType" editType="select" availableValue="none= ,uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="none" extened="true"/>
-        <Column label="XmlType" align="center" width="100" name="SchemaType" editType="select" availableValue="none= ,attribute=Attribute,element=Element,cdata=CData,elementcdata=Elementcdata" availableDefaultValue="none" extened="true"/>
+        <Column label="XmlType" align="center" width="100" name="SchemaType" editType="select" availableValue="none= ,attribute=Attribute,element=Element,cdata=CData,text=Text,elementcdata=Elementcdata" availableDefaultValue="none" extened="true"/>
         <Column label="XmlName" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
-        <Column label="FieldJsonName" align="left" width="100" name="FieldJsonName" editType="edit" extened="true"/>
+        
         <Column label="HttpQueryName" align="left" width="100" name="FieldHttpName" editType="edit" extened="true"/>
         <!-- 확장속성 필요 시 주석해제
         <Column label="XmlNS" align="left" width="100" name="xmlns" editType="edit" extened="true"/>
