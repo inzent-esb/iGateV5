@@ -22,7 +22,6 @@ import com.inzent.igate.message.MessageConverter ;
 import com.inzent.igate.message.Record ;
 import com.inzent.igate.message.ValueObject ;
 import com.inzent.igate.repository.meta.Activity ;
-import com.inzent.igate.util.Numeric ;
 
 /**
  * <code>TelegramHandler</code>
@@ -107,10 +106,7 @@ public class XmlTelegramHandler extends AbstractTelegramHandler implements Custo
   @Override
   protected String getMessageId(AdapterParameter adapterParameter, boolean request) throws IGateException
   {
-    String midValue = header.elementText(MID_FIELD) ;
-    com.inzent.igate.util.Numeric midNumeric = new Numeric(midValue, null, MID_LENGTH, 0) ;
-
-    return midNumeric.toString() ;
+    return header.elementText(MID_FIELD) ;
   }
 
   @Override

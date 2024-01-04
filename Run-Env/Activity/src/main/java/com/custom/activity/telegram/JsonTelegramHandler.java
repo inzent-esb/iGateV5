@@ -20,7 +20,6 @@ import com.inzent.igate.message.MessageConverter ;
 import com.inzent.igate.message.Record ;
 import com.inzent.igate.message.ValueObject;
 import com.inzent.igate.repository.meta.Activity ;
-import com.inzent.igate.util.Numeric;
 
 /**
  * <code>TelegramHandler</code>
@@ -105,11 +104,7 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
   @Override
   protected String getMessageId(AdapterParameter adapterParameter, boolean request) throws IGateException
   {
-	  String midValue =  header.path(MID_FIELD).asText() ;
-	  com.inzent.igate.util.Numeric midNumeric = new Numeric(midValue, null, MID_LENGTH, 0);	  
-
-	  return midNumeric.toString();
-	  //return header.path(MID_FIELD).asText() ;
+    return header.path(MID_FIELD).asText() ;
   }
 
   @Override

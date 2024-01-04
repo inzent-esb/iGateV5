@@ -12,7 +12,6 @@ import com.inzent.igate.common.CommonMessage ;
 import com.inzent.igate.exception.IGateAdapterException ;
 import com.inzent.igate.exception.IGateException ;
 import com.inzent.igate.exception.IGateMessageException ;
-import com.inzent.igate.message.Field ;
 import com.inzent.igate.message.IMessageBuilder ;
 import com.inzent.igate.message.MessageBeans ;
 import com.inzent.igate.message.Record ;
@@ -21,7 +20,6 @@ import com.inzent.igate.message.plain.FixedPlainMessageConverter ;
 import com.inzent.igate.repository.meta.Adapter ;
 import com.inzent.igate.repository.meta.Interface ;
 import com.inzent.igate.repository.meta.Service ;
-import com.inzent.igate.util.Numeric ;
 import com.inzent.igate.util.StringCodec ;
 
 public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter implements CustomMessageConstants
@@ -87,16 +85,6 @@ public class CustomFixedPlainMessageConverter extends FixedPlainMessageConverter
             record.getPath(), th.getMessage()) ;
       }
     }
-  }
-
-  /**
-   * 필드가 null이고(맵핑대상이 아닐 경우) 필드속성의 기본값이 없을 경우 Numeric 타입의 기본값은 ' ' 이다. 따라서 그
-   * 경우에도 '0'으로 패딩하기위해 overriding
-   **/
-  @Override
-  protected Object encodingNumeric(Field field, Numeric source) throws IGateException
-  {
-    return super.encodingNumeric(field, (source == null) ? new Numeric("0", null, field.getLength(), field.getScale()) : source) ;
   }
 
   @Override

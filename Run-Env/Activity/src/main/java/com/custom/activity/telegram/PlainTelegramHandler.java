@@ -17,7 +17,6 @@ import com.inzent.igate.adapter.AdapterParameter ;
 import com.inzent.igate.exception.IGateException ;
 import com.inzent.igate.message.Record ;
 import com.inzent.igate.repository.meta.Activity ;
-import com.inzent.igate.util.Numeric ;
 import com.inzent.igate.util.StringCodec ;
 
 /**
@@ -84,9 +83,8 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   @Override
   protected String getMessageId(AdapterParameter adapterParameter, boolean request) throws IGateException
   {
-		  
-    return new Numeric(StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()),
-        MID_OFFSET, MID_LENGTH, adapterParameter.getAdapter().getCharset()), null, MID_LENGTH, 0).toString() ;
+    return StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()),
+        MID_OFFSET, MID_LENGTH, adapterParameter.getAdapter().getCharset()) ;
   }
 
   @Override
