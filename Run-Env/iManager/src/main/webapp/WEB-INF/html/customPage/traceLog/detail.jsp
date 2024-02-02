@@ -80,7 +80,7 @@
 					<label class="control-label"><fmt:message>head.transaction</fmt:message> <fmt:message>head.id</fmt:message></label>
 					<div :class="{ 'input-group': object.exceptionCode? true : false }">
 						<input id="transactionId" type="text" class="form-control view-disabled" v-model="object.transactionId" disabled>
-						<button class="btn btn-icon search-linkBtn" title=<fmt:message>head.open</fmt:message> @click="clickEvt('transactionId')" v-if="object.exceptionCode">
+						<button class="btn btn-icon search-linkBtn" title=<fmt:message>head.open</fmt:message> @click="clickEvt('transactionId')" v-if="object.exceptionCode && !isTools">
 							<i class="icon-link"></i>
 						</button>
 					</div>
@@ -109,15 +109,21 @@
 			<div class="col-lg-6">
 				<div class="form-group">
 					<label class="control-label"><fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message></label>
-					<span @click="clickEvt('adapterId')" style="cursor: pointer;">
-						<input type="text" class="form-control view-disabled" v-model="object.adapterId" style="text-decoration: underline; color: #007bff"  disabled>
-					</span>					
+					<div class="input-group">
+						<input type="text" class="form-control view-disabled" v-model="object.adapterId" disabled>
+						<button class="btn btn-icon search-linkBtn" title=<fmt:message>head.open</fmt:message> @click="clickEvt('adapterId')" v-if="!isTools">
+							<i class="icon-link"></i>
+						</button>
+					</div>					
 				</div>
 				<div class="form-group">
 					<label class="control-label"><fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message></label>
-					<span @click="clickEvt('connectorId')" style="cursor: pointer;">
-						<input type="text" class="form-control view-disabled" v-model="object.connectorId" style="text-decoration: underline; color: #007bff"  disabled>
-					</span>
+					<div class="input-group">
+						<input type="text" class="form-control view-disabled" v-model="object.connectorId" disabled>
+						<button class="btn btn-icon search-linkBtn" title=<fmt:message>head.open</fmt:message> @click="clickEvt('connectorId')" v-if="!isTools">
+							<i class="icon-link"></i>
+						</button>
+					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label"><fmt:message>igate.connectorControl.session</fmt:message> <fmt:message>head.id</fmt:message></label>
@@ -146,15 +152,21 @@
 			<div class="col-lg-6">
 				<div class="form-group">
 					<label class="control-label"><fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message></label>
-					<span @click="clickEvt('interfaceId')" style="cursor: pointer;">
-						<input type="text" class="form-control view-disabled" v-model="object.interfaceId" style="text-decoration: underline; color: #007bff" disabled>
-					</span>						
+					<div class="input-group">
+						<input type="text" class="form-control view-disabled" v-model="object.interfaceId" disabled>
+						<button class="btn btn-icon search-linkBtn" title=<fmt:message>head.open</fmt:message> @click="clickEvt('interfaceId')" v-if="!isTools">
+							<i class="icon-link"></i>
+						</button>
+					</div>						
 				</div>
 				<div class="form-group">
 					<label class="control-label"><fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message></label>
-					<span @click="clickEvt('serviceId')" style="cursor: pointer;">
-						<input type="text" class="form-control view-disabled" v-model="object.serviceId" style="text-decoration: underline; color: #007bff" disabled>
-					</span>
+					<div class="input-group">
+						<input type="text" class="form-control view-disabled" v-model="object.serviceId" disabled>
+						<button class="btn btn-icon search-linkBtn" title=<fmt:message>head.open</fmt:message> @click="clickEvt('serviceId')" v-if="!isTools">
+							<i class="icon-link"></i>
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="col-lg-6">

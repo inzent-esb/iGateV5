@@ -43,7 +43,7 @@ $.fn.customDateRangePicker = function(type, callBackFunc, paramOption) {
 		}
 		
 	}else if('to' == type){
-		if(!option.startDate || endDate.getTime() > new Date(option.startDate).getTime())
+		if(!option.startDate)
 			option.startDate = moment(endDate).format(formatDate);
 		
 		if(!option.minDate)

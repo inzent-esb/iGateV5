@@ -337,6 +337,7 @@ td.invisible *{visibility: hidden;pointer-events: none}
 .modal-body-ct{margin-top: -1px}
 .modal-body>.ct-header{margin-top: -1rem}
 .modal-body .col-auto{ border-top: 1px solid #f0f1f6; }
+.modal-body .panel-body .sub-bar-comp{justify-content: center; background: #f5f6fb !important}
 
 /* collapse */
 .collapse-list{border: 1px solid #f0f1f6;border-width: 1px 0}
@@ -482,7 +483,7 @@ body{display: flex}
 /* login */
 .login #hd{background: #151826;border-bottom-color: #151826}
 .login #ct{position: relative;justify-content: center;padding-top: 6.25rem;padding-bottom: 6.25rem}
-.copy{position: absolute;left: 0;right: 0;text-align: center;bottom: 2rem;font-size: .75rem}
+.login .copy{position: absolute;left: 0;right: 0;text-align: center;bottom: 2rem;font-size: .75rem}
 .form-login{width: 280px}
 .form-login>img{height: 2.5rem;margin-bottom: 2.5rem}
 .form-login>.password-label{margin-bottom: 0.8rem !important; }
@@ -531,6 +532,7 @@ body{display: flex}
 .form-group.h-100>.well, .form-group.h-100>textarea{height: calc(100% - 1.5rem);overflow-y: auto;overflow-y: overlay}
 .frm-row:not(:last-child){margin-bottom: 1.5rem}
 .form-group-editor .well{border-radius: .25rem;border: 1px solid #aaacb4;padding: .375rem .5rem}
+.panel-body .sub-bar-comp{justify-content: center; background: #f5f6fb !important}
 
 /* scrollbar */
 body{scrollbar-3dLight-Color: #efefef; scrollbar-arrow-color: #f0f1f6; scrollbar-base-color: #f0f1f6; scrollbar-Face-Color: #e0e0e0; scrollbar-Track-Color: #f0f1f6; scrollbar-DarkShadow-Color: #f0f1f6; scrollbar-Highlight-Color: #efefef; scrollbar-Shadow-Color: #e0e0e0;-ms-overflow-style: -ms-autohiding-scrollbar}
@@ -563,7 +565,7 @@ body{scrollbar-3dLight-Color: #efefef; scrollbar-arrow-color: #f0f1f6; scrollbar
     .login .logo img{height: 46px}
     .login #ct{position: relative;padding-left: 40px}
     .form-login{position: static;padding: 0}
-    .copy{left: 40px;text-align: left}
+    .login .copy{left: 40px;text-align: left}
 
 	/* panel */
 	body:not(.sidebar-toggled) #ct .panel.panel-bottom.vertical {
@@ -865,6 +867,10 @@ select.panel-form-control {
 	border-bottom-width: 1px !important;
 }
 
+.refModelField.tui-grid-cell{
+	background-color: #ffffd2 !important;
+}
+
 .panel .searchArea-col {
 	padding: 0 .25rem !important;
 }
@@ -1120,6 +1126,10 @@ span.ellipsis {
 
 .tui-prev {
 	border: 1px solid #ddd !important;
+}
+
+.tui-grid-cell.red, .tui-grid-row-hover > .tui-grid-cell.red {
+	background-color: #f8e0e0;
 }
 
 .modal-backdrop.fade {

@@ -62,14 +62,14 @@
 .dark .tui-grid-lside-area > .tui-grid-header-area > .tui-grid-table > tbody > tr > th { background-color: #292e47 !important; }
 
 .dark .ui-selectable-helper {background: #fff; opacity: 0.5; border:1px solid #fff;}
-.dark .tui-grid-cell-header {background-color: #292e47 !important; color: rgba(255, 255, 255, .7);}
+.dark .tui-grid-cell-header {background-color: #292e47 !important; color: rgba(255, 255, 255, .7);border-color: #545A77 !important;}
 .dark .tui-grid-cell {background-color: #292e47; color: rgba(255, 255, 255, .7);}
 .dark .tui-grid-row-hover .tui-grid-cell {background-color: rgba(128, 128, 128, 0.4);}
 .dark .tui-grid-body-area {background-color: #292e47;}
 .dark .tui-grid-header-area {border-color: #545A77; background-color: #292e47;}
 .dark .tui-grid-cell {border-color: #545A77;}
 .dark .tui-grid-scrollbar-right-top {border-color: #545A77;}
-.dark .tui-grid-scrollbar-right-bottom {border-color: #545A77;}
+.dark .tui-grid-scrollbar-right-bottom {border-color: #545A77;background-color: #545A77 !important;}
 .dark .tui-grid-scrollbar-right-top {background-color: #292e47; color: rgba(255, 255, 255, .7);}
 .dark .tui-grid-scrollbar-y-inner-border {background-color: #545A77;}
 .dark .tui-grid-scrollbar-y-outer-border {background-color: #545A77;}
@@ -81,7 +81,7 @@
 .dark #dashContextSetting {background-color: #1f2337; border: 1px solid #777fa6; color: #fff;}
 .dark #dashContextSetting #contextMenuContainerList {background: #484f70;}
 .dark .nav-link:hover {color: #fff; background: #292e47;}
-.dark #noticeArea {border: 1px solid #fff}
+.dark #noticeArea {border: 1px solid #545A77}
 .dark #prevCompoentHover {opacity: 0.8;}
 .dark #componentHover {opacity: 0.8;}
 .dark .resize-tooptip {background-color: #343a40;}
@@ -93,3 +93,5 @@
 .dark .dark .filterModal .tui-grid-lside-area {border-left: 1px solid #545A77;}
 .dark .addHover {background-color: rgba(236, 237, 242, 0.5);}
 .dark .addAreaHover {background-color: rgba(236, 237, 242, 0.8);}
+.dark .tui-grid-scrollbar-frozen-border {border: 1px solid #545A77; height: 15px !important;}
+.dark .tui-grid-content-area{border-bottom: 1px solid #545A77;}

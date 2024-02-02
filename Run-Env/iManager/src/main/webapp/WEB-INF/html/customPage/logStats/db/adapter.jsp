@@ -258,13 +258,6 @@
 
 			                    this.object.fromDateTime = moment(date).format(dateFormat);
 
-			                    date.setHours(23);
-			                    date.setMinutes(59);
-			                    date.setSeconds(59);
-			                    date.setMilliseconds(59);
-
-			                    this.object.toDateTime = moment(date).format(dateFormat);
-
 			                    var fromDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromDateTime');
 			                    var toDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toDateTime');
 			                    var datePickerInfo = {
@@ -285,7 +278,6 @@
 			                                    this.object.toDateTime = toDateTime;
 			                                }.bind(this),
 			                                Object.assign({
-			                                        startDate: this.object.fromDateTime,
 			                                        minDate: fromDateTime
 			                                    },
 			                                    datePickerInfo

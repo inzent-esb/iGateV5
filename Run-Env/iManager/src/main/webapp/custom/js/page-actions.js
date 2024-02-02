@@ -433,7 +433,7 @@ var MigrationImngObj = {
         new HttpReq(url).create({ targetIds: data }, function (result) {
             ResultImngObj.resultResponseHandler(result);
 
-            window._alert({ type: 'warn', message: message });
+            window._alert({ message: message });
 
             callback(result);
 

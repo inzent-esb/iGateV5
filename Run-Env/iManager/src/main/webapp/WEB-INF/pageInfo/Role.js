@@ -226,7 +226,7 @@ const info = {
 						clickEvt: function (component) {
 							openNewTab('303050', function() {
 								localStorage.removeItem("searchObj");
-								localStorage.setItem("searchObj", JSON.stringify({"privilegeId": component.getData()['pk.privilegeId'] }));
+								localStorage.setItem("searchObj", JSON.stringify({ "privilegeId": component.getData()['pk.privilegeId'], "_pageSize": "10" }));
 							});
 						}
 					}

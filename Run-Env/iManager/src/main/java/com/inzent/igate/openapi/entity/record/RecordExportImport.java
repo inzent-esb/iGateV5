@@ -234,7 +234,7 @@ public class RecordExportImport implements EntityExportImportBean<Record> {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
 		response.setContentType("application/octet-stream");
 
-		try (FileInputStream fileInputStream = new FileInputStream(request.getServletContext().getRealPath("/template/RecordTemplate.xlsx"));
+		try (FileInputStream fileInputStream = new FileInputStream(request.getServletContext().getRealPath("/template/Model_Define.xlsx"));
 			 Workbook workbook = WorkbookFactory.create(fileInputStream);
 			 OutputStream outputStream = response.getOutputStream()) {
 			
@@ -255,79 +255,87 @@ public class RecordExportImport implements EntityExportImportBean<Record> {
 		Cell cell = null;
 
 		CellStyle cellStyle_Base = getBaseCellStyle(workbook);
+		
+		cellStyle_Base.setBorderTop(BorderStyle.HAIR);
+		cellStyle_Base.setBorderLeft(BorderStyle.HAIR);
+		cellStyle_Base.setBorderRight(BorderStyle.HAIR);
+		cellStyle_Base.setBorderBottom(BorderStyle.HAIR);
+				
+		row = writeSheet.getRow(1);
 
-		row = writeSheet.getRow(3);
-
-		// ID
+		// ID(모델ID)
 		cell = row.getCell(1);
+		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(entity.getRecordId());
-
-		// 이름
-		cell = row.getCell(4);
-		cell.setCellValue(entity.getRecordName());
-
+		
+		// 비고(설명)
+		cell = row.getCell(3);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(entity.getRecordDesc());
+		
 		// 입&출력 체크
-		cell = row.getCell(9);
+		cell = row.getCell(8);
 		String value = null;
 
 		if (entity.getRecordId().endsWith("_I")) 		 value = MessageGenerator.getMessage("label.input", "Input");
 		else if (entity.getRecordId().endsWith("_O"))  value = MessageGenerator.getMessage("label.output", "Output");
 		else									 value = "";
 
-		cell.setCellValue(value);		
-
-		// Private
-		cell = row.getCell(11);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(String.valueOf(entity.getPrivateYn()));
+		cell.setCellValue(value);
 		
-		// 종류
-		cell = row.getCell(13);
-
+		// 종류(모델유형)
+		cell = row.getCell(10);
+	
 		if (entity.getRecordType() == Record.TYPE_HEADER) 		value = MetaConstants.EXCEL_HEADER;
 		else if (entity.getRecordType() == Record.TYPE_REFER)	value = MetaConstants.EXCEL_REFER;
 		else													value = MetaConstants.EXCEL_INDIVI;
-
+	
 		cell.setCellValue(value);
+
+		// 이름(모델이름)
+		cell = row.getCell(12);
+		cell.setCellValue(entity.getRecordName());	
 		
 		// 메타도메인
-		cell = row.getCell(15);
+		cell = row.getCell(16);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(entity.getMetaDomain());
+
+		row = writeSheet.getRow(2);
 		
 		// 그룹
-		cell = row.getCell(17);
+		cell = row.getCell(1);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(entity.getRecordGroup());
-		
-		row = writeSheet.getRow(4);
-		
+				
 		// 권한
-		cell = row.getCell(1);
+		cell = row.getCell(3);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(entity.getPrivilegeId());
 		
-		// 비고
-		cell = row.getCell(3);
-		cell.setCellStyle(cellStyle_Base);
-		cell.setCellValue(entity.getRecordDesc());
-		
 		// 옵션
-		cell = row.getCell(9);
+		cell = row.getCell(5);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(entity.getRecordOptions());
 		
+		// Private(전문공유)
+		cell = row.getCell(10);
+		cell.setCellStyle(cellStyle_Base);
+		cell.setCellValue(String.valueOf(entity.getPrivateYn()));
+		
+		// 개별부경로, 직원번호 생략(iTools 제공)
+		
 		// 수정 사용자 
-		cell = row.getCell(11);
+		cell = row.getCell(14);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(entity.getUpdateUserId());
 		
 		// 수정 시각
-		cell = row.getCell(15);
+		cell = row.getCell(17);
 		cell.setCellStyle(cellStyle_Base);
 		cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(null != entity.getUpdateTimestamp() ? entity.getUpdateTimestamp() : new Date(System.currentTimeMillis())));
 		
-		exportExcelSheetRows(workbook, writeSheet, entity, 7, 0);
+		exportExcelSheetRows(workbook, writeSheet, entity, 4, 0);
 	}
 
 	protected int exportExcelSheetRows(Workbook workbook, Sheet writeSheet, Record entity, int index, int depth) {
@@ -499,22 +507,18 @@ public class RecordExportImport implements EntityExportImportBean<Record> {
 		Row row = null;
 	    Cell cell = null;
 	    
-		row = sheet.getRow(3);
+		row = sheet.getRow(1);
 		
-		// ID
+		// ID(모델ID)
 		cell = row.getCell(1);
 		record.setRecordId(cell.getStringCellValue());
-
-		// 이름
-		cell = row.getCell(4);
-		record.setRecordName(getStringNumericValue(cell));
 		
-		// Private
-		cell = row.getCell(11);
-		record.setPrivateYn(getStringNumericValue(cell).charAt(0));
+		// 비고(설명)
+		cell = row.getCell(3);
+		record.setRecordDesc(getStringNumericValue(cell));
 		
-		// 종류
-		cell = row.getCell(13);
+		// 종류(모델유형)
+		cell = row.getCell(10);
 		switch (getStringNumericValue(cell)) {
 		case MetaConstants.EXCEL_HEADER:
 			record.setRecordType(Record.TYPE_HEADER);
@@ -527,30 +531,34 @@ public class RecordExportImport implements EntityExportImportBean<Record> {
 		default:
 			record.setRecordType(Record.TYPE_INDIVI);
 		}
+
+		// 이름(모델이름)
+		cell = row.getCell(12);
+		record.setRecordName(getStringNumericValue(cell));
 		
 		// 메타도메인
-		cell = row.getCell(15);
+		cell = row.getCell(16);
 		record.setMetaDomain(getStringNumericValue(cell));
 		
+		row = sheet.getRow(2);
+		
 		// 그룹
-		cell = row.getCell(17);
+		cell = row.getCell(1);
 		record.setRecordGroup(getStringNumericValue(cell));
 		
-		row = sheet.getRow(4);
-		
 		// 권한
-		cell = row.getCell(1);
+		cell = row.getCell(3);
 		record.setPrivilegeId(getStringNumericValue(cell));
 		
-		// 비고
-		cell = row.getCell(3);
-		record.setRecordDesc(getStringNumericValue(cell));
-		
 		// 옵션
-		cell = row.getCell(9);
+		cell = row.getCell(5);
 		record.setRecordOptions(getStringNumericValue(cell));
+				
+		// Private
+		cell = row.getCell(10);
+		record.setPrivateYn(getStringNumericValue(cell).charAt(0));
 		
-		importExcelSheetRows(sheet, record, 7, 0);
+		importExcelSheetRows(sheet, record, 4, 0);
 	    
 		return record;
 	}

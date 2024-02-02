@@ -254,12 +254,20 @@
 			    }
 			]);
 
-			createPageObj.setPanelButtonList();
+			createPageObj.setPanelButtonList({
+			    dumpBtn: editor
+			});
 
-			createPageObj.panelConstructor(true);
+			createPageObj.panelConstructor();
 
 			SaveImngObj.setConfig({
-			    objectUrl: '/api/entity/operation/object'
+			    objectUrl: '/api/entity/operation/object',
+			    
+			});
+
+			ControlImngObj.setConfig({
+			    controlUrl: '/api/entity/operation/control',
+			    dumpUrl: '/api/entity/operation/dump'
 			});
 
 			new HttpReq('/api/page/properties').read({ pk : { propertyId: 'List.Operation.OperationType' }, orderByKey: true }, function (result) {
@@ -392,13 +400,13 @@
 			                        name: 'operationGroup',
 			                        header: '<fmt:message>head.group</fmt:message>',
 			                        align: 'left',
-			                        width: '20%'
+			                        width: '15%'
 			                    },
 			                    {
 			                        name: 'privilegeId',
 			                        header: '<fmt:message>common.privilege</fmt:message>',
 			                        align: 'left',
-			                        width: '20%'
+			                        width: '15%'
 			                    },
 			                    {
 			                        name: 'operationDesc',

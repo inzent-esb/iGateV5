@@ -196,9 +196,16 @@
 			                        },
 			                        name: '<fmt:message>igate.threadPool</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        clickEvt: function() {
+			                        	var searchData = window.vmMain.object.threadPoolId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('302040', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"threadPoolId": window.vmMain.object.threadPoolId, "_pageSize": "10"}));
+											localStorage.setItem("searchObj", JSON.stringify({ "threadPoolId": searchData, "_pageSize": "10" }));
 			                        	}); 
 			                        }
 			                    }

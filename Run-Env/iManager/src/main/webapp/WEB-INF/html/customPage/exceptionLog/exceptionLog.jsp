@@ -193,9 +193,16 @@
 			                        mappingDataInfo: 'object.transactionId',
 			                        name: '<fmt:message>igate.exceptionLog.transactionId</fmt:message>',
 			                        clickEvt: function() {
+			                        	var searchData = window.vmMain.object.transactionId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+			                        	
 			                        	openNewTab('103020', function() {	
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"transactionId": window.vmMain.object.transactionId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "transactionId": searchData }));
 			                        	});
 			                        },
 			                        regExpType: 'id'
@@ -212,9 +219,16 @@
 			                        name: '<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        regExpType: 'id',
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.interfaceId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+			                        	
 			                        	openNewTab('101050', function() {	
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"interfaceId": window.vmMain.object.interfaceId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "interfaceId": searchData }));
 			                        	}); 
 			                        }
 			                    },
@@ -224,9 +238,16 @@
 			                        name: '<fmt:message>igate.service</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        regExpType: 'id',
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.serviceId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+			                        	
 			                        	openNewTab('101030', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"serviceId": window.vmMain.object.serviceId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "serviceId": searchData }));
 			                        	});
 			                        }
 			                    }
@@ -241,9 +262,16 @@
 			                        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        regExpType: 'id',
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.adapterId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+			                        	
 			                        	openNewTab('202030', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"adapterId": window.vmMain.object.adapterId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "adapterId": searchData }));
 			                        	});
 			                        }
 			                    },
@@ -253,9 +281,16 @@
 			                        name: '<fmt:message>igate.connector</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        regExpType: 'id',
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.connectorId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+			                        	
 			                        	openNewTab('202020', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"connectorId": window.vmMain.object.connectorId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "connectorId": searchData }));
 			                        	});
 			                        }
 			                    },
@@ -265,9 +300,16 @@
 			                        name: '<fmt:message>igate.activity</fmt:message> <fmt:message>head.id</fmt:message>',
 			                        regExpType: 'id',
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.activityId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+			                        	
 			                        	openNewTab('102060', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"activityId": window.vmMain.object.activityId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "activityId": searchData }));
 			                        	});
 			                        }
 			                    }

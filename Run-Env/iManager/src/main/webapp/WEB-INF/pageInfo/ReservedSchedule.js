@@ -443,9 +443,16 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								clickEvt: function (component) {
+									const searchData = component.getData().exceptionId;
+									
+									if (!searchData) {
+										$alert({ type: 'warn', message: $t('head.no.data.warn') });
+										return;
+									}
+									
 									openNewTab('103010', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"pk.exceptionId": component.getData().exceptionId}));
+										localStorage.setItem("searchObj", JSON.stringify({ "pk.exceptionId": searchData }));
 									});
 								}
 							}
