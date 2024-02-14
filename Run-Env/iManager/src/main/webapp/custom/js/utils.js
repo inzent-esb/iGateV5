@@ -90,7 +90,7 @@ function getUUID() {
 
 function removeStorage() {
 	clearStorage(localStorage, function(key) {
-		return 'ckSaveUserId' === key || 'saveUserId' === key;
+		return 'ckSaveUserId' === key || 'saveUserId' === key || -1 < key.indexOf('detailLayoutInfo_');
 	});
 	
 	clearStorage(sessionStorage);
@@ -259,6 +259,8 @@ function makeGridOptions(gridOptions, formatterData) {
         
         if (!(navigator.appName == 'Netscape' && -1 != agent.indexOf('trident')) || -1 != agent.indexOf('msie')) {
             evt.instance.on('dblclick', function(dblClickEvt) {
+            	if (!dblClickEvt.nativeEvent.target.classList.contains('tui-grid-column-resize-handle')) return;
+            	
                 var span = document.createElement('span');
                 span.style.fontSize = '13px';
                 span.style.padding = '4px 5px';
@@ -280,28 +282,30 @@ function makeGridOptions(gridOptions, formatterData) {
                 
                 document.body.removeChild(span);
                 
-				var columns = JSON.parse(JSON.stringify(dblClickEvt.instance.getColumns()));
-
-				columns.forEach(function(column) {
+                var columnWidths = [];
+                
+				dblClickEvt.instance.getColumns().forEach(function(column) {
 					if (column.hidden) return;
 
-					column.width = column.name === dblClickEvt.nativeEvent.target.dataset.columnName ? maxWidth : column.baseWidth;
+					columnWidths.push(column.name === dblClickEvt.nativeEvent.target.dataset.columnName ? maxWidth : column.baseWidth);
+				});
+				
+				evt.instance.resetColumnWidths(columnWidths);
+				
+				evt.instance.store.column.allColumns.forEach(function(columnInfo) {
+					columnInfo.fixedWidth = true;
 				});
 
-				var sortStateColumns = JSON.parse(JSON.stringify(evt.instance.store.data.sortState.columns));
-
-				evt.instance.setColumns(columns);
-
-				evt.instance.store.data.sortState.columns = sortStateColumns;
-
-				evt.instance.refreshLayout();                
+				window.onresize();  
             });            
         }        
         
 		if ('percent' == widthConfigType) {
 			var width = null;
+			var lsideWidth = null;
 			
 			var containerEl = evt.instance.el.querySelector('.tui-grid-container');
+			var containerLsideEl = containerEl.querySelector('.tui-grid-lside-area');
 
 			var resizeObserver = function() {
 				if (!document.body.contains(evt.instance.el)) {
@@ -309,26 +313,27 @@ function makeGridOptions(gridOptions, formatterData) {
 					return;
 				}
 
-				if (containerEl.style.width && width !== containerEl.style.width) {
+				if (containerEl.style.width && (width !== containerEl.style.width || lsideWidth !== containerLsideEl.offsetWidth)) {
 					width = containerEl.style.width;
+					lsideWidth = containerLsideEl.offsetWidth;
 
-					var columns = $.extend(true, [], evt.instance.getColumns());
+					var columnWidths = [];
 					
-					columns.forEach(function(columnInfo) {
+					evt.instance.getColumns().forEach(function(columnInfo) {
 						if (columnInfo.hidden) return;
 
 						if (!columnInfo.copyOptions) return;
 
 						if (!columnInfo.copyOptions.widthRatio) return;
-
-						columnInfo.width = (Number(containerEl.style.width.replace('px', '')) - 17 - evt.instance.el.querySelector('.tui-grid-lside-area').offsetWidth) * (columnInfo.copyOptions.widthRatio / 100);
+						
+						columnWidths.push((Number(containerEl.style.width.replace('px', '')) - 17 - evt.instance.el.querySelector('.tui-grid-lside-area').offsetWidth) * (columnInfo.copyOptions.widthRatio / 100));
 					});
 					
-					var sortStateColumns = JSON.parse(JSON.stringify(evt.instance.store.data.sortState.columns));
+					evt.instance.resetColumnWidths(columnWidths);
 
-					evt.instance.setColumns(columns);
-					
-					evt.instance.store.data.sortState.columns = sortStateColumns;
+					evt.instance.store.column.allColumns.forEach(function(columnInfo) {
+						columnInfo.fixedWidth = true;
+					});
 				}
 
 				rafId = requestAnimationFrame(resizeObserver);

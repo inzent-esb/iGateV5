@@ -48,6 +48,8 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
 {
   public static final String MESSAGE = "Message" ;
 
+  public static final String DEFAULT_METADOMAIN = "internal" ;
+
   // Export
   public static final String RESULT_COUNT = "ResultCount" ;
 
@@ -323,6 +325,10 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
     // 모델 이름
     cell = row.getCell(12) ;
     cell.setCellValue(record.getRecordName()) ;
+
+    // 메타도메인
+    cell = row.getCell(16) ;
+    cell.setCellValue(record.getMetaDomain()) ;
 
     // 엑셀 3번째 줄 값 설정
     row = writeSheet.getRow(2) ;
@@ -744,6 +750,11 @@ public class ExportImportRecordUtils implements Exporter<Record>, Importer<Recor
       // 모델이름
       cell = row.getCell(12) ;
       record.setRecordName(getStringNumericValue(cell)) ;
+
+      // 메타도메인
+      cell = row.getCell(16) ;
+      String value = getStringNumericValue(cell) ;
+      record.setMetaDomain(value.equals(StringUtils.EMPTY) ? DEFAULT_METADOMAIN : value) ;
 
       // 엑셀 3번째 줄 값 가져오기
       row = readSheet.getRow(2) ;

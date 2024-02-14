@@ -538,9 +538,16 @@ const info = {
 									"igate.onlineHeaderMappingPolicy.requestMappingId"
 								),
 								clickEvt: function (component) {
+									const searchData = component.getData().requestMappingId;
+									
+									if (!searchData) {
+										$alert({ type: 'warn', message: $t('head.no.data.warn') });
+										return;
+									}
+									
 									openNewTab('101020', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().requestMappingId}));
+										localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 									});
 								},
 								modalInfo: {
@@ -622,9 +629,16 @@ const info = {
 									"igate.onlineHeaderMappingPolicy.responseMappingId"
 								),
 								clickEvt: function (component) {
+									const searchData = component.getData().responseMappingId;
+									
+									if (!searchData) {
+										$alert({ type: 'warn', message: $t('head.no.data.warn') });
+										return;
+									}
+									
 									openNewTab('101020', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().responseMappingId}));
+										localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 									});
 								},
 								modalInfo: {
@@ -706,9 +720,16 @@ const info = {
 									"igate.onlineHeaderMappingPolicy.replyMappingId"
 								),
 								clickEvt: function (component) {
+									const searchData = component.getData().replyMappingId;
+									
+									if (!searchData) {
+										$alert({ type: 'warn', message: $t('head.no.data.warn') });
+										return;
+									}
+									
 									openNewTab('101020', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().replyMappingId}));
+										localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 									});
 								},
 								modalInfo: {
@@ -790,9 +811,16 @@ const info = {
 									"igate.onlineHeaderMappingPolicy.createMappingId"
 								),
 								clickEvt: function (component) {
+									const searchData = component.getData().createMappingId;
+									
+									if (!searchData) {
+										$alert({ type: 'warn', message: $t('head.no.data.warn') });
+										return;
+									}
+									
 									openNewTab('101020', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"mappingId": component.getData().createMappingId}));
+										localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 									});
 								},
 								modalInfo: {

@@ -146,13 +146,25 @@
 			                    {
 			                        type: 'text',
 			                        mappingDataInfo: 'object.adapterId',
-			                        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>'
+			                        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
+			                        clickEvt: function() {
+										var searchData = window.vmMain.object.adapterId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+			                        	
+			                        	openNewTab('202030', function() {			                        		
+			                        		localStorage.removeItem("searchObj");
+											localStorage.setItem("searchObj", JSON.stringify({ "adapterId": searchData }));
+			                        	});
+			                        }
 			                    },
 			                    {
 			                        type: 'textEvt',
 			                        mappingDataInfo: 'object.operationId',
-			                        name: '<fmt:message>igate.operation</fmt:message>',
-			                        clickEvt: 'clickOperation(object.operationId)'
+			                        name: '<fmt:message>igate.operation</fmt:message>'			                        
 			                    },
 			                    {
 			                        type: 'text',
@@ -177,14 +189,12 @@
 			                    {
 			                        type: 'textEvt',
 			                        mappingDataInfo: 'object.requestRecordName',
-			                        name: '<fmt:message>igate.service.request.model</fmt:message>',
-			                        clickEvt: 'clickRecord(object.requestRecordId)'
+			                        name: '<fmt:message>igate.service.request.model</fmt:message>'
 			                    },
 			                    {
 			                        type: 'textEvt',
 			                        mappingDataInfo: 'object.responseRecordName',
-			                        name: '<fmt:message>igate.service.response.model</fmt:message>',
-			                        clickEvt: 'clickRecord(object.responseRecordId)'
+			                        name: '<fmt:message>igate.service.response.model</fmt:message>'
 			                    }
 			                ]
 			            },
@@ -646,22 +656,6 @@
 					                window.vmResouceInUse.object.updateUserId = null;
 					                window.vmResouceInUse.object.updateTimestamp = null;
 					            }
-					        },
-					        clickOperation: function (param) {
-					            if (!param) return;
-		
-					            localStorage.setItem('selectedOperation', JSON.stringify({ operationId: param }));
-					            localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['100000', '102000', '102070']));
-		
-					            window.open(location.href);
-					        },
-					        clickRecord: function (param) {
-					            if (!param) return;
-		
-					            localStorage.setItem('selectedMessageModel', JSON.stringify({ recordId: param }));
-					            localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(['100000', '101000', '101010']));
-		
-					            window.open(location.href);
 					        }
 					    }
 					});

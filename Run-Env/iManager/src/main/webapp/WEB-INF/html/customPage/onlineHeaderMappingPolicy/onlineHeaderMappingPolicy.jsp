@@ -125,9 +125,16 @@
 			                            callBackFuncName: 'setSearchRequestMappingId'
 			                        },
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.requestMappingId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('101020', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.requestMappingId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 			                        	}); 
 			                        }
 			                    },
@@ -141,9 +148,16 @@
 			                            callBackFuncName: 'setSearchResponseMappingId'
 			                        },
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.responseMappingId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('101020', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.responseMappingId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 			                        	}); 
 			                        }
 			                    },
@@ -157,9 +171,16 @@
 			                            callBackFuncName: 'setSearchReplyMappingId'
 			                        },
 			                        clickEvt: function() {
+			                        	var searchData = window.vmMain.object.replyMappingId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('101020', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.replyMappingId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 			                        	}); 
 			                        }
 			                    },
@@ -173,9 +194,16 @@
 			                            callBackFuncName: 'setSearchCreateMappingId'
 			                        },
 			                        clickEvt: function() {
+			                        	var searchData = window.vmMain.object.createMappingId;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('101020', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"mappingId": window.vmMain.object.createMappingId}));
+											localStorage.setItem("searchObj", JSON.stringify({ "mappingId": searchData }));
 			                        	}); 
 			                        }
 			                    }

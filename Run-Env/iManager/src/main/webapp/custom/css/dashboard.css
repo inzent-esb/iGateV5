@@ -112,6 +112,10 @@
 .scroll-wrapper:hover .scroll-element{opacity: 1}
 .scrollbar-inner>.scroll-element.scroll-x{height: 10px}
 .scrollbar-inner>.scroll-element.scroll-y{width: 10px}
+#containerHeader {line-height: 2.5; font-weight: bold;font-size: 1.5rem; text-align: center; display: flex; margin: auto; overflow: hidden; margin-bottom: 10px; }
+#containerHeader .header{text-overflow: ellipsis; overflow: hidden; white-space: nowrap}
+#containerHeader .logo{vertical-align: middle; margin-right: 10px}
+
 .btn-fullscreen{display: none}
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     .btn-fullscreen{display: inline-block}

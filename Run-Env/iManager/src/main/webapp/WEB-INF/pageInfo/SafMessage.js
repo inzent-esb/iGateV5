@@ -360,7 +360,7 @@ const info = {
 								clickEvt: function (component) {
 									openNewTab('202030', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"adapterId": component.getData()['pk.adapterId'] }));
+										localStorage.setItem("searchObj", JSON.stringify({ "adapterId": component.getData()['pk.adapterId'] }));
 									});
 								}
 							},
@@ -408,9 +408,16 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								clickEvt: function (component) {
+									const searchData = component.getData().interfaceId;
+									
+									if (!searchData) {
+										$alert({ type: 'warn', message: $t('head.no.data.warn') });
+										return;
+									}
+									
 									openNewTab('101050', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"interfaceId": component.getData().interfaceId }));
+										localStorage.setItem("searchObj", JSON.stringify({ "interfaceId": searchData }));
 									});
 								}
 							},
@@ -422,9 +429,16 @@ const info = {
 									" " +
 									this.$t("head.id"),
 								clickEvt: function (component) {
+									const searchData = component.getData().serviceId;
+									
+									if (!searchData) {
+										$alert({ type: 'warn', message: $t('head.no.data.warn') });
+										return;
+									}
+									
 									openNewTab('101030', function() {
 										localStorage.removeItem("searchObj");
-										localStorage.setItem("searchObj", JSON.stringify({"serviceId": component.getData().serviceId }));
+										localStorage.setItem("searchObj", JSON.stringify({"serviceId": searchData }));
 									});
 								}
 							},

@@ -311,7 +311,12 @@
 			                requestTimestamp: null,
 			                responseTimestamp: null,
 			                pageSize: 10,
-			            }
+			            },
+			            letter: {
+	    		            transactionId: searchObj['transactionId']
+		                    ? searchObj['transactionId'].length
+		                    : 0
+	    		        }
 			        })
 			    );
 			}
@@ -423,7 +428,7 @@
 	    		        initDatePicker: function () {
 	    		        	var fromLogDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#fromLogDateTime');
 	    		            var toLogDateTime = $('#' + createPageObj.getElementId('ImngSearchObject')).find('#toLogDateTime');
-
+	    		            
 	    		            fromLogDateTime.customDateRangePicker('from', function(fromLogDateTime) {
 	    		                this.object.fromLogDateTime = fromLogDateTime;
 	    		                
@@ -443,6 +448,11 @@
 	    		            startDate.setHours(startDate.getHours());
 	    		            startDate.setMinutes(startDate.getMinutes());
 	    		            startDate.setSeconds(startDate.getSeconds());
+	    		            
+	    		            var endDate = new Date();
+	    		            endDate.setHours(endDate.getHours());
+	    		            endDate.setMinutes(endDate.getMinutes());
+	    		            endDate.setSeconds(endDate.getSeconds());
 
 	    		            if ('h' == unit)
 	    		                startDate.setHours(startDate.getHours() - this.rangeTime);
@@ -451,6 +461,8 @@
 
 	    		            if (this.rangeTime !== '0')
 	    		                this.object.fromLogDateTime = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+	    		            
+	    		            this.object.toLogDateTime = moment(endDate).format('YYYY-MM-DD HH:mm:ss');
 
 	    		            this.initDatePicker();
 	    		        },
@@ -616,6 +628,7 @@
 			    		panelMode: null,
 			    		refGridData : null,
 			    		hasClickEvt: true,
+			    		isTools: window.isTools
 			    	},
 			    	computed: {
 			    		pk: function() {
@@ -664,7 +677,12 @@
 			        	initDetailArea: function(object) {
 			        		if(object) this.object = object;
 						},
-						clickEvt: function(data) {			            	
+						clickEvt: function(data) {		
+							if(!this.object[data]) {
+								window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+								return;
+							} 
+							
 							var menuId = [];
 							
 							switch(data) {
@@ -1033,11 +1051,13 @@
 			                    columns : [
 			                    	{
 			                    		name : 'fieldId',
-			                    		header : "<fmt:message>head.field</fmt:message> <fmt:message>head.id</fmt:message>"
+			                    		header : "<fmt:message>head.field</fmt:message> <fmt:message>head.id</fmt:message>",
+			                    		escapeHTML: true
 			                    	}, 
 			                    	{
 			                    		name : 'fieldName',
-			                    		header : "<fmt:message>head.field</fmt:message> <fmt:message>head.name</fmt:message>"
+			                    		header : "<fmt:message>head.field</fmt:message> <fmt:message>head.name</fmt:message>",
+			                    		escapeHTML: true
 			                    	}, 
 			                    	{
 			                    		name : 'fieldType',
@@ -1110,11 +1130,13 @@
 			                    	}, 
 			                    	{
 			                    		name : 'value',
-			                    		header : "<fmt:message>common.property.value</fmt:message>"
+			                    		header : "<fmt:message>common.property.value</fmt:message>",
+			                    		escapeHTML: true
 			                    	}, 
 			                    	{
 			                    		name : 'rawValue',
-			                    		header : "Hex"
+			                    		header : "Hex",
+			                    		escapeHTML: true
 			                    	}
 			                    ]
 			        		});

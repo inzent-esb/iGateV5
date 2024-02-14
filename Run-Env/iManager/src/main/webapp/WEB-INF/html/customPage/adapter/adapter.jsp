@@ -175,9 +175,16 @@
 			                            callBackFuncName: 'setSearchTelegramHandlerId'
 			                        },
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.telegramHandler;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('102060', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"activityId": window.vmMain.object.telegramHandler}));
+											localStorage.setItem("searchObj", JSON.stringify({ "activityId": searchData }));
 			                        	}); 
 			                        }
 			                    },
@@ -191,9 +198,16 @@
 			                            callBackFuncName: 'setSearchRequestStructureId'
 			                        },
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.requestStructure;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('101010', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"recordId": window.vmMain.object.requestStructure}));
+											localStorage.setItem("searchObj", JSON.stringify({ "recordId": searchData }));
 			                        	}); 
 			                        }
 			                    },
@@ -207,9 +221,16 @@
 			                            callBackFuncName: 'setSearchResponseStructureId'
 			                        },
 			                        clickEvt: function() {
+										var searchData = window.vmMain.object.responseStructure;
+										
+					                	if(!searchData) {
+					                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+					                		return;
+					                	}
+					                	
 			                        	openNewTab('101010', function() {			                        		
 			                        		localStorage.removeItem("searchObj");
-											localStorage.setItem("searchObj", JSON.stringify({"recordId": window.vmMain.object.responseStructure}));
+											localStorage.setItem("searchObj", JSON.stringify({ "recordId": searchData }));
 			                        	}); 
 			                        }
 			                    }
@@ -279,9 +300,16 @@
 			                    callBackFuncName: 'setCalendarId'
 			                },
 			                clickEvt: function() {
+			                	var searchData = window.vmAdapterOperations.adapterOperations[index].calendarId;
+								
+			                	if(!searchData) {
+			                		window.$alert({ type: 'warn', message: '<fmt:message>head.no.data.warn</fmt:message>' });
+			                		return;
+			                	}
+			                	
 			                	openNewTab('302060', function() {			                        		
 	                        		localStorage.removeItem("searchObj");
-									localStorage.setItem("searchObj", JSON.stringify({"calendarId": window.vmAdapterOperations.adapterOperations[index].calendarId}));
+									localStorage.setItem("searchObj", JSON.stringify({ "calendarId": searchData }));
 	                        	}); 
 	                        }
 			            },
