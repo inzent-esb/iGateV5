@@ -1,0 +1,38 @@
+{
+  "Header": {
+    "StandardHeader": {
+      "Length": 0,
+      "Guid": "TESTGUID",
+      "ProgressNo": 0,
+      "CmgrCd": "INZT",
+      "Channelid": "01",
+      "MCIsessionId": "MCISESSION",
+      "IpAddress": "198.182.1.2",
+      "MacAddress": "",
+      "TerminalBranch": "001",
+      "TellerCd": "P00001",
+      "ServiceMode": "D",
+      "SyncMode": "S",
+      "RequestMode": "S",
+      "LangCd": "EN",
+      "InterfaceID": "IF_TER_MCA_0001",
+      "Version": 0,
+      "TTL": {
+        "TtlEnable": 0
+      },
+      "Reserved": ""
+    }
+  },
+  "Body": [
+    {
+      "DataHeader": {
+        "DataType": "IO",
+        "ScreenID": "S00000001122",
+        "FormCount": 0
+      },
+      "DataBody": {
+        "NOTICE_TITLE": "%지"
+      }
+    }
+  ]
+}

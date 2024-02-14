@@ -1,0 +1,46 @@
+{
+  "Header": {
+    "StandardHeader": {
+      "Length": 0,
+      "Guid": "TESTGUID",
+      "ProgressNo": 0,
+      "CmgrCd": "INZT",
+      "Channelid": "01",
+      "MCIsessionId": "MCISESSION",
+      "IpAddress": "198.182.1.2",
+      "MacAddress": "",
+      "TerminalBranch": "001",
+      "TellerCd": "P00001",
+      "ServiceMode": "D",
+      "SyncMode": "S",
+      "RequestMode": "S",
+      "ResponseCode": "0",
+      "LangCd": "EN",
+      "InterfaceID": "IF_TER_MCA_0003",
+      "ServiceID": "SV_MCA_0003",
+      "Version": 0,
+      "TTL": {
+        "TtlEnable": 0,
+        "TtlStartTime": "",
+        "TtlDuration": 0
+      },
+      "Reserved": ""
+    }
+  },
+  "Body": [
+    {
+      "DataHeader": {
+        "DataType": "IO",
+        "DataLength": 0,
+        "ServiceID": "SV_MCA_0003",
+        "ScreenID": "S00000001122",
+        "FormCount": 0
+      },
+      "DataBody": {
+        "A_NOTICE_TITLE": "공지사항0",
+        "A_NOTICE_CONTENT": "공지사항0",
+        "NOTICE_ID": "0"
+      }
+    }
+  ]
+}

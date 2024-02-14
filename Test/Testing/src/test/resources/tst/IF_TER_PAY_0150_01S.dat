@@ -1,0 +1,42 @@
+{
+  "Header" : {
+    "StandardHeader" : {
+      "Length" : 0,
+      "Guid" : "bbb9d460-78d2-4788-9f24-06af06b0974f",
+      "ProgressNo" : 0,
+      "CmgrCd" : "",
+      "Channelid" : "01",
+      "MCIsessionId" : "",
+      "IpAddress" : "",
+      "MacAddress" : "",
+      "TerminalBranch" : "",
+      "TellerCd" : "",
+      "ServiceMode" : "D",
+      "SyncMode" : "S",
+      "RequestMode" : "S",
+      "ResponseCode" : "0",
+      "LangCd" : "",
+      "InterfaceID" : "IF_TER_PAY_0150",
+      "ServiceID" : "SV_PAY_0150",
+      "Version" : 0,
+      "TTL" : {
+        "TtlEnable" : 0,
+        "TtlStartTime" : "",
+        "TtlDuration" : 0
+      },
+      "Reserved" : "T"
+    }
+  },
+  "Body" : [ {
+    "DataHeader" : {
+      "DataType" : "IO",
+      "DataLength" : 0,
+      "ServiceID" : "",
+      "ScreenID" : "",
+      "FormCount" : 0
+    },
+    "DataBody" : {
+      "ID" : "0000600000"
+    }
+  } ]
+}

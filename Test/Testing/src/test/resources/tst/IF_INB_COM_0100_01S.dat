@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<HDR_STRUCTURE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Header>
+    <StandardHeader>
+      <Length>00000000</Length>
+      <Guid>2d4ce63f-15ca-4867-9833-689bfa0a120a</Guid>
+      <ProgressNo>00</ProgressNo>
+      <CmgrCd>INZT</CmgrCd>
+      <Channelid>01</Channelid>
+      <MCIsessionId>MCI_SESSION_ID</MCIsessionId>
+      <IpAddress>198.182.1.2</IpAddress>
+      <MacAddress/>
+      <TerminalBranch>001</TerminalBranch>
+      <TellerCd>P00001</TellerCd>
+      <ServiceMode>D</ServiceMode>
+      <SyncMode>S</SyncMode>
+      <RequestMode>S</RequestMode>
+      <ResponseCode>0</ResponseCode>
+      <LangCd>EN</LangCd>
+      <InterfaceID>IF_INB_COM_0100</InterfaceID>
+      <ServiceID>SV_COM_0100</ServiceID>
+      <Version>000</Version>
+      <TTL>
+        <TtlEnable>0</TtlEnable>
+        <TtlStartTime/>
+        <TtlDuration>000</TtlDuration>
+      </TTL>
+      <Reserved>T</Reserved>
+    </StandardHeader>
+  </Header>
+  <Body>
+    <DataHeader>
+      <DataType>IO</DataType>
+      <DataLength>00000000</DataLength>
+      <ServiceID>SV_COM_0100</ServiceID>
+      <ScreenID/>
+      <FormCount>00</FormCount>
+    </DataHeader>
+    <DataBody>
+      <CUST_NO>374017</CUST_NO>
+    </DataBody>
+  </Body>
+</HDR_STRUCTURE>

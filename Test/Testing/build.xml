@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="toolchain">
+	<target name="toolchain">
+		<replace file="pom.xml">
+			<replacefilter token="&lt;!--  toolchains" />
+			<replacefilter token="toolchains  --&gt;" />
+		</replace>
+	</target>
+</project>
