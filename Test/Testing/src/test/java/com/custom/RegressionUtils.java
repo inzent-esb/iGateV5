@@ -48,7 +48,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode ;
 
 public class RegressionUtils implements Regression
 {
-	//
 	public static String ASYNC_VALID_JDBC_URL ;
 	public static String ASYNC_VALID_JDBC_ID ="";
 	public static String ASYNC_VALID_JDBC_PASSWORD ="";
@@ -67,7 +66,7 @@ public class RegressionUtils implements Regression
 	  
 	public static String USERNAME ="";
 	public static String PASSWORD ="";
-	//
+
 	protected static Connection asyncValidConnection ;
 	protected static Connection extractConnection ;
 	protected static Connection loadConnection ;
@@ -81,48 +80,38 @@ public class RegressionUtils implements Regression
 		  {
 			System.out.println("[FileInputStream]");
 			FileInputStream fis = new FileInputStream("/home/igate5/iGate/bin/info.properties");
-			ASYNC_VALID_JDBC_URL = getProperties(fis, "ASYNC_VALID_JDBC_URL") ;
-			System.out.println("ASYNC_VALID_JDBC_URL :"+ASYNC_VALID_JDBC_URL);
-			ASYNC_VALID_JDBC_ID = getProperties(fis, "ASYNC_VALID_JDBC_ID") ;
-			ASYNC_VALID_JDBC_PASSWORD = getProperties(fis, "ASYNC_VALID_JDBC_PASSWORD") ;
-			
-			COR_JDBC_URL = getProperties(fis, "COR_JDBC_URL") ;
-			COR_JDBC_ID = getProperties(fis, "COR_JDBC_ID") ;
-			COR_JDBC_PASSWORD = getProperties(fis, "COR_JDBC_PASSWORD") ;
-			
-			EDW_JDBC_URL = getProperties(fis, "EDW_JDBC_URL") ;
-			EDW_JDBC_ID = getProperties(fis, "EDW_JDBC_ID") ;
-			EDW_JDBC_PASSWORD = getProperties(fis, "EDW_JDBC_PASSWORD") ;
-			
-			ECHO_CONNECTOR_ADDRESS = getProperties(fis, "ECHO_CONNECTOR_ADDRESS") ;
-			ECHO_USERNAME = getProperties(fis, "ECHO_USERNAME") ;
-			ECHO_PASSWORD = getProperties(fis, "ECHO_PASSWORD") ;
+			Properties prop = new Properties();
+			prop.load(fis);
 
-			USERNAME = getProperties(fis, "USERNAME") ;
-			PASSWORD = getProperties(fis, "PASSWORD") ;
+			for (Object i : prop.keySet()) 
+				System.out.println("[" + (String)i + "=" + prop.getProperty((String)i) + "]");
+			System.out.println("[info.properties] end");
+
+			ASYNC_VALID_JDBC_URL 		= prop.getProperty("ASYNC_VALID_JDBC_URL", "") ;
+			ASYNC_VALID_JDBC_ID 		= prop.getProperty("ASYNC_VALID_JDBC_ID", "") ;
+			ASYNC_VALID_JDBC_PASSWORD 	= prop.getProperty("ASYNC_VALID_JDBC_PASSWORD", "") ;
+			
+			COR_JDBC_URL 				= prop.getProperty("COR_JDBC_URL", "") ;
+			COR_JDBC_ID 				= prop.getProperty("COR_JDBC_ID", "") ;
+			COR_JDBC_PASSWORD 			= prop.getProperty("COR_JDBC_PASSWORD", "") ;
+			
+			EDW_JDBC_URL 				= prop.getProperty("EDW_JDBC_URL", "") ;
+			EDW_JDBC_ID 				= prop.getProperty("EDW_JDBC_ID", "") ;
+			EDW_JDBC_PASSWORD 			= prop.getProperty("EDW_JDBC_PASSWORD", "") ;
+			
+			ECHO_CONNECTOR_ADDRESS 		= prop.getProperty("ECHO_CONNECTOR_ADDRESS", "") ;
+			ECHO_USERNAME 				= prop.getProperty("ECHO_USERNAME", "") ;
+			ECHO_PASSWORD 				= prop.getProperty("ECHO_PASSWORD", "") ;
+
+			USERNAME 					= prop.getProperty("USERNAME", "") ;
+			PASSWORD 					= prop.getProperty("PASSWORD", "") ;
 		  } 
-		  catch (FileNotFoundException e) 
+		  catch (IOException e) 
 		  {
 			e.printStackTrace();
 		  }
 	}
-	
-	public static String getProperties(FileInputStream fis, String key)
-	{
-		Properties prop = new Properties();
-		try 
-		{
-			//key=value로 되어있는 애들을 pair로 읽어올 수 있는 기능
-			prop.load(fis);
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		return prop.getProperty(key, "") ;
-	}
-  
+
   // 17+19 = 36
   public static String getNowDateTime()
   {
