@@ -106,8 +106,8 @@ public class RegressionTestBATCH extends RegressionUtils
     {
       // sftp 연결
       JSch jsch = new JSch() ;
-      session = jsch.getSession(username, CONNECTOR_ADDRESS, ftpPort) ;
-      session.setPassword(password) ;
+      session = jsch.getSession(USERNAME, CONNECTOR_ADDRESS, ftpPort) ;
+      session.setPassword(PASSWORD) ;
       java.util.Properties config = new java.util.Properties() ;
       config.put("StrictHostKeyChecking", "no") ;
       session.setConfig(config) ;

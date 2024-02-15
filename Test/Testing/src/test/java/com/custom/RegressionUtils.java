@@ -2,6 +2,9 @@ package com.custom ;
 
 import static org.junit.jupiter.api.Assertions.assertEquals ;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream ;
 import java.net.InetSocketAddress ;
 import java.net.ServerSocket ;
@@ -16,6 +19,7 @@ import java.text.SimpleDateFormat ;
 import java.util.Date ;
 import java.util.HashSet ;
 import java.util.List ;
+import java.util.Properties;
 import java.util.stream.Collectors ;
 
 import org.apache.commons.io.IOUtils ;
@@ -44,14 +48,81 @@ import com.fasterxml.jackson.databind.node.ObjectNode ;
 
 public class RegressionUtils implements Regression
 {
-  protected static Connection asyncValidConnection ;
-  protected static Connection extractConnection ;
-  protected static Connection loadConnection ;
+	//
+	public static String ASYNC_VALID_JDBC_URL ;
+	public static String ASYNC_VALID_JDBC_ID ="";
+	public static String ASYNC_VALID_JDBC_PASSWORD ="";
+	
+	public static String COR_JDBC_URL ="";
+	public static String COR_JDBC_ID ="";
+	public static String COR_JDBC_PASSWORD ="";
+	
+	public static String EDW_JDBC_URL ="";
+	public static String EDW_JDBC_ID ="";
+	public static String EDW_JDBC_PASSWORD ="";
+	  
+	public static String ECHO_CONNECTOR_ADDRESS ;
+	public static String ECHO_USERNAME ="";
+	public static String ECHO_PASSWORD ="";
+	  
+	public static String USERNAME ="";
+	public static String PASSWORD ="";
+	//
+	protected static Connection asyncValidConnection ;
+	protected static Connection extractConnection ;
+	protected static Connection loadConnection ;
+	
+	public static CloseableHttpClient httpClient = HttpClients.createDefault() ;
+	public static String mcaSessionId ;
+	public static String tellerCode ;
 
-  public static CloseableHttpClient httpClient = HttpClients.createDefault() ;
-  public static String mcaSessionId ;
-  public static String tellerCode ;
+	static {
+		try 
+		  {
+			System.out.println("[FileInputStream]");
+			FileInputStream fis = new FileInputStream("/home/igate5/iGate/bin/info.properties");
+			ASYNC_VALID_JDBC_URL = getProperties(fis, "ASYNC_VALID_JDBC_URL") ;
+			System.out.println("ASYNC_VALID_JDBC_URL :"+ASYNC_VALID_JDBC_URL);
+			ASYNC_VALID_JDBC_ID = getProperties(fis, "ASYNC_VALID_JDBC_ID") ;
+			ASYNC_VALID_JDBC_PASSWORD = getProperties(fis, "ASYNC_VALID_JDBC_PASSWORD") ;
+			
+			COR_JDBC_URL = getProperties(fis, "COR_JDBC_URL") ;
+			COR_JDBC_ID = getProperties(fis, "COR_JDBC_ID") ;
+			COR_JDBC_PASSWORD = getProperties(fis, "COR_JDBC_PASSWORD") ;
+			
+			EDW_JDBC_URL = getProperties(fis, "EDW_JDBC_URL") ;
+			EDW_JDBC_ID = getProperties(fis, "EDW_JDBC_ID") ;
+			EDW_JDBC_PASSWORD = getProperties(fis, "EDW_JDBC_PASSWORD") ;
+			
+			ECHO_CONNECTOR_ADDRESS = getProperties(fis, "ECHO_CONNECTOR_ADDRESS") ;
+			ECHO_USERNAME = getProperties(fis, "ECHO_USERNAME") ;
+			ECHO_PASSWORD = getProperties(fis, "ECHO_PASSWORD") ;
 
+			USERNAME = getProperties(fis, "USERNAME") ;
+			PASSWORD = getProperties(fis, "PASSWORD") ;
+		  } 
+		  catch (FileNotFoundException e) 
+		  {
+			e.printStackTrace();
+		  }
+	}
+	
+	public static String getProperties(FileInputStream fis, String key)
+	{
+		Properties prop = new Properties();
+		try 
+		{
+			//key=value로 되어있는 애들을 pair로 읽어올 수 있는 기능
+			prop.load(fis);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return prop.getProperty(key, "") ;
+	}
+  
   // 17+19 = 36
   public static String getNowDateTime()
   {

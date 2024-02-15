@@ -61,8 +61,8 @@ public abstract class RegressionTest_External_FileProtocol extends RegressionUti
     JSch jsch = new JSch() ;
     try
     {
-      echo_session = jsch.getSession(echo_username, ECHO_CONNECTOR_ADDRESS, ftpPort) ;
-      echo_session.setPassword(echo_password) ;
+      echo_session = jsch.getSession(ECHO_USERNAME, ECHO_CONNECTOR_ADDRESS, ftpPort) ;
+      echo_session.setPassword(ECHO_PASSWORD) ;
 
       java.util.Properties config = new java.util.Properties() ;
       config.put("StrictHostKeyChecking", "no") ;
@@ -125,8 +125,8 @@ public abstract class RegressionTest_External_FileProtocol extends RegressionUti
     JSch jsch = new JSch() ;
     try
     {
-      session = jsch.getSession(username, CONNECTOR_ADDRESS, ftpPort) ;
-      session.setPassword(password) ;
+      session = jsch.getSession(USERNAME, CONNECTOR_ADDRESS, ftpPort) ;
+      session.setPassword(PASSWORD) ;
 
       java.util.Properties config = new java.util.Properties() ;
       config.put("StrictHostKeyChecking", "no") ;
