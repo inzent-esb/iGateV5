@@ -2,6 +2,9 @@ package com.custom ;
 
 import static org.junit.jupiter.api.Assertions.assertEquals ;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream ;
 import java.net.InetSocketAddress ;
 import java.net.ServerSocket ;
@@ -16,6 +19,7 @@ import java.text.SimpleDateFormat ;
 import java.util.Date ;
 import java.util.HashSet ;
 import java.util.List ;
+import java.util.Properties;
 import java.util.stream.Collectors ;
 
 import org.apache.commons.io.IOUtils ;
@@ -44,13 +48,69 @@ import com.fasterxml.jackson.databind.node.ObjectNode ;
 
 public class RegressionUtils implements Regression
 {
-  protected static Connection asyncValidConnection ;
-  protected static Connection extractConnection ;
-  protected static Connection loadConnection ;
+	public static String ASYNC_VALID_JDBC_URL ;
+	public static String ASYNC_VALID_JDBC_ID ="";
+	public static String ASYNC_VALID_JDBC_PASSWORD ="";
+	
+	public static String COR_JDBC_URL ="";
+	public static String COR_JDBC_ID ="";
+	public static String COR_JDBC_PASSWORD ="";
+	
+	public static String EDW_JDBC_URL ="";
+	public static String EDW_JDBC_ID ="";
+	public static String EDW_JDBC_PASSWORD ="";
+	  
+	public static String ECHO_CONNECTOR_ADDRESS ;
+	public static String ECHO_USERNAME ="";
+	public static String ECHO_PASSWORD ="";
+	  
+	public static String USERNAME ="";
+	public static String PASSWORD ="";
 
-  public static CloseableHttpClient httpClient = HttpClients.createDefault() ;
-  public static String mcaSessionId ;
-  public static String tellerCode ;
+	protected static Connection asyncValidConnection ;
+	protected static Connection extractConnection ;
+	protected static Connection loadConnection ;
+	
+	public static CloseableHttpClient httpClient = HttpClients.createDefault() ;
+	public static String mcaSessionId ;
+	public static String tellerCode ;
+
+	static {
+		try 
+		  {
+			System.out.println("[FileInputStream]");
+			FileInputStream fis = new FileInputStream("/home/igate5/iGate/bin/info.properties");
+			Properties prop = new Properties();
+			prop.load(fis);
+
+			for (Object i : prop.keySet()) 
+				System.out.println("[" + (String)i + "=" + prop.getProperty((String)i) + "]");
+			System.out.println("[info.properties] end");
+
+			ASYNC_VALID_JDBC_URL 		= prop.getProperty("ASYNC_VALID_JDBC_URL", "") ;
+			ASYNC_VALID_JDBC_ID 		= prop.getProperty("ASYNC_VALID_JDBC_ID", "") ;
+			ASYNC_VALID_JDBC_PASSWORD 	= prop.getProperty("ASYNC_VALID_JDBC_PASSWORD", "") ;
+			
+			COR_JDBC_URL 				= prop.getProperty("COR_JDBC_URL", "") ;
+			COR_JDBC_ID 				= prop.getProperty("COR_JDBC_ID", "") ;
+			COR_JDBC_PASSWORD 			= prop.getProperty("COR_JDBC_PASSWORD", "") ;
+			
+			EDW_JDBC_URL 				= prop.getProperty("EDW_JDBC_URL", "") ;
+			EDW_JDBC_ID 				= prop.getProperty("EDW_JDBC_ID", "") ;
+			EDW_JDBC_PASSWORD 			= prop.getProperty("EDW_JDBC_PASSWORD", "") ;
+			
+			ECHO_CONNECTOR_ADDRESS 		= prop.getProperty("ECHO_CONNECTOR_ADDRESS", "") ;
+			ECHO_USERNAME 				= prop.getProperty("ECHO_USERNAME", "") ;
+			ECHO_PASSWORD 				= prop.getProperty("ECHO_PASSWORD", "") ;
+
+			USERNAME 					= prop.getProperty("USERNAME", "") ;
+			PASSWORD 					= prop.getProperty("PASSWORD", "") ;
+		  } 
+		  catch (IOException e) 
+		  {
+			e.printStackTrace();
+		  }
+	}
 
   // 17+19 = 36
   public static String getNowDateTime()
