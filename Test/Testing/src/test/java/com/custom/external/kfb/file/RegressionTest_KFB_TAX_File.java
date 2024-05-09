@@ -32,8 +32,14 @@ public class RegressionTest_KFB_TAX_File extends RegressionTest_External_FilePro
     System.out.println("- echoInit()") ;
     echoInit();
     
-    System.out.println("- echoDeleteFile()") ;
-    deleteFile(echo_channelSftp, centerKfbTaxRecvFileDir, null) ;
+    try
+    {
+      System.out.println("- echoDeleteFile()") ;
+      deleteFile(echo_channelSftp, centerKfbTaxRecvFileDir, null) ;
+    }
+    catch(Exception e) 
+    {
+    }
     
     System.out.println("- initUpload()") ;
     initUpload();

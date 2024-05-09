@@ -34,8 +34,14 @@ public class RegressionTest_KFTC_BATCH_File extends RegressionTest_External_File
     System.out.println("- echoInit()") ;
     echoInit();
 
-    System.out.println("- echoDeleteFile()") ;
-    deleteFile(echo_channelSftp, centerKftcBatchRecvFileDir, null) ;
+    try
+    {
+      System.out.println("- echoDeleteFile()") ;
+      deleteFile(echo_channelSftp, centerKftcBatchRecvFileDir, null) ;
+    }
+    catch(Exception e) 
+    {
+    }
     
     System.out.println("- initUpload()") ;
     initUpload();
