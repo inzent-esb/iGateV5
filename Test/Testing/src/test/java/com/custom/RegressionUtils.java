@@ -66,6 +66,8 @@ public class RegressionUtils implements Regression
 	  
 	public static String USERNAME ="";
 	public static String PASSWORD ="";
+	
+	public static String CONNECTOR_ADDRESS = "tuto.inzent.com" ;
 
 	protected static Connection asyncValidConnection ;
 	protected static Connection extractConnection ;
@@ -105,6 +107,8 @@ public class RegressionUtils implements Regression
 
 			USERNAME 					= prop.getProperty("USERNAME", "") ;
 			PASSWORD 					= prop.getProperty("PASSWORD", "") ;
+			
+			CONNECTOR_ADDRESS           = prop.getProperty("CONNECTOR_ADDRESS", CONNECTOR_ADDRESS) ;
 		  } 
 		  catch (IOException e) 
 		  {

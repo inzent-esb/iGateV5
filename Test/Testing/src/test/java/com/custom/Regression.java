@@ -11,7 +11,7 @@ public interface Regression
   
   public static final String EDW_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
   
-  public static final String CONNECTOR_ADDRESS = "tuto.inzent.com" ;
+//  public static String CONNECTOR_ADDRESS = "tuto.inzent.com" ;
   public static final int TER_CONNECTOR_PORT = 5001 ;
   public static final int ATM_CONNECTOR_PORT = 5011 ;
   public static final int COL_CONNECTOR_PORT = 5021 ;
