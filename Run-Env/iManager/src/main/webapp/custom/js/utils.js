@@ -182,9 +182,7 @@ function makeGridOptions(gridOptions, formatterData) {
 			resizable: true,
 			minWidth: 1
 		},
-		contextMenu: function() {
-			return [];
-		},
+		contextMenu: null,
 		scrollX: true,
 		data: [],
 		usageStatistics: false

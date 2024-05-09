@@ -102,4 +102,9 @@ public class RestTelegramHandler extends AbstractTelegramHandler implements Cust
     return true ;
   }
 
+  @Override
+  protected String getResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null ;
+  } 
 }

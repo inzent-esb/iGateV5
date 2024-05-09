@@ -282,7 +282,7 @@ const info = {
 		totalCntUrl: '/api/entity/jobResult/count',
 		paging: {
 			isUse: true,
-			side: "server"
+			side: "client"
 		},
 		options: {
 			columns: [

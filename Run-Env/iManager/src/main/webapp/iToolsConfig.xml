@@ -81,7 +81,7 @@
         <Column label="TableFail" align="left" width="100" name="table.flag.fail" editType="edit" extened="true"/>
         <Column label="TableExclude" align="center" width="100" name="table.exclude" editType="checkbox" extened="true"/>
         <Column label="TableCommand" align="center" width="100" name="table.command" editType="checkbox" extened="true"/>
-        <Column label="HttpType" align="center" width="100" name="FieldHttpType" editType="select" availableValue="none= ,uri=Uri,query=Query,header=Header,body=Body" availableDefaultValue="none" extened="true"/>
+        <Column label="HttpType" align="center" width="100" name="FieldHttpType" editType="select" availableValue="none= ,uri=Uri,query=Query,status=Status,header=Header,body=Body" availableDefaultValue="none" extened="true"/>
         <Column label="XmlType" align="center" width="100" name="SchemaType" editType="select" availableValue="none= ,attribute=Attribute,element=Element,cdata=CData,text=Text,elementcdata=Elementcdata" availableDefaultValue="none" extened="true"/>
         <Column label="XmlName" align="left" width="100" name="XmlName" editType="edit" extened="true"/>
         

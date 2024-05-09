@@ -1854,7 +1854,7 @@ function getMakeGridObj() {
 						});
 					} else {
 						if ('server' === paging.side) {
-							if (pageNo > Math.ceil(grid.getData().length / searchObj.pageSize)) {
+							if (grid.getData().length < pageNo * searchObj.pageSize) {
 								getDataList(function() {
 									paging.setCurrentCnt(grid.getData().length);
 								});
@@ -2005,6 +2005,10 @@ function getMakeGridObj() {
 
 					if (0 < dataList.length) {
 						param.next = dataList[dataList.length - 1];
+						
+						if (grid.getData().length < pageNo * searchObj.pageSize) {
+							param.limit *= Math.ceil((pageNo * searchObj.pageSize - grid.getData().length) / param.limit);
+						}
 					}
 				} else if ('serverPaging' === paging.side) {
 					delete param.next;

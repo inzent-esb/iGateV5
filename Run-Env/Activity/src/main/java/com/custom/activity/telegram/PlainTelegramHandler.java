@@ -110,4 +110,10 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   {
 	  //transactionContextBean.setValue(LANG_CD, StringCodec.decode((byte[]) (request ? adapterParameter.getRequestData() : adapterParameter.getResponseData()), LANG_CD_FIELD_OFFSET, LANG_CD_FIELD_LENGTH, adapterParameter.getAdapter().getCharset()) ) ;
   }
+
+  @Override
+  protected String getResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null ;
+  } 
 }

@@ -590,6 +590,7 @@
 			                treeColumnOptions: {
 			                    name: 'fieldId'
 			                },
+			                contextMenu: null,
 			                columns: []
 			            };
 
