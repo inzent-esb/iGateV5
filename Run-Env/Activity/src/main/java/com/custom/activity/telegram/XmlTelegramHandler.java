@@ -132,4 +132,10 @@ public class XmlTelegramHandler extends AbstractTelegramHandler implements Custo
   {
     return null ;
   } 
+  
+  @Override
+  protected Object getHealthCheckResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null;
+  }
 }

@@ -107,4 +107,10 @@ public class RestTelegramHandler extends AbstractTelegramHandler implements Cust
   {
     return null ;
   } 
+  
+  @Override
+  protected Object getHealthCheckResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null;
+  }
 }

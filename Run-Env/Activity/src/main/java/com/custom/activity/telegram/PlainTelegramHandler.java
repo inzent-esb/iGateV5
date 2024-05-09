@@ -116,4 +116,10 @@ public class PlainTelegramHandler extends AbstractTelegramHandler implements Cus
   {
     return null ;
   } 
+  
+  @Override
+  protected Object getHealthCheckResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null;
+  }
 }
