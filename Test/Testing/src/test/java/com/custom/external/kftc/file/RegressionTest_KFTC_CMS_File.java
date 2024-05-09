@@ -34,8 +34,14 @@ public class RegressionTest_KFTC_CMS_File extends RegressionTest_External_FilePr
     System.out.println("- echoInit()") ;
     echoInit();
 
-    System.out.println("- echoDeleteFile()") ;
-    deleteFile(echo_channelSftp, centerKftcCmsRecvFileDir, null) ;
+    try
+    {
+      System.out.println("- echoDeleteFile()") ;
+      deleteFile(echo_channelSftp, centerKftcCmsRecvFileDir, null) ;
+    }
+    catch(Exception e) 
+    {
+    }
     
     System.out.println("- initUpload()") ;
     initUpload();
