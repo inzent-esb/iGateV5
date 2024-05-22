@@ -11,4 +11,4 @@ iGate 엔진 Jar 파일은 버전별로 아래의 경로에서 다운로드 후 
 
 5.2.4 ~ 이후 릴리즈 파일 (문서중앙화) : /내 공유함/공유받은함/공개 자료/iGate v5/01. Release/ </br>
 
-이전 ~ 5.2.3 릴리즈 파일 (Redmine) : https://project.inzent.com/redmine/boards/34
+이전 ~ 5.2.3 릴리즈 파일 (Redmine) : https://project.inzent.com/redmine/projects/igate_v5/boards/34
