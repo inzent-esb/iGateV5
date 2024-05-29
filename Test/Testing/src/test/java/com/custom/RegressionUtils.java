@@ -264,7 +264,7 @@ public class RegressionUtils implements Regression
 
     RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIMEOUT).setConnectTimeout(TIMEOUT).setConnectionRequestTimeout(TIMEOUT).build() ;
 
-    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + MCA_CONNECTOR_PORT + "/") ;
+    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + (MCA_CONNECTOR_PORT + INSTANCE_2_SOCKET_OFFSET) + "/") ;
     httpPost.setConfig(requestConfig) ;
     httpPost.setEntity(new ByteArrayEntity(makeJsonRequest(fileName, caseId, 0))) ;
 

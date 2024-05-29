@@ -23,6 +23,8 @@ public interface Regression
   public static final int KFTC_API_CONNECTOR_PORT = 6080 ;
   public static final int TIMEOUT = 10000 ;
 
+  public static final int INSTANCE_2_SOCKET_OFFSET = 1 ;
+
   public static final int ECHO_KFB_TAX_CONNECTOR_PORT = 6113 ;
 
   public static final int DATA_LEN_LENGTH = 8 ;
