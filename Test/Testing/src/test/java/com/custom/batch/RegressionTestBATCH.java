@@ -354,7 +354,7 @@ public class RegressionTestBATCH extends RegressionUtils
       List<String> list = new ArrayList<String>();
       list.add(STARTTIME);
       list.add(FIRSTCODE);
-      assertEquals(validData(asyncValidConnection, COR_EDW_0140_VALID_QUERY, list ), 1) ;
+      assertEquals(validData(extractConnection, COR_EDW_0140_VALID_QUERY, list ), 1) ;
       
       
     }
@@ -421,9 +421,7 @@ public class RegressionTestBATCH extends RegressionUtils
     public void TST_IF_EDW_COR_0141_01S() throws Exception
     {
       String[] bindList = { FIRSTCODE, FIRSTTIME, dataFormat.format(new Date()) } ;
-
       EDW_tester("IF_EDW_COR_0141_01S.dat", "0", bindList) ;
-
     }
   }
 
