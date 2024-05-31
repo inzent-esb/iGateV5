@@ -277,12 +277,17 @@ public class RegressionUtils implements Regression
   
   public void EDW_tester(String fileName, String ResponseCode, String[] bindList) throws Exception
   {
+    EDW_tester( fileName,  ResponseCode, bindList, 0) ; 
+  }
+
+  public void EDW_tester(String fileName, String ResponseCode, String[] bindList, int socketOffset ) throws Exception
+  {
     String caseId = fileName.substring(0, fileName.indexOf(".dat")) ;
     System.out.println("TEST EXECUTE : " + caseId) ;
     
     RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIMEOUT).setConnectTimeout(TIMEOUT).setConnectionRequestTimeout(TIMEOUT).build() ;
 
-    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + EDW_CONNECTOR_PORT + "/iGate/INB") ;
+    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + (EDW_CONNECTOR_PORT + socketOffset) + "/") ;
     httpPost.setConfig(requestConfig) ;
     httpPost.setEntity(new ByteArrayEntity(makeXmlRequest(fileName, caseId, 0, bindList))) ;
 

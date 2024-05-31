@@ -421,7 +421,7 @@ public class RegressionTestBATCH extends RegressionUtils
     public void TST_IF_EDW_COR_0141_01S() throws Exception
     {
       String[] bindList = { FIRSTCODE, FIRSTTIME, dataFormat.format(new Date()) } ;
-      EDW_tester("IF_EDW_COR_0141_01S.dat", "0", bindList) ;
+      EDW_tester("IF_EDW_COR_0141_01S.dat", "0", bindList, INSTANCE_2_SOCKET_OFFSET) ;
     }
   }
 
