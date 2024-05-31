@@ -485,7 +485,7 @@ public class RegressionTestBATCH extends RegressionUtils
     @DisplayName("[IF_COR_COM_0142] DB - SFTP 테스트")
     public void TST_IF_COR_COM_0142_01S() throws Exception
     {
-      assertEquals(checkFile("IF_COR_0142", sftpWriteFileDir), true) ;
+      assertEquals(checkFile("IF_COR_COM_0142", sftpWriteFileDir), true) ;
     }
     
     
