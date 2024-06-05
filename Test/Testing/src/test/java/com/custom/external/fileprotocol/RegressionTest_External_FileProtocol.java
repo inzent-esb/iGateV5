@@ -237,9 +237,14 @@ public abstract class RegressionTest_External_FileProtocol extends RegressionUti
 
   public static void echoCloseSFTP()
   {
-    echo_channelSftp.exit();
-    echo_channel.disconnect();
-    echo_session.disconnect();
+    if (echo_channelSftp != null)
+      echo_channelSftp.exit() ;
+    
+    if (echo_channel != null)
+      echo_channel.disconnect() ;
+    
+    if (echo_session != null)
+      echo_session.disconnect() ;
   }
 
   @SuppressWarnings("unchecked")
