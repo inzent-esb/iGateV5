@@ -34,11 +34,18 @@ public class RegressionTest_KCI_TDB_File extends RegressionTest_External_FilePro
 
     try
     {
-      System.out.println("- echoDeleteFile()") ;
-      deleteFile(echo_channelSftp, centerKciTdbRecvFileDir, null) ;
+      if (echo_channelSftp != null)
+      {
+        System.out.println("- echoDeleteFile()") ;
+        deleteFile(echo_channelSftp, centerKciTdbRecvFileDir, null) ;
+      }
+      else 
+        System.out.println("- echoDeleteFile() >>> --- Skip ---") ;
     }
     catch(Exception e) 
     {
+      System.out.println("- echoDeleteFile() >>> --- Fail ---") ;
+      e.printStackTrace() ;
     }
 
     System.out.println("- initUpload()") ;

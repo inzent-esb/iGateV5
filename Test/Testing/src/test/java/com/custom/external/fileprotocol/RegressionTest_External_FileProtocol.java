@@ -74,6 +74,7 @@ public abstract class RegressionTest_External_FileProtocol extends RegressionUti
     }
     catch (JSchException e)
     {
+      System.out.println("- echoInit() >>> --- Fail ---") ;
       e.printStackTrace() ;
     }
 
