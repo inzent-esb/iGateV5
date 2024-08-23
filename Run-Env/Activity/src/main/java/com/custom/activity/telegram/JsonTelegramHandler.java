@@ -124,4 +124,16 @@ public class JsonTelegramHandler extends AbstractTelegramHandler implements Cust
   {
     return header.path(SID_FIELD).asText() ;
   }
+
+  @Override
+  protected String getResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null ;
+  } 
+  
+  @Override
+  protected Object getHealthCheckResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null;
+  }
 }

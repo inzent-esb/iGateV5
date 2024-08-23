@@ -557,10 +557,7 @@
 		        		totalCntUrl: '/api/entity/exceptionLog/count',
 		        		paging: {
 			    			isUse: true,
-			    			side: "server",
-			    			setCurrentCnt: function(currentCnt) {
-			    			    this.currentCnt = currentCnt
-			    			}.bind(this)			    			
+			    			side: "client"			    			
 			    		},
 			            columns: [
 			                {

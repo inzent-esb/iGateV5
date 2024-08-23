@@ -132,10 +132,10 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
     case LogStats.STATS_FILE_SERVICE :
       return MessageGenerator.getMessage("igate.logStatistics.statsType.5.fileService", "File Service") ;
 
-    case LogStats.STATS_DB_INTERFACE :
+    case LogStats.STATS_TABLE_INTERFACE :
       return MessageGenerator.getMessage("igate.logStatistics.statsType.7.dbInterface", "DB Interface") ;
 
-    case LogStats.STATS_DB_SERVICE :
+    case LogStats.STATS_TABLE_SERVICE :
       return MessageGenerator.getMessage("igate.logStatistics.statsType.8.dbService", "DB Service") ;
 
     default :

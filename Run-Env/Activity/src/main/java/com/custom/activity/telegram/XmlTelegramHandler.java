@@ -126,4 +126,16 @@ public class XmlTelegramHandler extends AbstractTelegramHandler implements Custo
   {
     return header.elementText(SID_FIELD) ;
   }
+
+  @Override
+  protected String getResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null ;
+  } 
+  
+  @Override
+  protected Object getHealthCheckResponse(AdapterParameter adapterParameter) throws IGateException
+  {
+    return null;
+  }
 }

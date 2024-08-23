@@ -11,7 +11,7 @@ function _alert(alertObj) {
 	modalHtml += '				  <p  class="alert-text">' + message + '</p>';
 	modalHtml += '			  </div>';
 	modalHtml += '			  <div class="modal-footer">';
-	modalHtml += '			      <button id="ok" type="button" class="btn btn-primary" data-dismiss="modal">' + okBtn + '</button>';
+	modalHtml += '			      <button id="ok" type="button" class="btn" data-dismiss="modal">' + cancelBtn + '</button>';
 	modalHtml += '			  </div>';
 	modalHtml += '	      </div>';
 	modalHtml += '    </div>';
@@ -112,7 +112,7 @@ function openModal(modalParam) {
 	modalHtml += '            <div class="modal-footer">';
 	modalHtml +=                  customBtnHtml;
 	modalHtml += '				  <button type="button" class="btn btn-primary" id="modalCustomBtn" style="display: none;"></button>';
-	modalHtml += '                <button type="button" class="btn" data-dismiss="modal" id="modalClose">' + closeBtn + '</button>';
+	modalHtml += '                <button type="button" class="btn" data-dismiss="modal" id="modalClose">' + (buttonList ? cancelBtn : closeBtn) + '</button>';
 	modalHtml += '            </div>';
 	modalHtml += '        </div>';
 	modalHtml += '    </div>';

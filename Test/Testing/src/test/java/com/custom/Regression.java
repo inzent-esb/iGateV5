@@ -11,7 +11,7 @@ public interface Regression
   
   public static final String EDW_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
   
-  public static final String CONNECTOR_ADDRESS = "tuto.inzent.com" ;
+//  public static String CONNECTOR_ADDRESS = "tuto.inzent.com" ;
   public static final int TER_CONNECTOR_PORT = 5001 ;
   public static final int ATM_CONNECTOR_PORT = 5011 ;
   public static final int COL_CONNECTOR_PORT = 5021 ;
@@ -22,6 +22,8 @@ public interface Regression
   public static final int ATS_CONNECTOR_PORT = 6060 ;
   public static final int KFTC_API_CONNECTOR_PORT = 6080 ;
   public static final int TIMEOUT = 10000 ;
+
+  public static final int INSTANCE_2_SOCKET_OFFSET = 1 ;
 
   public static final int ECHO_KFB_TAX_CONNECTOR_PORT = 6113 ;
 

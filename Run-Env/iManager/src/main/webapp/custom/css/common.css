@@ -923,7 +923,7 @@ input::-ms-reveal {
 
 
 .tui-grid-row-header-draggable span {
-    display: none;
+	display: none !important;
 }
 
 .tui-grid-row-header-draggable::before{content: '\2195'; font-family: 'icomoon' !important;}
@@ -972,7 +972,7 @@ span.ellipsis {
 }
 
 .tui-grid-context-menu {
-    display: none;
+    font-family: 'Nanum Gothic';
 }
 
 .loginLayout {
@@ -1132,6 +1132,49 @@ span.ellipsis {
 	background-color: #f8e0e0;
 }
 
+.tui-grid-cell.gray, .tui-grid-row-hover > .tui-grid-cell.gray, .tui-grid-cell-row-header.tui-grid-cell-selected.gray {
+	background-color: #eee !important;
+}
+
+#mappingInfoRoot .tui-grid-cell-row-header.tui-grid-cell-selected {
+	background: none;
+}
+
 .modal-backdrop.fade {
 	transition: none !important; 
+}
+
+.tui-select-box-input {
+	height: 28px !important;
+}
+
+.modal.ui-draggable {
+	background-color: transparent;
+}
+
+.modal.ui-draggable .modal-dialog {
+	margin: 0;
+	border: 1px solid #babbc2;
+	border-radius: 8px; 
+	max-width: none !important;
+	width: 100%;
+	height: 100%;
+}
+
+.modal-header.ui-draggable-handle {
+	cursor: move;
+}
+
+.unlock {
+	width: 16px;
+	height: 16px;
+	background-image: url(../img/occupy.svg);
+	background-repeat:no-repeat
+}
+
+.lock {
+	width: 16px;
+	height: 16px;
+	background-image: url(../img/lock-other.svg);
+	background-repeat:no-repeat
 }

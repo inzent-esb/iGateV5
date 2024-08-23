@@ -429,7 +429,7 @@ const info = {
 		totalCntUrl: '/api/entity/fileRepository/count',
 		paging: {
 			isUse: true,
-			side: "server"
+			side: "client"
 		},
 		options: {
 			rowHeaders: ["checkbox"],

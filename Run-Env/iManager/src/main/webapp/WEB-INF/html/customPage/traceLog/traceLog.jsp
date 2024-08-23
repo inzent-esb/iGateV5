@@ -527,10 +527,7 @@
 			        		totalCntUrl: '/api/entity/traceLog/count',
 			        		paging: {
 				    			isUse: true,
-				    			side: "server",
-				    			setCurrentCnt: function(currentCnt) {
-				    			    this.currentCnt = currentCnt
-				    			}.bind(this)				    			
+				    			side: "client"			    			
 				    		},
 			              	columns: [		  
 								{
@@ -650,29 +647,34 @@
 			              	window.vmModelInfo.modelModel();
 			            },
 						goDetailPanel: function() {
-				              panelOpen('detail', null, function() {
-				            	  if (selectedRowTraceLog) {
-				            		  $("#panel").find("[data-target='#panel']").trigger('click');
-				            		  
-				            		  if ('c' == $("#_client_mode").val()) {
-				            			  $("#panel").find('#panel-header').find('.ml-auto').remove();
-			                          }
-			            		  }
-				            	  
-				            	//reference Log Grid
-				            	  var param = {
-				            		  limit : null,
-				            		  next: null,
-				            		  object: window.vmMain.object,
-				            		  reverseOrder: false
-				            	  };
-				            	  
-				            	  (new HttpReq('/api/entity/traceLog/search')).read(param, function(result) {
-				            		  this.refGridData = result.object;	            		  
-				            		  this.makeBasicInfoGridObj.search({ 'transactionId' : this.object.transactionId, pageSize : 5 });
-				            	  }.bind(this));
-				            	  
-				              }.bind(this));
+			              panelOpen('detail', null, function() {
+			            	  if (selectedRowTraceLog) {
+			            		  $("#panel").find("[data-target='#panel']").trigger('click');
+			            		  
+			            		  if ('c' == $("#_client_mode").val()) {
+			            			  $("#panel").find('#panel-header').find('.ml-auto').remove();
+		                          }
+		            		  }
+			            	  			            	  
+			            	  if(!this.object.transactionId) {
+			            		  window.$alert({ type: 'warn', message: '<fmt:message>igate.traceLog.not.exist.transaction.id</fmt:message>' });
+			            		  return;
+			            	  }
+			            	  
+			            	  //reference Log Grid
+			            	  var param = {
+			            		  limit : null,
+			            		  next: null,
+			            		  object: window.vmMain.object,
+			            		  reverseOrder: false
+			            	  };
+			            	  
+			            	  (new HttpReq('/api/entity/traceLog/search')).read(param, function(result) {
+			            		  this.refGridData = result.object;	            		  
+			            		  this.makeBasicInfoGridObj.search({ 'transactionId' : this.object.transactionId, pageSize : 5 });
+			            	  }.bind(this));
+			            	  
+			              }.bind(this));
 	                    },
 			        	initDetailArea: function(object) {
 			        		if(object) this.object = object;
@@ -842,7 +844,6 @@
 			    		messageModel : function() {
 			    			if (isMessage) {
 			    				(new HttpReq('/api/entity/traceLog/dump')).read(window.vmMain.object, function(result) {
-			    					
 			    					if("ok" == result.result) {
 			    						this.object = result.object;
 			    						

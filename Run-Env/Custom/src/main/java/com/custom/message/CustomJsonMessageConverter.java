@@ -57,7 +57,7 @@ public class CustomJsonMessageConverter extends JsonMessageConverter implements 
   protected ObjectNode addIndividualPosition(Record record)
   {
     if (null == individual)
-      individual = new Position(root.putArray(BODY_ROOT)) ;
+      individual = new Position(((ObjectNode)root).putArray(BODY_ROOT)) ;
 
     return individual.arrayNode.addObject() ;
   }

@@ -31,6 +31,18 @@
 
 	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
 
+	<bean id="apimCatalogRepository" class="com.inzent.imanager.repository.PrivilegedMetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.ApimCatalog" />
+	</bean>
+	
+	<bean id="apimApiRepository" class="com.inzent.imanager.repository.PrivilegedMetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.ApimApi" />
+	</bean>
+	
+	<bean id="apimApplicationRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.ApimApplication" />
+	</bean>
+
 	<bean id="batchLogService" class="com.inzent.imanager.service.LogEntityService">
 		<property name="entityRepository" ref="batchLogRepository" />
 	</bean>
@@ -50,19 +62,8 @@
 		<constructor-arg value="com.inzent.igate.repository.meta.ExceptionCode" />
 	</bean>
 
-	<bean id="exceptionCodeService" class="com.inzent.igate.imanager.CachedMetaEntityService">
-		<constructor-arg value="exceptionCode" />
-		<constructor-arg value="3" />
-
-		<property name="metaEntityRepository" ref="exceptionCodeRepository" />
-	</bean>
-
 	<bean id="externalLineRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
 		<constructor-arg value="com.inzent.igate.repository.meta.ExternalLine" />
-	</bean>
-
-	<bean id="externalLineService" class="com.inzent.imanager.service.MetaEntityService">
-		<property name="metaEntityRepository" ref="externalLineRepository" />
 	</bean>
 
 	<bean id="fieldMetaService" class="com.inzent.imanager.service.MetaEntityService">
@@ -90,10 +91,6 @@
 
 	<bean id="mappingDictionaryRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
 		<constructor-arg value="com.inzent.igate.repository.meta.MappingDictionary" />
-	</bean>
-
-	<bean id="mappingDictionaryService" class="com.inzent.imanager.service.MetaEntityService">
-		<property name="metaEntityRepository" ref="mappingDictionaryRepository" />
 	</bean>
 
 	<bean id="mappingRuleService" class="com.inzent.igate.imanager.CachedMetaEntityService">
@@ -144,13 +141,6 @@
 
 	<bean id="standardCodeRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
 		<constructor-arg value="com.inzent.igate.repository.meta.StandardCode" />
-	</bean>
-
-	<bean id="standardCodeService" class="com.inzent.igate.imanager.CachedMetaEntityService">
-		<constructor-arg value="standardCode" />
-		<constructor-arg value="1" />
-
-		<property name="metaEntityRepository" ref="standardCodeRepository" />
 	</bean>
 
 	<bean id="servicePolicyService" class="com.inzent.igate.imanager.CachedMetaEntityService">

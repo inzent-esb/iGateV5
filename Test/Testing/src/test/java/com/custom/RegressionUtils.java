@@ -66,6 +66,8 @@ public class RegressionUtils implements Regression
 	  
 	public static String USERNAME ="";
 	public static String PASSWORD ="";
+	
+	public static String CONNECTOR_ADDRESS = "tuto.inzent.com" ;
 
 	protected static Connection asyncValidConnection ;
 	protected static Connection extractConnection ;
@@ -105,6 +107,8 @@ public class RegressionUtils implements Regression
 
 			USERNAME 					= prop.getProperty("USERNAME", "") ;
 			PASSWORD 					= prop.getProperty("PASSWORD", "") ;
+			
+			CONNECTOR_ADDRESS           = prop.getProperty("CONNECTOR_ADDRESS", CONNECTOR_ADDRESS) ;
 		  } 
 		  catch (IOException e) 
 		  {
@@ -260,7 +264,7 @@ public class RegressionUtils implements Regression
 
     RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIMEOUT).setConnectTimeout(TIMEOUT).setConnectionRequestTimeout(TIMEOUT).build() ;
 
-    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + MCA_CONNECTOR_PORT + "/") ;
+    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + (MCA_CONNECTOR_PORT + INSTANCE_2_SOCKET_OFFSET) + "/") ;
     httpPost.setConfig(requestConfig) ;
     httpPost.setEntity(new ByteArrayEntity(makeJsonRequest(fileName, caseId, 0))) ;
 
@@ -273,18 +277,37 @@ public class RegressionUtils implements Regression
   
   public void EDW_tester(String fileName, String ResponseCode, String[] bindList) throws Exception
   {
+    EDW_tester( fileName,  ResponseCode, bindList, 0) ; 
+  }
+
+  public void EDW_tester(String fileName, String ResponseCode, String[] bindList, int socketOffset ) throws Exception
+  {
     String caseId = fileName.substring(0, fileName.indexOf(".dat")) ;
     System.out.println("TEST EXECUTE : " + caseId) ;
     
     RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIMEOUT).setConnectTimeout(TIMEOUT).setConnectionRequestTimeout(TIMEOUT).build() ;
 
-    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + EDW_CONNECTOR_PORT + "/iGate/INB") ;
+    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + (EDW_CONNECTOR_PORT + socketOffset) + "/") ;
     httpPost.setConfig(requestConfig) ;
     httpPost.setEntity(new ByteArrayEntity(makeXmlRequest(fileName, caseId, 0, bindList))) ;
 
     Element element = new SAXReader().read(httpClient.execute(httpPost).getEntity().getContent()).getRootElement() ;
 
     assertEquals(ResponseCode, element.element(HEADER_ID).element(STANDARD_HEADER_ID).element(RESPONSE_CODE_FIELD).getText()) ;
+  }
+
+  public void EDW_tester2(String fileName, String ResponseCode, String[] bindList , int socketOffset ) throws Exception
+  {
+    String caseId = fileName.substring(0, fileName.indexOf(".dat")) ;
+    System.out.println("TEST EXECUTE : " + caseId) ;
+    
+    RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIMEOUT).setConnectTimeout(TIMEOUT).setConnectionRequestTimeout(TIMEOUT).build() ;
+    
+    HttpPost httpPost = new HttpPost("http://" + CONNECTOR_ADDRESS + ":" + (EDW_CONNECTOR_PORT + socketOffset) + "/") ;
+    httpPost.setConfig(requestConfig) ;
+    httpPost.setEntity(new ByteArrayEntity(makeXmlRequest(fileName, caseId, 0, bindList))) ;
+    
+    httpClient.execute(httpPost) ;
   }
 
   public void REST_tester(String fileName, String method, String uri, String ResponseCode) throws Exception

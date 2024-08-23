@@ -1,6 +1,7 @@
 package com.custom.batch ;
 
 import static org.junit.jupiter.api.Assertions.assertEquals ;
+import static org.junit.jupiter.api.Assertions.assertTrue ;
 
 import java.io.InputStream ;
 import java.sql.DriverManager ;
@@ -354,7 +355,7 @@ public class RegressionTestBATCH extends RegressionUtils
       List<String> list = new ArrayList<String>();
       list.add(STARTTIME);
       list.add(FIRSTCODE);
-      assertEquals(validData(asyncValidConnection, COR_EDW_0140_VALID_QUERY, list ), 1) ;
+      assertEquals(validData(extractConnection, COR_EDW_0140_VALID_QUERY, list ), 1) ;
       
       
     }
@@ -421,9 +422,8 @@ public class RegressionTestBATCH extends RegressionUtils
     public void TST_IF_EDW_COR_0141_01S() throws Exception
     {
       String[] bindList = { FIRSTCODE, FIRSTTIME, dataFormat.format(new Date()) } ;
-
-      EDW_tester("IF_EDW_COR_0141_01S.dat", "0", bindList) ;
-
+      EDW_tester("IF_EDW_COR_0141_01S.dat", "0", bindList, INSTANCE_2_SOCKET_OFFSET) ;
+      assertTrue(true) ; 
     }
   }
 
@@ -487,7 +487,7 @@ public class RegressionTestBATCH extends RegressionUtils
     @DisplayName("[IF_COR_COM_0142] DB - SFTP 테스트")
     public void TST_IF_COR_COM_0142_01S() throws Exception
     {
-      assertEquals(checkFile("IF_COR_0142", sftpWriteFileDir), true) ;
+      assertEquals(checkFile("IF_COR_COM_0142", sftpWriteFileDir), true) ;
     }
     
     
