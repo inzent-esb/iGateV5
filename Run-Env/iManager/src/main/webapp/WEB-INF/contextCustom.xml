@@ -104,12 +104,11 @@
 		<security:intercept-url pattern="/api/logStats/**" access="hasRole('ROLE_LogStatisticsViewer')" />
 		<security:intercept-url pattern="/api/mapping/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/monitoring/**" access="hasRole('ROLE_DashBoardViewer')" />
+		<security:intercept-url pattern="/api/page/licenseExpiration" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/login" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/logoFileName" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/password" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/title" access="permitAll()" />
-		<security:intercept-url pattern="/api/page/licenseSerial" access="isAuthenticated()" />
-		<security:intercept-url pattern="/api/page/licenseExpiration" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/query/**" access="hasRole('ROLE_QueryViewer')" />
 		<security:intercept-url pattern="/api/wizard/adapter/**" access="hasRole('ROLE_AdapterWizardEditor')" />
