@@ -4,6 +4,7 @@
 	<property name="iManager.location" value="../iManager" />
 	<property name="iGate.location" value="../iGate" />
 	<property name="iLogger.location" value="../iLogger" />
+	<property name="iMonitor.location" value="../iMonitor" />
 	<property name="source" value="1.8" />
 	<property name="target" value="1.8" />
 	<property name="encoding" value="UTF-8" />
@@ -34,5 +35,6 @@
 		<copy file="target/${ant.project.name}.jar" todir="${iManager.location}/src/main/webapp/WEB-INF/lib/" />
 		<copy file="target/${ant.project.name}.jar" todir="${iGate.location}/src/main/webapp/WEB-INF/lib/" />
 		<copy file="target/${ant.project.name}.jar" todir="${iLogger.location}/src/main/webapp/WEB-INF/lib/" />
+		<copy file="target/${ant.project.name}.jar" todir="${iMonitor.location}/src/main/webapp/WEB-INF/lib/" />
 	</target>
 </project>
