@@ -6,6 +6,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/html/layout/header/common_head.jsp"%>
+<c:set var="combineLogin" value="<%= System.getProperty(\"imanager.combine.login\") %>" />
 </head>
 <body>	
 	<div id="login" class="login wrap" data-ready>
@@ -43,26 +44,51 @@
 			</p>
 		</div>
 	</div>
-		
+	
 	<script type="text/javascript">
+	var loginType = 'normal';
+	var loginQueryParam = null;
+	var clientMode = '<c:out value="${_client_mode}"/>'; 
+	var combineLogin = '<c:out value="${combineLogin}"/>';
+	var returnUrl = location.href;
+	
+	document.querySelector('#login').addEventListener('loginQueryParam', function(evt) {
+		loginQueryParam = evt.detail;
+	});
+	
 	document.querySelector('#login').addEventListener('ready', function(evt) {
-		initLoginArea();
-		
+		initLoginArea();	
+
 		initEventBind();
+
+		if (window !== window.parent) {
+			if (combineLogin) {
+				if (loginQueryParam && loginQueryParam.user && loginQueryParam.token) {
+					loginType = 'combine';
+					login();
+				} else {
+					loginType = 'normal';	
+				}
+			} else {
+				loginType = 'normal';	
+			}	
+		} else {
+			loginType = 'normal';
+		}
 	});
 	
 	function login() {
 		$.ajax({
 			type: 'POST',
-			url: "${prefixUrl}/api/auth/token",
+			url: "${prefixUrl}/api/auth/token" + ('combine' === loginType? '?combineLogin=true' : ''),
 			dataType: "json",
 			traditional: true,
 	        xhrFields: {
 	        	withCredentials: true
 	        },
 			data: JSON.stringify({
-				'userId': $('#userId').val(),
-				'password': encryptPassword($('#password').val()),
+				'userId': 'combine' === loginType? loginQueryParam.user : $('#userId').val(),
+				'password': 'combine' === loginType? loginQueryParam.token : encryptPassword($('#password').val()),
 				'_client_mode': 'c',
 				'clientTimeMillis': Date.now()
 			}),
@@ -71,26 +97,39 @@
 			},
 			success: function(data, textStatus, jqXHR) {
 				if ('error' == data.result) {
-					if (-1 < data.error[0].className.indexOf('CredentialsExpiredException')) {
-						window._confirm({
+					if ('combine' === loginType) {
+						window._alert({
 							type: 'warn',
-							message: '<fmt:message>common.password.expired</fmt:message>',
-							backdropMode: 'full',
+							message: '<fmt:message>head.error.info</fmt:message> <br/>' + escapeHtml(data.error[0].className) + '<br/><br/>' + escapeHtml(data.error[0].message),
+							backdropMode: true,
+							isXSSMode: false,
 							callBackFunc: function() {
-								document.querySelector('#login').dispatchEvent(new CustomEvent('goPasswordPage', {
-									detail: {
-										userId: $('#userId').val()
-									}
-								}));
+								location.href = combineLogin + "?returnUrl=" + returnUrl;	
 							}
 						});
-					} else if (-1 < data.error[0].className.indexOf('AccountExpiredException')) {
-						$("#error").text('<fmt:message>common.expired.account</fmt:message>').show();
-					} else if (-1 < data.error[0].className.indexOf('LockedException')) {
-                        $("#error").text('<fmt:message>common.restricted.login</fmt:message>').show();
 					} else {
-						$("#error").text('<fmt:message>common.id.password.entered.incorrectly</fmt:message>').show();	
+						if (-1 < data.error[0].className.indexOf('CredentialsExpiredException')) {
+							window._confirm({
+								type: 'warn',
+								message: '<fmt:message>common.password.expired</fmt:message>',
+								backdropMode: 'full',
+								callBackFunc: function() {
+									document.querySelector('#login').dispatchEvent(new CustomEvent('goPasswordPage', {
+										detail: {
+											userId: $('#userId').val()
+										}
+									}));
+								}
+							});
+						} else if (-1 < data.error[0].className.indexOf('AccountExpiredException')) {
+							$("#error").text('<fmt:message>common.expired.account</fmt:message>').show();
+						} else if (-1 < data.error[0].className.indexOf('LockedException')) {
+	                        $("#error").text('<fmt:message>common.restricted.login</fmt:message>').show();
+						} else {
+							$("#error").text('<fmt:message>common.id.password.entered.incorrectly</fmt:message>').show();	
+						}						
 					}
+					
 					return;
 				}
 				
@@ -113,7 +152,7 @@
 		        </c:choose>
 			}.bind(this),
 			error: function(jqXHR, textStatus, errorThrown) {
-				$("#error").text('<fmt:message>common.error.contact.administrator</fmt:message>').show();
+				$("#error").text('<fmt:message>common.error.contact.administrator</fmt:message>').show();	
 			},
 			complete: function(jqXHR, textStatus) {
 				window.$stopSpinner();

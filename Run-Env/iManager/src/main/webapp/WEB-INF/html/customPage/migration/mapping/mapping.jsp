@@ -384,7 +384,7 @@
 				            if (0 == targetIdList.length) {
 				                window._alert({ type: 'warn', message: '<fmt:message>igate.migration.selectError</fmt:message>' });
 				            } else {
-				                MigrationImngObj.makeSubmit('/api/entity/mapping/migration/object', targetIdList, '<fmt:message>igate.migration.make</fmt:message>', function (result) {
+				                MigrationImngObj.makeSubmit('/api/entity/mapping/migration/object', targetIdList, false, '<fmt:message>igate.migration.make</fmt:message>', function (result) {
 				                    window.vmMake.object = result.object;
 				                    panelOpen('detail');
 				                });
@@ -479,7 +479,7 @@
 			        		});
 				        },
 				        migration: function () {
-				        	MigrationImngObj.makeSubmit('/api/entity/mapping/migration/send', targetIdList, '<fmt:message>igate.migration.migration</fmt:message>', function (result) {
+				        	MigrationImngObj.makeSubmit('/api/entity/mapping/migration/send', targetIdList, false, '<fmt:message>igate.migration.migration</fmt:message>', function (result) {
 				                window.vmMake.object = result.object;
 				            });
 				        }

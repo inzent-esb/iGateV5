@@ -19,6 +19,25 @@
 		
 		<%@ include file="/WEB-INF/html/layout/component/component_detail.jsp"%>
 		
+		<span id="flagRowModal" style="display: none;">
+			<div>
+				<div class="radio-group">
+					<label class="custom-control custom-radio">
+						<input type="radio" name="flagRow" class="custom-control-input" v-model="flagRow" value="transaction">
+						<span class="custom-control-label" style="font-weight: bold; font-size: .8rem">Transaction</span>
+						<span style="display: inline-block; font-size: .778rem;"><fmt:message>igate.migration.transaction.processing</fmt:message></span>
+					</label>
+				</div>
+				<div class="radio-group">
+					<label class="custom-control custom-radio">
+						<input type="radio" name="flagRow" class="custom-control-input" v-model="flagRow" value="row">
+						<span class="custom-control-label" style="font-weight: bold; font-size: .8rem">Non-Transaction</span>
+						<span style="display: inline-block; font-size: .778rem;"><fmt:message>igate.migration.non.transaction.processing</fmt:message></span>
+					</label>
+				</div>
+			</div>
+		</span>
+		
 		<span id="fileResult" style="display: none;">
 			<div class="col-lg-12">
 				<div class="form-group" style="margin-bottom: 16px;">
@@ -74,14 +93,20 @@
 			<div class="col-lg-12" v-show="object.interfaces">
 				<div class="form-group" style="margin-bottom: 16px;">
 					<table class="migration-table" width="100%">
-						<colgroup>
-							<col width="50%" />
-							<col width="50%" />
+						<colgroup v-if="flagRow">
+							<col width="33%"/>
+							<col width="33%"/>
+							<col width="33%"/>							
+						</colgroup>
+						<colgroup v-else>
+							<col width="50%"/>
+							<col width="50%"/>
 						</colgroup>
 						<thead>
 							<tr align="center" style="background-color: #f5f6fb;">
 								<th><fmt:message>igate.interface</fmt:message></th>
 								<th><fmt:message>igate.migration.includeList</fmt:message></th>
+								<th v-if="flagRow"><fmt:message>head.process.result</fmt:message></th>
 							</tr>
 						</thead>
 						<tr v-for="interface in object.interfaces">
@@ -128,6 +153,7 @@
 			  					 							
 								</table>
 							</td>
+							<td v-if="flagRow" :style="{color: interface.result ? 'red' : 'black' }" >{{interface.result ? interface.result : "<fmt:message>igate.migration.migration</fmt:message>"}}</td>
 						</tr>
 					</table>
 				</div>
@@ -294,16 +320,23 @@
 
 			                    detailHtml += '<div style="width: 100%; padding-left:0.75rem; padding-right: 0.75rem;">';
 			                    detailHtml += '<table class="migration-table" width="100%">';
-			                    detailHtml += '    <colgroup>';
+			                    detailHtml += '    <colgroup v-if="flagRow">';
+			                    detailHtml += '        <col width="25%">';
+			                    detailHtml += '        <col width="25%">';
+			                    detailHtml += '        <col width="25%">';
+			                    detailHtml += '        <col width="25%">';
+			                    detailHtml += '    </colgroup>';
+			                    detailHtml += '    <colgroup v-else>';
 			                    detailHtml += '        <col width="33%">';
 			                    detailHtml += '        <col width="33%">';
 			                    detailHtml += '        <col width="34%">';
 			                    detailHtml += '    </colgroup>';
 			                    detailHtml += '    <thead>';
 			                    detailHtml += '	       <tr align="center" style="background-color: #f5f6fb;">';
-			                    detailHtml += '		       <th style="height: 32px;"><fmt:message>igate.interface</fmt:message></th>';
-			                    detailHtml += '			   <th style="height: 32px;"><fmt:message>igate.migration.includeList</fmt:message></th>';
-			                    detailHtml += '			   <th style="height: 32px;"><fmt:message>igate.migration.referList</fmt:message></th>';
+			                    detailHtml += '		       <th><fmt:message>igate.interface</fmt:message></th>';
+			                    detailHtml += '			   <th><fmt:message>igate.migration.includeList</fmt:message></th>';
+			                    detailHtml += '			   <th><fmt:message>igate.migration.referList</fmt:message></th>';
+			                    detailHtml += '			   <th v-if="flagRow"><fmt:message>head.process.result</fmt:message></th>';
 			                    detailHtml += '	       </tr>';
 			                    detailHtml += '	   </thead>';
 			                    detailHtml += '	   <tr v-for="interface in object.interfaces" style="height: 28px;">';
@@ -359,9 +392,12 @@
 			                    detailHtml += '                           </tr>';
 			                    detailHtml += '                       </table>';
 			                    detailHtml += '                   </td>';
-			                    detailHtml += '              </tr>';
-			                    detailHtml += '          </table>';
-			                    detailHtml += '      </td>';
+			                    detailHtml += '               </tr>';
+			                    detailHtml += '           </table>';
+			                    detailHtml += '       </td>';
+			                    detailHtml += '      <td v-if="flagRow && isReulstUpdate" :style="{color: interface.result ? \'red\' : \'black\'}">';
+		                    	detailHtml += '    	 	{{ interface.result ? interface.result : "<fmt:message>igate.migration.migration</fmt:message>" }}';
+			                    detailHtml += '    	 </td>';
 			                    detailHtml += '    </tr>';
 			                    detailHtml += '</table>';
 			                    detailHtml += '</div>';
@@ -391,6 +427,46 @@
 			createPageObj.setPanelButtonList(null);
 
 			createPageObj.panelConstructor(true);
+			
+			var openFlagModal = function(callback) {
+				var vmFlagRow = null;
+	        	
+	            var flagRowModal = $('#flagRowModal').clone();
+            	
+	            flagRowModal.children('div').attr('id', 'flagRowCt');
+	            
+            	openModal({
+            		name: 'flagRow',
+            		title: "<fmt:message>igate.logStatistics.transaction</fmt:message>",
+            		width: '450px',
+            		bodyHtml: flagRowModal.html(),
+            		isMultiCheck: true,
+            		buttonList: [
+        				{
+        					customBtnId: 'confirmBtn',
+        					customBtn: '<fmt:message>head.ok</fmt:message>',
+        					customBtnAction: function() {
+        						if(!vmFlagRow.flagRow) {
+        							window._alert({ type: 'warn', message: '<fmt:message>igate.migration.select.transaction.warn</fmt:message>' });
+        			                return;
+        						}
+        						
+        						var flagRow = vmFlagRow.flagRow === 'row';
+        						        						
+        						if(callback) callback(flagRow);
+        					}
+        				}
+        			],
+            		shownCallBackFunc: function() {
+            			vmFlagRow = new Vue({
+            				el: '#flagRowCt',
+            				data: {
+            					flagRow: null
+            				}
+            			});
+            		}
+            	});
+			}
 
 			new HttpReq('/api/entity/privilege/search').read({ object: { privilegeType: 'b' }, limit: null, next: null, reverseOrder: false }, function (privilegeResult) {
 			    new HttpReq('/api/page/properties').read({ pk : { propertyId: 'List.Interface.InterfaceType' }, orderByKey: true }, function (interfaceTypeResult) {
@@ -508,7 +584,11 @@
 			                            if (0 == targetIdList.length) {
 			                                window._alert({ type: 'warn', message: '<fmt:message>igate.migration.selectError</fmt:message>' });
 			                            } else {
-			                            	MigrationImngObj.makeSubmit('/api/entity/interface/migration/object', targetIdList, '<fmt:message>igate.migration.make</fmt:message>', function (result) {
+			                            	window.vmMake.flagRow = false;
+						            		window.vmImport.flagRow = false;
+						            		window.vmMake.isReulstUpdate = false;
+						            		
+			                            	MigrationImngObj.makeSubmit('/api/entity/interface/migration/object', targetIdList, false, '<fmt:message>igate.migration.make</fmt:message>', function (result) {
 							                    window.vmMake.object = result.object;
 							                    panelOpen('detail');
 							                });
@@ -631,6 +711,8 @@
 			    el: '#Make',
 			    data: {
 			        data: null,
+			        flagRow: false,
+			        isReulstUpdate: false,
 			        object: {
 			            userId: null,
 			            name: null,
@@ -653,9 +735,21 @@
 		        		});
 			        },
 			        migration: function () {
-			            MigrationImngObj.makeSubmit('/api/entity/interface/migration/send', targetIdList, '<fmt:message>igate.migration.migration</fmt:message>', function (result) {
-			                window.vmMake.object = result.object;
-			            });
+			        	openFlagModal(function(data) {
+							window.vmMake.flagRow = data ;
+							
+							$('#flagRowModalSearch').find('#modalClose').trigger('click');
+    						
+							var url = '/api/entity/interface/migration/send' ; 
+    						
+    						var migrationUrl = data ? url + '?flagRow=' + data : url;
+    						
+    						MigrationImngObj.makeSubmit(migrationUrl, targetIdList, data, '<fmt:message>igate.migration.migration</fmt:message>', function (result) {
+    							window.vmMake.isReulstUpdate = true;
+    							
+    							window.vmMake.object.interfaces = result.object;
+    			            });    						
+			        	});
 			        }
 			    }
 			});
@@ -667,7 +761,8 @@
 			            interfaces: null
 			        },
 			        fileName: '',
-			        errorMessage: ''
+			        errorMessage: '',
+			        flagRow: false
 			    },
 			    methods: {
 			        selectFile: function () {
@@ -686,23 +781,33 @@
 			                return;
 			            }
 			            
-			            uploadFileFunc({ 
-		        			url : '/api/entity/interface/migration/context',  
-		        			param : fileData,
-		        			callback : function(req) {
-		        				
-		        				var result = JSON.parse(req.response);
-		        				
-		        				if('ok' === result.result) {
-			                        window.vmImport.object = result.object;
-			                        window.vmImport.errorMessage = '';
-			                        window._alert({ type: 'warn', message: '<fmt:message>head.upload</fmt:message> <fmt:message>head.success</fmt:message>' });
-		        				} else {
-			                        window.vmImport.errorMessage = result.error[0].className + (result.error[0].message ? '\n' + result.error[0].message : '');		        					
-			                        window._alert({ type: 'warn', message: '<fmt:message>head.upload</fmt:message> <fmt:message>head.fail</fmt:message>' });
-		        				}
-		        			}
-		        		});
+			            this.object = {};
+			        	this.errorMessage = '';
+			        	this.flagRow = false;	
+			        	
+			        	openFlagModal(function(data) {
+							window.vmImport.flagRow = data ;
+    						
+    						uploadFileFunc({ 
+    		        			url : '/api/entity/interface/migration/context',  
+    		        			param : fileData,
+    		        			flagRow: data,
+    		        			callback : function(req) {		        		        				
+    		        				var result = JSON.parse(req.response);
+    		        				
+    		        				if('ok' === result.result) {
+    			                        window.vmImport.object = result.object;
+    			                        window.vmImport.errorMessage = '';
+    			                        if (!data) window._alert({ type: 'warn', message: '<fmt:message>head.upload</fmt:message> <fmt:message>head.success</fmt:message>' });
+    		        				} else {
+    			                        window.vmImport.errorMessage = result.error[0].className + (result.error[0].message ? '\n' + result.error[0].message : '');		        					
+    			                        window._alert({ type: 'warn', message: '<fmt:message>head.upload</fmt:message> <fmt:message>head.fail</fmt:message>' });
+    		        				}
+    		        				
+    		        				$('#flagRowModalSearch').find('#modalClose').trigger('click');
+    		        			}
+    		        		});
+			        	});
 			        }
 			    }
 			});

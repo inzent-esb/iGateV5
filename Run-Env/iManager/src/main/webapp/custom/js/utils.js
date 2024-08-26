@@ -470,6 +470,7 @@ function uploadFileFunc(uploadObj) {
     	
 	var uploadUrl = uploadObj.url;
 	var uploadData = uploadObj.param;
+	var flagRow = uploadObj.flagRow ? uploadObj.flagRow : false; 
 	var callback = uploadObj.callback;
 	
 	if(!uploadUrl || !uploadData) {
@@ -494,6 +495,7 @@ function uploadFileFunc(uploadObj) {
             var formData = new FormData();
 			formData.enctype = 'multipart/form-data';
 			formData.append('uploadFile', uploadData);
+			if(flagRow) formData.append('flagRow', flagRow);
 			
 			req.send(formData);
 

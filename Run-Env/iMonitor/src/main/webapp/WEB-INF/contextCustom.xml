@@ -5,6 +5,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"
 	default-lazy-init="false">
 
+ 	<bean class="com.inzent.igate.monitoring.MonitoringReceiver"> 
+		<constructor-arg value="com.inzent.igate.repository.log.ExceptionLog"/>
+ 	</bean>
+
 	<bean class="com.inzent.igate.monitoring.MonitoringReceiverListener" />
 
 </beans>

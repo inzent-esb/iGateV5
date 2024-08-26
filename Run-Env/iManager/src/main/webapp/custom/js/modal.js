@@ -11,7 +11,7 @@ function _alert(alertObj) {
 	modalHtml += '				  <p  class="alert-text">' + message + '</p>';
 	modalHtml += '			  </div>';
 	modalHtml += '			  <div class="modal-footer">';
-	modalHtml += '			      <button id="ok" type="button" class="btn" data-dismiss="modal">' + cancelBtn + '</button>';
+	modalHtml += '			      <button id="ok" type="button" class="btn" data-dismiss="modal">' + closeBtn + '</button>';
 	modalHtml += '			  </div>';
 	modalHtml += '	      </div>';
 	modalHtml += '    </div>';

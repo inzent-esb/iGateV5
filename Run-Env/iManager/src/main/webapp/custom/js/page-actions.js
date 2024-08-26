@@ -429,11 +429,15 @@ var JsonImngObj = {
 };
 
 var MigrationImngObj = {
-    makeSubmit: function (url, data, message, callback, modalMode) {
-        new HttpReq(url).create({ targetIds: data }, function (result) {
+    makeSubmit: function (url, data, flagRow, message, callback, modalMode) {
+    	window.$startSpinner();
+    	
+    	new HttpReq(url).create({ targetIds: data }, function (result) {    		
+    		window.$stopSpinner();
+    		
             ResultImngObj.resultResponseHandler(result);
 
-            window._alert({ message: message });
+            if(!flagRow) window._alert({ message: message });
 
             callback(result);
 

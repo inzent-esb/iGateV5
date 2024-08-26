@@ -558,10 +558,10 @@
 			                    function () {
 			                        $('#panel')
 			                            .find('#blockBtn')
-			                            .css('display', 'O' === this.object.requestDirection ? 'block' : 'none');
+			                            .css('display', 'O' === this.object.requestDirection || 'B' === this.object.requestDirection ? 'block' : 'none');
 			                        $('#panel')
 			                            .find('#unblockBtn')
-			                            .css('display', 'O' === this.object.requestDirection ? 'block' : 'none');
+			                            .css('display', 'O' === this.object.requestDirection || 'B' === this.object.requestDirection ? 'block' : 'none');
 			                    }.bind(this)
 			                );
 			            },

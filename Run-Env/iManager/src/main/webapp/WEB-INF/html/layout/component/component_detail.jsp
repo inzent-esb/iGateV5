@@ -47,9 +47,8 @@
 							<input type="text" class="form-control view-disabled"> 
 							<datalist></datalist>			
 						</span>
-						<div type="radio" style="display: none;" />
-						<div type="checkbox" style="display: none;" />
-						</span>
+						<div type="radio" style="display: none;"></div>
+						<div type="checkbox" style="display: none;"></div>
 						<div class="input-group-append" style="display: none;">
 							<button type="button" class="btn" id="lookupBtn"><i class="icon-srch"></i><fmt:message>head.search</fmt:message></button>
 							<button type="button" class="btn" id="resetBtn" style="margin-left: 5px; min-width: 0px;"><i class="icon-reset" style="margin-right: 0px;"></i></button>

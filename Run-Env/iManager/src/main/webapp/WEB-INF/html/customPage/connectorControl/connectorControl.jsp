@@ -457,7 +457,7 @@
 	    			                        0 === checkedRows.length
 	    			                            ? false
 	    			                            : checkedRows.every(function (info) {
-	    			                                  return 'O' === info.requestDirection;
+	    			                                  return 'O' === info.requestDirection || 'B' === info.requestDirection;
 	    			                              });
 
 	    			                    $('#' + createPageObj.getElementId('ImngListObject'))

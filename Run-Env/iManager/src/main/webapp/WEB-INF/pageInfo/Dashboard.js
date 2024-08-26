@@ -20,6 +20,9 @@ const info = {
 
 	//트랜잭션 TOP N 차트 > 조회될 행의 개수
 	datatableDefaultRowCnt: 5,
+	
+	//에러로그 조회될 행의 개수
+	exceptionLogDefaultRowCnt: 10,
 
 	//대상 동기화 시간.
 	targetSyncRefreshStandardTime: 60 * 1000,

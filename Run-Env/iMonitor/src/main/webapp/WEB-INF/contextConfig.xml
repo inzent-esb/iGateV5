@@ -16,8 +16,6 @@
 
 	<context:component-scan base-package="com.inzent.igate" />
 
-	<bean class="com.inzent.igate.monitoring.MonitoringReceiver" />
-
 	<bean id="monitoringWebSocketHandler" class="com.inzent.igate.monitoring.MonitoringWebSocketHandler" />
 
 	<websocket:handlers allowed-origins="*">

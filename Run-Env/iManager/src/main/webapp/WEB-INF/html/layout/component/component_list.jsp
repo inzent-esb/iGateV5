@@ -31,9 +31,9 @@
 				</span>
 				<a id="refreshBtn" href="javascript:void(0);" class="btn btn-m" v-on:click="refresh" title="<fmt:message>igate.refresh</fmt:message>"><i v-bind:class="{ 'icon-play' : !isStartRefresh, 'icon-pause' : isStartRefresh }"></i><span class="hide"><fmt:message>igate.refresh</fmt:message></span></a>			
 			</span>
-			<a id="importBtn"       href="javascript:void(0);" class="btn btn-m btn-primary" 		      	v-on:click="goImport" style="display: none;" 	title="<fmt:message>head.import</fmt:message>"><fmt:message>head.import</fmt:message></a>
-			<a id="downloadBtn"     href="javascript:void(0);" class="btn btn-m btn-primary" 			  	v-on:click="downloadFile" style="display: none;"title="<fmt:message>head.excel.output</fmt:message>"><i class="icon-result"></i><span class="hide"><fmt:message>head.excel.output</fmt:message></span></a>			
 			<a id="makeBtn"         href="javascript:void(0);" class="viewGroup btn btn-m btn-primary"    	v-on:click="make" style="display: none;" 		title="<fmt:message>head.make</fmt:message>"><fmt:message>head.make</fmt:message></a>
+			<a id="importBtn"       href="javascript:void(0);" class="btn btn-m btn-primary" 		      	v-on:click="goImport" style="display: none;" 	title="<fmt:message>head.import</fmt:message>"><fmt:message>head.import</fmt:message></a>
+			<a id="downloadBtn"     href="javascript:void(0);" class="btn btn-m btn-primary" 			  	v-on:click="downloadFile" style="display: none;"title="<fmt:message>head.excel.output</fmt:message>"><i class="icon-result"></i><span class="hide"><fmt:message>head.excel.output</fmt:message></span></a>
 			<a id="startBtn"        href="javascript:void(0);" class="viewGroup btn btn-m"    				v-on:click="start" style="display: none;" 		title="<fmt:message>head.execute</fmt:message>"><i class="icon-play"></i><fmt:message>head.execute</fmt:message></a>
 			<a id="stopBtn"         href="javascript:void(0);" class="viewGroup btn btn-m"    				v-on:click="stop" style="display: none;" 		title="<fmt:message>head.import</fmt:message>"><i class="icon-pause"></i><fmt:message>head.stop</fmt:message></a>
 			<a id="stopForceBtn"    href="javascript:void(0);" class="viewGroup btn btn-m"    				v-on:click="stopForce" style="display: none;" 	title="<fmt:message>head.stop.force</fmt:message>"><i class="icon-x"></i><fmt:message>head.stop.force</fmt:message></a>
