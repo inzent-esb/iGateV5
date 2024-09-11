@@ -42,6 +42,8 @@ const info = {
 		list: [
 			{ id: "add", isUse: true },
 			{ id: "initialize", isUse: true },
+			{ id: "excelImport", isUse: true, importUrl: '/api/entity/externalLineExcel/document' },
+			{ id: "excelExport", isUse: true, exportUrl: '/api/entity/externalLineExcel/download' },
 			{ id: "newTab", isUse: true }
 		]
 	},
