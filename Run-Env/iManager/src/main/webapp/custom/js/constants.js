@@ -1,9 +1,9 @@
 var constants = {
 	 regExpList: {
-		id: { maxLength: 70, regExp: '[^A-Za-z0-9_.-]'},
-		searchId: { maxLength: 70, regExp: '[^A-Za-z0-9_.#%-]'},
-		name: { maxLength: 70, regExp: '' },
-		value: { maxLength: 90, regExp: '' },
+		id: { maxLength: 200, regExp: '[^A-Za-z0-9_.-]'},
+		searchId: { maxLength: 200, regExp: '[^A-Za-z0-9_.#%-]'},
+		name: { maxLength: 200, regExp: '' },
+		value: { maxLength: 500, regExp: '' },
 		desc: { maxLength: 500, regExp: '' },
 		num: { maxLength: 30, regExp: '[^0-9]' },
 		url: { maxLength: 100, regExp: '' },
@@ -18,8 +18,8 @@ var constants = {
 	motionDetectTime: 1000,
 	autoLogoutTime: 1200000,
 	
-	//escape: 27, space: 32
-	modalCloseKeyCode: [27, 32],
+	//escape: 27
+	modalCloseKeyCode: [27],
 	isUseTheme: true,
 	
 	search: {
@@ -72,7 +72,7 @@ var constants = {
 			var ascending = true;
 			
 			// 에러로그, 조작이력, 공지사항
-			if ('103010' === menuId || '303020' === menuId || '303010' === menuId) {
+			if ('103010' === menuId || '202051' === menuId || '303020' === menuId || '303010' === menuId) {
 				ascending = false;
 			} else if (('101010' === menuId || '101030' === menuId || '101050' === menuId || '102040' === menuId) && '/api/entity/metaHistory/search' === searchUrl) {
 				ascending = false;
@@ -84,8 +84,8 @@ var constants = {
 			}
 		},
 		maxListCount: {
-			103010 : 1000,
-			103020 : 1000,
+			103010 : 100000,
+			103020 : 100000,
 			103080 : 1000,
 			201010 : 1000,
 			201020 : 1000,

@@ -28,11 +28,18 @@
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
+	<!-- Operation Debug -->
+	<servlet-mapping>
+		<servlet-name>Dispatcher</servlet-name>
+		<url-pattern>/_OperationDebug_</url-pattern>
+	</servlet-mapping>
+	<!-- WebSocket Connector Sample -->
 	<servlet-mapping>
 		<servlet-name>Dispatcher</servlet-name>
 		<url-pattern>/TER</url-pattern>
 	</servlet-mapping>
 	
+	<!-- HTTP Forward(Servlet) Sample -->
 	<servlet>
 		<servlet-name>I_INB_S_HTTP_S01</servlet-name>
 		<servlet-class>com.inzent.igate.session.http.HttpServlet</servlet-class>
@@ -73,6 +80,7 @@
 		<url-pattern>/INB</url-pattern>
 	</servlet-mapping>
 -->
+	<!-- Test Case -->
 	<servlet>
 		<servlet-name>TestCase</servlet-name>
 		<servlet-class>com.inzent.igate.connector.testing.TestingServlet</servlet-class>

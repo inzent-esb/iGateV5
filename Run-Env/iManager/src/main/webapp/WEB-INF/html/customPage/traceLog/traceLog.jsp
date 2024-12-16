@@ -286,15 +286,25 @@
 			    var searchObj = JSON.parse(localStorage.getItem('searchObj'));
 			    localStorage.removeItem('searchObj');
 
+				if (searchObj.time && searchObj.uuid) {
+					searchObj.transactionId = searchObj.uuid;
+
+					var date = new Date(Number(searchObj.time));
+
+					var startOfDay = moment(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)).format('YYYY-MM-DD HH:mm:ss');
+					var endOfDay = moment(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999)).format('YYYY-MM-DD HH:mm:ss');
+
+					searchObj.fromLogDateTime = startOfDay;
+					searchObj.toLogDateTime = endOfDay;
+				}
+
 			    localStorage.setItem(
 			        createPageObj.getElementId('ImngListObject') + '-newTabSearchCondition',
 			        JSON.stringify({
 			            object: {
-			                fromLogDateTime: null,
-			                toLogDateTime: null,
-			                transactionId: searchObj['transactionId']
-			                    ? searchObj['transactionId']
-			                    : null,
+			                fromLogDateTime: searchObj['fromLogDateTime']? searchObj['fromLogDateTime'] : null,
+			                toLogDateTime: searchObj['toLogDateTime']? searchObj['toLogDateTime'] : null,
+			                transactionId: searchObj['transactionId']? searchObj['transactionId'] : null,
 			                logCode: null,
 			                instanceId: null,
 			                adapterId: null,
@@ -383,6 +393,10 @@
 	    		                for (var key in searchCondition) {
 	    		                    this.$data[key] = searchCondition[key];
 	    		                }
+
+								if (null === this.object.fromLogDateTime || null === this.object.toLogDateTime) {
+									this.changeRangeTime('m');
+								}
 	    		            } else {
 	    		                this.rangeTime = '10';
 	    		                this.object.pageSize = 10;
@@ -417,7 +431,7 @@
 	    		                this.letter.responseCode = 0;
 	    		                this.letter.exceptionCode = 0;
 
-	    		                this.changeRangeTime('m');
+								this.changeRangeTime('m');
 	    		            }
 
 	    		            initSelectPicker($('#' + createPageObj.getElementId('ImngSearchObject')).find('#rangeTime'), this.rangeTime);
@@ -711,7 +725,7 @@
 			            	localStorage.setItem('selectedMenuPathIdListNewTab', JSON.stringify(menuId));
 			            	localStorage.setItem('searchObj', JSON.stringify(clickData));
 			            	
-			            	window.open(location.href);
+			            	openNewTab("/app/out:/TraceLog");		            
 			            }
 			        },
 			        created : function() {
@@ -816,7 +830,7 @@
 				              		localStorage.setItem('searchObj', JSON.stringify({transactionId: rowInfo.transactionId}));
 				              		localStorage.setItem('selectedRowTraceLog', JSON.stringify(rowInfo));
 				              		
-				              		window.open(location.href);
+				              		openNewTab("/app/out:/TraceLog");
 				            	});
 				            }
 			            });

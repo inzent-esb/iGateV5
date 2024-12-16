@@ -174,6 +174,10 @@
 					<label class="control-label"><fmt:message>igate.traceLog.responseCode</fmt:message></label>
 					<input type="text" class="form-control view-disabled" v-model="object.responseCode" disabled>
 				</div>
+				<div class="form-group">
+					<label class="control-label"><fmt:message>igate.traceLog.batchMessageSize</fmt:message></label>
+					<input type="text" class="form-control view-disabled" v-model="object.batchMessageSize" disabled>
+				</div>
 			</div>
 		</div>
 	</section>

@@ -301,9 +301,17 @@
 			                    window.vmSearch.initSearchArea();
 			                },
 			                downloadFile: function () {
+			                	var param = JSON.parse(JSON.stringify(window.vmSearch.object));
+			                    var agent = navigator.userAgent.toLowerCase();
+
+			                    if ((navigator.appName == 'Netscape' && -1 != agent.indexOf('trident')) || -1 != agent.indexOf('msie')) {
+			                       param.fromDateTime = param.fromDateTime.replace(/\//g, '-');
+			                       param.toDateTime = param.toDateTime.replace(/\//g, '-');
+			                    }
+			                    
 			                	downloadFileFunc({
 				        			url : '/api/logStats/online/service/download',  
-				        			param : window.vmSearch.object,
+				        			param : param,
 				        			fileName : '<fmt:message>igate.logStatistics.serviceStatistics</fmt:message>_<fmt:message>head.excel.output</fmt:message>_' + Date.now() + '.xlsx'
 				        		});			                	
 			                }

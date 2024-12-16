@@ -115,7 +115,6 @@
 		<security:intercept-url pattern="/api/wizard/sapInterface" access="hasRole('ROLE_InterfaceEditor')" />
 		<security:intercept-url pattern="/api/wizard/sapService" access="hasRole('ROLE_ServiceEditor')" />
 		<security:intercept-url pattern="/api/wizard/webservice" access="hasRole('ROLE_ServiceEditor')"/>
-		<security:intercept-url pattern="/api/entity/externalLineExcel/**" access="hasRole('ROLE_ExternalLineViewer')" />
 
 		<security:access-denied-handler ref="accessDeniedHandler" />
 		<security:csrf disabled="true" />

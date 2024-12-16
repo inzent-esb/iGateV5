@@ -146,7 +146,8 @@ function getCreatePageObj() {
 											id: daterangeObj.id,
 											class: 'form-control input-daterange',
 											placeholder: searchObj.placeholder,
-											autocomplete: 'off'
+											autocomplete: 'off',
+											readonly: true
 										})
 									)
 							)

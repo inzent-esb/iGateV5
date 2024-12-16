@@ -2,8 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd"
 	default-lazy-init="false">
 
 	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
@@ -92,4 +94,10 @@
 
 	<bean id="apimCache" class="com.inzent.igate.cache.CacheBean" />
 
+	<!-- operation Debug -->
+	<bean id="operationDebugHandler" class="com.inzent.igate.rule.operation.OperationDebugHandler" />
+	<websocket:handlers allowed-origins="*">
+		<websocket:mapping handler="operationDebugHandler" path="/_OperationDebug_" />
+		<websocket:handshake-handler ref="handshakeHandler" />
+	</websocket:handlers>
 </beans>

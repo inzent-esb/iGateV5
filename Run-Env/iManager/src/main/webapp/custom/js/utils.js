@@ -389,6 +389,10 @@ function parseHierarchyObj(obj) {
 	return result;
 }
 
+function openNewTab(menuUrl) {
+	window.open(document.body.classList.contains('external-menu-url')? prefixUrl + menuUrl +"?_client_mode=c" : location.href);
+}
+
 function downloadFileFunc(downloadObj) {
 	
 	var errorFunc = function() {
@@ -423,8 +427,8 @@ function downloadFileFunc(downloadObj) {
             
             req.withCredentials = true;
             req.responseType = 'blob';
-            
-            var param = JSON.parse(JSON.stringify(downloadParam));
+                       
+            var param = JSON.parse(JSON.stringify(downloadParam));            
             req.send(JSON.stringify(param));
 
             req.onload = function (event) {
@@ -586,6 +590,7 @@ function licExpirationModal() {
 			name:'licenseExpiration',
 			title: licenseExpiration,
 			width: '1000px',
+			spinnerMode: true,
 			bodyHtml: modalHtml,
 			shownCallBackFunc: function() {
 				var vmLicenseExpiration = new Vue({

@@ -6,9 +6,8 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/html/layout/header/common_head.jsp"%>
-<c:set var="combineLogin" value="<%= System.getProperty(\"imanager.combine.login\") %>" />
 </head>
-<body>	
+<body>
 	<div id="login" class="login wrap" data-ready>
 		<%@ include file="/WEB-INF/html/layout/component/component_search.jsp"%>		
 		<header id="hd">
@@ -61,17 +60,13 @@
 
 		initEventBind();
 
-		if (window !== window.parent) {
-			if (combineLogin) {
-				if (loginQueryParam && loginQueryParam.user && loginQueryParam.token) {
-					loginType = 'combine';
-					login();
-				} else {
-					loginType = 'normal';	
-				}
+		if (combineLogin) {
+			if (loginQueryParam && loginQueryParam.user && loginQueryParam.token) {
+				loginType = 'combine';
+				login();
 			} else {
-				loginType = 'normal';	
-			}	
+				loginType = 'normal';
+			}
 		} else {
 			loginType = 'normal';
 		}
@@ -139,12 +134,16 @@
 				localStorage.setItem('accessToken', 'Bearer ' + accessToken);
 				localStorage.setItem('refreshToken', refreshToken);
 				localStorage.setItem('tokenExpiration', data.object);
-				
+
 				licExpirationModal();
-				
+
 			    <c:choose>
 		        	<c:when test="${not empty _client_mode && 'c' == _client_mode}">
-		        		iManagerLogined("true", accessToken, refreshToken, String(data.object));
+						if (window.iManagerLogined) {
+							window.iManagerLogined("true", accessToken, refreshToken, String(data.object));
+						} else {
+							document.querySelector('#login').dispatchEvent(new CustomEvent('loginSuccess'));
+						}
 		        	</c:when>
 		            <c:otherwise>
 		            	document.querySelector('#login').dispatchEvent(new CustomEvent('loginSuccess'));
