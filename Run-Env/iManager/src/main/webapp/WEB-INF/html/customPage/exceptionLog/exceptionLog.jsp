@@ -530,6 +530,10 @@
 			                    function () {
 			                        if (0 == $('#' + createPageObj.getElementId('ImngListObject')).length) {
 			                            clearInterval(this.refreshIntervalId);
+			                            
+						                localStorage.removeItem('noAutoLogout');
+						                delete window.isRefreshMode;
+						                
 			                            return;
 			                        }
 
@@ -542,8 +546,14 @@
 			                    }.bind(this),
 			                    1000
 			                );
+			                
+			                localStorage.setItem('noAutoLogout', true);
+			                window.isRefreshMode = true;
 			            } else {
 			                clearInterval(this.refreshIntervalId);
+			                
+			                localStorage.removeItem('noAutoLogout');
+			                window.isRefreshMode = false;
 			            }
 			        }
 			    }),
@@ -612,12 +622,12 @@
 
 			        SearchImngObj.searchGrid = this.makeGridObj.getSearchGrid();
 
-			        if (!this.newTabSearchGrid()) {
+			        if (this.newTabSearchGrid()) {
 			            this.$nextTick(function () {
 			                window.vmSearch.search();
 			            });
 			        }
-			    }
+			    } 
 			});
 
 			window.vmMain = new Vue({
