@@ -26,7 +26,7 @@ import com.inzent.igate.util.SerializationUtils ;
  * 
  * {@link AdapterReplyEmulating}을 구현한 클래스이며, 미리 정의된 규칙을 기반으로 어댑터 응답을 에뮬레이션합니다.
  * 
- * 이 클래스는 "I_COM" 어댑터에 대한 응답을 처리하며,
+ * 이 클래스는 "A_COM" 어댑터에 대한 응답을 처리하며,
  * 올바른 응답 데이터 구조를 보장하는 역할을 수행합니다.
  * 
  */
