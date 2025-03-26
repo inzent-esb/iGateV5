@@ -52,7 +52,8 @@
 			            callBackFuncName: 'setSearchAdapterId'
 			        },
 			        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
-			        placeholder: '<fmt:message>head.searchId</fmt:message>'
+			        placeholder: '<fmt:message>head.searchId</fmt:message>',
+			        regExpType: 'searchId'
 			    },
 			    {
 			        type: 'select',

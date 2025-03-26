@@ -1468,7 +1468,7 @@ function getCreatePageObj() {
 			
 			var modalHtml = '';
 
-			modalHtml += '<div id="' + viewName + 'ModalSearch"  class="modal fade" tabindex="-1" role="dialog" style="background: none !important;">';
+			modalHtml += '<div id="' + viewName + 'ModalSearch"  class="modal fade" role="dialog" style="background: none !important;">';
 			modalHtml += '    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: ' + modalWidth + ';">';
 			modalHtml += '        <div class="modal-content" style="height: ' + modalHeight + ';">';
 			modalHtml += '            <div class="modal-header">';
@@ -1971,17 +1971,14 @@ function getMakeGridObj() {
                     	message: searchCriteriaLabel(maxListCount)
                     });
 					
-					if(!isGridView) {
-						$('#' + listObjectAreaId).children('.empty').show();
-						$('#' + listObjectAreaId).children('.table-responsive').hide();						
-					}
+					totalCnt = maxListCount;
 				} else {
 					totalCnt = Number(res.object);
-					
-					if(!isGridView) isGridView = true;
-					
-					callback();	
 				}
+				
+				if(!isGridView) isGridView = true;
+				
+				callback();	
 			}, false);
 		}		
 		
@@ -1996,9 +1993,9 @@ function getMakeGridObj() {
 				if ('client' === paging.side) {
 					param.limit = totalCnt;
 				} else if ('server' === paging.side) {
-					var rtnPageOption = constants.grid.pageOptionFunc(getCurrentMenuId(), searchUrl);
+					var rtnPageOption = constants.grid.pageOptionFunc(getCurrentMenuId(), searchUrl);					
 					
-					var limit = rtnPageOption.limit;
+					var limit = searchObj.pageSize >= rtnPageOption.limit? searchObj.pageSize : rtnPageOption.limit;
 					var ascending = rtnPageOption.ascending;
 					
 					param.limit = limit;

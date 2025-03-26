@@ -207,7 +207,7 @@ const info = {
 										vModel: "connectorId",
 										label: this.$t("head.id"),
 										placeholder: this.$t("head.searchId"),
-										regExpType: "id"
+										regExpType: "searchId"
 									},
 									{
 										type: "text",

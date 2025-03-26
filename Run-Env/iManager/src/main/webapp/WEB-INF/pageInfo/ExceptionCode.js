@@ -338,7 +338,7 @@ const info = {
 													this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id",
+												regExpType: "searchId",
 												modalInfo: {
 													title: this.$t(
 														"igate.adapter"
@@ -354,7 +354,8 @@ const info = {
 																placeholder:
 																	this.$t(
 																		"head.searchId"
-																	)
+																	),
+																regExpType: "searchId",
 															},
 															{
 																type: "text",
@@ -365,7 +366,8 @@ const info = {
 																placeholder:
 																	this.$t(
 																		"head.searchName"
-																	)
+																	),
+																regExpType: "name",
 															},
 															{
 																type: "text",
@@ -376,7 +378,8 @@ const info = {
 																placeholder:
 																	this.$t(
 																		"head.searchComment"
-																	)
+																	),
+																regExpType: "desc",
 															},
 															{
 																type: "dataList",

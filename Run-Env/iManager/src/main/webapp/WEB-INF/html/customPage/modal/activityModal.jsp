@@ -232,13 +232,17 @@
 		            
 		            if(modalActivityType.trim()) {
 		            	gridData.columns.splice(2, 2);
+		            	
+		            	gridData.columns.forEach(function (col) {
+		            		col.width = '33%';
+		            	})
 		            }
-		            
+		            		            
 		            this.makeGridObj.setConfig(gridData, true);
 		        }
 		    });
 		    
-			document.querySelector('#activityModal').addEventListener('resize', function(evt) {
+		    document.querySelector('#activityModal').addEventListener('resize', function(evt) {
 				resizeModalSearchGrid(vmList.makeGridObj.getSearchGrid());
 			});		    
 		});

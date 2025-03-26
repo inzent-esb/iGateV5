@@ -189,6 +189,10 @@
 
 	<context:component-scan base-package="com.inzent.imanager">
 		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.property.PropertyService" />
+
+		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserController" />
+		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserService" />
+		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserRepository" />
 	</context:component-scan>
 	<context:component-scan base-package="com.inzent.igate" />
 

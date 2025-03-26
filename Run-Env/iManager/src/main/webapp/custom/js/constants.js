@@ -15,8 +15,11 @@ var constants = {
 		default: { maxLength: 100, regExp: '' }
 	},
 	
-	motionDetectTime: 1000,
-	autoLogoutTime: 1200000,
+    motionDetectTime: 1000,
+    motionThreshold: 1200000,
+	
+	// "logout", "lock"
+	inactivityAction: "lock",
 	
 	//escape: 27
 	modalCloseKeyCode: [27],

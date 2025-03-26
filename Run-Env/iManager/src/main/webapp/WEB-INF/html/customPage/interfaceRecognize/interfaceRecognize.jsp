@@ -37,7 +37,7 @@
 			            vModel: 'object.pk.adapterId',
 			            callBackFuncName: 'setSearchAdapterId'
 			        },
-			        regExpType: 'id',
+			        regExpType: 'searchId',
 			        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 			        placeholder: '<fmt:message>head.searchId</fmt:message>'
 			    },
@@ -56,7 +56,7 @@
 			            vModel: 'object.interfaceId',
 			            callBackFuncName: 'setSearchInterfaceId'
 			        },
-			        regExpType: 'id',
+			        regExpType: 'searchId',
 			        name: '<fmt:message>igate.interface</fmt:message> <fmt:message>head.id</fmt:message>',
 			        placeholder: '<fmt:message>head.searchId</fmt:message>'
 			    }

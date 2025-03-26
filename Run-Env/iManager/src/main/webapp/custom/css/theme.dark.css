@@ -95,3 +95,4 @@
 .dark .addAreaHover {background-color: rgba(236, 237, 242, 0.8);}
 .dark .tui-grid-scrollbar-frozen-border {border: 1px solid #545A77; height: 15px !important;}
 .dark .tui-grid-content-area{border-bottom: 1px solid #545A77;}
+.dark .media-dl .media { border-color: #8d90a8; }

@@ -35,6 +35,7 @@ const info = {
 				vModel: "menuPrivilegeId",
 				label: this.$t("common.privilege") + " " + this.$t("head.id"),
 				placeholder: this.$t("head.searchId"),
+				regExpType: "searchId",
 				modalInfo: {
 					title: this.$t("common.privilege"),
 					search: {
@@ -279,7 +280,7 @@ const info = {
 												label: this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id"
+												regExpType: "searchId"
 											},
 											{
 												type: "text",

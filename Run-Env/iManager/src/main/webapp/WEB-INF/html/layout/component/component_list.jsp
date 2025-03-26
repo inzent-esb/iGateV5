@@ -5,7 +5,7 @@
 <div id="ImngListObject" class="ct-content" style="display: none;">
 	<div class="sub-bar">
 		<div style="display: none;" afterload>
-			<div id="currentCnt" class="form-inline m-full" v-if="null !== currentCnt && currentCnt !== totalCnt" style="margin-right: 5px;">
+			<div id="currentCnt" class="form-inline m-full" v-if="null !== currentCnt && Number(currentCnt) !== Number(totalCnt)" style="margin-right: 5px;">
 				<fmt:message key="head.currentCount"><fmt:param value="{{ currentCnt }}" /></fmt:message> /
 			</div>
 	        <div id="totalCnt" class="form-inline m-full" v-if="null !== totalCnt">

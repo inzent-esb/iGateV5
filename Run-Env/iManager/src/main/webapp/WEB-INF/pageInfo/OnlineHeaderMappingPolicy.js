@@ -307,7 +307,7 @@ const info = {
 												label: this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id"
+												regExpType: "searchId"
 											},
 											{
 												type: "text",
@@ -431,7 +431,7 @@ const info = {
 												label: this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id"
+												regExpType: "searchId"
 											},
 											{
 												type: "text",
@@ -560,7 +560,7 @@ const info = {
 												label: this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id"
+												regExpType: "searchId"
 											},
 											{
 												type: "dataList",
@@ -651,7 +651,7 @@ const info = {
 												label: this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id"
+												regExpType: "searchId"
 											},
 											{
 												type: "dataList",
@@ -742,7 +742,7 @@ const info = {
 												label: this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id"
+												regExpType: "searchId"
 											},
 											{
 												type: "dataList",
@@ -833,7 +833,7 @@ const info = {
 												label: this.$t("head.id"),
 												placeholder:
 													this.$t("head.searchId"),
-												regExpType: "id"
+												regExpType: "searchId"
 											},
 											{
 												type: "dataList",

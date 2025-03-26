@@ -197,7 +197,7 @@
 			            vModel: 'object.adapterId',
 			            callBackFuncName: 'setSearchAdapterId'
 			        },
-			        regExpType: 'id',
+			        regExpType: 'searchId',
 			        name: '<fmt:message>igate.adapter</fmt:message> <fmt:message>head.id</fmt:message>',
 			        placeholder: '<fmt:message>head.searchId</fmt:message>'
 			    },
@@ -253,7 +253,7 @@
 			        },
 			        name: '<fmt:message>common.privilege</fmt:message> <fmt:message>head.id</fmt:message>',
 			        placeholder: '<fmt:message>head.searchId</fmt:message>',
-			        regExpType: 'id'
+			        regExpType: 'searchId'
 			    },
 			    {
 			        type: 'text',
