@@ -102,7 +102,7 @@
 		<security:intercept-url pattern="/api/entity/user/password" access="permitAll()" />
 		<security:intercept-url pattern="/api/entity/user/unlock" access="hasRole('ROLE_UserEditor')" />
 		<security:intercept-url pattern="/api/entity/user/**" access="isAuthenticated()" />
-		<security:intercept-url pattern="/api/jsonConverter/**" access="hasRole('ROLE_TestCaseViewer')" />
+		<security:intercept-url pattern="/api/jsonConverter/**" access="hasAnyRole('ROLE_TestCaseViewer', 'ROLE_ReplyEmulateViewer')" />
 		<security:intercept-url pattern="/api/logStats/**" access="hasRole('ROLE_LogStatisticsViewer')" />
 		<security:intercept-url pattern="/api/mapping/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/monitoring/**" access="hasRole('ROLE_DashBoardViewer')" />
