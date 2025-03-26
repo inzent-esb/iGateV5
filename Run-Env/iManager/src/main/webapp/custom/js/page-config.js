@@ -1966,19 +1966,21 @@ function getMakeGridObj() {
 				var maxListCount = constants.grid.maxListCount[menuId.replace('_bookmark', '')];
 				
 				if(maxListCount && Number(res.object) > maxListCount) {
+					totalCnt = maxListCount;
+					
 					window._alert({
                     	type: 'warn',
-                    	message: searchCriteriaLabel(maxListCount)
+                    	message: searchCriteriaLabel(maxListCount),
+                    	callBackFunc: function() {
+                    		callback();                  		
+                    	}
                     });
-					
-					totalCnt = maxListCount;
 				} else {
 					totalCnt = Number(res.object);
+					callback();
 				}
 				
 				if(!isGridView) isGridView = true;
-				
-				callback();	
 			}, false);
 		}		
 		
