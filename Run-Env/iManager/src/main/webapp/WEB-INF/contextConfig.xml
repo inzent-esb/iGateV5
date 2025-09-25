@@ -196,8 +196,6 @@
 		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserController" />
 		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserService" />
 		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserRepository" />
-
-		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.auth.AuthenticateController" />
 	</context:component-scan>
 	<context:component-scan base-package="com.inzent.igate" />
 
