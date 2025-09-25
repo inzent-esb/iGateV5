@@ -73,7 +73,7 @@
 
 	<bean class="com.inzent.igate.message.MessageBeans"/>
 
-	<bean id="connector" class="com.inzent.igate.context.ConnectorManagerBean" />
+	<bean id="connector" class="com.inzent.igate.connector.ConnectorManagerBean" />
 
 	<bean id="adapter" class="com.inzent.igate.adapter.AdapterManagerBean" />
 
