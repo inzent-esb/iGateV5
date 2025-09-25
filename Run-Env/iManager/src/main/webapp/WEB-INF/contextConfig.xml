@@ -21,7 +21,6 @@
 	<mvc:resources mapping="/manual/**" location="/manual/" />
 	<mvc:resources mapping="/template/**" location="/template/" />
 	<mvc:resources mapping="/*.*" location="/" />
-	<mvc:resources mapping="/WEB-INF/html" location="/WEB-INF/html" />
 
 	<mvc:view-resolvers>
 		<mvc:jsp prefix="/WEB-INF/html/"/>
@@ -116,14 +115,6 @@
 		<property name="metaEntityRepository" ref="metaHistoryRepository" />
 	</bean>
 
-	<bean id="monitorComponentRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
-		<constructor-arg value="com.inzent.igate.repository.meta.MonitorComponent" />
-	</bean>
-
-	<bean id="monitorContainerService" class="com.inzent.imanager.service.MetaEntityService">
-		<property name="metaEntityRepository" ref="monitorContainerRepository" />
-	</bean>
-
 	<bean id="noticeRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
 		<constructor-arg value="com.inzent.imanager.repository.meta.Notice" />
 	</bean>
@@ -175,6 +166,18 @@
 
 		<property name="metaEntityRepository" ref="threadPoolRepository" />
 	</bean>
+	
+	<bean id="dashContainerService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="dashContainerRepository" />
+	</bean>
+	
+	<bean id="dashItemRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
+		<constructor-arg value="com.inzent.igate.repository.meta.DashItem" />
+	</bean>
+		
+	<bean id="dashItemService" class="com.inzent.imanager.service.MetaEntityService">
+		<property name="metaEntityRepository" ref="dashItemRepository" />
+	</bean>	
 
 	<bean id="transactionContextRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
 		<constructor-arg value="com.inzent.igate.repository.meta.TransactionContext" />
@@ -193,6 +196,8 @@
 		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserController" />
 		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserService" />
 		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.user.UserRepository" />
+
+		<context:exclude-filter type="regex" expression="com.inzent.imanager.openapi.auth.AuthenticateController" />
 	</context:component-scan>
 	<context:component-scan base-package="com.inzent.igate" />
 
