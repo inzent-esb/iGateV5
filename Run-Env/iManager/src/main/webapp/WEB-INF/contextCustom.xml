@@ -28,11 +28,11 @@
 	</bean>
 
 	<security:http auto-config="false" entry-point-ref="accessDeniedHandler" security-context-repository-ref="tokenRepository">
+		<security:intercept-url pattern="/api/auth/deleteRefreshToken" access="permitAll()" />
 		<security:intercept-url pattern="/api/auth/token" access="permitAll()" />
 		<security:intercept-url pattern="/api/auth/validateToken" access="permitAll()" />
-		<security:intercept-url pattern="/api/auth/deleteRefreshToken" access="permitAll()" />
 		<security:intercept-url pattern="/api/entity/activity/search" access="isAuthenticated()" />
-		<security:intercept-url pattern="/api/entity/activity/**" access="hasAnyRole('ROLE_ActivityViewer', 'ROLE_OperationViewer')" /> 
+		<security:intercept-url pattern="/api/entity/activity/**" access="hasAnyRole('ROLE_ActivityViewer', 'ROLE_OperationViewer')" />
 		<security:intercept-url pattern="/api/entity/adapter/control" access="hasRole('ROLE_AdapterControl')" />
 		<security:intercept-url pattern="/api/entity/adapter/snapshot" access="hasRole('ROLE_AdapterControl')" />
 		<security:intercept-url pattern="/api/entity/adapter/**" access="hasRole('ROLE_AdapterViewer')" />
@@ -42,6 +42,8 @@
 		<security:intercept-url pattern="/api/entity/connector/control" access="hasRole('ROLE_ConnectorControl')" />
 		<security:intercept-url pattern="/api/entity/connector/snapshot" access="hasRole('ROLE_ConnectorControl')" />
 		<security:intercept-url pattern="/api/entity/connector/**" access="hasRole('ROLE_ConnectorViewer')" />
+		<security:intercept-url pattern="/api/entity/dashboard/**" access="hasRole('ROLE_DashBoardViewer')" />
+		<security:intercept-url pattern="/api/entity/dashboardItem/**" access="hasRole('ROLE_DashBoardViewer')" />
 		<security:intercept-url pattern="/api/entity/exceptionCode/**" access="hasRole('ROLE_ExceptionCodeViewer')" />
 		<security:intercept-url pattern="/api/entity/exceptionLog/**" access="hasRole('ROLE_ExceptionLogViewer')" />
 		<security:intercept-url pattern="/api/entity/externalLine/**" access="hasRole('ROLE_ExternalLineViewer')" />
@@ -59,7 +61,7 @@
 		<security:intercept-url pattern="/api/entity/job/**" access="hasRole('ROLE_JobViewer')" />
 		<security:intercept-url pattern="/api/entity/jobResult/**" access="hasRole('ROLE_JobResultViewer')" />
 		<security:intercept-url pattern="/api/entity/mapping/migration/recv" access="permitAll()" />
-		<security:intercept-url pattern="/api/entity/mapping/**" access="hasAnyRole('ROLE_MappingViewer', 'ROLE_OperationViewer')"/> 
+		<security:intercept-url pattern="/api/entity/mapping/**" access="hasAnyRole('ROLE_MappingViewer', 'ROLE_OperationViewer')"/>
 		<security:intercept-url pattern="/api/entity/mappingDictionary/**" access="hasAnyRole('ROLE_MappingDictionaryViewer', 'ROLE_MappingViewer')" />
 		<security:intercept-url pattern="/api/entity/menu/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/entity/message/**" access="hasAnyRole('ROLE_MessageViewer', 'ROLE_OperationViewer')" />
@@ -68,7 +70,7 @@
 		<security:intercept-url pattern="/api/entity/onlineHeaderMappingPolicy/**" access="hasRole('ROLE_OnlineHeaderMappingPolicyViewer')" />
 		<security:intercept-url pattern="/api/entity/operation/migration/recv" access="permitAll()" />
 		<security:intercept-url pattern="/api/entity/operation/search" access="hasAnyRole('ROLE_OperationViewer', 'ROLE_ServiceEditor', 'ROLE_InterfaceViewer')" />
-		<security:intercept-url pattern="/api/entity/operation/**" access="hasAnyRole('ROLE_OperationViewer', 'ROLE_ServiceViewer')"/> 
+		<security:intercept-url pattern="/api/entity/operation/**" access="hasAnyRole('ROLE_OperationViewer', 'ROLE_ServiceViewer')"/>
 		<security:intercept-url pattern="/api/entity/privilege/search" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/entity/privilege/**" access="hasRole('ROLE_PrivilegeViewer')" />
 		<security:intercept-url pattern="/api/entity/property/group*" access="isAuthenticated()" />
@@ -106,21 +108,19 @@
 		<security:intercept-url pattern="/api/jsonConverter/**" access="hasAnyRole('ROLE_TestCaseViewer', 'ROLE_ReplyEmulateViewer')" />
 		<security:intercept-url pattern="/api/logStats/**" access="hasRole('ROLE_LogStatisticsViewer')" />
 		<security:intercept-url pattern="/api/mapping/**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/api/page/isCombineLogin" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/licenseExpiration" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/login" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/logoFileName" access="permitAll()" />
+		<security:intercept-url pattern="/api/page/messages" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/password" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/title" access="permitAll()" />
-		<security:intercept-url pattern="/api/page/messages" access="permitAll()" />
-		<security:intercept-url pattern="/api/page/isCombineLogin" access="permitAll()" />
 		<security:intercept-url pattern="/api/page/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/query/**" access="hasRole('ROLE_QueryViewer')" />
 		<security:intercept-url pattern="/api/wizard/adapter/**" access="hasRole('ROLE_AdapterWizardEditor')" />
 		<security:intercept-url pattern="/api/wizard/sapInterface" access="hasRole('ROLE_InterfaceEditor')" />
 		<security:intercept-url pattern="/api/wizard/sapService" access="hasRole('ROLE_ServiceEditor')" />
 		<security:intercept-url pattern="/api/wizard/webservice" access="hasRole('ROLE_ServiceEditor')"/>
-		<security:intercept-url pattern="/api/entity/dashboard/**" access="hasRole('ROLE_DashBoardViewer')" />
-		<security:intercept-url pattern="/api/entity/dashboardItem/**" access="hasRole('ROLE_DashBoardViewer')" />
 		<security:access-denied-handler ref="accessDeniedHandler" />
 		<security:csrf disabled="true" />
 	</security:http>

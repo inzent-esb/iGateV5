@@ -22,10 +22,6 @@
 	<mvc:resources mapping="/template/**" location="/template/" />
 	<mvc:resources mapping="/*.*" location="/" />
 
-	<mvc:view-resolvers>
-		<mvc:jsp prefix="/WEB-INF/html/"/>
-	</mvc:view-resolvers>
-
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
@@ -38,10 +34,6 @@
 		<constructor-arg value="com.inzent.igate.repository.meta.ApimApi" />
 	</bean>
 	
-	<bean id="apimApplicationRepository" class="com.inzent.imanager.repository.MetaEntityRepository">
-		<constructor-arg value="com.inzent.igate.repository.meta.ApimApplication" />
-	</bean>
-
 	<bean id="batchLogService" class="com.inzent.imanager.service.LogEntityService">
 		<property name="entityRepository" ref="batchLogRepository" />
 	</bean>
