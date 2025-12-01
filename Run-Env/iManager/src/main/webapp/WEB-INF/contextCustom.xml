@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.8.xsd"
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-6.5.xsd"
 	default-lazy-init="false">
 
 	<bean id="objectIdValidator" class="com.inzent.igate.imanager.ObjectIdValidatorImpl" />
@@ -36,7 +36,13 @@
 		<security:intercept-url pattern="/api/entity/adapter/control" access="hasRole('ROLE_AdapterControl')" />
 		<security:intercept-url pattern="/api/entity/adapter/snapshot" access="hasRole('ROLE_AdapterControl')" />
 		<security:intercept-url pattern="/api/entity/adapter/**" access="hasRole('ROLE_AdapterViewer')" />
+		<security:intercept-url pattern="/api/entity/apimApi/**" access="hasRole('ROLE_ApimApiViewer')" />
+		<security:intercept-url pattern="/api/entity/apimApplication/**" access="hasAnyRole('ROLE_ApimApplicationViewer', 'ROLE_ApimPortal')" />
+		<security:intercept-url pattern="/api/entity/apimApplicationRequest/token" access="permitAll()" />
+		<security:intercept-url pattern="/api/entity/apimApplicationRequest/**" access="hasAnyRole('ROLE_ApimApplicationViewer', 'ROLE_ApimPortal')" />
+		<security:intercept-url pattern="/api/entity/apimCatalog/**" access="hasAnyRole('ROLE_ApimCatalogViewer', 'ROLE_ApimPortal')" />
 		<security:intercept-url pattern="/api/entity/batchLog/**" access="hasRole('ROLE_BatchLogViewer')" />
+		<security:intercept-url pattern="/api/entity/menuBookmark/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/entity/calendar/search" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/entity/calendar/**" access="hasRole('ROLE_CalendarViewer')" />
 		<security:intercept-url pattern="/api/entity/connector/control" access="hasRole('ROLE_ConnectorControl')" />

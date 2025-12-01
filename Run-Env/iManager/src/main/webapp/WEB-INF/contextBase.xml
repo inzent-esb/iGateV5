@@ -22,6 +22,7 @@
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.cache.use_second_level_cache">false</prop>
 				<prop key="hibernate.jdbc.batch_size">-1</prop>
+				<prop key="hibernate.allow_update_outside_transaction">true</prop>
 			</props>
 		</property>
 		<property name="packagesToScan">
