@@ -10,9 +10,6 @@
 		<listener-class>com.inzent.igate.context.IGateInitializeListener</listener-class>
 	</listener>
 
-	<listener>
-		<listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
-	</listener> 
 	<servlet>
 		<servlet-name>Dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
