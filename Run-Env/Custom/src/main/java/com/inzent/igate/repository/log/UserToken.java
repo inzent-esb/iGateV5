@@ -2,10 +2,10 @@ package com.inzent.igate.repository.log;
 
 import java.io.Serializable ;
 
-import javax.persistence.Column ;
-import javax.persistence.Entity ;
-import javax.persistence.Id ;
-import javax.persistence.Table ;
+import jakarta.persistence.Column ;
+import jakarta.persistence.Entity ;
+import jakarta.persistence.Id ;
+import jakarta.persistence.Table ;
 
 import org.hibernate.annotations.Proxy ;
 
@@ -22,6 +22,8 @@ import com.inzent.imanager.repository.FieldRestriction ;
 @Entity
 @Table(name = "IGT_USER_TOKEN")
 @Proxy(lazy = false)
+@javax.persistence.Entity
+@javax.persistence.Table(name = "IGT_USER_TOKEN")
 public class UserToken implements Serializable
 {
   private static final long serialVersionUID = 545950243346849062L ;
@@ -29,9 +31,12 @@ public class UserToken implements Serializable
   @Id
   @Column(name = "USER_ID")
   @FieldRestriction(unformalize = FieldRestriction.BLANK, nullable = false, where = FieldRestriction.EQ)
+  @javax.persistence.Id
+  @javax.persistence.Column(name = "USER_ID")
   private String userId ;
 
   @Column(name = "TOKEN", nullable = false )
+  @javax.persistence.Column(name = "TOKEN", nullable = false )
   private String token;
 
   /**

@@ -2,12 +2,12 @@ package com.inzent.igate.repository.log ;
 
 import java.io.Serializable ;
 
-import javax.persistence.Column ;
-import javax.persistence.Entity ;
-import javax.persistence.Id ;
-import javax.persistence.NamedQueries ;
-import javax.persistence.NamedQuery ;
-import javax.persistence.Table ;
+import jakarta.persistence.Column ;
+import jakarta.persistence.Entity ;
+import jakarta.persistence.Id ;
+import jakarta.persistence.NamedQueries ;
+import jakarta.persistence.NamedQuery ;
+import jakarta.persistence.Table ;
 
 import org.hibernate.annotations.Proxy ;
 
@@ -20,6 +20,12 @@ import com.inzent.imanager.repository.FieldRestriction;
   @NamedQuery(name = MciSession.SELECT_LOGINED, query = "FROM MciSession WHERE empId=:empId AND sessionDelYn='N'"),
   @NamedQuery(name = MciSession.UPDATE_LOGOUT_NORMAL, query = "UPDATE MciSession SET sessionDelYn='Y', logoffYms=:logoffYms WHERE mciSessionId=:mciSessionId"),
   @NamedQuery(name = MciSession.UPDATE_LOGOUT_FORCE, query = "UPDATE MciSession SET sessionDelYn='Y' WHERE mciSessionId=:mciSessionId") })
+@javax.persistence.Entity
+@javax.persistence.Table(name = "IGT_MCI_SESSION")
+@javax.persistence.NamedQueries({ 
+  @javax.persistence.NamedQuery(name = MciSession.SELECT_LOGINED, query = "FROM MciSession WHERE empId=:empId AND sessionDelYn='N'"),
+  @javax.persistence.NamedQuery(name = MciSession.UPDATE_LOGOUT_NORMAL, query = "UPDATE MciSession SET sessionDelYn='Y', logoffYms=:logoffYms WHERE mciSessionId=:mciSessionId"),
+  @javax.persistence.NamedQuery(name = MciSession.UPDATE_LOGOUT_FORCE, query = "UPDATE MciSession SET sessionDelYn='Y' WHERE mciSessionId=:mciSessionId") })
 public class MciSession implements Serializable
 {
   private static final long serialVersionUID = -7384444813173745206L ;
@@ -31,41 +37,53 @@ public class MciSession implements Serializable
   @Id
   @Column(name = "MCI_SESSION_ID")
   @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.EQ)
+  @javax.persistence.Id
+  @javax.persistence.Column(name = "MCI_SESSION_ID")
   private String mciSessionId ;
 
   @Column(name = "MCI_INSTANCE_ID")
+  @javax.persistence.Column(name = "MCI_INSTANCE_ID")
   private String mciInstanceId ;
 
   @Column(name = "CMGRCD")
+  @javax.persistence.Column(name = "CMGRCD")
   private String cmgrCd ;
 
   @Column(name = "CHANNEL_CODE")
+  @javax.persistence.Column(name = "CHANNEL_CODE")
   private String channelCode ;
 
   @Column(name = "CHANNEL_IP")
+  @javax.persistence.Column(name = "CHANNEL_IP")
   private String channelIp ;
 
   @Column(name = "MAC_ADDRESS")
   @FieldRestriction(where = FieldRestriction.EQ)
+  @javax.persistence.Column(name = "MAC_ADDRESS")
   private String macAddress ;
 
   @Column(name = "BRNCD")
+  @javax.persistence.Column(name = "BRNCD")
   private String brnCd ;
 
   @Column(name = "EMPID")
   @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.ILIKE)
+  @javax.persistence.Column(name = "EMPID")
   private String empId ;
 
   @Column(name = "LOGON_YMS")
   @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.ILIKE)
+  @javax.persistence.Column(name = "LOGON_YMS")
   private String logonYms ;
 
   @Column(name = "LOGOFF_YMS")
   @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.ILIKE)
+  @javax.persistence.Column(name = "LOGOFF_YMS")
   private String logoffYms ;
 
   @Column(name = "SESSION_DEL_YN")
   @FieldRestriction(unformalize = FieldRestriction.BLANK, where = FieldRestriction.EQ)
+  @javax.persistence.Column(name = "SESSION_DEL_YN")
   private String sessionDelYn ;
   
   public MciSession()
