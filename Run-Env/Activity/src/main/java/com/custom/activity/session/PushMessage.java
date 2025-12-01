@@ -3,7 +3,7 @@ package com.custom.activity.session ;
 import java.util.ArrayList;
 import java.util.Objects ;
 
-import javax.jms.Message ;
+import jakarta.jms.Message ;
 
 import com.custom.activity.telegram.CustomHandlerConstants;
 import com.inzent.igate.adapter.AdapterManagerBean ;

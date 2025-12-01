@@ -22,7 +22,7 @@
 	<mvc:resources mapping="/template/**" location="/template/" />
 	<mvc:resources mapping="/*.*" location="/" />
 
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 
 	<bean id="threadPool" class="com.inzent.igate.thread.ThreadPoolManager" />
 
