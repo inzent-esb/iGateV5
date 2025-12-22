@@ -192,7 +192,7 @@
 
 	<context:component-scan base-package="com.inzent.igate" >
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.tag.TagService" />
-		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.contentService" />
+		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.ContentService" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.nodeagent.NodeAgentService" />
 	</context:component-scan>
 
