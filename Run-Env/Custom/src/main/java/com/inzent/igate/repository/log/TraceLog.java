@@ -11,28 +11,13 @@ import org.hibernate.annotations.Proxy ;
 @Proxy(lazy = false)
 @javax.persistence.Entity
 @javax.persistence.Table(name = "IGT_TRACE_LOG")
-public class TraceLog extends AbstractTraceLogApim
+public class TraceLog extends AbstractTraceLog
 {
   private static final long serialVersionUID = 4091702834032052985L ;
 
     
   public TraceLog()
   {
-  }
-  
-  //인터페이스 한글명 필드 
-  @Transient
-  @javax.persistence.Transient
-  private String interfaceName ;
-  
-  public String getInterfaceName()
-  {
-    return interfaceName ;
-  }
-
-  public void setInterfaceName(String interfaceName)
-  {
-    this.interfaceName = interfaceName ;
   }
    
   
