@@ -111,10 +111,6 @@
 		<constructor-arg value="com.inzent.imanager.repository.meta.Notice" />
 	</bean>
 
-	<bean id="noticeService" class="com.inzent.imanager.service.MetaEntityService">
-		<property name="metaEntityRepository" ref="noticeRepository" />
-	</bean>
-
 	<bean id="onlineHeaderMappingPolicyService" class="com.inzent.igate.imanager.CachedMetaEntityService">
 		<constructor-arg value="onlineHeaderMappingPolicy" />
 		<constructor-arg value="3" />
@@ -196,7 +192,7 @@
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.ContentController" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.ContentService" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.ContentRepository" />
-		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.contentfile.contentFileService" />
+		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.contentfile.ContentFileService" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.nodeagent.NodeAgentController" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.nodeagent.NodeAgentService" />
 	</context:component-scan>
