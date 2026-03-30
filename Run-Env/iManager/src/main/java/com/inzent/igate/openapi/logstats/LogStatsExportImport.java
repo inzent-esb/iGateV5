@@ -8,8 +8,7 @@
  *******************************************************************************/
 package com.inzent.igate.openapi.logstats ;
 
-import java.io.File;
-import java.io.FileInputStream ;
+import java.io.InputStream ;
 import java.io.OutputStream ;
 import java.net.URLEncoder ;
 import java.util.List ;
@@ -42,8 +41,8 @@ import org.springframework.web.multipart.MultipartFile ;
 
 import com.fasterxml.jackson.core.JsonEncoding ;
 import com.inzent.igate.imanager.CommonTools;
-import com.inzent.igate.imanager.EntityExportImportBean ;
 import com.inzent.igate.repository.log.LogStats ;
+import com.inzent.imanager.EntityExportImportBean;
 import com.inzent.imanager.message.MessageGenerator;
 
 
@@ -93,11 +92,11 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
     switch (entity.getStatsClass())
     {
     case LogStatsRepository.CLASS_DB :
-      generateDownloadDB(response.getOutputStream(), request.getServletContext().getRealPath("/template/LogsStats" + entity.getStatsClass() + "_" + entity.getStatsFilter() + ".xlsx"), entity, list) ;
+      generateDownloadDB(request, response.getOutputStream(), "/template/LogsStats" + entity.getStatsClass() + "_" + entity.getStatsFilter() + ".xlsx", entity, list) ;
       break ;
 
     default :
-      generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/LogsStats" + entity.getStatsClass() + "_" + entity.getStatsFilter() + ".xlsx"), entity, list) ;
+      generateDownload(request, response.getOutputStream(), "/template/LogsStats" + entity.getStatsClass() + "_" + entity.getStatsFilter() + ".xlsx", entity, list) ;
       break ;
     }
 
@@ -181,23 +180,25 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
    * @author jkh, 2020. 7. 10.
    * @throws Exception 
    */
-  protected void generateDownload(OutputStream outputStream, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
+  protected void generateDownload(HttpServletRequest request, OutputStream outputStream, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
   {  
     Workbook workbook ;
-    try (FileInputStream fileInputStream = new FileInputStream(new File(templateFile)))
+    try (InputStream fileInputStream = request.getServletContext().getResourceAsStream(templateFile))
     {
       workbook = WorkbookFactory.create(fileInputStream) ;
     }
 
     boolean typeFlag = false;
+    
     switch(logStats.getStatsFilter())
     {
-    	case LogStatsRepository.FILTER_ADAPTER:
-    		typeFlag = true;
-    		break;
-    	default: 
-    	   	break;
-    }
+      case LogStatsRepository.FILTER_ADAPTER:
+        typeFlag = true;
+        break;
+      default: 
+        break;
+    }    	
+    
     Row row = null ;
     Cell cell = null ;
     String values = null ;
@@ -224,22 +225,26 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
     cell.setCellValue(values) ;
 
     int nextCell = 1;
-    switch (logStats.getStatsFilter())
-    {
-    case LogStatsRepository.FILTER_DAILY:
-    case LogStatsRepository.FILTER_ADAPTER :
-      // 구분
-      values = getStatsTypeName(logStats) ;
-      row = writeSheet.getRow(4) ;
-      cell = row.createCell(nextCell) ;
-      cell.setCellStyle(cellStyle_Base) ;
-      cell.setCellValue(values) ;
-      nextCell += 2;
-      break ;
-     default: 
-	   	break;
-    }
     
+    if (!LogStatsRepository.CLASS_APIM_API.equals(logStats.getStatsClass()) && !LogStatsRepository.CLASS_APIM_APP.equals(logStats.getStatsClass()))
+    {
+      switch (logStats.getStatsFilter())
+      {
+      case LogStatsRepository.FILTER_DAILY:
+      case LogStatsRepository.FILTER_ADAPTER :
+        // 구분
+        values = getStatsTypeName(logStats) ;
+        row = writeSheet.getRow(4) ;
+        cell = row.createCell(nextCell) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ;
+        nextCell += 2;
+        break ;
+      default: 
+        break;
+      }   	
+    }
+
     // 조회타입
     values = logStats.getSearchType().equals(LogStatsRepository.SEARCH_DAILY) ? MessageGenerator.getMessage("igate.logStatistics.daily", "Daily") : logStats.getSearchType().equals(LogStatsRepository.SEARCH_HOUR) ? MessageGenerator.getMessage("igate.logStatistics.hour", "Hour") : MessageGenerator.getMessage("igate.logStatistics.minute", "Minute") ;
     row = writeSheet.getRow(4) ;
@@ -258,6 +263,15 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
       break ;
     case LogStatsRepository.FILTER_INTERFACE :
     case LogStatsRepository.FILTER_SERVICE :
+      if (LogStatsRepository.CLASS_APIM_API.equals(logStats.getStatsClass()) || LogStatsRepository.CLASS_APIM_APP.equals(logStats.getStatsClass()))
+      {
+        values = logStats.getPk().getAdapterId() ;
+        cell = row.createCell(nextCell) ;
+        cell.setCellStyle(cellStyle_Base) ;
+        cell.setCellValue(values) ; 
+        nextCell+=2;
+      }
+      
       values = logStats.getPk().getInterfaceServiceId() ;
       cell = row.createCell(nextCell) ;
       cell.setCellStyle(cellStyle_Base) ;
@@ -280,36 +294,65 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
       cell.setCellStyle(cellStyle_Base) ;
       cell.setCellValue(values) ;
 
-      switch (logStats.getStatsFilter())
+      if (LogStatsRepository.CLASS_APIM_API.equals(logStats.getStatsClass()) || LogStatsRepository.CLASS_APIM_APP.equals(logStats.getStatsClass()))
       {
-      case LogStatsRepository.FILTER_DAILY :
-        values = getStatsTypeName(logStats2) ;
-        cell = row.createCell(c++) ;
-        cell.setCellStyle(cellStyle_Base) ;
-        cell.setCellValue(values) ;
-    	
-    	break;  
-      case LogStatsRepository.FILTER_ADAPTER :
-        values = getStatsTypeName(logStats2) ;
-        cell = row.createCell(c++) ;
-        cell.setCellStyle(cellStyle_Base) ;
-        cell.setCellValue(values) ;
-
-        values = logStats2.getPk().getAdapterId() ;
-        cell = row.createCell(c++) ;
-        cell.setCellStyle(cellStyle_Base) ;
-        cell.setCellValue(values) ;
-        break ;
-      case LogStatsRepository.FILTER_INTERFACE :
-      case LogStatsRepository.FILTER_SERVICE :
-        values = logStats2.getPk().getInterfaceServiceId() ;
-        cell = row.createCell(c++) ;
-        cell.setCellStyle(cellStyle_Base) ;
-        cell.setCellValue(values) ;
-        break ;
-      default: 
-  	   	break;
+    	switch (logStats.getStatsFilter())
+    	{
+    	  case LogStatsRepository.FILTER_ADAPTER :
+    	    values = logStats2.getPk().getAdapterId() ;
+    	    cell = row.createCell(c++) ;
+    	    cell.setCellStyle(cellStyle_Base) ;
+    	    cell.setCellValue(values) ;	  
+    	    break;
+    	  case LogStatsRepository.FILTER_INTERFACE :
+    	    values = logStats2.getPk().getAdapterId() ;
+      	    cell = row.createCell(c++) ;
+      	    cell.setCellStyle(cellStyle_Base) ;
+      	    cell.setCellValue(values) ;
+          	    
+      	    values = logStats2.getPk().getInterfaceServiceId() ;
+      	    cell = row.createCell(c++) ;
+      	    cell.setCellStyle(cellStyle_Base) ;
+      	    cell.setCellValue(values) ;	  
+      	    break;
+          default: 
+            break;      	    
+    	}
       }
+      else
+      {
+        switch (logStats.getStatsFilter())
+        {
+        case LogStatsRepository.FILTER_DAILY :
+          values = getStatsTypeName(logStats2) ;
+          cell = row.createCell(c++) ;
+          cell.setCellStyle(cellStyle_Base) ;
+          cell.setCellValue(values) ;
+          	
+          break;  
+        case LogStatsRepository.FILTER_ADAPTER :
+          values = getStatsTypeName(logStats2) ;
+          cell = row.createCell(c++) ;
+          cell.setCellStyle(cellStyle_Base) ;
+          cell.setCellValue(values) ;
+
+          values = logStats2.getPk().getAdapterId() ;
+          cell = row.createCell(c++) ;
+          cell.setCellStyle(cellStyle_Base) ;
+          cell.setCellValue(values) ;
+          break ;
+        case LogStatsRepository.FILTER_INTERFACE :
+        case LogStatsRepository.FILTER_SERVICE :
+          values = logStats2.getPk().getInterfaceServiceId() ;
+          cell = row.createCell(c++) ;
+          cell.setCellStyle(cellStyle_Base) ;
+          cell.setCellValue(values) ;
+          break ;
+        default: 
+          break;
+        }    	  
+      }
+
 
       // request
       values = CommonTools.numberWithComma(String.valueOf(logStats2.getRequestCount())) ;
@@ -347,12 +390,12 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
       {
         case LogStatsRepository.CLASS_FILE : 
           // 평균 파일 크기
-          values = CommonTools.numberWithComma(String.valueOf(getFileSize(logStats2.getFileSizeTotal()))) ;
+          values = CommonTools.numberWithComma(String.valueOf(logStats2.getFileSizeTotal())) ;
           cell = row.createCell(c++) ;
           cell.setCellStyle(cellStyle_Base) ;
           cell.setCellValue(values) ;
           // 최대 파일 크기
-          values = CommonTools.numberWithComma(String.valueOf(getFileSize(logStats2.getFileSizeMax()))) ;
+          values = CommonTools.numberWithComma(String.valueOf(logStats2.getFileSizeMax())) ;
           cell = row.createCell(c++) ;
           cell.setCellStyle(cellStyle_Base) ;
           cell.setCellValue(values) ;
@@ -382,7 +425,26 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
     cell = row.createCell(2) ;
     cell.setCellStyle(cellStyle_Info) ;
 
-    i = typeFlag ? 3 : 2 ;
+    if (LogStatsRepository.CLASS_APIM_API.equals(logStats.getStatsClass()) || LogStatsRepository.CLASS_APIM_APP.equals(logStats.getStatsClass()))
+    {
+	 switch (logStats.getStatsFilter())
+	 {
+	   case LogStatsRepository.FILTER_ADAPTER :
+	   case LogStatsRepository.FILTER_INTERFACE :
+	     i = 2;
+	  	 break;
+	   case LogStatsRepository.FILTER_DAILY :
+	     i = 1;
+	     break;	     
+	   default:
+	     i = 1;
+	     break;      	    
+	 }
+    }
+    else
+    {
+      i = typeFlag ? 3 : 2 ;
+    }
 
     // requestSum
     values = CommonTools.numberWithComma(Long.toString(requestSum)) ;
@@ -417,10 +479,10 @@ public class LogStatsExportImport implements EntityExportImportBean<LogStats>
    * @author myj, 2022. 6. 14.
    * @throws Exception 
    */
-  protected void generateDownloadDB(OutputStream outputStream, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
+  protected void generateDownloadDB(HttpServletRequest request, OutputStream outputStream, String templateFile, LogStats logStats, List<LogStats> logStatsList) throws Exception
   {
     Workbook workbook ;
-    try (FileInputStream fileInputStream = new FileInputStream(templateFile))
+    try (InputStream fileInputStream = request.getServletContext().getResourceAsStream(templateFile))
     {
       workbook = WorkbookFactory.create(fileInputStream) ;
     }

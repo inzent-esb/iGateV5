@@ -21,6 +21,8 @@
 		<security:authentication-provider ref="authenticationProvider" />
 	</security:authentication-manager>
 
+	<bean id="noticeFileBean" class="com.inzent.imanager.openapi.notice.NoticeFileBean" />
+
 	<bean id="tokenRepository" class="com.inzent.imanager.openapi.auth.TokenRepository">
 		<property name="compressionCodec">
 			<bean class="io.jsonwebtoken.impl.compression.GzipCompressionCodec" />

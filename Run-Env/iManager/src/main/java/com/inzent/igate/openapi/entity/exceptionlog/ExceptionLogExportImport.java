@@ -1,6 +1,6 @@
 package com.inzent.igate.openapi.entity.exceptionlog ;
 
-import java.io.FileInputStream ;
+import java.io.InputStream;
 import java.io.OutputStream ;
 import java.net.URLEncoder ;
 import java.sql.Timestamp ;
@@ -29,8 +29,8 @@ import org.springframework.web.multipart.MultipartFile ;
 
 import com.fasterxml.jackson.core.JsonEncoding ;
 import com.inzent.igate.imanager.CommonTools ;
-import com.inzent.igate.imanager.EntityExportImportBean ;
 import com.inzent.igate.repository.log.ExceptionLog ;
+import com.inzent.imanager.EntityExportImportBean;
 import com.inzent.imanager.message.MessageGenerator ;
 
 @Component
@@ -45,7 +45,7 @@ public class ExceptionLogExportImport implements EntityExportImportBean<Exceptio
     response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
     response.setContentType("application/octet-stream");
 
-    generateDownload(response, request.getServletContext().getRealPath("/template/List_ExceptionLog.xlsx"), entity, list);
+    generateDownload(request, response, "/template/List_ExceptionLog.xlsx", entity, list);
 
     response.flushBuffer();
   }
@@ -62,10 +62,10 @@ public class ExceptionLogExportImport implements EntityExportImportBean<Exceptio
     throw new UnsupportedOperationException() ;
   }
 
-	public void generateDownload(HttpServletResponse response  , String templateFile, ExceptionLog entity, List<ExceptionLog> entityList) throws Exception {
+	public void generateDownload(HttpServletRequest request, HttpServletResponse response, String templateFile, ExceptionLog entity, List<ExceptionLog> entityList) throws Exception {
 		
 		try (OutputStream outputStream = response.getOutputStream();
-			 FileInputStream fileInputStream = new FileInputStream(templateFile);
+			 InputStream fileInputStream = request.getServletContext().getResourceAsStream(templateFile);
 			 Workbook workbook = WorkbookFactory.create(fileInputStream);)
 		{
 			Sheet writeSheet = workbook.getSheetAt(0);

@@ -1,6 +1,6 @@
 package com.inzent.igate.openapi.entity.tracelog ;
 
-import java.io.FileInputStream ;
+import java.io.InputStream ;
 import java.io.OutputStream ;
 import java.net.URLEncoder ;
 import java.sql.Timestamp ;
@@ -28,8 +28,8 @@ import org.springframework.stereotype.Component ;
 import org.springframework.web.multipart.MultipartFile ;
 
 import com.fasterxml.jackson.core.JsonEncoding ;
-import com.inzent.igate.imanager.EntityExportImportBean ;
 import com.inzent.igate.repository.log.TraceLog ;
+import com.inzent.imanager.EntityExportImportBean;
 import com.inzent.imanager.message.MessageGenerator ;
 
 @Component
@@ -45,7 +45,7 @@ public class TraceLogExportImport implements EntityExportImportBean<TraceLog>
             + URLEncoder.encode(fileName, JsonEncoding.UTF8.getJavaName()).replaceAll("\\+", "%20"));
     response.setContentType("application/octet-stream");
 
-    generateDownload(response.getOutputStream(), request.getServletContext().getRealPath("/template/List_TraceLog.xlsx"), entity, list);
+    generateDownload(request, response.getOutputStream(), "/template/List_TraceLog.xlsx", entity, list);
 
     response.flushBuffer();
   }
@@ -62,14 +62,14 @@ public class TraceLogExportImport implements EntityExportImportBean<TraceLog>
     throw new UnsupportedOperationException() ;
   }
 
-	public void generateDownload(OutputStream outputStream, String templateFile, TraceLog entity,
+	public void generateDownload(HttpServletRequest request, OutputStream outputStream, String templateFile, TraceLog entity,
 			List<TraceLog> entityList) throws Exception {
 		Row row = null;
 		Cell cell = null;
 		String values = null;
 		Sheet writeSheet;
 		
-		try(FileInputStream fileInputStream = new FileInputStream(templateFile);
+		try(InputStream fileInputStream = request.getServletContext().getResourceAsStream(templateFile);
 			Workbook workbook = WorkbookFactory.create(fileInputStream);)
 		{
 			writeSheet = workbook.getSheetAt(0);
