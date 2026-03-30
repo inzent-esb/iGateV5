@@ -196,7 +196,7 @@
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.ContentController" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.ContentService" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.content.ContentRepository" />
-		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.contentfile.contentFileService" />
+		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.contentfile.ContentFileService" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.nodeagent.NodeAgentController" />
 		<context:exclude-filter type="regex" expression="com.inzent.igate.openapi.entity.nodeagent.NodeAgentService" />
 	</context:component-scan>
