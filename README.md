@@ -1,4 +1,4 @@
-# iGateV5
+# INZENT MCI V5
 
 ### <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/26a0.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png?v8">⚠</span> **이클립스 Pull시 Master이 아닌 Tag를 버전에 맞게 Pull하시는것을 권장드립니다.** </br>
 
