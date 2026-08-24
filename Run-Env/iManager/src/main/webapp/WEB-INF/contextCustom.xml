@@ -66,6 +66,7 @@
 		<security:intercept-url pattern="/api/entity/mapping/**" access="hasAnyRole('ROLE_MappingViewer', 'ROLE_OperationViewer')"/>
 		<security:intercept-url pattern="/api/entity/mappingDictionary/**" access="hasAnyRole('ROLE_MappingDictionaryViewer', 'ROLE_MappingViewer')" />
 		<security:intercept-url pattern="/api/entity/menu/**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/api/entity/menuBookmark/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/api/entity/message/**" access="hasAnyRole('ROLE_MessageViewer', 'ROLE_OperationViewer')" />
 		<security:intercept-url pattern="/api/entity/metaHistory/**" access="hasRole('ROLE_MetaHistoryViewer')" />
 		<security:intercept-url pattern="/api/entity/notice/**" access="isAuthenticated()" />
