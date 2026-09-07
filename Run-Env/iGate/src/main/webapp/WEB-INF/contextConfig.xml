@@ -90,7 +90,7 @@
 
 	<bean id="job" class="com.inzent.igate.job.JobManager" lazy-init="true" />
 
-	<bean id="monitoringManager" class="com.inzent.igate.monitoring.MonitoringManager" lazy-init="true" />
+	<bean id="monitoringManager" class="com.inzent.igate.monitoring.MonitoringManager" />
 
 	<bean id="apimCache" class="com.inzent.igate.cache.CacheBean" />
 
